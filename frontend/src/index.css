@@ -1,0 +1,18 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'Humanist521BT';
+  src: url('/src/assets/fonts/Humanist521BT.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+

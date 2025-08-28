@@ -1,0 +1,94 @@
+[
+  {
+    "_id": "1",
+    "title": "Luxury Villa",
+    "category": "Residential",
+    "description": "A stunning villa with modern architecture and luxurious amenities.",
+    "sections": [
+      {
+        "type": "image",
+        "content": "https://picsum.photos/800/600?random=1"
+      },
+      {
+        "type": "text",
+        "content": "This luxurious villa is nestled in a serene location, offering a perfect blend of tranquility and urban convenience. It features expansive indoor-outdoor living spaces, high ceilings, and floor-to-ceiling windows that flood the home with natural light. The private pool and landscaped garden make it an ideal retreat for both relaxation and entertainment."
+      },
+      {
+        "type": "image",
+        "content": "https://picsum.photos/800/600?random=2"
+      },
+      {
+        "type": "text",
+        "content": "The interiors have been thoughtfully designed with a minimalist aesthetic, emphasizing clean lines, natural materials, and functional elegance. Each room is furnished with bespoke pieces that complement the villa’s architectural beauty, creating a harmonious living experience."
+      }
+    ],
+    "location": "Serene Location",
+    "year": "2024",
+    "client": "Private Owner",
+    "project_team": "Architect Team A",
+    "collaborators": "Interior Designers, Landscape Artists",
+    "status": "Completed"
+  },
+  {
+    "_id": "2",
+    "title": "Modern Office",
+    "category": "Commercial",
+    "description": "A state-of-the-art office space designed for productivity.",
+    "coverImage": "https://picsum.photos/800/600?random=3",
+    "sections": [
+      {
+        "type": "image",
+        "content": "https://picsum.photos/800/600?random=4"
+      },
+      {
+        "type": "text",
+        "content": "This modern office space is designed to foster creativity and collaboration among teams. The open-plan layout encourages interaction, while dedicated quiet zones provide spaces for focused work. High-end finishes and ergonomic furniture enhance comfort and productivity."
+      },
+      {
+        "type": "image",
+        "content": "https://picsum.photos/800/600?random=5"
+      },
+      {
+        "type": "text",
+        "content": "Natural light pours in from full-height windows, reducing the need for artificial lighting and boosting employee wellness. Integrated smart tech helps manage lighting, temperature, and air quality, while biophilic design elements like indoor plants bring nature closer to the workspace."
+      }
+    ],
+    "location": "City Center",
+    "year": "2025",
+    "client": "Global Tech Inc.",
+    "project_team": "Corporate Design Group",
+    "collaborators": "Furniture Suppliers, IT Consultants",
+    "status": "In Design"
+  },
+  {
+    "_id": "3",
+    "title": "Luxury Villa",
+    "category": "Residential",
+    "description": "A stunning villa with modern architecture and luxurious amenities.",
+    "coverImage": "https://picsum.photos/800/600?random=6",
+    "sections": [
+      {
+        "type": "image",
+        "content": "https://picsum.photos/800/600?random=7"
+      },
+      {
+        "type": "text",
+        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
+      },
+      {
+        "type": "image",
+        "content": "https://picsum.photos/800/600?random=8"
+      },
+      {
+        "type": "text",
+        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
+      }
+    ],
+    "location": "Upscale Neighborhood",
+    "year": "2023",
+    "client": "Real Estate Developers",
+    "project_team": "Luxury Homes Architects",
+    "collaborators": "Smart Home Tech Providers",
+    "status": "Completed"
+  }
+]
