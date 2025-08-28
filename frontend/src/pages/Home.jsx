@@ -1,5 +1,5 @@
 import ProjectCard from '../components/ProjectCard';
-import projects from '../data/projects.json'; 
+import projects from "../Data/projects.json";
 import HorizontalScrollComponent from '../components/HorizontalScrollComponent';
 const Home = () => {
   return (
