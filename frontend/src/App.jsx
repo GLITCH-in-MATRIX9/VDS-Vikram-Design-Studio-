@@ -18,19 +18,22 @@ function App() {
 function AppContent() {
   const location = useLocation();
 
-  // Hide Navbar and Footer if the route starts with /admin
-  const hideLayout = location.pathname.startsWith('/admin');
+  const isAdmin = location.pathname.startsWith('/admin');
+  const isContact = location.pathname.startsWith('/contact');
+  const isCareer = location.pathname.startsWith('/career');
+
+  const showNavbar = !isAdmin;
+  const showFooter = !isAdmin && !isContact && !isCareer;
 
   return (
     <>
-      {!hideLayout && <Navbar />}
+      {showNavbar && <Navbar />}
       <div className="min-h-[80vh]">
         <Routes />
       </div>
-      {!hideLayout && <Footer />}
+      {showFooter && <Footer />}
     </>
   );
 }
 
 export default App;
-
