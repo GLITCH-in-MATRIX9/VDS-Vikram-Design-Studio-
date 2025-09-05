@@ -2,26 +2,26 @@ import React from 'react';
 
 const AboutHeading = () => {
   return (
-    <section className="bg-[#f3efee] px-6 lg:px-20 py-16">
+    <section className="bg-[#f3efee] px-4 sm:px-6 lg:px-20 py-10 sm:py-16">
       <div className="max-w-screen-xl mx-auto">
-        <h1 className="font-sora text-7xl font-semibold text-[#3E3C3C] mb-16">ABOUT</h1>
+        <h1 className="font-sora text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-semibold text-[#3E3C3C] mb-8 sm:mb-16 text-left">ABOUT</h1>
       </div>
 
-      <div className="max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-12">
+      <div className="max-w-screen-xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-12">
 
 
         {/* This is the main left section: it holds the big heading and the two-column story about VDS. */}
         <div className="lg:col-span-2">
 
 
-          <h2 className="font-sora text-lg font-semibold  text-[#7E797A] mb-8">
+          <h2 className="font-sora text-base sm:text-lg font-semibold text-[#7E797A] mb-4 sm:mb-8">
             Vikram Design Studio (VDS) didn’t start with blueprints –<br />
             it began with trust.
           </h2>
 
           {/* Here comes the heart of the About page: two columns, each telling a different part of the VDS journey. */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-[#474545] leading-relaxed text-base">
-            <div className="font-inter space-y-4 text-sm font-normal">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 text-[#474545] leading-relaxed text-sm sm:text-base">
+            <div className="font-inter space-y-3 sm:space-y-4 text-sm font-normal">
               <p>
                 In 2009, after years of working with one of Guwahati’s leading architectural firms,
                 Vikram B Sihrof and Pooza Agarwal – both qualified interior designers – founded VDS
@@ -42,7 +42,7 @@ const AboutHeading = () => {
               </p>
             </div>
 
-            <div className="font-inter space-y-4 text-sm font-normal">
+            <div className="font-inter space-y-3 sm:space-y-4 text-sm font-normal">
               <p>
                 Amid this growth, a new energy entered the picture. Namman Sihrof, an architect and trained lighting
                 designer, had long been connected to the studio through his father, Vikraman. In 2023, he officially
@@ -64,7 +64,8 @@ const AboutHeading = () => {
         </div>
 
         {/* On the right, we could show a team photo, a project image, or just a placeholder for now. */}
-        <div className="w-full h-full flex justify-center items-start">
+        {/* Image placeholder: visible only on large screens (desktop) */}
+        <div className="hidden lg:flex w-full h-full justify-center items-start mt-6 lg:mt-0">
           <div className="w-full h-full bg-gray-300 rounded-md" />
         </div>
 

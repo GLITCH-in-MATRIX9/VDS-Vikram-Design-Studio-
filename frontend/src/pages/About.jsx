@@ -1,6 +1,5 @@
 import React from 'react';
 
-// Import all AboutPage components
 import AboutHeading from '../components/AboutPage/AboutHeading';
 import AboutMetrics from '../components/AboutPage/AboutMetrics';
 import Architecture from '../components/AboutPage/Architecture';
