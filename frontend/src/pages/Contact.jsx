@@ -6,11 +6,11 @@ import Form from '../components/Contact/Form'
 
 const Contact = () => {
   return (
-    <div className="flex flex-col gap-6 md:gap-12 lg:gap-16 my-8 md:my-12 lg:my-20">
+    <div className="flex flex-col gap-6 md:gap-12 lg:gap-16 py-8 md:py-12 lg:py-20 bg-[#F2EFEE]">
       <Heading />
       <Cards />
       <Form />
-      {/* <ContactFooter /> */}
+      <ContactFooter />
     </div>
   )
 }
