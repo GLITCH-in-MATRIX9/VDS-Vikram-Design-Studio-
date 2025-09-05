@@ -12,6 +12,18 @@ const Form = () => {
     captcha: false,
   });
 
+  const [isFilled, setIsFilled] = React.useState(false);
+
+  React.useEffect( () => {
+    setIsFilled(
+      formData.firstName != '' &&
+      formData.mobileNumber != '' &&
+      formData.emailAddress != '' &&
+      formData.message != '' &&
+      formData.captcha
+    )}, [formData]
+  )
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData((prevData) => ({
@@ -57,18 +69,18 @@ const Form = () => {
       </h2>
       <form
         onSubmit={handleSubmit}
-        className="space-y-6 w-[90%] md:w-[542px] lg:w-[616px] mx-auto text-xs md:text-sm lg:text-base"
+        className="flex flex-col gap-4 lg:gap-6 space-y-6 w-[90%] md:w-[542px] lg:w-[616px] mx-auto text-xs md:text-sm lg:text-base font-inter text-[#474545]"
       >
-        <div className="grid grid-cols-2 gap-y-4 lg:gap-y-8 gap-x-3 md:gap-x-4">
+        <div className="my-0 grid grid-cols-2 gap-x-3 md:gap-x-4">
           <div>
           <input
             type="text"
             name="firstName"
             onChange={handleChange}
             value={formData.firstName}
-            placeholder="First Name*"
+            placeholder="First Name *"
             required
-            className="block w-full px-4 py-3 bg-white outline-[0.5px] rounded-2xl focus:outline-1 outline-[#7E797A] focus:outline-[#474545]"
+            className="block w-full px-4 py-3 bg-[#F9F8F7] outline-[0.5px] rounded-2xl focus:outline-1 outline-[#7E797A] focus:outline-[#474545]"
           />
 
         </div>
@@ -79,22 +91,22 @@ const Form = () => {
             onChange={handleChange}
             value={formData.lastName}
             placeholder="Last Name"
-            className="block w-full px-4 py-3 bg-white  outline-[0.5px] rounded-2xl focus:outline-1 outline-[#7E797A] focus:outline-[#474545]"
+            className="block w-full px-4 py-3 bg-[#F9F8F7]  outline-[0.5px] rounded-2xl focus:outline-1 outline-[#7E797A] focus:outline-[#474545]"
           />
             </div>
           </div>
           
-          <div>
+          <div className='my-0'>
             <input
               type="text"
               name="company"
               onChange={handleChange}
               value={formData.company}
               placeholder="Company"
-              className="w-full px-4 py-3  outline-[0.5px] rounded-2xl focus:outline-1 outline-[#7E797A] focus:outline-[#474545]"
+              className="w-full px-4 py-3 bg-[#F9F8F7] outline-[0.5px] rounded-2xl focus:outline-1 outline-[#7E797A] focus:outline-[#474545]"
             />
           </div>
-          <div>
+          <div className='my-0'>
             <input
               type="tel"
               name="mobileNumber"
@@ -102,10 +114,10 @@ const Form = () => {
               value={formData.mobileNumber}
               placeholder="Mobile Number *"
               required
-              className="w-full px-4 py-3  outline-[0.5px] rounded-2xl focus:outline-1 outline-[#7E797A] focus:outline-[#474545]"
+              className="w-full px-4 py-3 bg-[#F9F8F7] outline-[0.5px] rounded-2xl focus:outline-1 outline-[#7E797A] focus:outline-[#474545]"
             />
           </div>
-          <div>
+          <div className='my-0'>
             <input
               type="email"
               name="emailAddress"
@@ -113,10 +125,10 @@ const Form = () => {
               value={formData.emailAddress}
               placeholder="Email Address *"
               required
-              className="w-full px-4 py-3 outline-[0.5px] rounded-2xl focus:outline-1 outline-[#7E797A] focus:outline-[#474545]"
+              className="w-full px-4 py-3 bg-[#F9F8F7] outline-[0.5px] rounded-2xl focus:outline-1 outline-[#7E797A] focus:outline-[#474545]"
             />
           </div>
-          <div>
+          <div className='my-0'>
             <textarea
               name="message"
               onChange={handleChange}
@@ -124,19 +136,19 @@ const Form = () => {
               placeholder="Message *"
               rows="6"
               requiredb
-              className="w-full px-4 py-3 o outline-[0.5px] rounded-2xl focus:outline-1 outline-[#7E797A] focus:outline-[#474545] "
+              className="w-full px-4 py-3 bg-[#F9F8F7] outline-[0.5px] rounded-2xl focus:outline-1 outline-[#7E797A] focus:outline-[#474545] "
             ></textarea>
           </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-            <div className="flex items-center">
+          <div className="flex flex-row items-start justify-between gap-4 my-0">
+            <div className="flex items-center my-0">
               <input
                 id="captcha"
                 type="checkbox"
                 onChange={handleChange}
                 name="captcha"
                 checked={formData.captcha}
-                className="w-4 h-4 text-gray-600 bg-gray-100 border-gray-300 rounded focus:ring-gray-500"
+                className="w-4 h-4 bg-[#474545] text-[#474545] rounded-0 "
               />
               <label htmlFor="captcha" className="ml-2 text-sm text-gray-600">
                 Captcha
@@ -144,7 +156,7 @@ const Form = () => {
             </div>
             <button 
               type="submit"
-              className='flex items-center gap-1 bg-[#7E797A] font-medium rounded-lg px-4 py-2 uppercase text-white text-xs md:text-sm lg:text-base'>
+              className={`flex items-center gap-1 ${isFilled ? "bg-[#474545]" : "bg-[#7E797A]" } font-medium rounded-lg px-4 py-2 uppercase text-white text-xs md:text-sm lg:text-base`}>
                 Send Message 
                 {<LuSend />}
             </button>
