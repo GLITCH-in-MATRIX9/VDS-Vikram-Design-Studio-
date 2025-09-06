@@ -16,9 +16,9 @@ export default function Login() {
   }, []);
 
   const dummyUser = {
-    email: "admin@test.com",
-    password: "123456",
-    role: "super-admin",
+      email: "admin@test.com",
+      password: "123456",
+
   };
 
   const handleLogin = (e) => {

@@ -48,39 +48,26 @@ const HorizontalScrollComponent = ({ onClose }) => {
   return (
     <div className="relative w-full font-inter min-h-[520px] overflow-hidden">
 
-      <div className="absolute top-5 left-5 flex items-center gap-3 z-20">
+      {/* Top left: Close button for exiting the gallery view */}
+      <div className="absolute top-4 left-4 flex items-center gap-2 z-20 sm:top-5 sm:left-5 sm:gap-3">
         <button
           onClick={onClose}
           aria-label="Close"
-          className="rounded-full border border-gray-400 w-10 h-10 bg-white cursor-pointer text-gray-500 flex items-center justify-center"
+          className="rounded-full border border-gray-400 w-9 h-9 sm:w-10 sm:h-10 bg-white cursor-pointer text-gray-500 flex items-center justify-center"
         >
           <FiX size={20} />
         </button>
 
-        <button
-          onClick={handleNavigateToProjects}
-          className="group relative flex items-center justify-start rounded-full border border-gray-400 bg-white hover:bg-[#2B2624B2] hover:text-[#faf6f3] text-gray-400 w-10 hover:w-44 h-10 transition-all duration-300 overflow-hidden"
-        >
-          <div className="absolute left-0 top-0 w-10 h-10 flex items-center justify-center">
-            <FiArrowRight
-              size={20}
-              className="transition-all duration-100 group-hover:mr-2"
-            />
-          </div>
-          <span className="opacity-0 group-hover:opacity-100 text-xs font-semibold duration-300 whitespace-nowrap group-hover:text-[#faf6f3] pl-10 pr-4">
-            VIEW ENTIRE PROJECT
-          </span>
-        </button>
+
       </div>
 
-
+      {/* Left/right scroll buttons (only visible on desktop) for navigating through the gallery */}
       <button
         onClick={scrollLeft}
         className="absolute z-10 left-2 top-1/2 transform -translate-y-1/2 bg-white/80 hover:bg-white text-gray-500 p-2 rounded-full shadow-md transition hidden md:flex"
       >
         <FiArrowLeft size={20} />
       </button>
-
 
       <button
         onClick={scrollRight}
@@ -89,10 +76,10 @@ const HorizontalScrollComponent = ({ onClose }) => {
         <FiArrowRight size={20} />
       </button>
 
-
+      {/* Main scrollable area: contains project info, image, and description. Supports drag-to-scroll. */}
       <div
         ref={scrollContainerRef}
-        className={`flex overflow-x-auto h-full px-4 md:px-[60px] py-[30px] box-border scroll-smooth hide-scrollbar ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
+        className={`flex overflow-x-auto h-full px-4 sm:px-6 md:px-[60px] py-6 sm:py-[30px] box-border scroll-smooth hide-scrollbar ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
         onMouseDown={onDragStart}
         onMouseMove={onDragMove}
         onMouseUp={onDragEnd}
@@ -103,11 +90,12 @@ const HorizontalScrollComponent = ({ onClose }) => {
         onTouchCancel={onDragEnd}
       >
 
-        <div className="min-w-[200px] pl-5 flex flex-col justify-center font-medium text-right items-end">
-          <div className="flex flex-col gap-2">
-            <div className="text-sm text-gray-500 font-semibold">RESIDENTIAL</div>
-            <h1 className="font-bold text-2xl m-0">Shanti Villa</h1>
-            <div className="text-sm text-gray-500 flex flex-col gap-1">
+        {/* Project details: shows type, name, location, year, and team info */}
+        <div className="min-w-[180px] sm:min-w-[200px] pl-3 sm:pl-5 flex flex-col justify-center font-medium text-right items-end">
+          <div className="flex flex-col gap-2 text-xs sm:text-sm">
+            <div className="text-gray-500 font-semibold">RESIDENTIAL</div>
+            <h1 className="font-bold text-xl sm:text-2xl m-0">Shanti Villa</h1>
+            <div className="text-gray-500 flex flex-col gap-1">
               <p className="flex items-center justify-end gap-1">
                 <FiMapPin />
                 <span>Dimapur, Nagaland</span>
@@ -115,43 +103,44 @@ const HorizontalScrollComponent = ({ onClose }) => {
               <p>2015</p>
             </div>
           </div>
-          <div className="mt-6 flex flex-col gap-3 text-xs text-gray-700">
+          <div className="mt-4 sm:mt-6 flex flex-col gap-3 text-xs text-gray-700">
             <div>
               <div className="text-gray-500 font-semibold">CLIENT</div>
               <div>CLIENT NAME, CLIENT NAME</div>
             </div>
             <div>
-              <div className="text-gray-500 font-semibold mt-3">PROJECT TEAM</div>
+              <div className="text-gray-500 font-semibold mt-2">PROJECT TEAM</div>
               <div>MANAGER, ARCHITECT, TEAM</div>
             </div>
             <div>
-              <div className="text-gray-500 font-semibold mt-3">COLLABORATORS</div>
+              <div className="text-gray-500 font-semibold mt-2">COLLABORATORS</div>
               <div>COLLABORATOR NAME</div>
             </div>
             <div>
-              <div className="text-gray-500 font-semibold mt-3">STATUS</div>
+              <div className="text-gray-500 font-semibold mt-2">STATUS</div>
               <div>COMPLETED</div>
             </div>
           </div>
         </div>
 
-
-        <div className="w-[800px] h-[450px] ml-8 rounded-[20px] overflow-hidden flex-shrink-0 flex justify-center items-center">
+        {/* Main project image: large and prominent for visual impact */}
+        <div className="w-[300px] sm:w-[500px] md:w-[800px] h-[200px] sm:h-[350px] md:h-[450px] ml-4 sm:ml-6 rounded-[16px] sm:rounded-[20px] overflow-hidden flex-shrink-0 flex justify-center items-center">
           <img
             src="https://picsum.dev/800/450"
             alt="Shanti Villa"
-            className="h-full w-auto object-cover rounded-[20px]"
+            className="h-full w-auto object-cover rounded-[16px] sm:rounded-[20px]"
           />
         </div>
 
-
-        <div className="min-w-[300px] max-w-[450px] pl-[20px] text-sm text-gray-700 leading-relaxed overflow-y-auto max-h-[450px] mt-7 font-normal">
+        {/* Project description: summary or story about the project */}
+        <div className="min-w-[250px] max-w-[90vw] sm:max-w-[400px] pl-4 sm:pl-[20px] text-xs sm:text-sm text-gray-700 leading-relaxed overflow-y-auto max-h-[200px] sm:max-h-[450px] mt-4 sm:mt-7 font-normal">
           <p>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris suscipit ac amet vel sapien...
           </p>
         </div>
       </div>
 
+      {/* Hide scrollbar for a cleaner look on all browsers */}
       <style>{`
         .hide-scrollbar::-webkit-scrollbar { display: none; }
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

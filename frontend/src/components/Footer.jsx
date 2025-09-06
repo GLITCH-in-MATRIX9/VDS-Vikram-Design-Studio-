@@ -7,7 +7,7 @@ const Footer = () => {
         <footer className="bg-[#f9f6f3] border-t border-[#e0dcd7]">
             <div className="max-w-7xl mx-auto px-6 py-6 flex flex-row lg:flex-row items-center justify-between text-sm gap-4 lg:gap-0">
 
-                {/* Left: Logo & Brand */}
+                {/* Left section: Company logo and brand name, links to homepage */}
                 <Link to="/"><div className="flex items-center space-x-3">
                     <img src={logo} alt="Vikram Design Studio Logo" className="h-10 w-auto" />
                     <span className="text-gray-700" style={{ fontFamily: 'Humanist521BT' }}>
@@ -16,7 +16,7 @@ const Footer = () => {
                 </div>
                 </Link>
 
-                {/* Center: Social Icons */}
+                {/* Center section: Social media icons for connecting with VDS */}
                 <div className="flex space-x-5 text-[#af2b1e] text-lg">
                     <a href="#"><FaYoutube /></a>
                     <a href="#"><FaFacebookF /></a>
@@ -24,7 +24,7 @@ const Footer = () => {
                     <a href="#"><FaLinkedinIn /></a>
                 </div>
 
-                {/* Right: Copyright (only visible on lg and above) */}
+                {/* Right section: Copyright notice, visible only on large screens */}
                 <div className="text-gray-500 text-xs hidden lg:block">
                     Vikram Design Studio © 2025. All rights reserved.
                 </div>

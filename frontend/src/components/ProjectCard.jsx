@@ -4,6 +4,7 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import ProjectImageGallery from "./ProjectImageGallery";
 import HorizontalScrollComponent from "./HorizontalScrollComponent";
 
+
 const ProjectCard = ({ project }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -41,9 +42,7 @@ const ProjectCard = ({ project }) => {
             className="cursor-pointer"
             onClick={handleToggleExpand}
           >
-
             <div className="flex flex-col-reverse md:flex-row gap-4 items-start overflow-x-hidden w-full">
-
               <div className="flex flex-col items-start md:items-end text-left md:text-right min-w-[300px] md:min-w-[420px] max-w-lg pr-2 space-y-3">
                 <p className="text-sm text-gray-600 uppercase tracking-wider">
                   Residential
@@ -57,8 +56,6 @@ const ProjectCard = ({ project }) => {
                 </div>
                 <p className="text-sm text-gray-500">2015</p>
               </div>
-
-
               <ProjectImageGallery sections={project.sections} isZoomed={false} />
             </div>
           </motion.div>
