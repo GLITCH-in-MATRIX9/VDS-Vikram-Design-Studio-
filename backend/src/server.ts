@@ -4,30 +4,27 @@ import cors from 'cors';
 import path from 'path';
 import fs from 'fs';
 import connectDB from './config/db';
+import { config } from './config/env';
 import authRoutes from './routes/auth.routes';
 import projectRoutes from './routes/project.routes';
+import contactRoutes from './routes/contact.routes';
 import { errorHandler } from './middlewares/error.middleware';
+import { generalRateLimit } from './middlewares/rateLimit.middleware';
 
 dotenv.config();
-
-// Validate required environment variables
-const requiredEnvVars = ['MONGO_URI', 'JWT_SECRET'];
-const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
-
-if (missingVars.length > 0) {
-  console.error(`Missing required environment variables: ${missingVars.join(', ')}`);
-  process.exit(1);
-}
 
 connectDB();
 
 const app: Express = express();
-const PORT = process.env.PORT || 5002;
+const PORT = config.port;
 
 const clientOrigin = process.env.CLIENT_ORIGIN || '*';
 app.use(cors({ origin: clientOrigin }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
+
+// Apply general rate limiting to all routes
+app.use(generalRateLimit);
 
 // Ensure upload directory exists
 const uploadRoot = process.env.UPLOAD_DIR || 'uploads';
@@ -49,6 +46,7 @@ app.get('/', (req: Request, res: Response) => {
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
+app.use('/api/contact', contactRoutes);
 
 // Error handling middleware
 app.use(errorHandler);
