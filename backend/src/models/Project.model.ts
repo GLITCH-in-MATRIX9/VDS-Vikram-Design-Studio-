@@ -1,8 +1,8 @@
 import { Schema, model, Document } from 'mongoose';
 
 export interface IProjectSection {
-  type: 'text' | 'image';
-  content: string; // text content or image URL
+  type: 'text' | 'image' | 'gif';
+  content: string; // text content, image URL, or GIF URL
 }
 
 export interface IProject extends Document {
@@ -25,7 +25,7 @@ export interface IProject extends Document {
 
 const ProjectSectionSchema = new Schema<IProjectSection>(
   {
-    type: { type: String, enum: ['text', 'image'], required: true },
+    type: { type: String, enum: ['text', 'image', 'gif'], required: true },
     content: { type: String, required: true },
   },
   { _id: false }

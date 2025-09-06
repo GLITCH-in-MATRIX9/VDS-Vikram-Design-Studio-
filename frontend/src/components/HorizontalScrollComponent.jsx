@@ -1,7 +1,8 @@
 import React, { useRef, useState } from "react";
 import { FiArrowRight, FiArrowLeft, FiX, FiMapPin } from "react-icons/fi";
+import ProjectSectionDisplay from "./ProjectSectionDisplay";
 
-const HorizontalScrollComponent = ({ onClose }) => {
+const HorizontalScrollComponent = ({ onClose, project }) => {
   const scrollContainerRef = useRef(null);
   const scrollByAmount = 600;
 
@@ -93,50 +94,39 @@ const HorizontalScrollComponent = ({ onClose }) => {
         {/* Project details: shows type, name, location, year, and team info */}
         <div className="min-w-[180px] sm:min-w-[200px] pl-3 sm:pl-5 flex flex-col justify-center font-medium text-right items-end">
           <div className="flex flex-col gap-2 text-xs sm:text-sm">
-            <div className="text-gray-500 font-semibold">RESIDENTIAL</div>
-            <h1 className="font-bold text-xl sm:text-2xl m-0">Shanti Villa</h1>
+            <div className="text-gray-500 font-semibold">{project?.category || "RESIDENTIAL"}</div>
+            <h1 className="font-bold text-xl sm:text-2xl m-0">{project?.title || project?.name || "Project Name"}</h1>
             <div className="text-gray-500 flex flex-col gap-1">
               <p className="flex items-center justify-end gap-1">
                 <FiMapPin />
-                <span>Dimapur, Nagaland</span>
+                <span>{project?.location || "Location"}</span>
               </p>
-              <p>2015</p>
+              <p>{project?.year || "Year"}</p>
             </div>
           </div>
           <div className="mt-4 sm:mt-6 flex flex-col gap-3 text-xs text-gray-700">
             <div>
               <div className="text-gray-500 font-semibold">CLIENT</div>
-              <div>CLIENT NAME, CLIENT NAME</div>
+              <div>{project?.client || "Client Name"}</div>
             </div>
             <div>
               <div className="text-gray-500 font-semibold mt-2">PROJECT TEAM</div>
-              <div>MANAGER, ARCHITECT, TEAM</div>
+              <div>{project?.project_team || project?.projectTeam || "Team Name"}</div>
             </div>
             <div>
               <div className="text-gray-500 font-semibold mt-2">COLLABORATORS</div>
-              <div>COLLABORATOR NAME</div>
+              <div>{project?.collaborators || "Collaborator Name"}</div>
             </div>
             <div>
               <div className="text-gray-500 font-semibold mt-2">STATUS</div>
-              <div>COMPLETED</div>
+              <div>{project?.status || "Status"}</div>
             </div>
           </div>
         </div>
 
-        {/* Main project image: large and prominent for visual impact */}
-        <div className="w-[300px] sm:w-[500px] md:w-[800px] h-[200px] sm:h-[350px] md:h-[450px] ml-4 sm:ml-6 rounded-[16px] sm:rounded-[20px] overflow-hidden flex-shrink-0 flex justify-center items-center">
-          <img
-            src="https://picsum.dev/800/450"
-            alt="Shanti Villa"
-            className="h-full w-auto object-cover rounded-[16px] sm:rounded-[20px]"
-          />
-        </div>
-
-        {/* Project description: summary or story about the project */}
-        <div className="min-w-[250px] max-w-[90vw] sm:max-w-[400px] pl-4 sm:pl-[20px] text-xs sm:text-sm text-gray-700 leading-relaxed overflow-y-auto max-h-[200px] sm:max-h-[450px] mt-4 sm:mt-7 font-normal">
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris suscipit ac amet vel sapien...
-          </p>
+        {/* Project sections: displays all project content including images, GIFs, and text */}
+        <div className="w-[300px] sm:w-[500px] md:w-[800px] ml-4 sm:ml-6 rounded-[16px] sm:rounded-[20px] flex-shrink-0 overflow-y-auto max-h-[200px] sm:max-h-[450px]">
+          <ProjectSectionDisplay sections={project?.sections} />
         </div>
       </div>
 
@@ -150,3 +140,4 @@ const HorizontalScrollComponent = ({ onClose }) => {
 };
 
 export default HorizontalScrollComponent;
+

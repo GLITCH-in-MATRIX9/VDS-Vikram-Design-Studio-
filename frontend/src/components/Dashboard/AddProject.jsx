@@ -73,6 +73,18 @@ const AddProject = () => {
         });
     };
 
+    const handleAddGif = (blockIndex, file) => {
+        if (!file) return;
+        setBlocks((prev) => {
+            const newBlocks = [...prev];
+            newBlocks[blockIndex].contents.push({
+                type: "gif",
+                value: URL.createObjectURL(file),
+            });
+            return newBlocks;
+        });
+    };
+
 
     const handleContentChange = (blockIndex, contentIndex, value) => {
         setBlocks((prev) => {
@@ -245,7 +257,7 @@ const AddProject = () => {
                         <label className="text-sm font-medium text-[#722F37]">
                             Upload Preview
                         </label>
-                        <input type="file" accept="image/*" onChange={handlePreviewChange} />
+                        <input type="file" accept="image/*,.gif" onChange={handlePreviewChange} />
                         {formData.preview && (
                             <img
                                 src={URL.createObjectURL(formData.preview)}
@@ -297,6 +309,17 @@ const AddProject = () => {
                                                                     className="hidden"
                                                                     onChange={(e) =>
                                                                         handleAddImage(blockIndex, e.target.files[0])
+                                                                    }
+                                                                />
+                                                            </label>
+                                                            <label className="px-2 py-1 text-sm rounded bg-purple-600 text-white cursor-pointer">
+                                                                + Add GIF
+                                                                <input
+                                                                    type="file"
+                                                                    accept=".gif,image/gif"
+                                                                    className="hidden"
+                                                                    onChange={(e) =>
+                                                                        handleAddGif(blockIndex, e.target.files[0])
                                                                     }
                                                                 />
                                                             </label>
@@ -358,10 +381,16 @@ const AddProject = () => {
                                                                                             )
                                                                                         }
                                                                                     />
-                                                                                ) : (
+                                                                                ) : content.type === "image" ? (
                                                                                     <img
                                                                                         src={content.value}
                                                                                         alt="block content"
+                                                                                        className="h-20 rounded"
+                                                                                    />
+                                                                                ) : (
+                                                                                    <img
+                                                                                        src={content.value}
+                                                                                        alt="GIF content"
                                                                                         className="h-20 rounded"
                                                                                     />
                                                                                 )}
