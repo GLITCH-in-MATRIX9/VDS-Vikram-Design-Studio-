@@ -4,10 +4,20 @@ import cors from 'cors';
 import path from 'path';
 import fs from 'fs';
 import connectDB from './config/db';
+import authRoutes from './routes/auth.routes';
 import projectRoutes from './routes/project.routes';
 import { errorHandler } from './middlewares/error.middleware';
 
 dotenv.config();
+
+// Validate required environment variables
+const requiredEnvVars = ['MONGO_URI', 'JWT_SECRET'];
+const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
+
+if (missingVars.length > 0) {
+  console.error(`Missing required environment variables: ${missingVars.join(', ')}`);
+  process.exit(1);
+}
 
 connectDB();
 
@@ -27,17 +37,31 @@ fs.mkdirSync(uploadsPath, { recursive: true });
 // Static serving of uploads
 app.use('/uploads', express.static(uploadsPath));
 
+// Health check
 app.get('/', (req: Request, res: Response) => {
-  res.send('Backend API is running...');
+  res.json({
+    message: 'VDS Backend API is running...',
+    version: '1.0.0',
+    timestamp: new Date().toISOString()
+  });
 });
 
+// API Routes
+app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 
+// Error handling middleware
 app.use(errorHandler);
 
+// 404 handler
+app.use('*', (req: Request, res: Response) => {
+  res.status(404).json({ message: 'Route not found' });
+});
+
 app.listen(PORT, () => {
-  // eslint-disable-next-line no-console
-  console.log(`Server running on port ${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
+  console.log(`📁 Uploads directory: ${uploadsPath}`);
+  console.log(`🌐 CORS origin: ${clientOrigin}`);
 });
 
 
