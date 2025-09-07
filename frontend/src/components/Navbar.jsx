@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 
 import logo from "../assets/navbar/LogoIcon.png";
-import searchIcon from "../assets/icons/Search Icon.png";
+import searchIcon from "../assets/icons/SearchIcon.png";
 import filterIcon from "../assets/icons/Vector.png";
 import hamburgerIcon from "../assets/navbar/HamburgerMenu.png";
 import closeIcon from "../assets/navbar/Close.png";
