@@ -10,6 +10,10 @@
         "content": "https://picsum.photos/800/600?random=1"
       },
       {
+        "type": "gif",
+        "content": "https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif"
+      },
+      {
         "type": "text",
         "content": "This luxurious villa is nestled in a serene location, offering a perfect blend of tranquility and urban convenience. It features expansive indoor-outdoor living spaces, high ceilings, and floor-to-ceiling windows that flood the home with natural light. The private pool and landscaped garden make it an ideal retreat for both relaxation and entertainment."
       },
@@ -39,6 +43,10 @@
       {
         "type": "image",
         "content": "https://picsum.photos/800/600?random=4"
+      },
+      {
+        "type": "gif",
+        "content": "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif"
       },
       {
         "type": "text",

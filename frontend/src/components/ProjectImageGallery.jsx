@@ -1,7 +1,7 @@
 import React from "react";
 
 const ProjectImageGallery = ({ sections }) => {
-  const firstImage = sections?.find(section => section.type === "image");
+  const firstImage = sections?.find(section => section.type === "image" || section.type === "gif");
   if (!firstImage) return null;
 
   return (

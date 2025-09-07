@@ -69,7 +69,7 @@ const ProjectCard = ({ project }) => {
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="w-full overflow-hidden"
           >
-            <HorizontalScrollComponent onClose={handleToggleExpand} />
+            <HorizontalScrollComponent onClose={handleToggleExpand} project={project} />
           </motion.div>
         )}
       </AnimatePresence>
