@@ -1,9 +1,8 @@
-// Navbar.jsx
 import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 
 import logo from "../assets/navbar/LogoIcon.png";
-// import searchIcon from "../assets/icons/Search.png";
+import searchIcon from "../assets/icons/Search.png";
 import filterIcon from "../assets/icons/Vector.png";
 import hamburgerIcon from "../assets/navbar/HamburgerMenu.png";
 import closeIcon from "../assets/navbar/Close.png";
@@ -106,7 +105,7 @@ const Navbar = () => {
                 {/* Search box */}
                 <div className="relative flex items-center">
                   <img
-                    src={filterIcon}
+                    src={searchIcon}
                     alt="search"
                     className="h-4 w-4 object-contain absolute left-2 cursor-pointer"
                   />
