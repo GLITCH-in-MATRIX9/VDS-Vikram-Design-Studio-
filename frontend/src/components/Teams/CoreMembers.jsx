@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import vikrammImg from '../../assets/Team/vikramm.jpeg';
 import poojaImg from '../../assets/Team/pooja.jpeg';
 import nammanImg from '../../assets/Team/namman.png';
@@ -55,15 +56,40 @@ design-driven, and uncompromising in vision. `,
   },
 ];
 
+// Define variants for the parent container
+const containerVariants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15, // Delay between each child animation
+    },
+  },
+};
+
+// Define variants for each individual card
+const cardVariants = {
+  hidden: { y: 40, opacity: 0 },
+  visible: { y: 0, opacity: 1, transition: { duration: 0.6, ease: 'easeOut' } },
+};
+
 const CoreMembers = () => {
   return (
     <div className="bg-[#f7f6f4] py-12 px-6 md:px-12 lg:px-24">
       <h2 className="text-2xl font-bold text-gray-800 mb-8">CORE MEMBERS</h2>
-      <div className="flex flex-wrap justify-center gap-6 max-w-[1200px] mx-auto">
+      <motion.div
+        className="flex flex-wrap justify-center gap-6 max-w-[1200px] mx-auto"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible" // Triggers the animation when the container is in view
+        viewport={{ once: true }} // Ensures the animation runs only once
+      >
         {members.map(({ id, name, role, description, image }) => (
-          <div
+          <motion.div
             key={id}
             className="relative w-[369px] h-[372px] rounded-[16px] overflow-hidden shadow-lg cursor-pointer group transform transition-transform duration-300 hover:scale-105"
+            variants={cardVariants} // Applies the card animation variants
+            whileHover={{ scale: 1.05 }}
           >
             {/* Image with dim effect */}
             <img
@@ -85,9 +111,9 @@ const CoreMembers = () => {
                 {description}
               </p>
             </div>
-          </div>
+          </motion.div>
         ))}
-      </div>
+      </motion.div>
     </div>
   );
 };

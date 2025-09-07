@@ -98,5 +98,67 @@
     "project_team": "Luxury Homes Architects",
     "collaborators": "Smart Home Tech Providers",
     "status": "Completed"
+  },
+  {
+    "_id": "4",
+    "title": "Luxury Villa",
+    "category": "Residential",
+    "description": "A stunning villa with modern architecture and luxurious amenities.",
+    "coverImage": "https://picsum.photos/800/600?random=6",
+    "sections": [
+      {
+        "type": "image",
+        "content": "https://picsum.photos/800/600?random=7"
+      },
+      {
+        "type": "text",
+        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
+      },
+      {
+        "type": "image",
+        "content": "https://picsum.photos/800/600?random=8"
+      },
+      {
+        "type": "text",
+        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
+      }
+    ],
+    "location": "Upscale Neighborhood",
+    "year": "2023",
+    "client": "Real Estate Developers",
+    "project_team": "Luxury Homes Architects",
+    "collaborators": "Smart Home Tech Providers",
+    "status": "Completed"
+  },
+  {
+    "_id": "5",
+    "title": "Luxury Villa",
+    "category": "Residential",
+    "description": "A stunning villa with modern architecture and luxurious amenities.",
+    "coverImage": "https://picsum.photos/800/600?random=6",
+    "sections": [
+      {
+        "type": "image",
+        "content": "https://picsum.photos/800/600?random=7"
+      },
+      {
+        "type": "text",
+        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
+      },
+      {
+        "type": "image",
+        "content": "https://picsum.photos/800/600?random=8"
+      },
+      {
+        "type": "text",
+        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
+      }
+    ],
+    "location": "Upscale Neighborhood",
+    "year": "2023",
+    "client": "Real Estate Developers",
+    "project_team": "Luxury Homes Architects",
+    "collaborators": "Smart Home Tech Providers",
+    "status": "Completed"
   }
 ]

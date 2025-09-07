@@ -1,13 +1,15 @@
 import React from "react";
 import { Pencil, Trash2, User, X } from "lucide-react";
 
-const SidebarRight = ({ project, onClose }) => {
+const SidebarRight = ({ project, onClose, onModify }) => {
+  // If no project is selected, don't show the sidebar
   if (!project) return null;
 
   return (
     <aside className="flex flex-col h-screen w-[400px] bg-[#F9F8F7] text-[#333] overflow-y-auto shadow-lg">
 
       <div className="flex justify-end p-4">
+        {/* Click this button to close the sidebar and go back to the project list */}
         <button
           onClick={onClose}
           className="text-gray-600 hover:text-black transition"
@@ -19,6 +21,7 @@ const SidebarRight = ({ project, onClose }) => {
 
 
       <div className="px-6">
+        {/* Project image at the top for a quick visual reference */}
         <img
           src={project.image || "https://picsum.dev/300/200"}
           alt={project.name}
@@ -28,11 +31,13 @@ const SidebarRight = ({ project, onClose }) => {
 
 
       <div className="flex-1 px-6 py-6 space-y-6">
+        {/* Project name and details below the image */}
         <h2 className="text-xl font-bold break-words whitespace-normal max-w-[320px]">
           {project.name}
         </h2>
 
 
+        {/* All the key project details in a quick grid below */}
         <div className="grid grid-cols-2 gap-y-4 text-sm">
           <span className="text-gray-500 font-medium">LOCATION</span>
           <span>{project.location || "Location"}</span>
@@ -78,9 +83,11 @@ const SidebarRight = ({ project, onClose }) => {
         </div>
 
 
+        {/* Divider before more details */}
         <hr className="border-gray-300" />
 
 
+        {/* Date and user info for project edits */}
         <div className="grid grid-cols-2 gap-y-3 text-sm">
           <span className="text-gray-500 font-medium">DATE CREATED</span>
           <span>
@@ -103,7 +110,11 @@ const SidebarRight = ({ project, onClose }) => {
 
 
       <div className="px-6 py-4 flex gap-3 border-t border-gray-200">
-        <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-500 rounded-lg text-gray-700 font-medium hover:bg-gray-100 transition">
+        {/* Action buttons: modify or delete the project */}
+        <button
+          onClick={onModify}
+          className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-500 rounded-lg text-gray-700 font-medium hover:bg-gray-100 transition"
+        >
           <Pencil size={16} />
           Modify Project
         </button>

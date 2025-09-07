@@ -28,10 +28,6 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
     setIsDragging(false);
   };
 
-  const handleNavigateToProjects = () => {
-    window.location.href = "/projects";
-  };
-
   const scrollLeft = () => {
     scrollContainerRef.current.scrollBy({
       left: -scrollByAmount,
@@ -48,7 +44,6 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
 
   return (
     <div className="relative w-full font-inter min-h-[520px] overflow-hidden">
-
       {/* Top left: Close button for exiting the gallery view */}
       <div className="absolute top-4 left-4 flex items-center gap-2 z-20 sm:top-5 sm:left-5 sm:gap-3">
         <button
@@ -58,8 +53,6 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
         >
           <FiX size={20} />
         </button>
-
-
       </div>
 
       {/* Left/right scroll buttons (only visible on desktop) for navigating through the gallery */}
@@ -77,10 +70,12 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
         <FiArrowRight size={20} />
       </button>
 
-      {/* Main scrollable area: contains project info, image, and description. Supports drag-to-scroll. */}
+      {/* Main scrollable area: now fills the available space with no fixed width */}
       <div
         ref={scrollContainerRef}
-        className={`flex overflow-x-auto h-full px-4 sm:px-6 md:px-[60px] py-6 sm:py-[30px] box-border scroll-smooth hide-scrollbar ${isDragging ? "cursor-grabbing" : "cursor-grab"}`}
+        className={`flex overflow-x-auto h-full px-4 sm:px-6 md:px-[60px] py-6 sm:py-[30px] box-border scroll-smooth hide-scrollbar ${
+          isDragging ? "cursor-grabbing" : "cursor-grab"
+        }`}
         onMouseDown={onDragStart}
         onMouseMove={onDragMove}
         onMouseUp={onDragEnd}
@@ -90,9 +85,8 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
         onTouchEnd={onDragEnd}
         onTouchCancel={onDragEnd}
       >
-
-        {/* Project details: shows type, name, location, year, and team info */}
-        <div className="min-w-[180px] sm:min-w-[200px] pl-3 sm:pl-5 flex flex-col justify-center font-medium text-right items-end">
+        {/* Project details: a fixed-width container */}
+        <div className="min-w-[180px] sm:min-w-[200px] flex flex-col justify-center font-medium text-right items-end flex-shrink-0">
           <div className="flex flex-col gap-2 text-xs sm:text-sm">
             <div className="text-gray-500 font-semibold">{project?.category || "RESIDENTIAL"}</div>
             <h1 className="font-bold text-xl sm:text-2xl m-0">{project?.title || project?.name || "Project Name"}</h1>
@@ -124,9 +118,9 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
           </div>
         </div>
 
-        {/* Project sections: displays all project content including images, GIFs, and text */}
-        <div className="w-[300px] sm:w-[500px] md:w-[800px] ml-4 sm:ml-6 rounded-[16px] sm:rounded-[20px] flex-shrink-0 overflow-y-auto max-h-[200px] sm:max-h-[450px]">
-          <ProjectSectionDisplay sections={project?.sections} />
+        {/* Project sections container: this is the main part of the horizontal scroller */}
+        <div className="flex-grow flex-shrink-0 flex items-center gap-6 md:gap-8 ml-4 sm:ml-6 w-auto h-full">
+            <ProjectSectionDisplay sections={project?.sections} />
         </div>
       </div>
 
@@ -140,4 +134,3 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
 };
 
 export default HorizontalScrollComponent;
-

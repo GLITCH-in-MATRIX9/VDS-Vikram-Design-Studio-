@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { motion } from 'framer-motion';
 
 const Interior = () => {
   const scrollRef = useRef(null);
@@ -12,19 +13,38 @@ const Interior = () => {
     }
   };
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15, // Each card pops in one after another for a friendly intro
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }, // Cards gently float up as they appear
+  };
+
   return (
     <section className="px-4 sm:px-6 lg:px-20 py-10 sm:py-16 bg-[#f3efee] text-[#3E3C3C]">
       <div className="max-w-screen-xl mx-auto">
-        {/* Section heading */}
-        <h1
+        {/* Big title to introduce our interior design team! */}
+        <motion.h1
           className="font-sora font-semibold text-3xl sm:text-4xl md:text-5xl lg:text-[40px] leading-tight tracking-[-0.01em] mb-6 sm:mb-8 text-left"
           style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600 }}
+          initial={{ opacity: 0, y: -20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.5 }}
+          transition={{ duration: 0.6 }}
         >
           INTERIOR
-        </h1>
+        </motion.h1>
 
-        {/* Introductory paragraphs */}
-        <div
+        {/* A little intro to set the mood for this section */}
+        <motion.div
           className="max-w-4xl space-y-4 sm:space-y-6 mb-10 sm:mb-16 text-sm sm:text-base"
           style={{
             fontFamily: 'Inter, sans-serif',
@@ -32,6 +52,10 @@ const Interior = () => {
             lineHeight: '140%',
             letterSpacing: '0',
           }}
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.6, ease: 'easeOut' }}
         >
           <p>
             Interior design at VDS is guided by precision, emotion, and experience. From refined
@@ -47,11 +71,17 @@ const Interior = () => {
             reveal its essence. Every line, surface, and shadow contribute to a coherent,
             human-centric environment that’s built to be used, remembered, and returned to.
           </p>
-        </div>
+        </motion.div>
 
-        {/* Horizontally scrollable cards */}
-        <div className="relative">
-          {/* Navigation buttons */}
+        {/* Here come the cards! You can scroll through them to meet our interior collaborators. */}
+        <motion.div
+          className="relative"
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+        >
+          {/* Tap these buttons to scroll left or right and explore more cards! */}
           <button
             onClick={() => scroll('left')}
             className="hidden sm:block absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-[#f3efee] shadow-md rounded-full p-2"
@@ -65,15 +95,16 @@ const Interior = () => {
             →
           </button>
 
-          {/* Cards */}
+          {/* Each card shows an interior partner's photo and a short story about them */}
           <div
             ref={scrollRef}
             className="flex overflow-x-auto gap-4 sm:gap-6 py-4 scroll-smooth no-scrollbar"
           >
             {[1, 2, 3, 4, 5, 6].map((item) => (
-              <div
+              <motion.div
                 key={item}
                 className="w-[260px] sm:w-[340px] md:w-[400px] lg:w-[448px] h-[320px] sm:h-[370px] md:h-[400px] lg:h-[425px] bg-[#f3efee] border rounded-[16px] p-4 sm:p-8 flex-shrink-0 shadow-sm"
+                variants={itemVariants}
               >
                 <img
                   src={`https://picsum.photos/seed/${item}/448/240`}
@@ -93,10 +124,10 @@ const Interior = () => {
                 >
                   Egestas elit dui scelerisque ut eu purus aliquam vitae habitasse.
                 </p>
-              </div>
+              </motion.div>
             ))}
           </div>
-        </div>
+        </motion.div>
       </div>
     </section>
   );

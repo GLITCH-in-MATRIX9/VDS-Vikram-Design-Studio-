@@ -4,7 +4,7 @@ import { config } from '../config/env';
 // The configuration now points to Brevo's SMTP server.
 // Note that for port 587, `secure` is false because the connection
 // starts in plain text and is then upgraded to a secure one using STARTTLS.
-const transporter = nodemailer.createTransporter({
+const transporter = nodemailer.createTransport({
   host: config.email.host,
   port: config.email.port,
   secure: false, // Important: false for port 587

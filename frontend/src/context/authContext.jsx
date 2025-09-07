@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
-import { FaUserCheck, FaUserTimes, FaSignInAlt, FaUserPlus, FaSignOutAlt, FaSpinner } from "react-icons/fa";
+import { FaUserCheck, FaUserTimes, FaSignInAlt, FaUserPlus, FaSignOutAlt } from "react-icons/fa";
 
 export const AuthContext = createContext();
 
@@ -71,8 +71,8 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, loading, login, register, logout, icons: { FaUserCheck, FaUserTimes, FaSignInAlt, FaUserPlus, FaSignOutAlt, FaSpinner } }}>
-      {loading ? <FaSpinner className="animate-spin text-2xl mx-auto mt-10 text-gray-500" /> : children}
+    <AuthContext.Provider value={{ user, loading, login, register, logout, icons: { FaUserCheck, FaUserTimes, FaSignInAlt, FaUserPlus, FaSignOutAlt } }}>
+      {children}
     </AuthContext.Provider>
   );
 };

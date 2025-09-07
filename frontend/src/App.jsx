@@ -3,7 +3,8 @@ import Routes from './routes';
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
 import { AuthProvider } from './context/authContext';
-import React from 'react';
+import React, { useState } from 'react';
+import LoadingScreen from './components/LoadingScreen';
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
 
 function AppContent() {
   const location = useLocation();
+  const [isLoading, setIsLoading] = useState(true);
 
   const isAdmin = location.pathname.startsWith('/admin');
   const isContact = location.pathname.startsWith('/contact');
@@ -25,13 +27,23 @@ function AppContent() {
   const showNavbar = !isAdmin;
   const showFooter = !isAdmin && !isContact && !isCareer;
 
+  const handleLoadingComplete = () => {
+    setIsLoading(false);
+  };
+
   return (
     <>
-      {showNavbar && <Navbar />}
-      <div className="min-h-[80vh]">
-        <Routes />
-      </div>
-      {showFooter && <Footer />}
+      {isLoading ? (
+        <LoadingScreen onAnimationComplete={handleLoadingComplete} />
+      ) : (
+        <>
+          {showNavbar && <Navbar />}
+          <div className="min-h-[80vh]">
+            <Routes />
+          </div>
+          {showFooter && <Footer />}
+        </>
+      )}
     </>
   );
 }

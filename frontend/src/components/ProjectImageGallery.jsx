@@ -5,17 +5,13 @@ const ProjectImageGallery = ({ sections }) => {
   if (!firstImage) return null;
 
   return (
-    <div className="grid grid-cols-2 w-full mt-0 pt-0">
-
-      <div className="flex justify-center items-start">
-        <img
-          src={firstImage.content}
-          alt="Project"
-          className="max-w-full max-h-auto object-contain rounded-lg shadow-md"
-        />
-      </div>
-    
-      <div></div>
+    // Corrected: Removed the grid and used a flex container to center the image.
+    <div className="flex justify-center items-center w-full">
+      <img
+        src={firstImage.content}
+        alt="Project"
+        className="max-w-full max-h-auto object-contain rounded-lg shadow-md"
+      />
     </div>
   );
 };

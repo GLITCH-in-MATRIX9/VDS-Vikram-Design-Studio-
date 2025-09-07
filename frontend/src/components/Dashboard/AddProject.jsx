@@ -1,6 +1,12 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { FaGripVertical, FaTrash } from "react-icons/fa";
+import { FiUpload } from "react-icons/fi";
+
+
+const MAX_TEXT_LENGTH = 700;
+
+const TAG_OPTIONS = ["Residential", "Commercial", "Institutional", "Urban", "Public", "Hospitality", "Renovation"];
 
 const AddProject = () => {
     const [formData, setFormData] = useState({
@@ -12,151 +18,93 @@ const AddProject = () => {
         subCategory: "",
         client: "",
         collaborators: "",
-        team: "",
-        tags: ["", "", ""],
-        dateCreated: "",
-        dateModified: "",
-        modifiedBy: "",
-        keyDate: "",
         projectTeam: "",
-        preview: null,
+        tags: [],
+        keyDate: "",
+        previewImageUrl: "",
     });
 
-    const [blocks, setBlocks] = useState([{ contents: [] }]);
-    const fileInputRefs = useRef({});
+    const [sections, setSections] = useState([]);
+    const [previewFile, setPreviewFile] = useState(null);
 
-
+    // Handles changes to all form fields, including tags
     const handleChange = (e) => {
         const { name, value } = e.target;
-        if (name.startsWith("tag")) {
-            const index = parseInt(name.split("-")[1], 10);
-            const newTags = [...formData.tags];
-            newTags[index] = value;
-            setFormData((prev) => ({ ...prev, tags: newTags }));
+        if (name === "tags") {
+            setFormData((prev) => {
+                if (value && !prev.tags.includes(value)) {
+                    return { ...prev, tags: [...prev.tags, value] };
+                }
+                return prev;
+            });
         } else {
             setFormData((prev) => ({ ...prev, [name]: value }));
         }
     };
 
-
-    const handleAddBlock = () => {
-        setBlocks((prev) => {
-
-            const lastBlock = prev[prev.length - 1];
-            if (lastBlock && lastBlock.contents.length === 0) {
-                return prev;
-            }
-            return [...prev, { contents: [] }];
-        });
-    };
-    const handleRemoveBlock = (blockIndex) =>
-        setBlocks((prev) => prev.filter((_, i) => i !== blockIndex));
-
-
-    const handleAddText = (blockIndex) => {
-        setBlocks((prev) => {
-            const newBlocks = [...prev];
-            newBlocks[blockIndex].contents.push({ type: "text", value: "" });
-            return newBlocks;
-        });
+    const handleRemoveTag = (tagToRemove) => {
+        setFormData((prev) => ({
+            ...prev,
+            tags: prev.tags.filter(tag => tag !== tagToRemove),
+        }));
     };
 
-    const handleAddImage = (blockIndex, file) => {
-        if (!file) return;
-        setBlocks((prev) => {
-            const newBlocks = [...prev];
-            newBlocks[blockIndex].contents.push({
-                type: "image",
-                value: URL.createObjectURL(file),
-            });
-            return newBlocks;
-        });
+    const handleAddText = () => {
+        setSections((prev) => [...prev, { type: "text", content: "" }]);
     };
 
-    const handleAddGif = (blockIndex, file) => {
-        if (!file) return;
-        setBlocks((prev) => {
-            const newBlocks = [...prev];
-            newBlocks[blockIndex].contents.push({
-                type: "gif",
-                value: URL.createObjectURL(file),
-            });
-            return newBlocks;
-        });
-    };
-
-
-    const handleContentChange = (blockIndex, contentIndex, value) => {
-        setBlocks((prev) => {
-            const newBlocks = [...prev];
-            newBlocks[blockIndex].contents[contentIndex].value = value;
-            return newBlocks;
-        });
-    };
-
-    const handleRemoveContent = (blockIndex, contentIndex) => {
-        setBlocks((prev) => {
-            const newBlocks = [...prev];
-            newBlocks[blockIndex].contents = newBlocks[blockIndex].contents.filter(
-                (_, i) => i !== contentIndex
-            );
-            return newBlocks;
-        });
-    };
-
-
-    const handleDragEnd = (result) => {
-        if (!result.destination) return;
-
-        const { source, destination, type } = result;
-
-        if (type === "block") {
-            const reordered = Array.from(blocks);
-            const [removed] = reordered.splice(source.index, 1);
-            reordered.splice(destination.index, 0, removed);
-            setBlocks(reordered);
-        } else if (type === "content") {
-            const sourceBlockIndex = parseInt(source.droppableId.split("-")[1], 10);
-            const destBlockIndex = parseInt(destination.droppableId.split("-")[1], 10);
-
-            const sourceContents = Array.from(blocks[sourceBlockIndex].contents);
-            const [removed] = sourceContents.splice(source.index, 1);
-
-            if (sourceBlockIndex === destBlockIndex) {
-                sourceContents.splice(destination.index, 0, removed);
-                setBlocks((prev) => {
-                    const newBlocks = [...prev];
-                    newBlocks[sourceBlockIndex].contents = sourceContents;
-                    return newBlocks;
-                });
-            } else {
-                const destContents = Array.from(blocks[destBlockIndex].contents);
-                destContents.splice(destination.index, 0, removed);
-                setBlocks((prev) => {
-                    const newBlocks = [...prev];
-                    newBlocks[sourceBlockIndex].contents = sourceContents;
-                    newBlocks[destBlockIndex].contents = destContents;
-                    return newBlocks;
-                });
-            }
+    const handleAddImage = (file) => {
+        if (file) {
+            setSections((prev) => [...prev, { type: "image", content: URL.createObjectURL(file) }]);
         }
     };
 
+    const handleAddGif = (file) => {
+        if (file) {
+            setSections((prev) => [...prev, { type: "gif", content: URL.createObjectURL(file) }]);
+        }
+    };
+
+    const handleContentChange = (index, value) => {
+        if (value.length <= MAX_TEXT_LENGTH) {
+            setSections((prev) => {
+                const newSections = [...prev];
+                newSections[index].content = value;
+                return newSections;
+            });
+        }
+    };
+
+    const handleRemoveContent = (index) => {
+        setSections((prev) => prev.filter((_, i) => i !== index));
+    };
+
+    const handleDragEnd = (result) => {
+        if (!result.destination) return;
+        const reordered = Array.from(sections);
+        const [removed] = reordered.splice(result.source.index, 1);
+        reordered.splice(result.destination.index, 0, removed);
+        setSections(reordered);
+    };
+
     const handlePreviewChange = (e) => {
-        setFormData((prev) => ({
-            ...prev,
-            preview: e.target.files[0],
-        }));
+        setPreviewFile(e.target.files[0]);
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Form Data:", formData);
-        console.log("Blocks:", blocks);
+        const finalData = {
+            ...formData,
+            sections, 
+            previewImageUrl: previewFile ? 'url-from-upload-service' : '', // Placeholder
+            createdAt: new Date().toISOString(), // Auto-generated
+            updatedAt: new Date().toISOString(), // Auto-generated
+        };
+        console.log("Final Project Data:", finalData);
     };
 
     return (
-        <div className="flex-1 h-[calc(100vh-100px)] p-6 bg-[#F5F1EE]">
+        <div className="flex-1 p-6 bg-[#F5F1EE]">
             <nav className="text-sm font-medium mb-4 text-[#722F37]">
                 <span>Projects</span> &gt; <span>Add Project</span>
             </nav>
@@ -165,7 +113,7 @@ const AddProject = () => {
                 onSubmit={handleSubmit}
                 className="bg-white border rounded p-6 flex flex-col gap-6"
             >
-
+                {/* 1. Mandatory Fields */}
                 <div className="grid grid-cols-2 gap-6 items-start">
                     <div className="flex flex-col gap-4">
                         <h2 className="font-bold text-lg text-[#722F37]">
@@ -203,12 +151,12 @@ const AddProject = () => {
                                 required
                             />
                             <input
-                                type="date"
-                                name="keyDate"
-                                value={formData.keyDate}
+                                type="text"
+                                name="subCategory"
+                                value={formData.subCategory}
                                 onChange={handleChange}
+                                placeholder="Sub-Category"
                                 className="border p-2 rounded w-full border-[#C9BEB8]"
-                                required
                             />
                         </div>
                         <input
@@ -238,29 +186,49 @@ const AddProject = () => {
                             className="border p-2 rounded w-full border-[#C9BEB8]"
                             required
                         />
-                        <select
-                            name="status"
-                            value={formData.status}
-                            onChange={handleChange}
-                            className="border p-2 rounded w-full border-[#C9BEB8]"
-                            required
-                        >
-                            <option value="">Select Status *</option>
-                            <option value="Ongoing">Ongoing</option>
-                            <option value="Completed">Completed</option>
-                            <option value="On Hold">On Hold</option>
-                        </select>
+                        <div className="grid grid-cols-2 gap-2">
+                            <select
+                                name="status"
+                                value={formData.status}
+                                onChange={handleChange}
+                                className="border p-2 rounded w-full border-[#C9BEB8]"
+                                required
+                            >
+                                <option value="">Select Status *</option>
+                                <option value="Ongoing">Ongoing</option>
+                                <option value="Completed">Completed</option>
+                                <option value="On Hold">On Hold</option>
+                            </select>
+                            <input
+                                type="text"
+                                name="year"
+                                value={formData.year}
+                                onChange={handleChange}
+                                placeholder="Year *"
+                                className="border p-2 rounded w-full border-[#C9BEB8]"
+                                required
+                            />
+                        </div>
                     </div>
 
-
                     <div className="flex flex-col gap-2 items-center justify-center border p-4 rounded border-[#C9BEB8]">
-                        <label className="text-sm font-medium text-[#722F37]">
-                            Upload Preview
+                        <label
+                            htmlFor="preview-upload"
+                            className="flex items-center gap-2 px-4 py-2 bg-[#722F37] text-white rounded-md cursor-pointer hover:bg-[#632932] transition"
+                        >
+                            <FiUpload />
+                            <span className="text-sm font-medium">Upload Preview</span>
+                            <input
+                                id="preview-upload"
+                                type="file"
+                                accept="image/*,.gif"
+                                onChange={handlePreviewChange}
+                                className="hidden"
+                            />
                         </label>
-                        <input type="file" accept="image/*,.gif" onChange={handlePreviewChange} />
-                        {formData.preview && (
+                        {previewFile && (
                             <img
-                                src={URL.createObjectURL(formData.preview)}
+                                src={URL.createObjectURL(previewFile)}
                                 alt="Preview"
                                 className="w-auto h-68 object-cover rounded mt-2"
                             />
@@ -268,152 +236,142 @@ const AddProject = () => {
                     </div>
                 </div>
 
+                {/* 2. Additional Fields */}
+                <div className="mt-6 flex flex-col gap-4">
+                    <h2 className="font-bold text-lg text-[#722F37]">
+                        2. Additional Fields
+                    </h2>
+                    <div className="flex flex-col gap-2">
+                        <select
+                            name="tags"
+                            onChange={handleChange}
+                            className="border p-2 rounded w-full border-[#C9BEB8]"
+                            value=""
+                        >
+                            <option value="" disabled>Select Tags...</option>
+                            {TAG_OPTIONS.map((tag) => (
+                                <option key={tag} value={tag} disabled={formData.tags.includes(tag)}>
+                                    {tag}
+                                </option>
+                            ))}
+                        </select>
+                        <div className="flex flex-wrap gap-2 mt-2">
+                            {formData.tags.map((tag) => (
+                                <span key={tag} className="flex items-center gap-1 bg-[#D9D2CC] text-[#474545] text-xs px-3 py-1 rounded-full">
+                                    {tag}
+                                    <button
+                                        type="button"
+                                        onClick={() => handleRemoveTag(tag)}
+                                        className="text-gray-600 hover:text-gray-800"
+                                    >
+                                        &times;
+                                    </button>
+                                </span>
+                            ))}
+                        </div>
+                    </div>
+                    <div>
+                        <label htmlFor="keyDate" className="block text-sm font-medium text-[#722F37] mb-1">
+                            Key Date (e.g., Launch Date)
+                        </label>
+                        <input
+                            id="keyDate"
+                            type="date"
+                            name="keyDate"
+                            value={formData.keyDate}
+                            onChange={handleChange}
+                            placeholder="Key Date"
+                            className="border p-2 rounded w-full border-[#C9BEB8]"
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="dateCreated" className="block text-sm font-medium text-[#722F37] mb-1">
+                            Date Created (Auto-generated)
+                        </label>
+                        <input
+                            id="dateCreated"
+                            type="text"
+                            name="dateCreated"
+                            value={new Date().toISOString()} 
+                            placeholder="Date Created"
+                            disabled
+                            className="border p-2 rounded w-full bg-gray-100 border-[#C9BEB8]"
+                        />
+                    </div>
+                    <div>
+                        <label htmlFor="updatedAt" className="block text-sm font-medium text-[#722F37] mb-1">
+                            Date Modified (Auto-generated)
+                        </label>
+                        <input
+                            id="updatedAt"
+                            type="text"
+                            name="updatedAt"
+                            value={new Date().toISOString()}
+                            placeholder="Date Modified"
+                            disabled
+                            className="border p-2 rounded w-full bg-gray-100 border-[#C9BEB8]"
+                        />
+                    </div>
+                </div>
 
+                {/* 3. Content Sections */}
                 <div className="mt-6">
                     <h2 className="font-bold text-lg mb-4 text-[#722F37]">
-                        2. Content Blocks
+                        3. Content Sections
                     </h2>
+
                     <DragDropContext onDragEnd={handleDragEnd}>
-                        <Droppable droppableId="blocks" type="block">
+                        <Droppable droppableId="sections">
                             {(provided) => (
                                 <div {...provided.droppableProps} ref={provided.innerRef}>
-                                    {blocks.map((block, blockIndex) => (
-                                        <Draggable
-                                            key={`block-${blockIndex}`}
-                                            draggableId={`block-${blockIndex}`}
-                                            index={blockIndex}
-                                        >
+                                    {sections.map((section, index) => (
+                                        <Draggable key={`section-${index}`} draggableId={`section-${index}`} index={index}>
                                             {(provided) => (
                                                 <div
-                                                    className="mb-6 border rounded p-4 border-[#C9BEB8] bg-white"
+                                                    className="mb-4 border rounded p-4 border-[#C9BEB8] bg-white flex flex-col gap-2"
                                                     ref={provided.innerRef}
                                                     {...provided.draggableProps}
                                                 >
-                                                    <div className="flex justify-between items-center mb-2">
-                                                        <h3 className="font-semibold text-[#722F37]">
-                                                            Block {blockIndex + 1}
+                                                    <div className="flex justify-between items-center">
+                                                        <h3 className="font-medium text-[#722F37]">
+                                                            {section.type === "text" ? "Text Section" : `${section.type.charAt(0).toUpperCase() + section.type.slice(1)} Section`}
                                                         </h3>
-                                                        <div className="flex gap-2">
+                                                        <div className="flex gap-2 items-center">
                                                             <button
                                                                 type="button"
-                                                                onClick={() => handleAddText(blockIndex)}
-                                                                className="px-2 py-1 text-sm rounded bg-[#722F37] text-white"
-                                                            >
-                                                                + Add Text
-                                                            </button>
-                                                            <label className="px-2 py-1 text-sm rounded bg-green-600 text-white cursor-pointer">
-                                                                + Add Image
-                                                                <input
-                                                                    type="file"
-                                                                    accept="image/*"
-                                                                    className="hidden"
-                                                                    onChange={(e) =>
-                                                                        handleAddImage(blockIndex, e.target.files[0])
-                                                                    }
-                                                                />
-                                                            </label>
-                                                            <label className="px-2 py-1 text-sm rounded bg-purple-600 text-white cursor-pointer">
-                                                                + Add GIF
-                                                                <input
-                                                                    type="file"
-                                                                    accept=".gif,image/gif"
-                                                                    className="hidden"
-                                                                    onChange={(e) =>
-                                                                        handleAddGif(blockIndex, e.target.files[0])
-                                                                    }
-                                                                />
-                                                            </label>
-                                                            <button
-                                                                type="button"
-                                                                onClick={() => handleRemoveBlock(blockIndex)}
+                                                                onClick={() => handleRemoveContent(index)}
                                                                 className="text-red-600 hover:text-red-800"
                                                             >
                                                                 <FaTrash />
                                                             </button>
-                                                            <span
-                                                                {...provided.dragHandleProps}
-                                                                className="cursor-move text-gray-400 ml-2"
-                                                            >
+                                                            <span {...provided.dragHandleProps} className="cursor-move text-gray-400">
                                                                 <FaGripVertical />
                                                             </span>
                                                         </div>
                                                     </div>
 
-
-                                                    <Droppable
-                                                        droppableId={`contents-${blockIndex}`}
-                                                        type="content"
-                                                    >
-                                                        {(provided) => (
-                                                            <div
-                                                                ref={provided.innerRef}
-                                                                {...provided.droppableProps}
-                                                                className="flex flex-col gap-2"
-                                                            >
-                                                                {block.contents.map((content, contentIndex) => (
-                                                                    <Draggable
-                                                                        key={`content-${blockIndex}-${contentIndex}`}
-                                                                        draggableId={`content-${blockIndex}-${contentIndex}`}
-                                                                        index={contentIndex}
-                                                                    >
-                                                                        {(provided) => (
-                                                                            <div
-                                                                                className="flex items-center gap-2 border p-2 rounded border-[#D9D2CC] bg-[#FAF8F6]"
-                                                                                ref={provided.innerRef}
-                                                                                {...provided.draggableProps}
-                                                                            >
-                                                                                <span
-                                                                                    {...provided.dragHandleProps}
-                                                                                    className="cursor-move text-gray-400"
-                                                                                >
-                                                                                    <FaGripVertical />
-                                                                                </span>
-                                                                                {content.type === "text" ? (
-                                                                                    <textarea
-                                                                                        className="flex-grow border p-2 rounded border-[#C9BEB8]"
-                                                                                        value={content.value}
-                                                                                        placeholder="Enter text"
-                                                                                        onChange={(e) =>
-                                                                                            handleContentChange(
-                                                                                                blockIndex,
-                                                                                                contentIndex,
-                                                                                                e.target.value
-                                                                                            )
-                                                                                        }
-                                                                                    />
-                                                                                ) : content.type === "image" ? (
-                                                                                    <img
-                                                                                        src={content.value}
-                                                                                        alt="block content"
-                                                                                        className="h-20 rounded"
-                                                                                    />
-                                                                                ) : (
-                                                                                    <img
-                                                                                        src={content.value}
-                                                                                        alt="GIF content"
-                                                                                        className="h-20 rounded"
-                                                                                    />
-                                                                                )}
-                                                                                <button
-                                                                                    type="button"
-                                                                                    onClick={() =>
-                                                                                        handleRemoveContent(
-                                                                                            blockIndex,
-                                                                                            contentIndex
-                                                                                        )
-                                                                                    }
-                                                                                    className="text-red-600 hover:text-red-800"
-                                                                                >
-                                                                                    <FaTrash />
-                                                                                </button>
-                                                                            </div>
-                                                                        )}
-                                                                    </Draggable>
-                                                                ))}
-                                                                {provided.placeholder}
+                                                    {section.type === "text" ? (
+                                                        <>
+                                                            <textarea
+                                                                className="border p-2 rounded w-full border-[#C9BEB8] min-h-[100px]"
+                                                                value={section.content}
+                                                                placeholder="Enter text"
+                                                                onChange={(e) => handleContentChange(index, e.target.value)}
+                                                                maxLength={MAX_TEXT_LENGTH}
+                                                            />
+                                                            <div className="text-right text-xs text-gray-500">
+                                                                {section.content.length} / {MAX_TEXT_LENGTH}
                                                             </div>
-                                                        )}
-                                                    </Droppable>
+                                                        </>
+                                                    ) : (
+                                                        <div className="flex justify-center w-full">
+                                                            <img
+                                                                src={section.content}
+                                                                alt={`${section.type} content`}
+                                                                className="max-h-40 rounded object-cover"
+                                                            />
+                                                        </div>
+                                                    )}
                                                 </div>
                                             )}
                                         </Draggable>
@@ -424,13 +382,33 @@ const AddProject = () => {
                         </Droppable>
                     </DragDropContext>
 
-                    <button
-                        type="button"
-                        onClick={handleAddBlock}
-                        className="mt-4 px-4 py-2 bg-[#722F37] text-white rounded"
-                    >
-                        + Add Block
-                    </button>
+                    <div className="flex gap-2 justify-center mt-4">
+                        <button
+                            type="button"
+                            onClick={handleAddText}
+                            className="px-4 py-2 text-sm rounded bg-[#722F37] text-white"
+                        >
+                            + Add Text
+                        </button>
+                        <label className="px-4 py-2 text-sm rounded bg-green-600 text-white cursor-pointer">
+                            + Add Image
+                            <input
+                                type="file"
+                                accept="image/*,.gif"
+                                className="hidden"
+                                onChange={(e) => handleAddImage(e.target.files[0])}
+                            />
+                        </label>
+                        <label className="px-4 py-2 text-sm rounded bg-purple-600 text-white cursor-pointer">
+                            + Add GIF
+                            <input
+                                type="file"
+                                accept=".gif,image/gif"
+                                className="hidden"
+                                onChange={(e) => handleAddGif(e.target.files[0])}
+                            />
+                        </label>
+                    </div>
                 </div>
 
                 <button

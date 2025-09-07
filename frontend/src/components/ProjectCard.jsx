@@ -4,7 +4,6 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import ProjectImageGallery from "./ProjectImageGallery";
 import HorizontalScrollComponent from "./HorizontalScrollComponent";
 
-
 const ProjectCard = ({ project }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -12,7 +11,7 @@ const ProjectCard = ({ project }) => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768);
+      setIsMobile(window.innerWidth <= 768); 
     };
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -26,7 +25,7 @@ const ProjectCard = ({ project }) => {
   return (
     <motion.div
       layout
-      className={`relative w-full max-w-7xl r ounded-xl p-4 overflow-hidden`}
+      className={`relative w-full max-w-7xl rounded-xl p-4 overflow-hidden`}
       transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
     >
       <AnimatePresence mode="wait">
@@ -42,21 +41,40 @@ const ProjectCard = ({ project }) => {
             className="cursor-pointer"
             onClick={handleToggleExpand}
           >
-            <div className="flex flex-col-reverse md:flex-row gap-4 items-start overflow-x-hidden w-full">
-              <div className="flex flex-col items-start md:items-end text-left md:text-right min-w-[300px] md:min-w-[420px] max-w-lg pr-2 space-y-3">
+            {/* Main grid container: 1 column on mobile, 3 columns on desktop for centering */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 justify-items-center">
+              
+              {/* Left Column (Desktop Only) - Text Content, right-aligned */}
+              <div className="hidden md:flex flex-col items-end text-right w-full md:pr-4">
                 <p className="text-sm text-gray-600 uppercase tracking-wider">
-                  Residential
+                  {project?.category || "Residential"}
                 </p>
                 <h2 className="text-2xl font-semibold text-gray-800">
-                  Shanti Villa
+                  {project?.title || "Shanti Villa"}
                 </h2>
-                <div className="flex items-center gap-2 text-gray-500 text-sm">
-                  <FaMapMarkerAlt className="text-gray-400" />
-                  <span>Dimapur, Nagaland</span>
+                <div className="flex flex-col text-sm text-gray-500 mt-2">
+                  <div className="flex items-center gap-2">
+                    <FaMapMarkerAlt className="text-gray-400" />
+                    <span>{project?.location || "Dimapur, Nagaland"}</span>
+                  </div>
+                  <p className="mt-1">{project?.year || "2015"}</p>
                 </div>
-                <p className="text-sm text-gray-500">2015</p>
               </div>
-              <ProjectImageGallery sections={project.sections} isZoomed={false} />
+
+              {/* Center Column (Desktop) / Main Column (Mobile) - Image Gallery */}
+              <div className="order-1 md:order-2 flex justify-center items-start w-full">
+                <ProjectImageGallery sections={project.sections} isZoomed={false} />
+              </div>
+
+              {/* Mobile-only Text Content - Centered below image */}
+              <div className="md:hidden order-2 flex flex-col items-center text-center w-full">
+                <p className="text-sm text-gray-600 uppercase tracking-wider">
+                  {project?.category || "Residential"}
+                </p>
+                <h2 className="text-2xl font-semibold text-gray-800">
+                  {project?.title || "Shanti Villa"}
+                </h2>
+              </div>
             </div>
           </motion.div>
         ) : (
