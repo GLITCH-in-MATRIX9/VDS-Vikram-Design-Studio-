@@ -7,7 +7,7 @@ const containerVariants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.1, // Controls the delay between the heading and the form
+      staggerChildren: 0.1,
     },
   },
 };
@@ -20,14 +20,14 @@ const itemVariants = {
 const Form = () => {
   const [formData, setFormData] = React.useState({
     firstName: '',
-    staggerChildren: 0.1, // Heading and form fields appear one after another for a friendly effect
+    lastName: '',
     company: '',
     mobileNumber: '',
     emailAddress: '',
     message: '',
     captcha: false,
   });
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } }, // Each field gently floats up as it appears
+  
   const [isFilled, setIsFilled] = React.useState(false);
 
   React.useEffect(() => {
