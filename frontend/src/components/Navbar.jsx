@@ -2,8 +2,8 @@ import { Link, useLocation } from "react-router-dom";
 import { useState } from "react";
 
 import logo from "../assets/navbar/LogoIcon.png";
-import searchIcon from "../assets/icons/Search.png";
-import filterIcon from "../assets/icons/Vector.png";
+import searchIcon from "../assets/Icons/Search.png";
+import filterIcon from "../assets/Icons/Vector.png";
 import hamburgerIcon from "../assets/navbar/HamburgerMenu.png";
 import closeIcon from "../assets/navbar/Close.png";
 
