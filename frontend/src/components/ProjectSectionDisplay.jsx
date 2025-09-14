@@ -6,26 +6,26 @@ const ProjectSectionDisplay = ({ sections }) => {
   return (
     <div className="flex gap-6 md:gap-8 h-full">
       {sections.map((section, index) => (
-        <div 
-          key={index} 
-          className="flex-shrink-0 flex flex-col gap-4 items-center justify-center" 
+        <div
+          key={index}
+          className="flex-shrink-0 flex flex-col gap-4 items-center justify-center"
           // Removed inline width here. Each block will have its own width defined inside.
         >
           {section.type === "text" ? (
-            <div className=" p-4 " style={{ width: '400px' }}>
-              <p className="text-gray-700 leading-relaxed whitespace-pre-wrap">
+            <div className=" p-4 " style={{ minWidth: '320px', maxWidth: '400px' }}>
+              <p className="text-gray-700 leading-[140%] md:leading-relaxed whitespace-pre-wrap text-sm ">
                 {section.content}
               </p>
             </div>
           ) : (section.type === "image" || section.type === "gif") ? (
             <div 
-              className="rounded-lg shadow-md overflow-hidden" 
-              style={{ width: '800px', height: '450px' }}
+              className="w-[95vw] max-w-[800px] aspect-video rounded-lg shadow-md overflow-hidden" 
+              // style={{ width: '800px', height: '450px' }}
             >
               <img
                 src={section.content}
                 alt={`Project ${section.type} ${index + 1}`}
-                className="w-full h-full object-cover"
+                className="w-full object-cover"
               />
             </div>
           ) : null}
