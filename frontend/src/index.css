@@ -22,6 +22,10 @@
   scrollbar-width: none;
 }
 
+/* To prevent the page from overscrolling. */
+html {
+  overscroll-behavior-y: none;
+}
 
 /* marquee images  */
 @keyframes marquee {

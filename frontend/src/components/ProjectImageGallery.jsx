@@ -10,7 +10,7 @@ const ProjectImageGallery = ({ sections }) => {
       <img
         src={firstImage.content}
         alt="Project"
-        className="max-w-full max-h-auto object-contain rounded-lg shadow-md"
+        className="max-w-full aspect-video object-cover rounded-lg shadow-md"
       />
     </div>
   );

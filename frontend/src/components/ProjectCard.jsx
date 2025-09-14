@@ -25,7 +25,7 @@ const ProjectCard = ({ project }) => {
   return (
     <motion.div
       layout
-      className={`relative w-full max-w-7xl rounded-xl p-4 overflow-hidden`}
+      className={`relative w-full max-w-7xl rounded-xl px-4 overflow-hidden`}
       transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
     >
       <AnimatePresence mode="wait">
@@ -42,36 +42,36 @@ const ProjectCard = ({ project }) => {
             onClick={handleToggleExpand}
           >
             {/* Main grid container: 1 column on mobile, 3 columns on desktop for centering */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 justify-items-center">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 justify-items-center items-center px-4 md:px-0">
               
               {/* Left Column (Desktop Only) - Text Content, right-aligned */}
               <div className="hidden md:flex flex-col items-end text-right w-full md:pr-4">
-                <p className="text-sm text-gray-600 uppercase tracking-wider">
+                <p className="text-xs text-[#7E797A] uppercase">
                   {project?.category || "Residential"}
                 </p>
-                <h2 className="text-2xl font-semibold text-gray-800">
+                <h2 className="font-sora text-xl font-semibold text-[#3E3C3C]">
                   {project?.title || "Shanti Villa"}
                 </h2>
-                <div className="flex flex-col text-sm text-gray-500 mt-2">
-                  <div className="flex items-center gap-2">
+                <div className="flex flex-col text-sm text-[#474545] mt-2">
+                  <div className="flex items-center gap-2 text-xs">
                     <FaMapMarkerAlt className="text-gray-400" />
                     <span>{project?.location || "Dimapur, Nagaland"}</span>
                   </div>
-                  <p className="mt-1">{project?.year || "2015"}</p>
+                  {/* <p className="mt-1">{project?.year || "2015"}</p> */}
                 </div>
               </div>
 
               {/* Center Column (Desktop) / Main Column (Mobile) - Image Gallery */}
-              <div className="order-1 md:order-2 flex justify-center items-start w-full">
+              <div className="order-1 md:order-2 flex items-start w-full">
                 <ProjectImageGallery sections={project.sections} isZoomed={false} />
               </div>
 
               {/* Mobile-only Text Content - Centered below image */}
-              <div className="md:hidden order-2 flex flex-col items-center text-center w-full">
-                <p className="text-sm text-gray-600 uppercase tracking-wider">
+              <div className="md:hidden order-2 flex flex-col w-full">
+                <p className="text-xs text-[#7E797A] uppercase">
                   {project?.category || "Residential"}
                 </p>
-                <h2 className="text-2xl font-semibold text-gray-800">
+                <h2 className="font-sora text-xl font-semibold text-[#3E3C3C]">
                   {project?.title || "Shanti Villa"}
                 </h2>
               </div>
