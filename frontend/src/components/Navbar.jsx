@@ -10,7 +10,7 @@ import filterIcon from "../assets/Icons/Vector.png";
 import hamburgerIcon from "../assets/navbar/HamburgerMenu.png";
 import closeIcon from "../assets/navbar/Close.png";
 
-import FilterSidebar from "./FilterSidebar";
+import FilterSidebar from "./FilterSideBar";
 
 // Filter options data (used for both desktop and mobile versions)
 const filterOptions = {
