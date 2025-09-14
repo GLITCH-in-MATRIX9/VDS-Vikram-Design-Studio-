@@ -1,12 +1,10 @@
-import { motion, useSpring, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
-import { useEffect, useState, useRef } from "react";
+import { motion, useSpring, useScroll, useTransform, useVelocity } from "framer-motion";
 import ProjectCard from "../components/ProjectCard";
 import projects from "../Data/projects.json";
 
 const Home = () => {
-  const {scrollY} = useScroll();
-  const [isScrolling, setIsScrolling] = useState(false);
-  const timeoutRef = useRef(null);
+  const { scrollY } = useScroll();
+  const scrollVelocity = useVelocity(scrollY);
 
   const springConfig = {
     stiffness: 100,
@@ -14,22 +12,13 @@ const Home = () => {
   }
 
   // Smooth scaling spring
-  const z = useSpring(0, springConfig);
+  const targetZ = useTransform(scrollVelocity, [-1500, 0, 1500], [-150, 0, -150], { clamp: false });
+  const z = useSpring(targetZ, springConfig);
   
   // Keep the origin of perspective change in the center of the screen dynamically
   const perspectiveOrigin = useTransform(scrollY, y => `50% ${y + window.innerHeight / 2}px`);
 
-  useEffect(() => {
-    z.set(isScrolling ? -250 : 0);
-  }, [isScrolling, z]);
-
-  useMotionValueEvent(scrollY, "change", () => {
-    setIsScrolling(true);
-    clearTimeout(timeoutRef.current);
-    timeoutRef.current = setTimeout(() => {
-      setIsScrolling(false);
-    }, 150);
-  });
+  
 
   return (
     <motion.div style={{perspective: "1200px", perspectiveOrigin}} className="bg-[#faf6f3] flex flex-col items-center py-6">
