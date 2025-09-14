@@ -20,7 +20,7 @@ const Home = () => {
   const perspectiveOrigin = useTransform(scrollY, y => `50% ${y + window.innerHeight / 2}px`);
 
   useEffect(() => {
-    z.set(isScrolling ? -100 : 0);
+    z.set(isScrolling ? -250 : 0);
   }, [isScrolling, z]);
 
   useMotionValueEvent(scrollY, "change", () => {
