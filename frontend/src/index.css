@@ -53,3 +53,21 @@ html {
 .animate-marquee-reverse {
   animation: marquee-reverse 20s linear infinite;
 }
+
+
+.list-circle-stroke {
+  list-style: none; /* Removes the default marker */
+  padding-left: 1.5rem; /* Adds space for the custom marker */
+}
+
+.list-circle-stroke li::before {
+  content: '';
+  display: inline-block;
+  width: 0.5rem; /* Size of the circle */
+  height: 0.5rem;
+  border: 2px solid #4c4c4c; /* Adjust color and stroke width */
+  border-radius: 50%;
+  margin-right: 0.75rem; /* Space between the circle and the text */
+  position: relative;
+  top: 0.001rem; 
+}

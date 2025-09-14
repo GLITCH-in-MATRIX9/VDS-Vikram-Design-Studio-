@@ -1,37 +1,91 @@
 [
   {
     "_id": "1",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
+    "title": "Sarba Siksha Abhyan Modular Schools",
+    "category": "Education",
+    "description": "A scalable and site-adaptable G+2 modular school prototype for secondary education infrastructure across Assam.",
     "sections": [
       {
         "type": "image",
-        "content": "https://picsum.photos/800/600?random=1"
-      },
-      {
-        "type": "gif",
-        "content": "https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif"
+        "content": "src/assets/MEDIA/01.png"
       },
       {
         "type": "text",
-        "content": "This luxurious villa is nestled in a serene location, offering a perfect blend of tranquility and urban convenience. It features expansive indoor-outdoor living spaces, high ceilings, and floor-to-ceiling windows that flood the home with natural light. The private pool and landscaped garden make it an ideal retreat for both relaxation and entertainment."
+        "content": "This G+2 modular school prototype has been conceived as a scalable and site-adaptable solution under the Sarba Siksha Abhyan initiative, aimed at strengthening secondary education infrastructure across Assam. Designed to be deployed across multiple locations, the plan emphasizes repeatability without compromising on contextual relevance or educational quality"
       },
       {
         "type": "image",
-        "content": "https://picsum.photos/800/600?random=2"
+        "content": "src/assets/MEDIA/03.png"
+      },
+      {
+        "type": "image",
+        "content": "src/assets/MEDIA/04.png"
       },
       {
         "type": "text",
-        "content": "The interiors have been thoughtfully designed with a minimalist aesthetic, emphasizing clean lines, natural materials, and functional elegance. Each room is furnished with bespoke pieces that complement the villa’s architectural beauty, creating a harmonious living experience."
+        "content": "This G+2 modular school uses three typologies—L-shaped, C-shaped, and Linear—based on a flexible grid for varied site conditions. Type A offers maximum daylight and ventilation, Type B is compact with a courtyard, and Type C suits narrow plots. Classrooms feature cross ventilation, storage, and planters for functional, comfortable learning spaces. The design ensures quick, site-responsive deployment across Assam."
+      },
+      {
+        "type": "image",
+        "content": "src/assets/MEDIA/06.png"
+      },
+      {
+        "type": "image",
+        "content": "src/assets/MEDIA/07.png"
+      },
+      {
+        "type": "text",
+        "content": "Best suited for narrow or constrained sites, this form has satisfactory daylight and ventilation, with no internal courtyard. The ramp is positioned externally, and a full butterfly roof maximizes water drainage efficiency."
+      },
+      {
+        "type": "image",
+        "content": "src/assets/MEDIA/09.png"
+      },
+      {
+        "type": "image",
+        "content": "src/assets/MEDIA/10.png"
+      },
+      {
+        "type": "text",
+        "content": "Offers excellent cross ventilation and daylight with a spacious 20×32m courtyard. This layout is ideal for larger sites and provides the most open interaction space. Ramp runs along the interior, and the roof follows a half butterfly form."
+      },
+      {
+        "type": "image",
+        "content": "src/assets/MEDIA/12.png"
+      },
+      {
+        "type": "image",
+        "content": "src/assets/MEDIA/13.png"
+      },
+      {
+        "type": "text",
+        "content": "A compact version with a 12×12m courtyard and good ventilation and lighting. The layout creates a semi-enclosed central green space, encouraging community interaction. Suitable for medium-sized plots."
+      },
+      {
+        "type": "image",
+        "content": "src/assets/MEDIA/15.png"
+      },
+      {
+        "type": "image",
+        "content": "src/assets/MEDIA/16.png"
+      },
+      {
+        "type": "text",
+        "content": "The G+2 modular school ensures thermal comfort through cross ventilation, operable louvered windows, and ventilated lofts under sloped roofs. Efficient airflow, daylight optimization, and passive cooling strategies create a sustainable, low-maintenance learning environment suited to Assam’s climate."
+      },
+      {
+        "type": "image",
+        "content": "src/assets/MEDIA/18.png"
       }
     ],
-    "location": "Serene Location",
-    "year": "2024",
-    "client": "Private Owner",
-    "project_team": "Architect Team A",
-    "collaborators": "Interior Designers, Landscape Artists",
-    "status": "Completed"
+    "location": "Assam",
+    "year": "2025",
+    "client": "World Bank, Public Works Department (B) Assam",
+    "project_team": "Namman Shroff, Tanisha Sengupta, Mahasweta Bose, Rajnish Rabha, Paran Basumatary",
+    "collaborators": "Space Ace Architects, Swasti Engineers & Associates",
+    "size_m2": "1300",
+    "size_ft2": "13,988",
+    "status": "In design"
   },
   {
     "_id": "2",
