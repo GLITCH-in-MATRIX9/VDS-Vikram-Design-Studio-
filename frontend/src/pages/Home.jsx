@@ -1,45 +1,51 @@
-import { motion, useSpring } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, useSpring, useScroll, useTransform, useMotionValueEvent } from "framer-motion";
+import { useEffect, useState, useRef } from "react";
 import ProjectCard from "../components/ProjectCard";
 import projects from "../Data/projects.json";
 
 const Home = () => {
+  const {scrollY} = useScroll();
   const [isScrolling, setIsScrolling] = useState(false);
+  const timeoutRef = useRef(null);
 
-  useEffect(() => {
-    let timeout;
-    const handleScroll = () => {
-      setIsScrolling(true);
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        setIsScrolling(false);
-      }, 150); // a bit longer delay for smoother return
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  const springConfig = {
+    stiffness: 100,
+    damping: 50,
+  }
 
   // Smooth scaling spring
-  const scaleSpring = useSpring(isScrolling ? 1.03 : 1, {
-    stiffness: 120,   
-    damping: 18,      
-    mass: 0.7,       
+  const z = useSpring(0, springConfig);
+  
+  // Keep the origin of perspective change in the center of the screen dynamically
+  const perspectiveOrigin = useTransform(scrollY, y => `50% ${y + window.innerHeight / 2}px`);
+
+  useEffect(() => {
+    z.set(isScrolling ? -100 : 0);
+  }, [isScrolling, z]);
+
+  useMotionValueEvent(scrollY, "change", () => {
+    setIsScrolling(true);
+    clearTimeout(timeoutRef.current);
+    timeoutRef.current = setTimeout(() => {
+      setIsScrolling(false);
+    }, 150);
   });
 
   return (
-    <div className="bg-[#faf6f3] flex flex-col items-center py-6 space-y-6">
-      {projects.map((project) => (
-        <motion.div
-          key={project._id}
-          style={{ scale: scaleSpring }}
-          className="w-full flex justify-center overflow-hidden"
-        >
-          <ProjectCard project={project} />
-        </motion.div>
-      ))}
-    </div>
+    <motion.div style={{perspective: "1200px", perspectiveOrigin}} className="bg-[#faf6f3] flex flex-col items-center py-6">
+      <motion.div style={{z}} className="w-full flex flex-col items-center gap-8">
+        {projects.map((project) => (
+          <div
+            key={project._id}
+            className="w-full flex justify-center overflow-hidden"
+          >
+            <ProjectCard project={project} />
+          </div>
+        ))}
+      </motion.div>
+    </motion.div>
   );
 };
 
-export default Home;
+
+export default Home; 
