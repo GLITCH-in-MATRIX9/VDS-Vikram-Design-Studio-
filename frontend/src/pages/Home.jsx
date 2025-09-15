@@ -36,7 +36,7 @@ const Home = () => {
   return (
     <ReactLenis root options={lenisOptions}>
       <motion.div style={{perspective: "1200px", perspectiveOrigin}} className="bg-[#faf6f3] flex flex-col items-center py-6">
-        <motion.div style={{z}} className="w-full flex flex-col items-center gap-8">
+        <motion.div style={{z}} className="w-full flex flex-col items-center gap-3 md:gap-6 xl:gap-8">
           {projects.map((project) => (
             <div
               key={project._id}
