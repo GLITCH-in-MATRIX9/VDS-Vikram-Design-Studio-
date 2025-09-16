@@ -7,7 +7,7 @@
     "sections": [
       {
         "type": "image",
-        "content": "src/assets/MEDIA/01.png"
+        "content": "src/assets/media/01.png"
       },
       {
         "type": "text",
@@ -15,11 +15,11 @@
       },
       {
         "type": "image",
-        "content": "src/assets/MEDIA/03.png"
+        "content": "src/assets/media/03.png"
       },
       {
         "type": "image",
-        "content": "src/assets/MEDIA/04.png"
+        "content": "src/assets/media/04.png"
       },
       {
         "type": "text",
@@ -27,11 +27,11 @@
       },
       {
         "type": "image",
-        "content": "src/assets/MEDIA/06.png"
+        "content": "src/assets/media/06.png"
       },
       {
         "type": "image",
-        "content": "src/assets/MEDIA/07.png"
+        "content": "src/assets/media/07.png"
       },
       {
         "type": "text",
@@ -39,11 +39,11 @@
       },
       {
         "type": "image",
-        "content": "src/assets/MEDIA/09.png"
+        "content": "src/assets/media/09.png"
       },
       {
         "type": "image",
-        "content": "src/assets/MEDIA/10.png"
+        "content": "src/assets/media/10.png"
       },
       {
         "type": "text",
@@ -51,11 +51,11 @@
       },
       {
         "type": "image",
-        "content": "src/assets/MEDIA/12.png"
+        "content": "src/assets/media/12.png"
       },
       {
         "type": "image",
-        "content": "src/assets/MEDIA/13.png"
+        "content": "src/assets/media/13.png"
       },
       {
         "type": "text",
@@ -63,11 +63,11 @@
       },
       {
         "type": "image",
-        "content": "src/assets/MEDIA/15.png"
+        "content": "src/assets/media/15.png"
       },
       {
         "type": "image",
-        "content": "src/assets/MEDIA/16.png"
+        "content": "src/assets/media/16.png"
       },
       {
         "type": "text",
@@ -75,7 +75,7 @@
       },
       {
         "type": "image",
-        "content": "src/assets/MEDIA/18.png"
+        "content": "src/assets/media/18.png"
       }
     ],
     "location": "Assam",
