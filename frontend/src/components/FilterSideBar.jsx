@@ -34,7 +34,7 @@ const FilterSidebar = ({ isOpen, onClose }) => {
                     initial={{ x: '100%' }}
                     animate={{ x: '0%' }}
                     exit={{ x: '100%' }}
-                    transition={{ type: "tween", duration: 0.3 }}
+                    transition={{ type: "tween", duration: 1, ease: [0.83, 0, 0.17, 1] }}
                     // Adjusted classes for positioning and height
                     className="fixed top-20 right-0 h-[calc(100vh-80px)] w-80 bg-[#f3efee] shadow-lg z-[99] flex flex-col"
                 >
@@ -53,7 +53,7 @@ const FilterSidebar = ({ isOpen, onClose }) => {
                                             initial={{ height: 0, opacity: 0 }}
                                             animate={{ height: 'auto', opacity: 1 }}
                                             exit={{ height: 0, opacity: 0 }}
-                                            transition={{ duration: 0.2 }}
+                                            transition={{ duration: 0.3, ease: "easeInOut" }}
                                             className="overflow-hidden bg-[#f3efee]"
                                         >
                                             <ul className="py-2 list-circle-stroke">

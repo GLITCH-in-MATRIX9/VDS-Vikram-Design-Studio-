@@ -25,7 +25,7 @@ const ProjectCard = ({ project }) => {
   return (
     <motion.div
       layout
-      className={`relative w-full max-w-7xl rounded-xl px-4 overflow-hidden`}
+      className={`relative w-full max-w-7xl rounded-xl overflow-hidden`}
       transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
     >
       <AnimatePresence mode="wait">
@@ -42,17 +42,17 @@ const ProjectCard = ({ project }) => {
             onClick={handleToggleExpand}
           >
             {/* Main grid container: 1 column on mobile, 3 columns on desktop for centering */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 justify-items-center items-center px-4 md:px-0">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 justify-items-center items-center px-4 lg:px-0">
               
               {/* Left Column (Desktop Only) - Text Content, right-aligned */}
-              <div className="hidden md:flex flex-col items-end text-right w-full md:pr-4">
+              <div className="hidden lg:flex flex-col items-end text-right w-full lg:pl-4 lg:pr-8">
                 <p className="text-xs text-[#7E797A] uppercase">
                   {project?.category || "Residential"}
                 </p>
-                <h2 className="font-sora text-xl font-semibold text-[#3E3C3C]">
+                <h2 className="font-sora text-xl font-semibold text-[#3E3C3C] mt-1">
                   {project?.title || "Shanti Villa"}
                 </h2>
-                <div className="flex flex-col text-sm text-[#474545] mt-2">
+                <div className="flex flex-col text-sm text-[#474545] mt-4">
                   <div className="flex items-center gap-2 text-xs">
                     <FaMapMarkerAlt className="text-gray-400" />
                     <span>{project?.location || "Dimapur, Nagaland"}</span>
@@ -62,12 +62,12 @@ const ProjectCard = ({ project }) => {
               </div>
 
               {/* Center Column (Desktop) / Main Column (Mobile) - Image Gallery */}
-              <div className="order-1 md:order-2 flex items-start w-full">
+              <div className="order-1 lg:order-2 flex items-start w-full max-w-[400px] lg:max-w-[800px]">
                 <ProjectImageGallery sections={project.sections} isZoomed={false} />
               </div>
 
               {/* Mobile-only Text Content - Centered below image */}
-              <div className="md:hidden order-2 flex flex-col w-full">
+              <div className="lg:hidden max-w-[400px] lg:max-w-[800px] order-2 flex gap-1 flex-col w-full py-3">
                 <p className="text-xs text-[#7E797A] uppercase">
                   {project?.category || "Residential"}
                 </p>

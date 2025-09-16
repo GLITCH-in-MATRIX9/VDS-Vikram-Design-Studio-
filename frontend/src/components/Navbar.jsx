@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 import { FaYoutube, FaFacebookF, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
@@ -30,6 +30,18 @@ const Navbar = () => {
     const [filterOpen, setFilterOpen] = useState(false);
     const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
     const [selectedCategory, setSelectedCategory] = useState(null);
+
+    useEffect(() => {
+        // If the menu is open, add the 'no-scroll' class to the body
+        if (menuOpen) {
+            document.body.classList.add('no-scroll');
+        } else {
+            document.body.classList.remove('no-scroll');
+        }
+        return () => {
+            document.body.classList.remove('no-scroll');
+        };
+    }, [menuOpen]); 
 
     const location = useLocation();
     const isHome = location.pathname === "/";
@@ -87,12 +99,12 @@ const Navbar = () => {
                         </div>
 
                         {/* Mobile Icons (visible below md) */}
-                        <div className={`md:hidden flex items-center gap-4 ${!isHome && 'invisible pointer-events-none'}`}>
+                        <div className={`md:hidden flex items-center gap-4`}>
                             <button onClick={() => {
                                 setMobileFilterOpen((prev) => !prev);
                                 setMenuOpen(false);
                             }}>
-                                <img src={filterIcon} alt="filter" className="h-4 w-4 object-contain" />
+                                <img src={filterIcon} alt="filter" className={`h-4 w-4 object-contain ${!isHome && 'invisible pointer-events-none'}`} />
                             </button>
                             <button onClick={() => setMenuOpen(true)}>
                                 <img src={hamburgerIcon} alt="menu" className="h-8 w-8 object-contain" />
@@ -107,10 +119,10 @@ const Navbar = () => {
                 {isHome && filterOpen && (
                     <motion.div
                         key="filters"
-                        initial={{ height: 0, opacity: 0 }}
+                        initial={{ height: 0, opacity: 1}}
                         animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        exit={{ height: 0, opacity: 1 }}
+                        transition={{ duration: 1, ease: [0.83, 0, 0.17, 1] }}
                         className="w-full bg-[#f3efee] border-b border-[#e0dcd7] overflow-hidden z-40"
                     >
                         <div className="max-w-7xl mx-auto px-6 py-3 grid grid-cols-2 md:flex justify-evenly flex-wrap gap-2">
@@ -133,10 +145,10 @@ const Navbar = () => {
                 {isHome && selectedCategory && filterOpen && (
                     <motion.div
                         key="subfilters"
-                        initial={{ height: 0, opacity: 0 }}
+                        initial={{ height: 0, opacity: 1 }}
                         animate={{ height: "auto", opacity: 1 }}
-                        exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.3, ease: "easeInOut" }}
+                        exit={{ height: 0, opacity: 1 }}
+                        transition={{ duration: 0.8, ease: [0.83, 0, 0.17, 1] }}
                         className="w-full bg-[#f3efee] overflow-hidden z-30"
                     >
                         <div className="max-w-7xl mx-auto px-6 py-3 flex justify-evenly flex-wrap gap-2 text-gray-600">
@@ -155,10 +167,10 @@ const Navbar = () => {
                 {menuOpen && (
                     <motion.div
                         key="mobile-menu"
-                        initial={{ opacity: 0, x: '100%' }}
+                        initial={{ opacity: 1, x: '100%' }}
                         animate={{ opacity: 1, x: '0%' }}
-                        exit={{ opacity: 0, x: '100%' }}
-                        transition={{ duration: 0.3, ease: 'easeInOut' }}
+                        exit={{ opacity: 1, x: '100%' }}
+                        transition={{ duration: 1, ease: [0.83, 0, 0.17, 1] }}
                         className="fixed inset-0 z-[100] bg-[#f9f6f3] flex flex-col items-center pt-6"
                     >
                         <div className="absolute top-6 right-6">
@@ -167,7 +179,7 @@ const Navbar = () => {
                             </button>
                         </div>
 
-                        <ul className="flex flex-col space-y-14 mt-52 text-[#af2b1e] font-semibold text-4xl text-center">
+                        <ul className="flex flex-col space-y-14 mt-30 text-[#af2b1e] font-semibold text-4xl text-center">
                             <li><Link to="/" onClick={closeAllMenus}>HOME</Link></li>
                             <li><Link to="/about" onClick={closeAllMenus}>ABOUT</Link></li>
                             <li><Link to="/team" onClick={closeAllMenus}>TEAM</Link></li>
@@ -175,7 +187,7 @@ const Navbar = () => {
                             <li><Link to="/contact" onClick={closeAllMenus}>CONTACT</Link></li>
                         </ul>
 
-                        <div className="mt-auto mb-10 flex space-x-6 text-[#af2b1e] text-xl">
+                        <div className="mt-30 flex space-x-6 text-[#af2b1e] text-xl">
                             <a href="#"><FaYoutube /></a>
                             <a href="#"><FaFacebookF /></a>
                             <a href="#"><FaInstagram /></a>
