@@ -17,11 +17,11 @@ const Footer = () => {
                 </Link>
 
                 {/* Center section: Social media icons for connecting with VDS */}
-                <div className="flex space-x-5 text-[#af2b1e] text-lg">
-                    <a href="#"><FaYoutube /></a>
-                    <a href="#"><FaFacebookF /></a>
-                    <a href="#"><FaInstagram /></a>
-                    <a href="#"><FaLinkedinIn /></a>
+                <div class="flex space-x-5 text-[#af2b1e] text-lg">
+                    <a href="https://www.youtube.com/@vikramdesignstudio4300/featured" target="_blank"><FaYoutube/></a>
+                    <a href="https://www.facebook.com/VikramDesignStudioOfficial/" target="_blank"><FaFacebookF/></a>
+                    <a href="https://www.instagram.com/vikramdesignstudio/" target="_blank"><FaInstagram/></a>
+                    <a href="https://www.linkedin.com/company/74880921/admin/dashboard/" target="_blank"><FaLinkedinIn/></a>
                 </div>
 
                 {/* Right section: Copyright notice, visible only on large screens */}

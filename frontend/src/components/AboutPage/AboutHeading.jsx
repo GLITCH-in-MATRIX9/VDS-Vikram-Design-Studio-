@@ -97,7 +97,13 @@ const AboutHeading = () => {
           className="hidden lg:flex w-full h-full justify-center items-start mt-6 lg:mt-0"
           variants={itemVariants}
         >
-          <div className="w-full h-full bg-gray-300 rounded-md" />
+          <div className="w-full h-full rounded-md">
+            <img
+              src="https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057665/yqbxzbkijtuvtde5nilu.jpg"
+              alt="Description of the image"
+              className="w-full h-full object-cover rounded-md"
+            />          
+          </div>
         </motion.div>
       </motion.div>
     </section>
