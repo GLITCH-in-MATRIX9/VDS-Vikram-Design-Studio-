@@ -1,25 +1,25 @@
 [
   {
     "_id": "1",
-    "title": "Bhupen Hazarika Museum",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
+    "title": "Sarba Siksha Abhyan Modular Schools",
+    "category": "Education",
+    "description": "A scalable and site-adaptable modular school prototype developed under the Sarba Siksha Abhyan initiative, aimed at strengthening secondary education infrastructure across Assam. Designed to be deployed across multiple locations, the plan emphasizes repeatability without compromising on contextual relevance or educational quality.",
     "sections": [
       {
         "type": "image",
-        "content": "src/assets/media/01.png"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055694/bonyhflvwz9rzh5emsn4.png"
       },
       {
         "type": "text",
-        "content": "This G+2 modular school prototype has been conceived as a scalable and site-adaptable solution under the Sarba Siksha Abhyan initiative, aimed at strengthening secondary education infrastructure across Assam. Designed to be deployed across multiple locations, the plan emphasizes repeatability without compromising on contextual relevance or educational quality"
+        "content": "This G+2 modular school prototype has been conceived as a scalable and site-adaptable solution under the Sarba Siksha Abhyan initiative, aimed at strengthening secondary education infrastructure across Assam. Designed to be deployed across multiple locations, the plan emphasizes repeatability without compromising on contextual relevance or educational quality."
       },
       {
         "type": "image",
-        "content": "src/assets/media/03.png"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055696/orumzqm5amoni3hjjxft.png"
       },
       {
         "type": "image",
-        "content": "src/assets/media/04.png"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055695/xblabyfflfkoogzlh2d2.png"
       },
       {
         "type": "text",
@@ -27,11 +27,11 @@
       },
       {
         "type": "image",
-        "content": "src/assets/media/06.png"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055695/cjkzfo9agl7bfkqthcht.png"
       },
       {
         "type": "image",
-        "content": "src/assets/media/07.png"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055694/ueuaw3bfap8o3cqir8pw.png"
       },
       {
         "type": "text",
@@ -39,11 +39,11 @@
       },
       {
         "type": "image",
-        "content": "src/assets/media/09.png"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055694/groby74695a8fwow3kbk.png"
       },
       {
         "type": "image",
-        "content": "src/assets/media/10.png"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055693/kwzgdaupipu2jspkttkn.png"
       },
       {
         "type": "text",
@@ -51,11 +51,11 @@
       },
       {
         "type": "image",
-        "content": "src/assets/media/12.png"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055693/khystxntqxsiai869vcq.png"
       },
       {
         "type": "image",
-        "content": "src/assets/media/13.png"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055693/ehp9abbqfyhw5lds6bh1.png"
       },
       {
         "type": "text",
@@ -63,11 +63,11 @@
       },
       {
         "type": "image",
-        "content": "src/assets/media/15.png"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055693/kezrpwf860ssafrmklqb.png"
       },
       {
         "type": "image",
-        "content": "src/assets/media/16.png"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055693/iztims6incqarpt8mcgc.png"
       },
       {
         "type": "text",
@@ -75,1226 +75,465 @@
       },
       {
         "type": "image",
-        "content": "src/assets/media/18.png"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055692/w6gwbmqcxmq9hwujgtou.png"
       }
     ],
     "location": "Assam",
     "year": "2025",
     "client": "World Bank, Public Works Department (B) Assam",
-    "project_team": "Namman Shroff, Tanisha Sengupta, Mahasweta Bose, Rajnish Rabha, Paran Basumatary",
+    "project_leader": "Namman Shroff",
+    "project_team": "Tanisha Sengupta, Mahasweta Bose, Rajnish Rabha, Paran Basumatary",
     "collaborators": "Space Ace Architects, Swasti Engineers & Associates",
     "size_m2": "1300",
     "size_ft2": "13,988",
     "status": "In design"
   },
+
   {
     "_id": "2",
-    "title": "Modern Office",
-    "category": "Commercial",
-    "description": "A state-of-the-art office space designed for productivity.",
-    "coverImage": "https://picsum.photos/800/600?random=3",
+    "title": "Bhupen Hazarika Museum",
+    "category": "Culture",
+    "description": "A cultural campus in Assam dedicated to the legendary musician Bhupen Hazarika. The masterplan integrates museums, an auditorium, and open-air gathering spaces through courtyards and shaded walkways, reinterpreting vernacular architecture while anchoring the visitor experience in landscape, light, and memory.",
     "sections": [
       {
         "type": "image",
-        "content": "https://picsum.photos/800/600?random=4"
-      },
-      {
-        "type": "gif",
-        "content": "https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057014/uvckc7svrbsz5yg6bjli.jpg"
       },
       {
         "type": "text",
-        "content": "This modern office space is designed to foster creativity and collaboration among teams. The open-plan layout encourages interaction, while dedicated quiet zones provide spaces for focused work. High-end finishes and ergonomic furniture enhance comfort and productivity."
+        "content": "VDS is leading the design of a cultural campus in Assam dedicated to the legendary musician Bhupen Hazarika. Located in a lush, tree-lined site, the masterplan weaves together museums, an auditorium, and open-air gathering spaces through a series of courtyards and shaded walkways. The design reinterprets vernacular typologies with rhythmic wooden louvers and deep overhangs, while anchoring the visitor experience in landscape, light, and memory."
       },
       {
         "type": "image",
-        "content": "https://picsum.photos/800/600?random=5"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057015/l7pjahuetbay339q0liz.jpg"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057013/eor5oyrpbh7hd1rvafo5.jpg"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057013/tba5nfzjkzfwkxo6f5v9.jpg"
       },
       {
         "type": "text",
-        "content": "Natural light pours in from full-height windows, reducing the need for artificial lighting and boosting employee wellness. Integrated smart tech helps manage lighting, temperature, and air quality, while biophilic design elements like indoor plants bring nature closer to the workspace."
+        "content": "The master plan is conceived as an interconnected cultural spine — seamlessly integrating the museum halls, an auditorium, guest lodging, dining, and landscaped zones. Each function is placed to create intuitive movement and layered experiences, encouraging pause, interaction, and exploration."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057019/s3uik65iqa3xu4qlgfmg.jpg"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057018/cgvdhcjtkd6k4um6pn8h.jpg"
+      },
+      {
+        "type": "text",
+        "content": "Set within a tapestry of water bodies and native greens, the architecture is elevated to embrace the land it rests on. Pathways meander through shaded verandahs, open courts, and reflective ponds—blurring the lines between built and unbuilt. The design fosters quiet discovery while framing moments of gathering, memory, and reflection."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057012/nmvp04s4euwt0px61pyh.jpg"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057012/rtigvnttogxsijskw0xn.jpg"
+      },
+      {
+        "type": "text",
+        "content": "Layered around a central courtyard, the buildings are arranged with deliberate porosity—offering moments of pause, shade, and discovery. Deep overhangs and terracotta-hued louvres evoke a vernacular familiarity while tempering the tropical sun. Sculptural landscape elements, including a bust of Bhupen Hazarika, ground the architecture in memory and place."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057011/jdan45fyfm7b9pptiu3m.jpg"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057010/tzzrnd9voybcyimopkk8.jpg"
+      },
+      {
+        "type": "text",
+        "content": "Elevated volumes with deep overhangs define the architectural language of the campus, creating shaded courtyards and breezeways. These floating masses house key academic and cultural functions, while the verandahs and open corridors below foster social interaction. The design draws from vernacular principles, balancing mass and void to encourage natural light, ventilation, and moments of pause within the institutional rhythm."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057010/mw1nkhhtniw6su0abnqk.jpg"
+      },
+      {
+        "type": "text",
+        "content": "At dusk, the campus becomes a quiet stage—where light, sculpture, and landscape perform in harmony. Subtle illumination highlights the rhythmic louvres, while curated sculptures offer a contemplative pause in the institutional rhythm."
+      },
+      {
+        "type": "map",
+        "content": "https://maps.google.com/?q=Guwahati,Assam"
       }
     ],
-    "location": "City Center",
+    "location": "Guwahati, Assam",
     "year": "2025",
-    "client": "Global Tech Inc.",
-    "project_team": "Corporate Design Group",
-    "collaborators": "Furniture Suppliers, IT Consultants",
-    "status": "In Design"
+    "client": "Public Works Department (B) Assam, Bhupen Hazarika Cultural Trust",
+    "project_leader": "Namman Shroff",
+    "project_team": "Vikramm B Shroff, Mahasweta Bose, Rajnish Rabha, Paran Basumatary",
+    "collaborators": "Space Ace Architects",
+    "size_m2": "6500",
+    "size_ft2": "69,940",
+    "status": "In design"
   },
   {
     "_id": "3",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=6",
+    "title": "Sarba Siksha Abhyan Modular Schools",
+    "category": "Education",
+    "description": "A scalable and site-adaptable modular school prototype developed under the Sarba Siksha Abhyan initiative, aimed at strengthening secondary education infrastructure across Assam. Designed to be deployed across multiple locations, the plan emphasizes repeatability without compromising on contextual relevance or educational quality.",
     "sections": [
       {
         "type": "image",
-        "content": "https://picsum.photos/800/600?random=7"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055694/bonyhflvwz9rzh5emsn4.png"
       },
       {
         "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
+        "content": "This G+2 modular school prototype has been conceived as a scalable and site-adaptable solution under the Sarba Siksha Abhyan initiative, aimed at strengthening secondary education infrastructure across Assam. Designed to be deployed across multiple locations, the plan emphasizes repeatability without compromising on contextual relevance or educational quality."
       },
       {
         "type": "image",
-        "content": "https://picsum.photos/800/600?random=8"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055696/orumzqm5amoni3hjjxft.png"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055695/xblabyfflfkoogzlh2d2.png"
       },
       {
         "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
+        "content": "This G+2 modular school uses three typologies—L-shaped, C-shaped, and Linear—based on a flexible grid for varied site conditions. Type A offers maximum daylight and ventilation, Type B is compact with a courtyard, and Type C suits narrow plots. Classrooms feature cross ventilation, storage, and planters for functional, comfortable learning spaces. The design ensures quick, site-responsive deployment across Assam."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055695/cjkzfo9agl7bfkqthcht.png"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055694/ueuaw3bfap8o3cqir8pw.png"
+      },
+      {
+        "type": "text",
+        "content": "Best suited for narrow or constrained sites, this form has satisfactory daylight and ventilation, with no internal courtyard. The ramp is positioned externally, and a full butterfly roof maximizes water drainage efficiency."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055694/groby74695a8fwow3kbk.png"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055693/kwzgdaupipu2jspkttkn.png"
+      },
+      {
+        "type": "text",
+        "content": "Offers excellent cross ventilation and daylight with a spacious 20×32m courtyard. This layout is ideal for larger sites and provides the most open interaction space. Ramp runs along the interior, and the roof follows a half butterfly form."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055693/khystxntqxsiai869vcq.png"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055693/ehp9abbqfyhw5lds6bh1.png"
+      },
+      {
+        "type": "text",
+        "content": "A compact version with a 12×12m courtyard and good ventilation and lighting. The layout creates a semi-enclosed central green space, encouraging community interaction. Suitable for medium-sized plots."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055693/kezrpwf860ssafrmklqb.png"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055693/iztims6incqarpt8mcgc.png"
+      },
+      {
+        "type": "text",
+        "content": "The G+2 modular school ensures thermal comfort through cross ventilation, operable louvered windows, and ventilated lofts under sloped roofs. Efficient airflow, daylight optimization, and passive cooling strategies create a sustainable, low-maintenance learning environment suited to Assam’s climate."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055692/w6gwbmqcxmq9hwujgtou.png"
       }
     ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
+    "location": "Assam",
+    "year": "2025",
+    "client": "World Bank, Public Works Department (B) Assam",
+    "project_leader": "Namman Shroff",
+    "project_team": "Tanisha Sengupta, Mahasweta Bose, Rajnish Rabha, Paran Basumatary",
+    "collaborators": "Space Ace Architects, Swasti Engineers & Associates",
+    "size_m2": "1300",
+    "size_ft2": "13,988",
+    "status": "In design"
   },
+
   {
     "_id": "4",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=9",
+    "title": "Bhupen Hazarika Museum",
+    "category": "Culture",
+    "description": "A cultural campus in Assam dedicated to the legendary musician Bhupen Hazarika. The masterplan integrates museums, an auditorium, and open-air gathering spaces through courtyards and shaded walkways, reinterpreting vernacular architecture while anchoring the visitor experience in landscape, light, and memory.",
     "sections": [
       {
         "type": "image",
-        "content": "https://picsum.photos/800/600?random=10"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057014/uvckc7svrbsz5yg6bjli.jpg"
       },
       {
         "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
+        "content": "VDS is leading the design of a cultural campus in Assam dedicated to the legendary musician Bhupen Hazarika. Located in a lush, tree-lined site, the masterplan weaves together museums, an auditorium, and open-air gathering spaces through a series of courtyards and shaded walkways. The design reinterprets vernacular typologies with rhythmic wooden louvers and deep overhangs, while anchoring the visitor experience in landscape, light, and memory."
       },
       {
         "type": "image",
-        "content": "https://picsum.photos/800/600?random=11"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057015/l7pjahuetbay339q0liz.jpg"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057013/eor5oyrpbh7hd1rvafo5.jpg"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057013/tba5nfzjkzfwkxo6f5v9.jpg"
       },
       {
         "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
+        "content": "The master plan is conceived as an interconnected cultural spine — seamlessly integrating the museum halls, an auditorium, guest lodging, dining, and landscaped zones. Each function is placed to create intuitive movement and layered experiences, encouraging pause, interaction, and exploration."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057019/s3uik65iqa3xu4qlgfmg.jpg"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057018/cgvdhcjtkd6k4um6pn8h.jpg"
+      },
+      {
+        "type": "text",
+        "content": "Set within a tapestry of water bodies and native greens, the architecture is elevated to embrace the land it rests on. Pathways meander through shaded verandahs, open courts, and reflective ponds—blurring the lines between built and unbuilt. The design fosters quiet discovery while framing moments of gathering, memory, and reflection."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057012/nmvp04s4euwt0px61pyh.jpg"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057012/rtigvnttogxsijskw0xn.jpg"
+      },
+      {
+        "type": "text",
+        "content": "Layered around a central courtyard, the buildings are arranged with deliberate porosity—offering moments of pause, shade, and discovery. Deep overhangs and terracotta-hued louvres evoke a vernacular familiarity while tempering the tropical sun. Sculptural landscape elements, including a bust of Bhupen Hazarika, ground the architecture in memory and place."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057011/jdan45fyfm7b9pptiu3m.jpg"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057010/tzzrnd9voybcyimopkk8.jpg"
+      },
+      {
+        "type": "text",
+        "content": "Elevated volumes with deep overhangs define the architectural language of the campus, creating shaded courtyards and breezeways. These floating masses house key academic and cultural functions, while the verandahs and open corridors below foster social interaction. The design draws from vernacular principles, balancing mass and void to encourage natural light, ventilation, and moments of pause within the institutional rhythm."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057010/mw1nkhhtniw6su0abnqk.jpg"
+      },
+      {
+        "type": "text",
+        "content": "At dusk, the campus becomes a quiet stage—where light, sculpture, and landscape perform in harmony. Subtle illumination highlights the rhythmic louvres, while curated sculptures offer a contemplative pause in the institutional rhythm."
+      },
+      {
+        "type": "map",
+        "content": "https://maps.google.com/?q=Guwahati,Assam"
       }
     ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
+    "location": "Guwahati, Assam",
+    "year": "2025",
+    "client": "Public Works Department (B) Assam, Bhupen Hazarika Cultural Trust",
+    "project_leader": "Namman Shroff",
+    "project_team": "Vikramm B Shroff, Mahasweta Bose, Rajnish Rabha, Paran Basumatary",
+    "collaborators": "Space Ace Architects",
+    "size_m2": "6500",
+    "size_ft2": "69,940",
+    "status": "In design"
   },
   {
     "_id": "5",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=12",
+    "title": "Sarba Siksha Abhyan Modular Schools",
+    "category": "Education",
+    "description": "A scalable and site-adaptable modular school prototype developed under the Sarba Siksha Abhyan initiative, aimed at strengthening secondary education infrastructure across Assam. Designed to be deployed across multiple locations, the plan emphasizes repeatability without compromising on contextual relevance or educational quality.",
     "sections": [
       {
         "type": "image",
-        "content": "https://picsum.photos/800/600?random=13"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055694/bonyhflvwz9rzh5emsn4.png"
       },
       {
         "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
+        "content": "This G+2 modular school prototype has been conceived as a scalable and site-adaptable solution under the Sarba Siksha Abhyan initiative, aimed at strengthening secondary education infrastructure across Assam. Designed to be deployed across multiple locations, the plan emphasizes repeatability without compromising on contextual relevance or educational quality."
       },
       {
         "type": "image",
-        "content": "https://picsum.photos/800/600?random=14"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055696/orumzqm5amoni3hjjxft.png"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055695/xblabyfflfkoogzlh2d2.png"
       },
       {
         "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
+        "content": "This G+2 modular school uses three typologies—L-shaped, C-shaped, and Linear—based on a flexible grid for varied site conditions. Type A offers maximum daylight and ventilation, Type B is compact with a courtyard, and Type C suits narrow plots. Classrooms feature cross ventilation, storage, and planters for functional, comfortable learning spaces. The design ensures quick, site-responsive deployment across Assam."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055695/cjkzfo9agl7bfkqthcht.png"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055694/ueuaw3bfap8o3cqir8pw.png"
+      },
+      {
+        "type": "text",
+        "content": "Best suited for narrow or constrained sites, this form has satisfactory daylight and ventilation, with no internal courtyard. The ramp is positioned externally, and a full butterfly roof maximizes water drainage efficiency."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055694/groby74695a8fwow3kbk.png"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055693/kwzgdaupipu2jspkttkn.png"
+      },
+      {
+        "type": "text",
+        "content": "Offers excellent cross ventilation and daylight with a spacious 20×32m courtyard. This layout is ideal for larger sites and provides the most open interaction space. Ramp runs along the interior, and the roof follows a half butterfly form."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055693/khystxntqxsiai869vcq.png"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055693/ehp9abbqfyhw5lds6bh1.png"
+      },
+      {
+        "type": "text",
+        "content": "A compact version with a 12×12m courtyard and good ventilation and lighting. The layout creates a semi-enclosed central green space, encouraging community interaction. Suitable for medium-sized plots."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055693/kezrpwf860ssafrmklqb.png"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055693/iztims6incqarpt8mcgc.png"
+      },
+      {
+        "type": "text",
+        "content": "The G+2 modular school ensures thermal comfort through cross ventilation, operable louvered windows, and ventilated lofts under sloped roofs. Efficient airflow, daylight optimization, and passive cooling strategies create a sustainable, low-maintenance learning environment suited to Assam’s climate."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758055692/w6gwbmqcxmq9hwujgtou.png"
       }
     ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
+    "location": "Assam",
+    "year": "2025",
+    "client": "World Bank, Public Works Department (B) Assam",
+    "project_leader": "Namman Shroff",
+    "project_team": "Tanisha Sengupta, Mahasweta Bose, Rajnish Rabha, Paran Basumatary",
+    "collaborators": "Space Ace Architects, Swasti Engineers & Associates",
+    "size_m2": "1300",
+    "size_ft2": "13,988",
+    "status": "In design"
   },
-    {
-    "_id": "6",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=15",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=16"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=17"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  },  {
-    "_id": "7",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=18",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=19"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=20"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  },  {
-    "_id": "8",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=21",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=22"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=23"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  },  {
-    "_id": "9",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=24",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=25"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=26"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  },  {
-    "_id": "10",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=27",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=28"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=29"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  },  {
-    "_id": "11",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=30",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=31"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=32"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  },  {
-    "_id": "12",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=33",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=34"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=35"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  }, {
-    "_id": "13",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=36",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=37"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=38"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  },{
-    "_id": "14",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=39",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=40"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=41"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  },{
-    "_id": "15",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=42",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=43"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=44"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  },{
-    "_id": "16",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=45",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=46"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=47"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  },{
-    "_id": "17",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=48",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=49"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=50"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  },{
-    "_id": "18",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=51",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=52"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=53"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  },{
-    "_id": "19",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=54",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=55"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=56"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  },{
-    "_id": "20",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=57",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=58"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=59"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  },{
-    "_id": "21",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=60",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=61"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=62"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  },{
-    "_id": "22",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=63",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=64"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=65"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  },{
-    "_id": "23",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=66",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=67"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=68"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  },{
-    "_id": "24",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=69",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=70"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=71"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  },{
-    "_id": "25",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=72",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=73"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=74"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  },
+
   {
-    "_id": "26",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=75",
+    "_id": "6",
+    "title": "Bhupen Hazarika Museum",
+    "category": "Culture",
+    "description": "A cultural campus in Assam dedicated to the legendary musician Bhupen Hazarika. The masterplan integrates museums, an auditorium, and open-air gathering spaces through courtyards and shaded walkways, reinterpreting vernacular architecture while anchoring the visitor experience in landscape, light, and memory.",
     "sections": [
       {
         "type": "image",
-        "content": "https://picsum.photos/800/600?random=76"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057014/uvckc7svrbsz5yg6bjli.jpg"
       },
       {
         "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
+        "content": "VDS is leading the design of a cultural campus in Assam dedicated to the legendary musician Bhupen Hazarika. Located in a lush, tree-lined site, the masterplan weaves together museums, an auditorium, and open-air gathering spaces through a series of courtyards and shaded walkways. The design reinterprets vernacular typologies with rhythmic wooden louvers and deep overhangs, while anchoring the visitor experience in landscape, light, and memory."
       },
       {
         "type": "image",
-        "content": "https://picsum.photos/800/600?random=77"
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057015/l7pjahuetbay339q0liz.jpg"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057013/eor5oyrpbh7hd1rvafo5.jpg"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057013/tba5nfzjkzfwkxo6f5v9.jpg"
       },
       {
         "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
+        "content": "The master plan is conceived as an interconnected cultural spine — seamlessly integrating the museum halls, an auditorium, guest lodging, dining, and landscaped zones. Each function is placed to create intuitive movement and layered experiences, encouraging pause, interaction, and exploration."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057019/s3uik65iqa3xu4qlgfmg.jpg"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057018/cgvdhcjtkd6k4um6pn8h.jpg"
+      },
+      {
+        "type": "text",
+        "content": "Set within a tapestry of water bodies and native greens, the architecture is elevated to embrace the land it rests on. Pathways meander through shaded verandahs, open courts, and reflective ponds—blurring the lines between built and unbuilt. The design fosters quiet discovery while framing moments of gathering, memory, and reflection."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057012/nmvp04s4euwt0px61pyh.jpg"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057012/rtigvnttogxsijskw0xn.jpg"
+      },
+      {
+        "type": "text",
+        "content": "Layered around a central courtyard, the buildings are arranged with deliberate porosity—offering moments of pause, shade, and discovery. Deep overhangs and terracotta-hued louvres evoke a vernacular familiarity while tempering the tropical sun. Sculptural landscape elements, including a bust of Bhupen Hazarika, ground the architecture in memory and place."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057011/jdan45fyfm7b9pptiu3m.jpg"
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057010/tzzrnd9voybcyimopkk8.jpg"
+      },
+      {
+        "type": "text",
+        "content": "Elevated volumes with deep overhangs define the architectural language of the campus, creating shaded courtyards and breezeways. These floating masses house key academic and cultural functions, while the verandahs and open corridors below foster social interaction. The design draws from vernacular principles, balancing mass and void to encourage natural light, ventilation, and moments of pause within the institutional rhythm."
+      },
+      {
+        "type": "image",
+        "content": "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057010/mw1nkhhtniw6su0abnqk.jpg"
+      },
+      {
+        "type": "text",
+        "content": "At dusk, the campus becomes a quiet stage—where light, sculpture, and landscape perform in harmony. Subtle illumination highlights the rhythmic louvres, while curated sculptures offer a contemplative pause in the institutional rhythm."
+      },
+      {
+        "type": "map",
+        "content": "https://maps.google.com/?q=Guwahati,Assam"
       }
     ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  }, {
-    "_id": "27",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=78",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=79"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=80"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  }, {
-    "_id": "28",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=81",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=82"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=83"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  }, {
-    "_id": "29",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=84",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=85"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=86"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  }, {
-    "_id": "30",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=87",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=88"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=89"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  }, {
-    "_id": "31",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=90",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=91"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=92"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  }, {
-    "_id": "32",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=93",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=94"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=95"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  }, {
-    "_id": "33",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=96",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=97"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=98"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  }, {
-    "_id": "34",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=99",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=100"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=101"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  }, {
-    "_id": "35",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=102",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=103"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=104"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  }, {
-    "_id": "36",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=105",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=106"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=107"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  }, {
-    "_id": "37",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=108",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=109"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=110"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  }, {
-    "_id": "38",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=111",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=112"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=113"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  }, {
-    "_id": "39",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=114",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=115"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=116"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  }, {
-    "_id": "40",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=117",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=118"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=119"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  }, {
-    "_id": "41",
-    "title": "Luxury Villa",
-    "category": "Residential",
-    "description": "A stunning villa with modern architecture and luxurious amenities.",
-    "coverImage": "https://picsum.photos/800/600?random=120",
-    "sections": [
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=121"
-      },
-      {
-        "type": "text",
-        "content": "Located in an upscale neighborhood, this villa features a sophisticated layout that maximizes space and functionality. The grand foyer leads to an open-concept living and dining area, perfect for hosting gatherings or enjoying peaceful evenings with family."
-      },
-      {
-        "type": "image",
-        "content": "https://picsum.photos/800/600?random=122"
-      },
-      {
-        "type": "text",
-        "content": "Bedrooms are spacious and designed with tranquility in mind, offering walk-in closets, en-suite bathrooms, and private balconies. The smart home system ensures comfort at your fingertips, from ambient lighting to temperature control and security integration."
-      }
-    ],
-    "location": "Upscale Neighborhood",
-    "year": "2023",
-    "client": "Real Estate Developers",
-    "project_team": "Luxury Homes Architects",
-    "collaborators": "Smart Home Tech Providers",
-    "status": "Completed"
-  } 
+    "location": "Guwahati, Assam",
+    "year": "2025",
+    "client": "Public Works Department (B) Assam, Bhupen Hazarika Cultural Trust",
+    "project_leader": "Namman Shroff",
+    "project_team": "Vikramm B Shroff, Mahasweta Bose, Rajnish Rabha, Paran Basumatary",
+    "collaborators": "Space Ace Architects",
+    "size_m2": "6500",
+    "size_ft2": "69,940",
+    "status": "In design"
+  }
 ]

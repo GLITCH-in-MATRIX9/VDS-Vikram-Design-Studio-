@@ -2,9 +2,10 @@ import React, { useRef, useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 
 const images = [
-  'https://picsum.photos/id/1015/340/280',
-  'https://picsum.photos/id/1016/340/280',
-  'https://picsum.photos/id/1018/340/280',
+  'https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057665/yqbxzbkijtuvtde5nilu.jpg',
+  'https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057651/xadw3lwnfahqwjxpakbf.jpg',
+  'https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057650/c2l4o8vfowaghj1bfy4n.jpg',
+  'https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057646/cqakxcxvhrabwwg5hylr.jpg'
 ];
 
 const MarqueeImages = () => {

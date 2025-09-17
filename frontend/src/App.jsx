@@ -25,7 +25,7 @@ function AppContent() {
   const isCareer = location.pathname.startsWith('/career');
 
   const showNavbar = !isAdmin;
-  const showFooter = !isAdmin && !isContact && !isCareer;
+  const showFooter = !isAdmin && !isCareer;
 
   const handleLoadingComplete = () => {
     setIsLoading(false);
