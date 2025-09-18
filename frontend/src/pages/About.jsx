@@ -2,24 +2,24 @@ import React from 'react';
 
 import AboutHeading from '../components/AboutPage/AboutHeading';
 import AboutMetrics from '../components/AboutPage/AboutMetrics';
-import Architecture from '../components/AboutPage/Architecture';
-import Collaborators from '../components/AboutPage/Collaborators';
-// import Engineering from '../components/AboutPage/Engineering';
-import Interior from '../components/AboutPage/Interior';
-import LandScape from '../components/AboutPage/LandScape';
-import Planning from '../components/AboutPage/Planning';
+import aboutSectionData from "../Data/aboutSections.json"
+import AboutSection from '../components/AboutPage/AboutSection';
+import SectionDivider from "../components/SectionDivider"
 
 const About = () => {
   return (
     <div>
       <AboutHeading />
+      <SectionDivider />
       <AboutMetrics />
-      <Architecture />
-      <Interior />
-      <LandScape />
-      {/* <Engineering /> */}
-      <Planning />
-      <Collaborators />
+      <SectionDivider />
+      {aboutSectionData.map((sectionData, index) => (
+        sectionData.heading.toLowerCase() !== "engineering" && // disable Engineering section
+          <>
+            <AboutSection key={sectionData.id} data={sectionData}/>
+            {index !== aboutSectionData.length - 1 && <SectionDivider/>}
+          </>
+      ))}
     </div>
   );
 };

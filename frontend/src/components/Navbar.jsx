@@ -55,7 +55,7 @@ const Navbar = () => {
     return (
         <>
             {/* Main Navbar */}
-            <nav className="w-full bg-[#f3efee] border-b border-[#e0dcd7] relative z-50">
+            <nav className="w-full bg-[#f2efee]  relative z-50">
                 <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
                     {/* Left - Logo */}
                     <div className="flex items-center space-x-3">
