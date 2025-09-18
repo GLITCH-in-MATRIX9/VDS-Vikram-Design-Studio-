@@ -51,53 +51,59 @@ const CountUp = ({ end, duration = 2000, format = false }) => {
 
 const AboutMetrics = () => {
   return (
-    <section className="bg-[#f3efee] px-6 lg:px-20 py-16">
-      <div className="max-w-screen-xl mx-auto flex flex-wrap gap-2.5 justify-center">
+    <section className="bg-[#f2efee] px-4 md:px-8 xl:px-20 py-12 md:py-16">
+      <div className="max-w-screen-xl mx-auto flex flex-wrap gap-4 md:gap-5 xl:gap-6 justify-center">
 
         {/* Projects Completed */}
-        <div className="w-[411px] h-[205px] bg-white rounded-md shadow-[0_2px_10px_rgba(0,0,0,0.05)] py-12 px-6 flex items-center justify-between opacity-100">
-          <div className="flex items-center gap-4">
-            <img src={BuildingImg} alt="Projects" className="h-16 w-16 object-contain" />
-            <div>
-              <h3 className="font-sora font-semibold text-[40px] leading-[48px] tracking-[-0.01em] text-[#474545]">
-                <CountUp end={200} /> 
-              </h3>
-              <p className="font-inter font-medium text-[12px] leading-[100%] tracking-[0] uppercase text-[#7E797A]">
-                Number of Projects Completed
-              </p>
+        <div className="shadow-[0_16px_32px_#3E3C3C1A]">
+          <div className="h-[205px] bg-[#F9F8F7] rounded-md shadow-[0_4px_2px_#3e3c3c0a] py-12 px-6 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <img src={BuildingImg} alt="Projects" className="h-16 w-16 object-contain" />
+              <div> 
+                <h3 className="font-sora font-semibold text-[40px] leading-[48px] tracking-[-0.01em] text-[#474545]">
+                  <CountUp end={200} /> 
+                </h3>
+                <p className="font-inter font-medium text-[12px] leading-[100%] tracking-[0] uppercase text-[#6D6D6D]">
+                  Number of Projects Completed
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Total Square Footage */}
-        <div className="w-[411px] h-[205px] bg-white rounded-md shadow-[0_2px_10px_rgba(0,0,0,0.05)] py-12 px-6 flex items-center justify-between opacity-100">
-          <div className="flex items-center gap-4">
-            <img src={ClipboardImg} alt="Square Footage" className="h-16 w-16 object-contain" />
-            <div>
-              <h3 className="font-sora font-semibold text-[40px] leading-[48px] tracking-[-0.01em] text-[#474545]">
-                <CountUp end={20000} format /> <span className="text-lg font-semibold">sq.ft.</span>
-              </h3>
-              <p className="font-inter font-medium text-[12px] leading-[100%] tracking-[0] uppercase text-[#7E797A]">
-                Total Square Foot Area Designed Till Date
-              </p>
+        <div className="shadow-[0_16px_32px_#3E3C3C1A]">
+          <div className="w-[411px] h-[205px] bg-[#F9F8F7] rounded-md shadow-[0_4px_2px_#3e3c3c0a] py-12 px-6 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <img src={ClipboardImg} alt="Square Footage" className="h-16 w-16 object-contain" />
+              <div>
+                <h3 className="font-sora font-semibold text-[40px] leading-[48px] tracking-[-0.01em] text-[#474545]">
+                  <CountUp end={20000} format /> <span className="text-lg font-semibold">sq.ft.</span>
+                </h3>
+                <p className="font-inter font-medium text-[12px] leading-[100%] tracking-[0] uppercase text-[#6D6D6D]">
+                  Total Square Foot Area Designed Till Date
+                </p>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Years in Industry */}
-        <div className="w-[411px] h-[205px] bg-white rounded-md shadow-[0_2px_10px_rgba(0,0,0,0.05)] py-12 px-6 flex items-center justify-between opacity-100">
-          <div className="flex items-center gap-4">
-            <img src={CertificateImg} alt="Experience" className="h-16 w-16 object-contain" />
-            <div>
-              <h3 className="font-sora font-semibold text-[40px] leading-[48px] tracking-[-0.01em] text-[#474545]">
-                <CountUp end={25} />
-              </h3>
-              <p className="font-inter font-medium text-[12px] leading-[100%] tracking-[0] uppercase text-[#7E797A]">
-                Years in the Industry
-              </p>
+        <div className="shadow-[0_16px_32px_#3E3C3C1A]">
+          <div className="w-[411px] h-[205px] bg-[#F9F8F7] rounded-md shadow-[0_4px_2px_#3e3c3c0a] py-12 px-6 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <img src={CertificateImg} alt="Experience" className="h-16 w-16 object-contain" />
+              <div>
+                <h3 className="font-sora font-semibold text-[40px] leading-[48px] tracking-[-0.01em] text-[#474545]">
+                  <CountUp end={25} />
+                </h3>
+                <p className="font-inter font-medium text-[12px] leading-[100%] tracking-[0] uppercase text-[#6D6D6D]">
+                  Years in the Industry
+                </p>
+              </div>
             </div>
+            {/* <img src={TrophyImg} alt="Trophy" className="h-8 w-8 object-contain opacity-70" /> */}    
           </div>
-          <img src={TrophyImg} alt="Trophy" className="h-8 w-8 object-contain opacity-70" />
         </div>
 
       </div>
