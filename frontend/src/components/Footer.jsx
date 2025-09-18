@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
-        <footer className="bg-[#f9f6f3] border-t border-[#e0dcd7]">
+        <footer className="bg-[#F2EFEE]">
             <div className="max-w-7xl mx-auto px-6 py-6 flex flex-row lg:flex-row items-center justify-between text-sm gap-4 lg:gap-0">
 
                 {/* Left section: Company logo and brand name, links to homepage */}
