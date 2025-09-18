@@ -34,8 +34,8 @@ const AboutSection = ({data}) => {
         {/* Big heading */}
         <motion.h1
           className="font-sora font-semibold text-[#3E3C3C]
-            text-[28px]l md:text-[40px]
-            leading-tight tracking-[-0.01em]"
+            text-[28px] md:text-[40px]
+            leading-tight tracking-[-0.01em] uppercase"
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
