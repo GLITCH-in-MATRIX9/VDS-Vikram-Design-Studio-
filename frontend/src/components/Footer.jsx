@@ -17,7 +17,7 @@ const Footer = () => {
                 </Link>
 
                 {/* Center section: Social media icons for connecting with VDS */}
-                <div class="flex space-x-5 text-[#af2b1e] text-lg">
+                <div className="flex space-x-5 text-[#af2b1e] text-lg">
                     <a href="https://www.youtube.com/@vikramdesignstudio4300/featured" target="_blank"><FaYoutube/></a>
                     <a href="https://www.facebook.com/VikramDesignStudioOfficial/" target="_blank"><FaFacebookF/></a>
                     <a href="https://www.instagram.com/vikramdesignstudio/" target="_blank"><FaInstagram/></a>
