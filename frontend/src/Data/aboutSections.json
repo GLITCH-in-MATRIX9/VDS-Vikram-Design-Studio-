@@ -17,38 +17,56 @@
         "carousel_cards": [
             {
                 "id": 1,
-                "img_src": "https://picsum.photos/400/225?random=1",
-                "project_name": "Project Name",
-                "project_location": "Location Name, City Name",
+                "img_src": "SERVICE IMAGES/ARCHITECTURE/Architecture-1-Upgradation of Batadrava Than at Barduwa Nagaon Assam.jpeg",
+                "project_name": "Batadrava Than",
+                "project_location": "Barduwa, Assam",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
             },{
                 "id": 2,
-                "img_src": "https://picsum.photos/400/225?random=2",
-                "project_name": "Project Name",
-                "project_location": "Location Name, City Name",
+                "img_src": "SERVICE IMAGES/ARCHITECTURE/Architecture-2-Upgradation of Batadrava Than at Barduwa Nagaon Assam.jpeg",
+                "project_name": "Batadrava Than",
+                "project_location": "Barduwa, Assam",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
             },{
                 "id": 3,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
+                "img_src": "SERVICE IMAGES/ARCHITECTURE/Architecture-3-Jamugurihat Auditorium.png",
+                "project_name": "Jamugurihat Auditorium",
                 "project_location": "Location Name, City Name",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
             },{
                 "id": 4,
-                "img_src": "https://picsum.photos/400/225?random=4",
-                "project_name": "Project Name",
+                "img_src": "SERVICE IMAGES/ARCHITECTURE/Architecture-4-Shanti Villa.jpeg",
+                "project_name": "Shanti Villa",
                 "project_location": "Location Name, City Name",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
             },{
                 "id": 5,
-                "img_src": "https://picsum.photos/400/225?random=5",
-                "project_name": "Project Name",
+                "img_src": "SERVICE IMAGES/ARCHITECTURE/Architecture-5-Margherita Villa.jpg",
+                "project_name": "Margherita Villa",
                 "project_location": "Location Name, City Name",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
             },{
                 "id": 6,
-                "img_src": "https://picsum.photos/400/225?random=6",
-                "project_name": "Project Name",
+                "img_src": "SERVICE IMAGES/ARCHITECTURE/Architecture-6 Civil Services Officers' Institute.png",
+                "project_name": "Civil Services Officers' Institute",
+                "project_location": "Location Name, City Name",
+                "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+            },{
+                "id": 7,
+                "img_src": "SERVICE IMAGES/ARCHITECTURE/Architecture-7-Bhupen Hazarika Museum.jpg",
+                "project_name": "Bhupen Hazarika Museum",
+                "project_location": "Location Name, City Name",
+                "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+            },{
+                "id": 8,
+                "img_src": "SERVICE IMAGES/ARCHITECTURE/Architecture-8-Khagrabari Indoor Stadium.png",
+                "project_name": "Khagrabari Indoor Stadium",
+                "project_location": "Location Name, City Name",
+                "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+            },{
+                "id": 9,
+                "img_src": "SERVICE IMAGES/ARCHITECTURE/Architecture-9-Bhergaon Sports Complex.png",
+                "project_name": "Bhergaon Sports Complex",
                 "project_location": "Location Name, City Name",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
             }
@@ -68,38 +86,85 @@
         "carousel_cards": [
             {
                 "id": 1,
-                "img_src": "https://picsum.photos/400/225?random=1",
-                "project_name": "Project Name",
+                "img_src": "SERVICE IMAGES/INTERIOR/01-The CA Studio.jpg",
+                "project_name": "The CA Studio",
                 "project_location": "Location Name, City Name",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
-            },{
+            },
+            {
                 "id": 2,
-                "img_src": "https://picsum.photos/400/225?random=2",
-                "project_name": "Project Name",
+                "img_src": "SERVICE IMAGES/INTERIOR/02-The CA Studio.jpg",
+                "project_name": "The CA Studio",
                 "project_location": "Location Name, City Name",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
-            },{
+            },
+            {
                 "id": 3,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
+                "img_src": "SERVICE IMAGES/INTERIOR/03-Shanti Villa.jpg",
+                "project_name": "Shanti Villa",
                 "project_location": "Location Name, City Name",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
-            },{
+            },
+            {
                 "id": 4,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
+                "img_src": "SERVICE IMAGES/INTERIOR/04-Shanti Villa.jpg",
+                "project_name": "Shanti Villa",
                 "project_location": "Location Name, City Name",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
-            },{
+            },
+            {
                 "id": 5,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
+                "img_src": "SERVICE IMAGES/INTERIOR/05-Shanti Villa.jpg",
+                "project_name": "Shanti Villa",
                 "project_location": "Location Name, City Name",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
-            },{
+            },
+            {
                 "id": 6,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
+                "img_src": "SERVICE IMAGES/INTERIOR/06-Shanti Villa.jpg",
+                "project_name": "Shanti Villa",
+                "project_location": "Location Name, City Name",
+                "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+            },
+            {
+                "id": 7,
+                "img_src": "SERVICE IMAGES/INTERIOR/07-Sethi Penthouse.JPG",
+                "project_name": "Sethi Penthouse",
+                "project_location": "Location Name, City Name",
+                "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+            },
+            {
+                "id": 8,
+                "img_src": "SERVICE IMAGES/INTERIOR/08-Iris Boutique Hotel.jpg",
+                "project_name": "Iris Boutique Hotel",
+                "project_location": "Location Name, City Name",
+                "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+            },
+            {
+                "id": 9,
+                "img_src": "SERVICE IMAGES/INTERIOR/09-Iris Boutique Hotel.jpg",
+                "project_name": "Iris Boutique Hotel",
+                "project_location": "Location Name, City Name",
+                "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+            },
+            {
+                "id": 10,
+                "img_src": "SERVICE IMAGES/INTERIOR/10-TK Engineering Consortium Corporate Office.jpg",
+                "project_name": "TK Engineering Consortium Corporate Office",
+                "project_location": "Location Name, City Name",
+                "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+            },
+            {
+                "id": 11,
+                "img_src": "SERVICE IMAGES/INTERIOR/11-Margherita Villa.png",
+                "project_name": "Margherita Villa",
+                "project_location": "Location Name, City Name",
+                "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+            },
+            {
+                "id": 12,
+                "img_src": "SERVICE IMAGES/INTERIOR/12-Margherita Villa.jpg",
+                "project_name": "Margherita Villa",
                 "project_location": "Location Name, City Name",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
             }
@@ -119,38 +184,44 @@
         "carousel_cards": [
             {
                 "id": 1,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
+                "img_src": "SERVICE IMAGES/LANDSCAPE/landscape_01-Bismillah Khan College.jpg",
+                "project_name": "Bismillah Khan College",
                 "project_location": "Location Name, City Name",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
             },{
                 "id": 2,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
+                "img_src": "SERVICE IMAGES/LANDSCAPE/landscape_02-Bismillah Khan College.jpg",
+                "project_name": "Bismillah Khan College",
                 "project_location": "Location Name, City Name",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
             },{
                 "id": 3,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
+                "img_src": "SERVICE IMAGES/LANDSCAPE/landscape_03-Margherita Villa.jpg",
+                "project_name": "Margherita Villa",
                 "project_location": "Location Name, City Name",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
             },{
                 "id": 4,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
+                "img_src": "SERVICE IMAGES/LANDSCAPE/landscape_04-Margherita Villa.jpg",
+                "project_name": "Margherita Villa",
                 "project_location": "Location Name, City Name",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
             },{
                 "id": 5,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
+                "img_src": "SERVICE IMAGES/LANDSCAPE/landscape_05-Margherita Villa.jpg",
+                "project_name": "Margherita Villa",
                 "project_location": "Location Name, City Name",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
             },{
                 "id": 6,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
+                "img_src": "SERVICE IMAGES/LANDSCAPE/landscape_06-IAS Officer Residence.jpg",
+                "project_name": "IAS Officer Residence",
+                "project_location": "Location Name, City Name",
+                "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+            },{
+                "id": 7,
+                "img_src": "SERVICE IMAGES/LANDSCAPE/landscape_07-IAS Officer Residence.jpg",
+                "project_name": "IAS Officer Residence",
                 "project_location": "Location Name, City Name",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
             }
@@ -215,38 +286,38 @@
         "carousel_cards": [
             {
                 "id": 1,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
+                "img_src": "SERVICE IMAGES/PLANNING/planning_01-Dr. T Ao Sports Complex.jpg",
+                "project_name": "Dr. T Ao Sports Complex",
                 "project_location": "Location Name, City Name",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
             },{
                 "id": 2,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
+                "img_src": "SERVICE IMAGES/PLANNING/planning_02-Tamulpur District Sports Complex.jpg",
+                "project_name": "Tamulpur District Sports Complex",
                 "project_location": "Location Name, City Name",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
             },{
                 "id": 3,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
+                "img_src": "SERVICE IMAGES/PLANNING/planning_03-Khagrabari Indoor Stadium Complex.jpg",
+                "project_name": "Khagrabari Indoor Stadium Complex",
                 "project_location": "Location Name, City Name",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
             },{
                 "id": 4,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
+                "img_src": "SERVICE IMAGES/PLANNING/planning_04-Hidipi Sports Complex.jpg",
+                "project_name": "Hidipi Sports Complex",
                 "project_location": "Location Name, City Name",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
             },{
                 "id": 5,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
-                "project_location": "Location Name, City Name",
+                "img_src": "SERVICE IMAGES/PLANNING/planning_05-Batadrava Than Complex at Barduwa Nagaon Assam.jpg",
+                "project_name": "Batadrava Than Complex",
+                "project_location": "Barduwa, Assam",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
             },{
                 "id": 6,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
+                "img_src": "SERVICE IMAGES/PLANNING/planning_06-Khatara Satra Complex.png",
+                "project_name": "Khatara Satra Complex",
                 "project_location": "Location Name, City Name",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
             }
@@ -263,39 +334,21 @@
         "carousel_cards": [
             {
                 "id": 1,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
-                "project_location": "Location Name, City Name",
+                "img_src": "",
+                "project_name": "Space Ace Architects ",
+                "project_location": "Our Guiding Collaborators",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
-            },{
+            }, {
                 "id": 2,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
-                "project_location": "Location Name, City Name",
+                "img_src": "",
+                "project_name": "Swasti Engineers & Associates",
+                "project_location": "Structural Consultant",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
             },{
                 "id": 3,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
-                "project_location": "Location Name, City Name",
-                "text": "This text will wrap to the next line and is meant to be a caption for the image above"
-            },{
-                "id": 4,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
-                "project_location": "Location Name, City Name",
-                "text": "This text will wrap to the next line and is meant to be a caption for the image above"
-            },{
-                "id": 5,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
-                "project_location": "Location Name, City Name",
-                "text": "This text will wrap to the next line and is meant to be a caption for the image above"
-            },{
-                "id": 6,
-                "img_src": "https://picsum.photos/400/225?random=3",
-                "project_name": "Project Name",
-                "project_location": "Location Name, City Name",
+                "img_src": "",
+                "project_name": "Aayushi Consultancy & Services Pvt. Ltd.",
+                "project_location": "MEPF Consultant",
                 "text": "This text will wrap to the next line and is meant to be a caption for the image above"
             }
         ]
