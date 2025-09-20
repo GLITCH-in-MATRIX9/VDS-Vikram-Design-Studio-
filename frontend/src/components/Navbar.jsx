@@ -41,7 +41,7 @@ const Navbar = () => {
         return () => {
             document.body.classList.remove('no-scroll');
         };
-    }, [menuOpen]); 
+    }, [menuOpen]);
 
     const location = useLocation();
     const isHome = location.pathname === "/";
@@ -119,7 +119,7 @@ const Navbar = () => {
                 {isHome && filterOpen && (
                     <motion.div
                         key="filters"
-                        initial={{ height: 0, opacity: 1}}
+                        initial={{ height: 0, opacity: 1 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 1 }}
                         transition={{ duration: 1, ease: [0.83, 0, 0.17, 1] }}
@@ -183,15 +183,15 @@ const Navbar = () => {
                             <li><Link to="/" onClick={closeAllMenus}>HOME</Link></li>
                             <li><Link to="/about" onClick={closeAllMenus}>ABOUT</Link></li>
                             <li><Link to="/team" onClick={closeAllMenus}>TEAM</Link></li>
-                            <li><Link to="/careers" onClick={closeAllMenus}>CAREERS</Link></li>
+                            {/* <li><Link to="/careers" onClick={closeAllMenus}>CAREERS</Link></li> */}
                             <li><Link to="/contact" onClick={closeAllMenus}>CONTACT</Link></li>
                         </ul>
 
                         <div className="mt-30 flex space-x-6 text-[#af2b1e] text-xl">
-                            <a href="#"><FaYoutube /></a>
-                            <a href="#"><FaFacebookF /></a>
-                            <a href="#"><FaInstagram /></a>
-                            <a href="#"><FaLinkedinIn /></a>
+                            <a href="https://www.youtube.com/@vikramdesignstudio4300/featured" target="_blank"><FaYoutube /></a>
+                            <a href="https://www.facebook.com/VikramDesignStudioOfficial/" target="_blank"><FaFacebookF /></a>
+                            <a href="https://www.instagram.com/vikramdesignstudio/" target="_blank"><FaInstagram /></a>
+                            <a href="https://www.linkedin.com/company/74880921/admin/dashboard/" target="_blank"><FaLinkedinIn /></a>
                         </div>
                     </motion.div>
                 )}
