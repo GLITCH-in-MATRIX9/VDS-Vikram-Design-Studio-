@@ -25,7 +25,7 @@ const Home = () => {
   }
 
   // Mapping scrollVelocity to z perspective
-  const targetZ = useTransform(scrollVelocity, [-1500, 0, 1500], [-150, 0, -150], { clamp: false });
+  const targetZ = useTransform(scrollVelocity, [-1500, 0, 1500], [-150, 0, -150], { clamp: true });
   const z = useSpring(targetZ, springConfig);
   
   // Keep the origin of perspective change in the center of the screen dynamically
