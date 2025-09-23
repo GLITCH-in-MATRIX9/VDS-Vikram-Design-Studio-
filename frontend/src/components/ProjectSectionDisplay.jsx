@@ -1,17 +1,11 @@
 import React from "react";
+import ProjectImage from "./ProjectImage";
 
 const ProjectSectionDisplay = ({ sections }) => {
   if (!sections || sections.length === 0) return null;
   return (
     <div className="flex h-full">
-      {sections.map((section, index) => {
-        let isPortrait = false;
-        if (section.type === "image" || section.type === "gif") {
-          const img = new Image();
-          img.src = section.content;
-          isPortrait = img.height > img.width;
-        }
-          
+      {sections.map((section, index) => {          
         return <div
           key={index}
           className="flex-shrink-0 flex flex-col gap-4 items-center px-2 lg:px-6 justify-center"
@@ -24,15 +18,10 @@ const ProjectSectionDisplay = ({ sections }) => {
               </p>
             </div>
           ) : (section.type === "image" || section.type === "gif") ? (
-            <div 
-              className={`${isPortrait ? 'aspect-[2/3] h-[calc(95vw/16*9)] sm:h-[225px] lg:h-[450px]' : 'aspect-video w-[95vw] sm:w-[400px] lg:w-[800px]'}  rounded-lg shadow-md overflow-hidden`} 
-            >
-              <img
-                src={section.content}
-                alt={`Project ${section.type} ${index + 1}`}
-                className="w-full h-full object-cover object-center"
-              />
-            </div>
+            <ProjectImage
+              src={section.content}
+              alt={`Project ${section.type} ${index + 1}`}
+            />
           ) : null}
         </div>
       }
