@@ -13,7 +13,12 @@ const validateEnv = () => {
     'EMAIL_PORT', 
     'EMAIL_USER', 
     'EMAIL_PASS',
-    'EMAIL_FROM'
+    'EMAIL_FROM',
+    // Cloudinary requirements
+    'CLOUDINARY_CLOUD_NAME',
+    'CLOUDINARY_API_KEY',
+    'CLOUDINARY_API_SECRET',
+    'CLOUDINARY_FOLDER_NAME'
   ];
 
   const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
@@ -40,5 +45,11 @@ export const config = {
     user: process.env.EMAIL_USER!,
     pass: process.env.EMAIL_PASS!,
     from: process.env.EMAIL_FROM!, 
+  },
+  cloudinary: {
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME!,
+    apiKey: process.env.CLOUDINARY_API_KEY!,
+    apiSecret: process.env.CLOUDINARY_API_SECRET!,
+    folderName: process.env.CLOUDINARY_FOLDER_NAME!,
   }
 };

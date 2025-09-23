@@ -1,21 +1,26 @@
 import { Request, Response } from 'express';
-import jwt from 'jsonwebtoken';
+import jwt, { SignOptions, Secret } from 'jsonwebtoken';
+import { Types } from 'mongoose';
 import { AdminUser } from '../models/AdminUser.model';
+import { config } from '../config/env';
 
-const generateToken = (id: string): string => {
-  const secret = process.env.JWT_SECRET;
-  if (!secret) {
-    throw new Error('JWT_SECRET is not configured');
-  }
-  
-  return jwt.sign({ id }, secret, { 
-    expiresIn: process.env.JWT_EXPIRES_IN || '7d' 
-  });
+const generateToken = (id: string | Types.ObjectId): string => {
+  const userId = typeof id === 'string' ? id : id.toString();
+  const expiresIn: any = config.jwt.expiresIn || '7d';
+  return jwt.sign({ id: userId }, config.jwt.secret as Secret, { expiresIn });
 };
 
 export const registerAdmin = async (req: Request, res: Response) => {
   try {
-    const { email, password, name, role } = req.body;
+    const { email, password, name } = req.body;
+
+    // If any admin exists, block public registration
+    const existingAdminCount = await AdminUser.countDocuments();
+    if (existingAdminCount > 0) {
+      return res.status(403).json({ 
+        message: 'Registration is disabled. Please contact a super admin to create accounts.' 
+      });
+    }
 
     // Check if user already exists
     const existingUser = await AdminUser.findOne({ email });
@@ -25,19 +30,19 @@ export const registerAdmin = async (req: Request, res: Response) => {
       });
     }
 
-    // Create new admin user
+    // First user is bootstrapped as super_admin; ignore any client-provided role
     const user = await AdminUser.create({
       email,
       password,
       name,
-      role: role || 'admin',
+      role: 'super_admin',
     });
 
     // Generate token
-    const token = generateToken(user._id);
+  const token = generateToken(user._id as Types.ObjectId);
 
     res.status(201).json({
-      message: 'Admin user created successfully',
+      message: 'Super admin created successfully',
       user: {
         id: user._id,
         email: user.email,
@@ -91,7 +96,7 @@ export const loginAdmin = async (req: Request, res: Response) => {
     await AdminUser.findByIdAndUpdate(user._id, { lastLogin: new Date() });
 
     // Generate token
-    const token = generateToken(user._id);
+  const token = generateToken(user._id as Types.ObjectId);
 
     res.status(200).json({
       message: 'Login successful',

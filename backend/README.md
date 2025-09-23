@@ -50,6 +50,7 @@ npm run dev
     - `keyDate` (string date, required)
     - `sections` (JSON string array of { type: 'text'|'image', content: string })
     - `preview` (file, optional) image upload for preview
+    - See also: [Auth API](./AUTH_API.md) for authentication endpoints and usage.
 
 - GET `/api/projects`
 - GET `/api/projects/:id`

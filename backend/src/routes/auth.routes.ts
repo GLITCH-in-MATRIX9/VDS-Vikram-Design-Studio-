@@ -7,12 +7,14 @@ import {
   changePassword 
 } from '../controllers/auth.controller';
 import { protect } from '../middlewares/auth.middleware';
+import { validateAuth, validateRegister } from '../middlewares/validation.middleware';
+import { loginRateLimit, registerRateLimit } from '../middlewares/rateLimit.middleware';
 
 const router = Router();
 
 // Public routes
-router.post('/register', registerAdmin);
-router.post('/login', loginAdmin);
+router.post('/register', registerRateLimit, validateRegister, registerAdmin);
+router.post('/login', loginRateLimit, validateAuth, loginAdmin);
 
 // Protected routes
 router.get('/profile', protect, getProfile);
