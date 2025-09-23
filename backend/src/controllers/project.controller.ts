@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import { Project } from '../models/Project.model';
+import cloudinary from '../config/cloudinary';
 
 export const createProject = async (req: Request, res: Response) => {
   try {
@@ -18,10 +19,11 @@ export const createProject = async (req: Request, res: Response) => {
       sections,
     } = req.body as Record<string, any>;
 
-    const parsedTags: string[] = typeof tags === 'string' ? JSON.parse(tags) : Array.isArray(tags) ? tags : [];
-    const parsedSections = typeof sections === 'string' ? JSON.parse(sections) : Array.isArray(sections) ? sections : [];
+  const parsedTags: string[] = typeof tags === 'string' ? JSON.parse(tags) : Array.isArray(tags) ? tags : [];
+  const parsedSections = typeof sections === 'string' ? JSON.parse(sections) : Array.isArray(sections) ? sections : [];
 
-    const previewImageUrl = req.file ? `/uploads/previews/${req.file.filename}` : undefined;
+  // If Cloudinary middleware ran, these will already be on req.body
+  const { previewImageUrl, previewImagePublicId } = req.body as any;
 
     if (!name || !location || !status || !category || !client || !collaborators || !projectTeam || !keyDate) {
       return res.status(400).json({ message: 'Missing required fields' });
@@ -40,6 +42,7 @@ export const createProject = async (req: Request, res: Response) => {
       tags: parsedTags,
       keyDate,
       previewImageUrl,
+      previewImagePublicId,
       sections: parsedSections,
     });
 
@@ -88,7 +91,9 @@ export const updateProject = async (req: Request, res: Response) => {
     const parsedTags: string[] = typeof tags === 'string' ? JSON.parse(tags) : Array.isArray(tags) ? tags : [];
     const parsedSections = typeof sections === 'string' ? JSON.parse(sections) : Array.isArray(sections) ? sections : [];
 
-    // Handle preview image update
+    const { previewImageUrl, previewImagePublicId } = req.body as any;
+
+    // Build update data
     let updateData: any = {
       name,
       location,
@@ -103,23 +108,30 @@ export const updateProject = async (req: Request, res: Response) => {
       keyDate,
       sections: parsedSections,
     };
-
-    // If new preview image is uploaded, update the URL
-    if (req.file) {
-      updateData.previewImageUrl = `/uploads/previews/${req.file.filename}`;
+    
+    const existing = await Project.findById(req.params.id);
+    if (!existing) {
+      return res.status(404).json({ message: 'Project not found' });
     }
 
-    const project = await Project.findByIdAndUpdate(
+    // If a new image was uploaded (Cloudinary middleware set new public id), delete old one
+    if (previewImagePublicId && existing.previewImagePublicId && previewImagePublicId !== existing.previewImagePublicId) {
+      try {
+        await cloudinary.uploader.destroy(existing.previewImagePublicId);
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.warn('Failed to delete old Cloudinary image:', e);
+      }
+      updateData.previewImageUrl = previewImageUrl;
+      updateData.previewImagePublicId = previewImagePublicId;
+    }
+    const updated = await Project.findByIdAndUpdate(
       req.params.id,
       updateData,
       { new: true, runValidators: true }
     );
 
-    if (!project) {
-      return res.status(404).json({ message: 'Project not found' });
-    }
-
-    return res.status(200).json(project);
+    return res.status(200).json(updated);
   } catch (err: any) {
     return res.status(500).json({ message: 'Failed to update project', error: err.message });
   }
@@ -127,12 +139,22 @@ export const updateProject = async (req: Request, res: Response) => {
 
 export const deleteProject = async (req: Request, res: Response) => {
   try {
-    const project = await Project.findByIdAndDelete(req.params.id);
-    
+    const project = await Project.findById(req.params.id);
     if (!project) {
       return res.status(404).json({ message: 'Project not found' });
     }
 
+    // Delete cloudinary image first if present
+    if (project.previewImagePublicId) {
+      try {
+        await cloudinary.uploader.destroy(project.previewImagePublicId);
+      } catch (e) {
+        // eslint-disable-next-line no-console
+        console.warn('Failed to delete Cloudinary image during project delete:', e);
+      }
+    }
+
+    await Project.findByIdAndDelete(req.params.id);
     return res.status(200).json({ message: 'Project deleted successfully' });
   } catch (err: any) {
     return res.status(500).json({ message: 'Failed to delete project', error: err.message });

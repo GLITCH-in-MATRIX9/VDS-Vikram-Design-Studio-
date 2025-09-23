@@ -18,6 +18,7 @@ export interface IProject extends Document {
   tags: string[];
   keyDate: string; // ISO date string from date input
   previewImageUrl?: string; // stored path of uploaded preview
+  previewImagePublicId?: string; // Cloudinary public id for deletion
   sections: IProjectSection[]; // content blocks serialized from editor
   createdAt: Date;
   updatedAt: Date;
@@ -45,6 +46,7 @@ const ProjectSchema = new Schema<IProject>(
     tags: { type: [String], default: [] },
     keyDate: { type: String, required: true },
     previewImageUrl: { type: String },
+    previewImagePublicId: { type: String },
     sections: { type: [ProjectSectionSchema], default: [] },
   },
   { timestamps: true }

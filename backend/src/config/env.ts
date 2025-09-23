@@ -14,7 +14,12 @@ const validateEnv = () => {
     'EMAIL_PORT',
     'EMAIL_USER',
     'EMAIL_PASS',
-    'EMAIL_FROM'
+    'EMAIL_FROM',
+    // Cloudinary requirements
+    'CLOUDINARY_CLOUD_NAME',
+    'CLOUDINARY_API_KEY',
+    'CLOUDINARY_API_SECRET',
+    'CLOUDINARY_FOLDER_NAME'
   ];
 
   const missingVars = requiredEnvVars.filter(v => !process.env[v]);
@@ -37,13 +42,13 @@ export const config = {
     port: parseInt(process.env.EMAIL_PORT!, 10),
     user: process.env.EMAIL_USER!,
     pass: process.env.EMAIL_PASS!,
-    from: process.env.EMAIL_FROM!,
+    from: process.env.EMAIL_FROM!, 
   },
-  zoho: {
-    clientId: process.env.ZOHO_CLIENT_ID!,
-    clientSecret: process.env.ZOHO_CLIENT_SECRET!,
-    redirectUri: process.env.ZOHO_REDIRECT_URI!,
-    tokenStorePath: process.env.TOKEN_STORE_PATH!,
+  cloudinary: {
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME!,
+    apiKey: process.env.CLOUDINARY_API_KEY!,
+    apiSecret: process.env.CLOUDINARY_API_SECRET!,
+    folderName: process.env.CLOUDINARY_FOLDER_NAME!,
   }
 };
 

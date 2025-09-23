@@ -108,3 +108,34 @@ export const validateAuth = (req: Request, res: Response, next: NextFunction) =>
 
   next();
 };
+
+export const validateRegister = (req: Request, res: Response, next: NextFunction) => {
+  const { email, password, name } = req.body;
+
+  const errors: string[] = [];
+
+  if (!email || email.trim().length === 0) {
+    errors.push('Email is required');
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errors.push('Email must be valid');
+  }
+
+  if (!password || password.trim().length === 0) {
+    errors.push('Password is required');
+  } else if (password.length < 6) {
+    errors.push('Password must be at least 6 characters');
+  }
+
+  if (name && name.trim().length === 0) {
+    errors.push('Name cannot be empty');
+  }
+
+  if (errors.length > 0) {
+    return res.status(400).json({
+      message: 'Validation failed',
+      errors,
+    });
+  }
+
+  next();
+};
