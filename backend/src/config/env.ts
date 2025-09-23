@@ -1,7 +1,8 @@
 import dotenv from 'dotenv';
+import path from 'path';
 
-// Load environment variables from .env file
-dotenv.config();
+// Load environment variables
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 const validateEnv = () => {
   const requiredEnvVars = [
@@ -9,9 +10,9 @@ const validateEnv = () => {
     'JWT_SECRET',
     'JWT_EXPIRES_IN',
     'PORT',
-    'EMAIL_HOST', 
-    'EMAIL_PORT', 
-    'EMAIL_USER', 
+    'EMAIL_HOST',
+    'EMAIL_PORT',
+    'EMAIL_USER',
     'EMAIL_PASS',
     'EMAIL_FROM',
     // Cloudinary requirements
@@ -21,19 +22,16 @@ const validateEnv = () => {
     'CLOUDINARY_FOLDER_NAME'
   ];
 
-  const missingVars = requiredEnvVars.filter(varName => !process.env[varName]);
-
+  const missingVars = requiredEnvVars.filter(v => !process.env[v]);
   if (missingVars.length > 0) {
     throw new Error(`Missing required environment variables: ${missingVars.join(', ')}`);
   }
 };
 
-// Run the validation
 validateEnv();
 
-// Export the validated and typed variables for use throughout the app
 export const config = {
-  port: process.env.PORT!,
+  port: parseInt(process.env.PORT!, 10),
   mongoUri: process.env.MONGO_URI!,
   jwt: {
     secret: process.env.JWT_SECRET!,
@@ -53,3 +51,5 @@ export const config = {
     folderName: process.env.CLOUDINARY_FOLDER_NAME!,
   }
 };
+
+console.log("MONGO_URI from env:", config.mongoUri);

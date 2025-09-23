@@ -22,6 +22,14 @@
   scrollbar-width: none;
 }
 
+/* To prevent the page from overscrolling. */
+html {
+  overscroll-behavior-y: none;
+}
+
+body.no-scroll {
+  overflow: hidden;
+}
 
 /* marquee images  */
 @keyframes marquee {
@@ -48,4 +56,22 @@
 
 .animate-marquee-reverse {
   animation: marquee-reverse 20s linear infinite;
+}
+
+
+.list-circle-stroke {
+  list-style: none; 
+  padding-left: 1.5rem; 
+}
+
+.list-circle-stroke li::before {
+  content: '';
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border: 2px solid #4c4c4c; 
+  border-radius: 50%;
+  margin-right: 0.75rem; 
+  position: relative;
+  top: 0.001rem; 
 }

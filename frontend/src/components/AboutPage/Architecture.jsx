@@ -29,7 +29,7 @@ const Architecture = () => {
   };
 
   return (
-    <section className="px-4 sm:px-6 lg:px-20 py-10 sm:py-16 bg-[#f3efee] text-[#3E3C3C]">
+    <section className="px-4 md:px-8 xl:px-20 py-12 md:py-20 bg-[#f] text-[#3E3C3C]">
       <div className="max-w-screen-xl mx-auto">
         {/* Big heading */}
         <motion.h1

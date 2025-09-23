@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
     return (
-        <footer className="bg-[#f9f6f3] border-t border-[#e0dcd7]">
+        <footer className="bg-[#F2EFEE]">
             <div className="max-w-7xl mx-auto px-6 py-6 flex flex-row lg:flex-row items-center justify-between text-sm gap-4 lg:gap-0">
 
                 {/* Left section: Company logo and brand name, links to homepage */}
@@ -18,10 +18,10 @@ const Footer = () => {
 
                 {/* Center section: Social media icons for connecting with VDS */}
                 <div className="flex space-x-5 text-[#af2b1e] text-lg">
-                    <a href="#"><FaYoutube /></a>
-                    <a href="#"><FaFacebookF /></a>
-                    <a href="#"><FaInstagram /></a>
-                    <a href="#"><FaLinkedinIn /></a>
+                    <a href="https://www.youtube.com/@vikramdesignstudio4300/featured" target="_blank"><FaYoutube/></a>
+                    <a href="https://www.facebook.com/VikramDesignStudioOfficial/" target="_blank"><FaFacebookF/></a>
+                    <a href="https://www.instagram.com/vikramdesignstudio/" target="_blank"><FaInstagram/></a>
+                    <a href="https://www.linkedin.com/company/74880921/admin/dashboard/" target="_blank"><FaLinkedinIn/></a>
                 </div>
 
                 {/* Right section: Copyright notice, visible only on large screens */}

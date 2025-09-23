@@ -1,45 +1,55 @@
-import { motion, useSpring } from "framer-motion";
-import { useEffect, useState } from "react";
+import { motion, useSpring, useTransform, useVelocity, useMotionValue } from "framer-motion";
+import { useLenis, ReactLenis } from "lenis/react"; // Smooth scroll library
 import ProjectCard from "../components/ProjectCard";
 import projects from "../Data/projects.json";
 
+const lenisOptions = {
+    lerp: 0.1,
+    duration: 1.2,
+    smoothTouch: true,
+    smoothWheel: true,
+  };
+
 const Home = () => {
-  const [isScrolling, setIsScrolling] = useState(false);
+  const scrollY = useMotionValue(0);
 
-  useEffect(() => {
-    let timeout;
-    const handleScroll = () => {
-      setIsScrolling(true);
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        setIsScrolling(false);
-      }, 150); // a bit longer delay for smoother return
-    };
-
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // Smooth scaling spring
-  const scaleSpring = useSpring(isScrolling ? 1.03 : 1, {
-    stiffness: 120,   
-    damping: 18,      
-    mass: 0.7,       
+  // Using Lenis scroll event to set scrollY
+  useLenis(({ scroll }) => {
+    scrollY.set(scroll);
   });
 
+  const scrollVelocity = useVelocity(scrollY);
+  const springConfig = {
+    stiffness: 100,
+    damping: 50,
+  }
+
+  // Mapping scrollVelocity to z perspective
+  const targetZ = useTransform(scrollVelocity, [-1500, 0, 1500], [-150, 0, -150], { clamp: false });
+  const z = useSpring(targetZ, springConfig);
+  
+  // Keep the origin of perspective change in the center of the screen dynamically
+  const perspectiveOrigin = useTransform(scrollY, y => `50% ${y + window.innerHeight / 2}px`);
+
+  
+
   return (
-    <div className="bg-[#faf6f3] flex flex-col items-center py-6 space-y-6">
-      {projects.map((project) => (
-        <motion.div
-          key={project._id}
-          style={{ scale: scaleSpring }}
-          className="w-full flex justify-center overflow-hidden"
-        >
-          <ProjectCard project={project} />
+    <ReactLenis root options={lenisOptions}>
+      <motion.div style={{perspective: "1200px", perspectiveOrigin}} className="bg-[#faf6f3] flex flex-col items-center py-6">
+        <motion.div style={{z}} className="w-full flex flex-col items-center gap-3 md:gap-6 xl:gap-8">
+          {projects.map((project) => (
+            <div
+              key={project._id}
+              className="w-full flex justify-center overflow-hidden"
+            >
+              <ProjectCard project={project} />
+            </div>
+          ))}
         </motion.div>
-      ))}
-    </div>
+      </motion.div>
+    </ReactLenis>
   );
 };
 
-export default Home;
+
+export default Home; 

@@ -1,7 +1,6 @@
 import React from 'react'
 import Heading from '../components/Contact/Heading'
 import Cards from '../components/Contact/Cards'
-import ContactFooter from '../components/Contact/ContactFooter'
 import Form from '../components/Contact/Form'
 
 const Contact = () => {
@@ -12,7 +11,6 @@ const Contact = () => {
         <Cards />
         <Form />
       </div>
-      <ContactFooter />
     </div>
   )
 }

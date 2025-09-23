@@ -1,5 +1,4 @@
 import express, { Express, Request, Response } from 'express';
-import dotenv from 'dotenv';
 import cors from 'cors';
 import path from 'path';
 import fs from 'fs';
@@ -11,9 +10,8 @@ import contactRoutes from './routes/contact.routes';
 import { errorHandler } from './middlewares/error.middleware';
 import { generalRateLimit } from './middlewares/rateLimit.middleware';
 
-dotenv.config();
-
-connectDB();
+// Connect to MongoDB
+connectDB(config.mongoUri);
 
 const app: Express = express();
 const PORT = config.port;
@@ -23,24 +21,17 @@ app.use(cors({ origin: clientOrigin }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 
-// Apply general rate limiting to all routes
 app.use(generalRateLimit);
 
-// Ensure upload directory exists
+// Upload directory
 const uploadRoot = process.env.UPLOAD_DIR || 'uploads';
 const uploadsPath = path.join(process.cwd(), uploadRoot);
 fs.mkdirSync(uploadsPath, { recursive: true });
-
-// Static serving of uploads
 app.use('/uploads', express.static(uploadsPath));
 
 // Health check
 app.get('/', (req: Request, res: Response) => {
-  res.json({
-    message: 'VDS Backend API is running...',
-    version: '1.0.0',
-    timestamp: new Date().toISOString()
-  });
+  res.json({ message: 'VDS Backend API is running...', version: '1.0.0', timestamp: new Date().toISOString() });
 });
 
 // API Routes
@@ -48,18 +39,12 @@ app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/contact', contactRoutes);
 
-// Error handling middleware
+// Error & 404 handlers
 app.use(errorHandler);
-
-// 404 handler
-app.use('*', (req: Request, res: Response) => {
-  res.status(404).json({ message: 'Route not found' });
-});
+app.use('*', (req: Request, res: Response) => res.status(404).json({ message: 'Route not found' }));
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📁 Uploads directory: ${uploadsPath}`);
   console.log(`🌐 CORS origin: ${clientOrigin}`);
 });
-
-

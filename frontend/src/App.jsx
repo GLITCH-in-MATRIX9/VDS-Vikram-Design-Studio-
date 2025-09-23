@@ -5,6 +5,7 @@ import Footer from './components/Footer';
 import { AuthProvider } from './context/authContext';
 import React, { useState } from 'react';
 import LoadingScreen from './components/LoadingScreen';
+import SectionDivider from './components/SectionDivider';
 
 function App() {
   return (
@@ -25,7 +26,7 @@ function AppContent() {
   const isCareer = location.pathname.startsWith('/career');
 
   const showNavbar = !isAdmin;
-  const showFooter = !isAdmin && !isContact && !isCareer;
+  const showFooter = !isAdmin && !isCareer;
 
   const handleLoadingComplete = () => {
     setIsLoading(false);
@@ -38,9 +39,11 @@ function AppContent() {
       ) : (
         <>
           {showNavbar && <Navbar />}
+          <SectionDivider />
           <div className="min-h-[80vh]">
             <Routes />
           </div>
+          <SectionDivider />
           {showFooter && <Footer />}
         </>
       )}
