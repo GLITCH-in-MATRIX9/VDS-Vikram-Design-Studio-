@@ -2,15 +2,17 @@ import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { AdminUser } from '../models/AdminUser.model';
 
+// Helper to generate a JWT for a user id
 const generateToken = (id: string): string => {
   const secret = process.env.JWT_SECRET;
   if (!secret) {
     throw new Error('JWT_SECRET is not configured');
   }
-  
-  return jwt.sign({ id }, secret, { 
-    expiresIn: process.env.JWT_EXPIRES_IN || '7d' 
-  });
+  const payload: { id: string } = { id };
+  const options: jwt.SignOptions = {
+    expiresIn: (process.env.JWT_EXPIRES_IN as jwt.SignOptions['expiresIn']) ?? '7d'
+  };
+  return jwt.sign(payload, secret as jwt.Secret, options);
 };
 
 
@@ -34,16 +36,16 @@ export const registerAdmin = async (req: Request, res: Response) => {
       });
     }
 
-    // First user is bootstrapped as super_admin; ignore any client-provided role
+    // First (and only publicly creatable) user is bootstrapped as super_admin
     const user = await AdminUser.create({
       email,
       password,
       name,
-      role: role || 'admin',
+      role: 'super_admin',
     });
 
     // Generate token
-    const token = generateToken(user._id);
+  const token = generateToken(user.id); // user.id is the string representation of _id
 
     res.status(201).json({
       message: 'Admin user created successfully',
@@ -100,7 +102,7 @@ export const loginAdmin = async (req: Request, res: Response) => {
     await AdminUser.findByIdAndUpdate(user._id, { lastLogin: new Date() });
 
     // Generate token
-    const token = generateToken(user._id);
+  const token = generateToken(user.id);
 
     res.status(200).json({
       message: "Login successful",
