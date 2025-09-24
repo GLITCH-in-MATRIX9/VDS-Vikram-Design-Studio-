@@ -1,12 +1,12 @@
 import React from "react";
+import ProjectImage from "./ProjectImage";
 
 const ProjectSectionDisplay = ({ sections }) => {
   if (!sections || sections.length === 0) return null;
-
   return (
     <div className="flex h-full">
-      {sections.map((section, index) => (
-        <div
+      {sections.map((section, index) => {          
+        return <div
           key={index}
           className="flex-shrink-0 flex flex-col gap-4 items-center px-2 lg:px-6 justify-center"
           // Removed inline width here. Each block will have its own width defined inside.
@@ -18,19 +18,14 @@ const ProjectSectionDisplay = ({ sections }) => {
               </p>
             </div>
           ) : (section.type === "image" || section.type === "gif") ? (
-            <div 
-              className="w-[95vw] max-w-[800px] sm:w-[400px] lg:w-[800px] aspect-video rounded-lg shadow-md overflow-hidden" 
-              // style={{ width: '800px', height: '450px' }}
-            >
-              <img
-                src={section.content}
-                alt={`Project ${section.type} ${index + 1}`}
-                className="w-full object-cover"
-              />
-            </div>
+            <ProjectImage
+              src={section.content}
+              alt={`Project ${section.type} ${index + 1}`}
+            />
           ) : null}
         </div>
-      ))}
+      }
+      )}
     </div>
   );
 };

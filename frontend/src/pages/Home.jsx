@@ -25,7 +25,7 @@ const Home = () => {
   }
 
   // Mapping scrollVelocity to z perspective
-  const targetZ = useTransform(scrollVelocity, [-1500, 0, 1500], [-150, 0, -150], { clamp: false });
+  const targetZ = useTransform(scrollVelocity, [-1500, 0, 1500], [-150, 0, -150], { clamp: true });
   const z = useSpring(targetZ, springConfig);
   
   // Keep the origin of perspective change in the center of the screen dynamically
@@ -35,7 +35,7 @@ const Home = () => {
 
   return (
     <ReactLenis root options={lenisOptions}>
-      <motion.div style={{perspective: "1200px", perspectiveOrigin}} className="bg-[#faf6f3] flex flex-col items-center py-6">
+      <motion.div style={{perspective: "1200px", perspectiveOrigin}} className="bg-[#F2EFEE] flex flex-col items-center py-6">
         <motion.div style={{z}} className="w-full flex flex-col items-center gap-3 md:gap-6 xl:gap-8">
           {projects.map((project) => (
             <div
