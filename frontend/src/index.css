@@ -84,3 +84,7 @@ body.no-scroll {
   position: relative;
   top: 0.001rem; 
 }
+
+img {
+  pointer-events: none;
+}
