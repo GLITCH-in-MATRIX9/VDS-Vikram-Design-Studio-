@@ -16,9 +16,16 @@ connectDB(config.mongoUri);
 const app: Express = express();
 const PORT = config.port;
 
-const clientOrigin = process.env.CLIENT_ORIGIN || '*';
-app.use(cors({ origin: clientOrigin }));
-app.use(express.json({ limit: '10mb' }));
+// CORS setup
+const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
+app.use(cors({
+  origin: clientOrigin,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  credentials: true, // allow cookies
+}));
+
+// Parse JSON & URL-encoded payloads
+app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true }));
 
 app.use(generalRateLimit);

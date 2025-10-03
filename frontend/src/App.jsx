@@ -7,11 +7,28 @@ import React, { useState } from 'react';
 import LoadingScreen from './components/LoadingScreen';
 import SectionDivider from './components/SectionDivider';
 
+// ✅ Import Toastify
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <AppContent />
+        {/* ✅ ToastContainer at root */}
+        <ToastContainer 
+          position="top-right" 
+          autoClose={3000} 
+          hideProgressBar={false} 
+          newestOnTop={true} 
+          closeOnClick 
+          rtl={false} 
+          pauseOnFocusLoss 
+          draggable 
+          pauseOnHover 
+          theme="colored"
+        />
       </BrowserRouter>
     </AuthProvider>
   );

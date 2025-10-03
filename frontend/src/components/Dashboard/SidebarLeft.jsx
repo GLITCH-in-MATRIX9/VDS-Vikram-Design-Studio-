@@ -1,11 +1,16 @@
 import React from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+// ⬅️ REMOVED: useLocation, useNavigate, and useContext are NOT needed here if props are passed correctly
+import { Link, useLocation } from "react-router-dom"; 
 import { FaHome, FaBriefcase, FaUsers, FaGlobe, FaHistory } from "react-icons/fa";
 import logo from "../../assets/navbar/VDSLOGOADMIN.png"
 
-const SidebarLeft = () => {
+// ⬅️ ACCEPT PROPS: user and onLogout are now passed from DashboardLayout
+const SidebarLeft = ({ user, onLogout }) => { 
   const location = useLocation();
-  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    onLogout(); 
+  };
 
   const navItems = [
     {
@@ -34,13 +39,10 @@ const SidebarLeft = () => {
       path: "/admin/dashboard/activity",
     },
   ];
-
-  const handleLogout = () => {
-    // When you log out, we clear your session and send you to the login page
-    localStorage.removeItem('token');
-    localStorage.removeItem('role');
-    navigate('/login');
-  };
+  
+  // ⬅️ SAFE USER ACCESS: Ensure user data exists before trying to destructure or access properties
+  const userName = user?.name || user?.email || "Admin User";
+  const userRole = user?.role || "Admin";
 
   return (
     <div className="h-screen w-64 bg-[#D4CECA] flex flex-col justify-between py-6 px-4 text-[#333]">
@@ -94,18 +96,21 @@ const SidebarLeft = () => {
       <div className="mt-6">
         <hr className="border-gray-400 mb-4" />
 
+        {/* ⬅️ UPDATED USER INFO SECTION */}
         <div className="flex items-center gap-3 mb-4">
           <div className="w-10 h-10 border rounded-full flex items-center justify-center">
             <span className="text-xl">👤</span>
           </div>
           <div className="text-xs">
-            <div className="uppercase text-gray-500">Role</div>
-            <div className="font-medium text-sm">Super Admin</div>
+            {/* ⬅️ Display dynamic role */}
+            <div className="uppercase text-gray-500">{userRole}</div> 
+            {/* ⬅️ Display dynamic name/email */}
+            <div className="font-medium text-sm capitalize">{userName}</div> 
           </div>
         </div>
 
         <button
-          onClick={handleLogout}
+          onClick={handleLogout} // ⬅️ Use the AuthContext logout function
           className="w-full py-2 border border-gray-600 rounded text-gray-800 hover:bg-gray-200 transition"
         >
           Logout

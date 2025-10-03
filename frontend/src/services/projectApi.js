@@ -1,0 +1,66 @@
+// frontend/src/api/projectApi.js
+import axios from "axios";
+
+const API_BASE = "http://localhost:5000/api/projects";
+
+const projectApi = {
+  createProject: async (formData) => {
+    const response = await axios.post(API_BASE, formData, {
+      withCredentials: true,
+    });
+    return response.data;
+  },
+
+  getProjects: async () => {
+    const response = await axios.get(API_BASE);
+    return response.data;
+  },
+
+  getProjectById: async (id) => {
+    const response = await axios.get(`${API_BASE}/${id}`);
+    return response.data;
+  },
+
+  updateProject: async (id, formData) => {
+    const response = await axios.put(`${API_BASE}/${id}`, formData, {
+      withCredentials: true,
+    });
+    return response.data;
+  },
+
+  deleteProject: async (id) => {
+    const response = await axios.delete(`${API_BASE}/${id}`, {
+      withCredentials: true,
+    });
+    return response.data;
+  },
+
+  searchProjects: async (query) => {
+    const params = new URLSearchParams(query).toString();
+    const response = await axios.get(`${API_BASE}/search?${params}`);
+    return response.data;
+  },
+
+  toggleProjectStatus: async (id) => {
+    const response = await axios.patch(`${API_BASE}/${id}/status`, {}, {
+      withCredentials: true,
+    });
+    return response.data;
+  },
+
+  // Upload method is correct, server issue is likely due to the file argument
+  uploadFile: async (file) => {
+    const fd = new FormData();
+    fd.append("file", file);
+
+    const response = await axios.post(`${API_BASE}/upload`, fd, {
+      // Axios correctly sets Content-Type for FormData, but keeping this is harmless
+      headers: { "Content-Type": "multipart/form-data" }, 
+      withCredentials: true,
+    });
+
+    return response.data; // { url: "...", public_id: "..." }
+  },
+};
+
+export default projectApi;

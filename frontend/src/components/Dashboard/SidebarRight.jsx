@@ -1,43 +1,105 @@
 import React from "react";
 import { Pencil, Trash2, User, X } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify"; 
+import "react-toastify/dist/ReactToastify.css";
 
-const SidebarRight = ({ project, onClose, onModify }) => {
-  // If no project is selected, don't show the sidebar
+// Custom Confirmation Component for deletion
+const ConfirmDeletionToast = ({ closeToast, project, onDeleteConfirm }) => {
+  const handleConfirm = () => {
+    onDeleteConfirm();
+    closeToast(); // Close the toast after confirmation
+  };
+
+  return (
+    <div className="p-2">
+      <p className="font-semibold text-sm mb-3">
+        Are you sure you want to delete <span className="text-red-600 font-bold">"{project.name}"</span>?
+      </p>
+      <div className="flex justify-end gap-2">
+        <button
+          onClick={closeToast}
+          className="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-100"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleConfirm}
+          className="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700 transition"
+        >
+          Yes, Delete
+        </button>
+      </div>
+    </div>
+  );
+};
+
+const SidebarRight = ({ project, onClose, onDeleteSuccess }) => {
+  const navigate = useNavigate();
   if (!project) return null;
+
+  const API_URL = "http://localhost:5000/api/projects";
+
+  // Function to execute project deletion
+  const executeDelete = async () => {
+    try {
+      await axios.delete(`${API_URL}/${project._id}`);
+      toast.success("Project deleted successfully! 🎉");
+      if (onDeleteSuccess) onDeleteSuccess();
+      onClose();
+    } catch (err) {
+      console.error("Deletion failed:", err);
+      toast.error(err?.response?.data?.message || "Failed to delete project. Please check the server.");
+    }
+  };
+
+  // Handle Delete click: show confirmation toast
+  const handleDelete = () => {
+    toast.warn(
+      ({ closeToast }) => (
+        <ConfirmDeletionToast
+          closeToast={closeToast}
+          project={project}
+          onDeleteConfirm={executeDelete}
+        />
+      ),
+      {
+        position: "top-center",
+        autoClose: false, // keep open for confirmation
+        closeOnClick: false,
+        draggable: false,
+      }
+    );
+  };
+
+  // Navigate to edit project
+  const handleModify = () => {
+    navigate(`/admin/dashboard/projects/edit/${project._id}`);
+    onClose();
+  };
 
   return (
     <aside className="flex flex-col h-screen w-[400px] bg-[#F9F8F7] text-[#333] overflow-y-auto shadow-lg">
+      <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="flex justify-end p-4">
-        {/* Click this button to close the sidebar and go back to the project list */}
-        <button
-          onClick={onClose}
-          className="text-gray-600 hover:text-black transition"
-          aria-label="Close sidebar"
-        >
+        <button onClick={onClose} className="text-gray-600 hover:text-black transition">
           <X size={22} />
         </button>
       </div>
 
-
       <div className="px-6">
-        {/* Project image at the top for a quick visual reference */}
         <img
-          src={project.image || "https://picsum.dev/300/200"}
+          src={project.previewImageUrl || "https://picsum.dev/300/200"}
           alt={project.name}
-          className="w-full h-60 object-cover rounded-xl shadow-sm"
+          className="w-full h-60 object-cover rounded-xl shadow-sm opacity-100"
         />
       </div>
 
-
       <div className="flex-1 px-6 py-6 space-y-6">
-        {/* Project name and details below the image */}
-        <h2 className="text-xl font-bold break-words whitespace-normal max-w-[320px]">
-          {project.name}
-        </h2>
+        <h2 className="text-xl font-bold break-words whitespace-normal max-w-[320px]">{project.name}</h2>
 
-
-        {/* All the key project details in a quick grid below */}
         <div className="grid grid-cols-2 gap-y-4 text-sm">
           <span className="text-gray-500 font-medium">LOCATION</span>
           <span>{project.location || "Location"}</span>
@@ -52,73 +114,50 @@ const SidebarRight = ({ project, onClose, onModify }) => {
           <span>{project.category || "Category"}</span>
 
           <span className="text-gray-500 font-medium">SUB - CATEGORY</span>
-          <span>{project.subcategory || "Sub - Category"}</span>
+          <span>{project.subCategory || "Sub - Category"}</span>
 
           <span className="text-gray-500 font-medium">CLIENT</span>
-          <span className="break-words">
-            {project.client || "XYZ (allow flow to new line)"}
-          </span>
+          <span className="break-words">{project.client || "XYZ"}</span>
 
           <span className="text-gray-500 font-medium">COLLABORATORS</span>
-          <span className="break-words">
-            {project.collaborators || "XYZ (allow flow to new line)"}
-          </span>
+          <span className="break-words">{project.collaborators || "XYZ"}</span>
 
           <span className="text-gray-500 font-medium">TEAM</span>
-          <span className="break-words">
-            {project.team || "Team (allow flow to new line)"}
-          </span>
+          <span className="break-words">{project.projectTeam || "Team"}</span>
 
           <span className="text-gray-500 font-medium">TAGS</span>
           <div className="flex flex-wrap gap-2">
-            {(project.tags || ["Tag 1", "Tag 2", "Tag 3"]).map((tag, i) => (
-              <span
-                key={i}
-                className="px-3 py-1 text-xs bg-gray-200 rounded-md text-gray-700"
-              >
-                {tag}
-              </span>
+            {(project.tags || []).map((tag, i) => (
+              <span key={i} className="px-3 py-1 text-xs bg-gray-200 rounded-md text-gray-700">{tag}</span>
             ))}
           </div>
         </div>
 
-
-        {/* Divider before more details */}
         <hr className="border-gray-300" />
 
-
-        {/* Date and user info for project edits */}
         <div className="grid grid-cols-2 gap-y-3 text-sm">
           <span className="text-gray-500 font-medium">DATE CREATED</span>
-          <span>
-            {project.created || "DD - MM - YYYY"}{" "}
-            <span className="ml-2 italic text-gray-600">20:00</span>
-          </span>
+          <span>{project.createdAt ? new Date(project.createdAt).toLocaleDateString() : "DD-MM-YYYY"}</span>
 
           <span className="text-gray-500 font-medium">DATE MODIFIED</span>
-          <span>
-            {project.modified || "DD - MM - YYYY"}{" "}
-            <span className="ml-2 italic text-gray-600">20:00</span>
-          </span>
+          <span>{project.updatedAt ? new Date(project.updatedAt).toLocaleDateString() : "DD-MM-YYYY"}</span>
 
           <span className="text-gray-500 font-medium">MODIFIED BY</span>
-          <span className="flex items-center gap-2">
-            <User size={16} /> {project.editedBy || "User Name"}
-          </span>
+          <span className="flex items-center gap-2"><User size={16} /> {project.editedBy || "User Name"}</span>
         </div>
       </div>
 
-
       <div className="px-6 py-4 flex gap-3 border-t border-gray-200">
-        {/* Action buttons: modify or delete the project */}
         <button
-          onClick={onModify}
+          onClick={handleModify}
           className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-500 rounded-lg text-gray-700 font-medium hover:bg-gray-100 transition"
         >
-          <Pencil size={16} />
-          Modify Project
+          <Pencil size={16} /> Modify Project
         </button>
-        <button className="px-4 py-2 border border-[#6E6A6B] rounded-lg text-[#6E6A6B] hover:bg-red-100 transition">
+        <button
+          onClick={handleDelete}
+          className="px-4 py-2 border border-[#6E6A6B] rounded-lg text-[#6E6A6B] hover:bg-red-100 transition"
+        >
           <Trash2 size={18} />
         </button>
       </div>
