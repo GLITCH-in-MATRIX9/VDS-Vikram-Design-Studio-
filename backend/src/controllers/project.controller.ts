@@ -32,7 +32,12 @@ export const createProject = async (req: Request, res: Response) => {
     const updatedSections = await Promise.all(
       parsedSections.map(async (sec: any) => {
         if (sec.file) {
-          const result = await cloudinary.uploader.upload(sec.file, { folder: "projects/sections" });
+          const result = await cloudinary.uploader.upload(sec.file, { 
+            folder: "projects/sections",
+            resource_type: 'auto', // Let Cloudinary auto-detect for GIFs
+            quality: 'auto',
+            fetch_format: 'auto'
+          });
           return { type: sec.type, content: result.secure_url };
         }
         return sec; // already a URL
@@ -134,7 +139,12 @@ export const updateProject = async (req: Request, res: Response) => {
     const updatedSections = await Promise.all(
       parsedSections.map(async (sec: any) => {
         if (sec.file) {
-          const result = await cloudinary.uploader.upload(sec.file, { folder: "projects/sections" });
+          const result = await cloudinary.uploader.upload(sec.file, { 
+            folder: "projects/sections",
+            resource_type: 'auto', // Let Cloudinary auto-detect for GIFs
+            quality: 'auto',
+            fetch_format: 'auto'
+          });
           return { type: sec.type, content: result.secure_url };
         }
         return sec; // already a URL

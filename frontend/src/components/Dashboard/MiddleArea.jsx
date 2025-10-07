@@ -103,6 +103,7 @@ const MiddleArea = ({ onProjectClick, filterState, onFilterChange }) => {
               value={searchTerm}
               onChange={handleSearchChange}
               className="border border-gray-300 px-10 py-2 w-full text-sm placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 rounded-lg"
+              autoComplete="off"
             />
           </div>
         )}
@@ -239,6 +240,9 @@ const MiddleArea = ({ onProjectClick, filterState, onFilterChange }) => {
                       src={project.previewImageUrl || "https://picsum.dev/300/200"}
                       alt={project.name}
                       className="w-16 h-10 object-cover rounded"
+                      onError={(e) => {
+                        e.target.src = "https://picsum.dev/300/200";
+                      }}
                     />
                   </td>
                   <td className="p-3 border-b border-gray-200 max-w-[200px] truncate">

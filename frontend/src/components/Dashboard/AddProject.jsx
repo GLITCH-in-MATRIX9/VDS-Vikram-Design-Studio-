@@ -135,13 +135,11 @@ const AddProject = () => {
     fd.append('sections', JSON.stringify(sections));
 
     if (previewFile) {
-      fd.append('preview', previewFile); // Must match multer field name
+      fd.append('previewImage', previewFile); // Must match multer field name
     }
 
     try {
-      const res = await projectApi.createProject(fd, {
-        headers: { 'Content-Type': 'multipart/form-data' },
-      });
+      const res = await projectApi.createProject(fd);
       alert('Project created successfully!');
       console.log(res.data);
     } catch (err) {
@@ -170,6 +168,7 @@ const AddProject = () => {
               onChange={handleChange}
               placeholder="Project Name *"
               className="border p-2 rounded w-full border-[#C9BEB8]"
+              autoComplete="off"
               required
             />
             <select
@@ -260,6 +259,7 @@ const AddProject = () => {
               onChange={handleChange}
               placeholder="Client *"
               className="border p-2 rounded w-full border-[#C9BEB8]"
+              autoComplete="off"
               required
             />
             <input
@@ -269,6 +269,7 @@ const AddProject = () => {
               onChange={handleChange}
               placeholder="Project Team *"
               className="border p-2 rounded w-full border-[#C9BEB8]"
+              autoComplete="off"
               required
             />
             <input
@@ -278,6 +279,7 @@ const AddProject = () => {
               onChange={handleChange}
               placeholder="Collaborators *"
               className="border p-2 rounded w-full border-[#C9BEB8]"
+              autoComplete="off"
               required
             />
 
