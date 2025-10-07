@@ -46,6 +46,30 @@ router.post(
   }
 );
 
+// Test endpoint specifically for GIF uploads
+router.post(
+  "/test-gif-upload",
+  protect,
+  requireRole(["admin", "super_admin"]),
+  upload.single("gif"), 
+  uploadToCloudinary,
+  (req, res) => {
+    if (!req.body.previewImageUrl) {
+      return res.status(400).json({ message: "No GIF file uploaded" });
+    }
+    res.status(200).json({ 
+      message: "GIF uploaded successfully",
+      url: req.body.previewImageUrl,
+      publicId: req.body.previewImagePublicId,
+      fileInfo: {
+        originalName: req.file?.originalname,
+        mimetype: req.file?.mimetype,
+        size: req.file?.size
+      }
+    });
+  }
+);
+
 router.put(
   "/:id",
   protect,

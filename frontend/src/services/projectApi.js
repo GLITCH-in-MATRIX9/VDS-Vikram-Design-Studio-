@@ -4,11 +4,12 @@ import axios from "axios";
 const API_BASE = "http://localhost:5000/api/projects";
 
 const projectApi = {
-  createProject: async (formData) => {
+  createProject: async (formData, config = {}) => {
     const response = await axios.post(API_BASE, formData, {
       withCredentials: true,
+      ...config,
     });
-    return response.data;
+    return response;
   },
 
   getProjects: async () => {
