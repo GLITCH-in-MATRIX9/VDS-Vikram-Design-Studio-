@@ -5,7 +5,7 @@ import streamifier from "streamifier";
 const uploadBufferToCloudinary = (
   buffer: Buffer,
   folder: string,
-  resourceType: string = 'auto'
+  resourceType: string =  'image' | 'video' | 'raw' | 'auto' = 'auto'
 ): Promise<any> => {
   return new Promise((resolve, reject) => {
     const uploadStream = cloudinary.uploader.upload_stream(
