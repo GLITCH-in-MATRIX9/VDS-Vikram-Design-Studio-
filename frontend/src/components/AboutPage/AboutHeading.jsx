@@ -1,6 +1,6 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import aboutImgUrl from '../../assets/Team/ABOUT IMAGE.jpg'
+import React from "react";
+import { motion } from "framer-motion";
+import aboutImgUrl from "../../assets/Team/ABOUT IMAGE.jpg";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -20,7 +20,7 @@ const itemVariants = {
 const AboutHeading = () => {
   return (
     <section className="bg-[#f2efee] px-4 md:px-8 xl:px-20 py-8 md:py-12 xl:py-20">
-      <div className="max-w-screen-xl mx-auto">
+      <div className="  mx-auto">
         <motion.h1
           className="font-sora text-[40px] md:text-[56px] xl:text-7xl font-semibold text-[#3E3C3C] 
             mb-6 xl:mb-16 tracking-[-0.01em] leading-[48px] md:leading-[64px] xl:leading-[80px] uppercase"
@@ -34,7 +34,7 @@ const AboutHeading = () => {
       </div>
 
       <motion.div
-        className="max-w-screen-xl mx-auto grid grid-cols-1 xl:grid-cols-3 gap-6"
+        className="  mx-auto grid grid-cols-1 xl:grid-cols-3 gap-6"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -52,28 +52,63 @@ const AboutHeading = () => {
 
           {/* Two columns for the story */}
           <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 sm:gap-8 text-[#474545] leading-[1.4em] text-sm sm:text-base">
-            <motion.div className="font-inter space-y-3 sm:space-y-4 text-sm" variants={containerVariants}>
+            <motion.div
+              className="font-inter space-y-3 sm:space-y-4 text-sm"
+              variants={containerVariants}
+            >
               <motion.p variants={itemVariants}>
-                In 2009, after years of working with one of Guwahati’s leading architectural firms, Vikramm B Shroff and Pooza Agarwal - both qualified interior designers - founded VDS as a turnkey design practice. With a deep understanding of space, materials, and execution, they shaped a firm that prioritized design integrity and client relationships.
+                In 2009, after years of working with one of Guwahati’s leading
+                architectural firms, Vikramm B Shroff and Pooza Agarwal - both
+                qualified interior designers - founded VDS as a turnkey design
+                practice. With a deep understanding of space, materials, and
+                execution, they shaped a firm that prioritized design integrity
+                and client relationships.
               </motion.p>
               <motion.p variants={itemVariants}>
-                The early years were grounded in interiors. But as the work grew, so did the vision. VDS began to take on private architectural and landscape commissions - quietly expanding its scope and its team. With the support of trusted collaborators, architects, and consultants, the studio evolved into a full-spectrum design practice.
+                The early years were grounded in interiors. But as the work
+                grew, so did the vision. VDS began to take on private
+                architectural and landscape commissions - quietly expanding its
+                scope and its team. With the support of trusted collaborators,
+                architects, and consultants, the studio evolved into a
+                full-spectrum design practice.
               </motion.p>
               <motion.p variants={itemVariants}>
-                Between 2019–2020, the studio stepped into uncharted territory with its first government project - the Batadrava Than Redevelopment in Nagaon, Assam. A culturally significant site and a project of substantial scale, it became a turning point. What followed was a momentum shift: a series of public commissions, larger institutional projects, and deeper collaborations across the northeast.
+                Between 2019–2020, the studio stepped into uncharted territory
+                with its first government project - the Batadrava Than
+                Redevelopment in Nagaon, Assam. A culturally significant site
+                and a project of substantial scale, it became a turning point.
+                What followed was a momentum shift: a series of public
+                commissions, larger institutional projects, and deeper
+                collaborations across the northeast.
               </motion.p>
             </motion.div>
 
-            <motion.div className="font-inter space-y-3 sm:space-y-4 text-sm" variants={containerVariants}>
+            <motion.div
+              className="font-inter space-y-3 sm:space-y-4 text-sm"
+              variants={containerVariants}
+            >
               <motion.p variants={itemVariants}>
-                Amid this growth, a new energy entered the picture. Namman Shroff, an architect and trained lighting designer, had long been connected to the studio through his father, Vikramm. In 2023, he officially stepped into leadership - bringing with him a sharper eye, a stronger design voice, and a background in visual arts. Namman’s decision to invest in VDS over a more conventional path marked the beginning of a new chapter: bold, forward-thinking, and unapologetically ambitious.
+                Amid this growth, a new energy entered the picture. Namman
+                Shroff, an architect and trained lighting designer, had long
+                been connected to the studio through his father, Vikramm. In
+                2023, he officially stepped into leadership - bringing with him
+                a sharper eye, a stronger design voice, and a background in
+                visual arts. Namman’s decision to invest in VDS over a more
+                conventional path marked the beginning of a new chapter: bold,
+                forward-thinking, and unapologetically ambitious.
               </motion.p>
               <motion.p variants={itemVariants}>
-                We’ll be honest - we’ve never won awards. For a long time, VDS worked like any typical mid-sized firm: consistent, dependable, and under the radar. But we’re no longer content with staying there.
+                We’ll be honest - we’ve never won awards. For a long time, VDS
+                worked like any typical mid-sized firm: consistent, dependable,
+                and under the radar. But we’re no longer content with staying
+                there.
               </motion.p>
               <motion.p variants={itemVariants}>
-               Today, we’re building a studio that reflects where we come from - but isn’t limited by it. One that believes good design isn’t just about beauty - it’s about responsibility, context, and possibility.
-The journey started quietly. But where we’re going is anything but.
+                Today, we’re building a studio that reflects where we come from
+                - but isn’t limited by it. One that believes good design isn’t
+                just about beauty - it’s about responsibility, context, and
+                possibility. The journey started quietly. But where we’re going
+                is anything but.
               </motion.p>
             </motion.div>
           </div>
@@ -89,7 +124,7 @@ The journey started quietly. But where we’re going is anything but.
               src="https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057665/yqbxzbkijtuvtde5nilu.jpg"
               alt="Description of the image"
               className="w-full h-full object-cover rounded-md"
-            />          
+            />
           </div>
         </motion.div>
       </motion.div>

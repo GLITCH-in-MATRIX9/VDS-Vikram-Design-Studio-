@@ -25,12 +25,16 @@ const Engineering = () => {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }, // Cards gently float up as they appear
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" },
+    }, // Cards gently float up as they appear
   };
 
   return (
     <section className="px-4 sm:px-6 lg:px-20 py-10 sm:py-16 bg-[#f3efee] text-[#3E3C3C]">
-      <div className="max-w-screen-xl mx-auto">
+      <div className="  mx-auto">
         {/* Big title to introduce our engineering partners! */}
         <motion.h1
           className="font-sora font-semibold text-3xl sm:text-4xl md:text-5xl lg:text-[40px] leading-tight tracking-[-0.01em] mb-6 sm:mb-8 text-left"
@@ -58,12 +62,14 @@ const Engineering = () => {
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <p>
-            Good design cannot exist without good engineering—and at VDS, both go hand in hand. We
-            collaborate with structural, civil, and services engineers from early design stages to
-            ensure ambition meets precision. Lighting integration is planned alongside structure and
-            services—ensuring that fixtures, conduits, and light quality align with the architecture.
-            From challenging sites to technical constraints, our engineering partners help us
-            translate spatial ideas into systems that work seamlessly and sustainably.
+            Good design cannot exist without good engineering—and at VDS, both
+            go hand in hand. We collaborate with structural, civil, and services
+            engineers from early design stages to ensure ambition meets
+            precision. Lighting integration is planned alongside structure and
+            services—ensuring that fixtures, conduits, and light quality align
+            with the architecture. From challenging sites to technical
+            constraints, our engineering partners help us translate spatial
+            ideas into systems that work seamlessly and sustainably.
           </p>
         </motion.div>
 
@@ -105,7 +111,9 @@ const Engineering = () => {
                   alt="Engineering"
                   className="w-full h-[140px] sm:h-[180px] md:h-[210px] lg:h-[240px] object-cover rounded-lg mb-4"
                 />
-                <div className="text-xs text-gray-400 uppercase mb-1">Category</div>
+                <div className="text-xs text-gray-400 uppercase mb-1">
+                  Category
+                </div>
                 <h3 className="font-bold text-base sm:text-lg mb-2">Title</h3>
                 <p
                   style={{
@@ -116,7 +124,8 @@ const Engineering = () => {
                   }}
                   className="text-xs sm:text-sm text-gray-500"
                 >
-                  Egestas elit dui scelerisque ut eu purus aliquam vitae habitasse.
+                  Egestas elit dui scelerisque ut eu purus aliquam vitae
+                  habitasse.
                 </p>
               </motion.div>
             ))}
