@@ -25,7 +25,7 @@ const ProjectCard = ({ project }) => {
   return (
     <motion.div
       layout
-      className={`relative w-full max-w-7xl rounded-xl overflow-hidden`}
+      className={`relative w-full overflow-hidden`}
       transition={{ layout: { duration: 0.3, ease: "easeInOut" } }}
     >
       <AnimatePresence mode="wait">

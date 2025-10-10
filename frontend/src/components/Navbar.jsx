@@ -55,13 +55,13 @@ const Navbar = () => {
     return (
         <>
             {/* Main Navbar */}
-            <nav className="w-full bg-[#f2efee]  relative z-50">
-                <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+            <nav className="w-full px-4 md:px-8 xl:px-20 bg-[#f2efee]  relative z-50">
+                <div className="max-w-screen-xl mx-auto py-4 flex justify-between items-center">
                     {/* Left - Logo */}
                     <div className="flex items-center space-x-3">
-                        <Link to="/" className="flex items-center space-x-3" onClick={closeAllMenus}>
-                            <img src={logo} alt="Vikram Design Studio Logo" className="h-10 w-auto" />
-                            <span className="text-gray-700 text-lg">Vikram Design Studio</span>
+                        <Link to="/" className="flex items-center gap-3" onClick={closeAllMenus}>
+                            <img src={logo} alt="Vikram Design Studio Logo" className="h-6 md:h-12 w-auto" />
+                            <span className="text-[#454545] leading-[1em] text-xs md:text-xl xl:text-2xl font-humanist">Vikram Design Studio</span>
                         </Link>
                     </div>
 
@@ -130,7 +130,7 @@ const Navbar = () => {
                                 <button
                                     key={category}
                                     onClick={() => setSelectedCategory(selectedCategory === category ? null : category)}
-                                    className={`px-4 py-2 rounded-md font-medium transition ${selectedCategory === category ? "bg-gray-700 text-white" : "text-gray-700 hover:bg-gray-200"} text-xs sm:text-sm`}
+                                    className={`px-4 py-2 rounded-md font-medium transition text-[#474545] ${selectedCategory === category ? "bg-[#D5CFCC]" : " hover:bg-[#E6E2E0]"} text-xs sm:text-sm`}
                                 >
                                     {category}
                                 </button>
@@ -151,9 +151,9 @@ const Navbar = () => {
                         transition={{ duration: 0.8, ease: [0.83, 0, 0.17, 1] }}
                         className="w-full bg-[#f3efee] overflow-hidden z-30"
                     >
-                        <div className="max-w-7xl mx-auto px-6 py-3 flex justify-evenly flex-wrap gap-2 text-gray-600">
+                        <div className="max-w-7xl mx-auto px-6 py-3 flex justify-evenly flex-wrap gap-2 text-[#474545]">
                             {filterOptions[selectedCategory].map((option, i) => (
-                                <div key={i} className="px-3 py-1 text-xs rounded-md cursor-pointer hover:bg-gray-200 transition">
+                                <div key={i} className="px-3 py-1 text-xs rounded-md cursor-pointer hover:bg-[#E6E2E0] transition">
                                     {option}
                                 </div>
                             ))}

@@ -13,10 +13,10 @@ const cardVariants = {
   }, // Card slides up gently when it appears
 };
 
-const Card = ({ data }) => {
+const  Card = ({ data }) => {
   return (
     <motion.article
-      className="max-w-[1920px] flex justify-between flex-col md:flex-row gap-4 md:gap-8 px-3 md:px-6 lg:px-8 py-4 md:py-8 lg:py-12 border-[0.5px] border-[#BEBBBC] text-[#3E3C3C] md:border-1 rounded-lg md:rounded-2xl"
+      className="max-w-[1920px] flex justify-between flex-col md:flex-row gap-4 md:gap-8 px-3 md:px-6 lg:px-12 py-4 md:py-8 lg:py-12 border-[0.5px] border-[#BEBBBC] text-[#3E3C3C] md:border-1 rounded-lg md:rounded-2xl"
       variants={cardVariants}
       initial="hidden"
       whileInView="visible"
