@@ -16,12 +16,27 @@ connectDB(config.mongoUri);
 const app: Express = express();
 const PORT = config.port;
 
-// CORS setup
-const clientOrigin = process.env.CLIENT_ORIGIN || 'http://localhost:5173';
+// ✅ CORS setup (supports multiple origins)
+const allowedOrigins = [
+  'https://vikramdesignstudio.com',  // production domain
+  'http://localhost:5173',           // local dev frontend
+  process.env.CLIENT_ORIGIN || ''    // optional env override
+].filter(Boolean); // remove empty strings
+
 app.use(cors({
-  origin: clientOrigin,
+  origin: (origin, callback) => {
+    // Allow requests with no origin (e.g. mobile apps, curl)
+    if (!origin) return callback(null, true);
+
+    if (allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      console.warn(`❌ CORS blocked for origin: ${origin}`);
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  credentials: true, // allow cookies
+  credentials: true,
 }));
 
 // Parse JSON & URL-encoded payloads
@@ -38,7 +53,11 @@ app.use('/uploads', express.static(uploadsPath));
 
 // Health check
 app.get('/', (req: Request, res: Response) => {
-  res.json({ message: 'VDS Backend API is running...', version: '1.0.0', timestamp: new Date().toISOString() });
+  res.json({
+    message: 'VDS Backend API is running...',
+    version: '1.0.0',
+    timestamp: new Date().toISOString(),
+  });
 });
 
 // API Routes
@@ -48,10 +67,12 @@ app.use('/api/contact', contactRoutes);
 
 // Error & 404 handlers
 app.use(errorHandler);
-app.use('*', (req: Request, res: Response) => res.status(404).json({ message: 'Route not found' }));
+app.use('*', (req: Request, res: Response) =>
+  res.status(404).json({ message: 'Route not found' })
+);
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📁 Uploads directory: ${uploadsPath}`);
-  console.log(`🌐 CORS origin: ${clientOrigin}`);
+  console.log(`🌐 Allowed CORS origins:`, allowedOrigins);
 });

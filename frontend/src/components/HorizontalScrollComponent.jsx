@@ -85,22 +85,27 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
         ref={containerRef}
         className={`flex overflow-x-auto h-full box-border scroll-smooth hide-scrollbar`}
       >
-        <motion.div
-          ref={contentRef}
-          className="flex items-start" // Use flex to lay out children horizontally
-          // Animate the 'x' property based on our state
-          animate={{ x: xOffset }}
-          transition={transition} // Use the dynamic transition state
-        >
-          {/* Project details desktop: a fixed-width container */}
-          <div className="hidden lg:flex w-[240px] leading-[1.4] flex-col pt-6 ml-12 pr-3 text-right items-end flex-shrink-0">
-            <div className="flex flex-col gap-1 text-xs sm:text-sm">
-              <div className="text-[#7E797A] font-medium text-xs uppercase">
-                {project?.category || "RESIDENTIAL"}
-              </div>
-              <h1 className="text-[#3E3C3C] font-sora font-semibold text-xl m-0">
-                {project?.title || project?.name || "Project Name"}
-              </h1>
+        {/* Project details desktop: a fixed-width container */}
+        <div className="hidden lg:flex w-[240px] leading-[1.4] flex-col pt-6 ml-12 pr-3 text-right items-end flex-shrink-0">
+          <div className="flex flex-col gap-1 text-xs sm:text-sm">
+            <div className="text-[#7E797A] font-medium text-xs uppercase">{project?.category || "RESIDENTIAL"}</div>
+            <h1 className="text-[#3E3C3C] font-sora font-semibold text-xl m-0">{project?.name || project?.title || "Project Name"}</h1>
+          </div>
+          <div className="flex flex-col gap-1 text-[#474545] text-xs mt-4">
+            <p className="flex items-center justify-end gap-1 ">
+              <FiMapPin />
+              <span>{project?.location || "Location"}</span>
+            </p>
+            <p>{project?.year || "Year"}</p>
+          </div>
+          <div className="mt-[46px] flex flex-col gap-6 text-[#474545] text-[10px] uppercase">
+            <div>
+              <div className="text-[#6E6A6B] mb-1">CLIENT</div>
+              <div>{project?.client || "Client Name"}</div>
+            </div>
+            <div>
+              <div className="text-[#6E6A6B] mb-1">PROJECT TEAM</div>
+              <div>{project?.projectTeam || project?.project_team || "Team Name"}</div>
             </div>
             <div className="flex flex-col gap-1 text-[#474545] text-xs mt-4">
               <p className="flex items-center justify-end gap-1 ">
@@ -140,12 +145,8 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
       {/* Project details: tablet size and smaller */}
       <div className="grid grid-cols-2 py-3 leading-[1.4] lg:hidden px-2">
         <div className="project-type">
-          <div className="text-[#7E797A] font-medium text-xs uppercase">
-            {project?.category || "RESIDENTIAL"}
-          </div>
-          <h1 className="text=[#3E3C3C] font-sora font-semibold text-xl m-0">
-            {project?.title || project?.name || "Project Name"}
-          </h1>
+            <div className="text-[#7E797A] font-medium text-xs uppercase">{project?.category || "RESIDENTIAL"}</div>
+            <h1 className="text=[#3E3C3C] font-sora font-semibold text-xl m-0">{project?.name || project?.title || "Project Name"}</h1>
         </div>
         <div className="location">
           <div className="flex flex-col items-end gap-1 text-[#474545] text-xs text-right">

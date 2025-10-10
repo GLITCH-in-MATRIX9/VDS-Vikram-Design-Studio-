@@ -50,12 +50,12 @@ const ProjectCard = ({ project }) => {
                   {project?.category || "Residential"}
                 </p>
                 <h2 className="font-sora text-xl font-semibold text-[#3E3C3C] mt-1">
-                  {project?.title || "Shanti Villa"}
+                  {project?.name || project?.title || "Project Name"}
                 </h2>
                 <div className="flex flex-col text-sm text-[#474545] mt-4">
                   <div className="flex items-center gap-2 text-xs">
                     <FaMapMarkerAlt className="text-gray-400" />
-                    <span>{project?.location || "Dimapur, Nagaland"}</span>
+                    <span>{project?.location || "Location"}</span>
                   </div>
                   {/* <p className="mt-1">{project?.year || "2015"}</p> */}
                 </div>
@@ -72,7 +72,7 @@ const ProjectCard = ({ project }) => {
                   {project?.category || "Residential"}
                 </p>
                 <h2 className="font-sora text-xl font-semibold text-[#3E3C3C]">
-                  {project?.title || "Shanti Villa"}
+                  {project?.name || project?.title || "Project Name"}
                 </h2>
               </div>
             </div>
