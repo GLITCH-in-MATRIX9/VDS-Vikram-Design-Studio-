@@ -16,7 +16,7 @@ const containerVariants = {
 const Cards = () => {
     return (
         <motion.section
-            className="flex flex-col gap-4 md:gap-8 lg:gap-12 px-6 md:px-12 lg:px-24"
+            className="flex flex-col gap-4 md:gap-8 lg:gap-12 px-4 md:px-8 xl:px-20"
             variants={containerVariants}
             initial="hidden"
             whileInView="visible"

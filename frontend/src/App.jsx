@@ -57,7 +57,7 @@ function AppContent() {
         <>
           {showNavbar && <Navbar />}
           <SectionDivider />
-          <div className="min-h-[80vh]">
+          <div className="min-h-[80vh] bg-[#f2efee]">
             <Routes />
           </div>
           <SectionDivider />
