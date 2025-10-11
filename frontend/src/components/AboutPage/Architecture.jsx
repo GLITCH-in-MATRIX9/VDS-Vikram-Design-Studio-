@@ -1,5 +1,5 @@
-import React, { useRef } from 'react';
-import { motion } from 'framer-motion';
+import React, { useRef } from "react";
+import { motion } from "framer-motion";
 
 const Architecture = () => {
   const scrollRef = useRef(null);
@@ -7,8 +7,8 @@ const Architecture = () => {
   const scroll = (direction) => {
     if (scrollRef.current) {
       scrollRef.current.scrollBy({
-        left: direction === 'left' ? -300 : 300,
-        behavior: 'smooth',
+        left: direction === "left" ? -300 : 300,
+        behavior: "smooth",
       });
     }
   };
@@ -25,16 +25,20 @@ const Architecture = () => {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" },
+    },
   };
 
   return (
     <section className="px-4 md:px-8 xl:px-20 py-12 md:py-20 bg-[#f] text-[#3E3C3C]">
-      <div className="max-w-screen-xl mx-auto">
+      <div className="  mx-auto">
         {/* Big heading */}
         <motion.h1
           className="font-sora font-semibold text-3xl sm:text-4xl md:text-5xl lg:text-[40px] leading-tight tracking-[-0.01em] mb-6 sm:mb-8 text-left"
-          style={{ fontFamily: 'Sora, sans-serif', fontWeight: 600 }}
+          style={{ fontFamily: "Sora, sans-serif", fontWeight: 600 }}
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
@@ -47,10 +51,10 @@ const Architecture = () => {
         <motion.div
           className="max-w-4xl space-y-4 sm:space-y-6 mb-10 sm:mb-16 text-sm sm:text-base"
           style={{
-            fontFamily: 'Inter, sans-serif',
+            fontFamily: "Inter, sans-serif",
             fontWeight: 400,
-            lineHeight: '140%',
-            letterSpacing: '0',
+            lineHeight: "140%",
+            letterSpacing: "0",
           }}
           variants={containerVariants}
           initial="hidden"
@@ -58,28 +62,32 @@ const Architecture = () => {
           viewport={{ once: true, amount: 0.1 }}
         >
           <motion.p variants={itemVariants}>
-            At VDS, architecture is an evolving dialogue—between people and place, ideas and
-            constraints, light and material. Our work spans public institutions, cultural spaces,
-            hospitality, and private residences—each shaped with a sensitivity to context and a
+            At VDS, architecture is an evolving dialogue—between people and
+            place, ideas and constraints, light and material. Our work spans
+            public institutions, cultural spaces, hospitality, and private
+            residences—each shaped with a sensitivity to context and a
             commitment to design that endures.
           </motion.p>
           <motion.p variants={itemVariants}>
-            Working in the diverse and often complex ecosystem of the northeast, we engage with
-            everything from high-end villas to government projects. Some require navigating
-            bureaucracy, cost-conscious detailing, or low-maintenance material strategies. Others
-            demand immersive environments, refined finishes, and bespoke spatial experiences. What
-            binds them all is our belief in clarity over complexity, expression without excess, and a
-            design language that is bold, sensitive, and lighting-centric.
+            Working in the diverse and often complex ecosystem of the northeast,
+            we engage with everything from high-end villas to government
+            projects. Some require navigating bureaucracy, cost-conscious
+            detailing, or low-maintenance material strategies. Others demand
+            immersive environments, refined finishes, and bespoke spatial
+            experiences. What binds them all is our belief in clarity over
+            complexity, expression without excess, and a design language that is
+            bold, sensitive, and lighting-centric.
           </motion.p>
           <motion.p variants={itemVariants}>
-            Over time, we’ve earned the trust of stakeholders and clients—not through spectacle, but
-            through thoughtfulness. Whether it’s a cultural corridor or a compact office, we design
-            spaces that perform with purpose and feel quietly powerful.
+            Over time, we’ve earned the trust of stakeholders and clients—not
+            through spectacle, but through thoughtfulness. Whether it’s a
+            cultural corridor or a compact office, we design spaces that perform
+            with purpose and feel quietly powerful.
           </motion.p>
         </motion.div>
 
         {/* Horizontally scrollable cards */}
-        <motion.div 
+        <motion.div
           className="relative"
           variants={containerVariants}
           initial="hidden"
@@ -87,13 +95,13 @@ const Architecture = () => {
           viewport={{ once: true, amount: 0.1 }}
         >
           <button
-            onClick={() => scroll('left')}
+            onClick={() => scroll("left")}
             className="hidden sm:block absolute left-0 top-1/2 transform -translate-y-1/2 z-10 bg-[#f3efee] shadow-md rounded-full p-2"
           >
             ←
           </button>
           <button
-            onClick={() => scroll('right')}
+            onClick={() => scroll("right")}
             className="hidden sm:block absolute right-0 top-1/2 transform -translate-y-1/2 z-10 bg-[#f3efee] shadow-md rounded-full p-2"
           >
             →
@@ -114,10 +122,13 @@ const Architecture = () => {
                   alt="Architecture"
                   className="w-full h-[140px] sm:h-[180px] md:h-[210px] lg:h-[240px] object-cover rounded-lg mb-4"
                 />
-                <div className="text-xs text-gray-400 uppercase mb-1">Category</div>
+                <div className="text-xs text-gray-400 uppercase mb-1">
+                  Category
+                </div>
                 <h3 className="font-bold text-base sm:text-lg mb-2">Title</h3>
                 <p className="text-xs sm:text-sm text-gray-500">
-                  Egestas elit dui scelerisque ut eu purus aliquam vitae habitasse.
+                  Egestas elit dui scelerisque ut eu purus aliquam vitae
+                  habitasse.
                 </p>
               </motion.div>
             ))}

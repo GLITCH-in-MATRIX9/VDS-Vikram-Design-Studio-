@@ -25,12 +25,16 @@ const LandScape = () => {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }, // Cards gently float up as they appear
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.6, ease: "easeOut" },
+    }, // Cards gently float up as they appear
   };
 
   return (
     <section className="px-4 sm:px-6 lg:px-20 py-10 sm:py-16 bg-[#f3efee] text-[#3E3C3C]">
-      <div className="max-w-screen-xl mx-auto">
+      <div className="  mx-auto">
         {/* Big title to introduce our landscape collaborators! */}
         <motion.h1
           className="font-sora font-semibold text-3xl sm:text-4xl md:text-5xl lg:text-[40px] leading-tight tracking-[-0.01em] mb-6 sm:mb-8 text-left"
@@ -58,18 +62,21 @@ const LandScape = () => {
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
           <p>
-            Our landscape design practice is rooted in context and collaboration. Whether it's a
-            spiritual campus or a private retreat, we work with land, light, and life to shape spaces
-            that feel grounded and alive. We believe landscape is not an afterthought, but an
-            architectural element—framing movement, anchoring built form, and adding rhythm to daily
-            experience.
+            Our landscape design practice is rooted in context and
+            collaboration. Whether it's a spiritual campus or a private retreat,
+            we work with land, light, and life to shape spaces that feel
+            grounded and alive. We believe landscape is not an afterthought, but
+            an architectural element—framing movement, anchoring built form, and
+            adding rhythm to daily experience.
           </p>
           <p>
-            From circulation and contouring to planting palettes and water systems, we pay close
-            attention to how the outdoors perform—ecologically, culturally, and aesthetically. Often
-            working in tandem with our architectural and interior teams, our landscape solutions are
-            integrated, sustainable, and quietly immersive. The goal is not to decorate, but to
-            connect—to soil, to season, to spirit.
+            From circulation and contouring to planting palettes and water
+            systems, we pay close attention to how the outdoors
+            perform—ecologically, culturally, and aesthetically. Often working
+            in tandem with our architectural and interior teams, our landscape
+            solutions are integrated, sustainable, and quietly immersive. The
+            goal is not to decorate, but to connect—to soil, to season, to
+            spirit.
           </p>
         </motion.div>
 
@@ -111,7 +118,9 @@ const LandScape = () => {
                   alt="Landscape"
                   className="w-full h-[140px] sm:h-[180px] md:h-[210px] lg:h-[240px] object-cover rounded-lg mb-4"
                 />
-                <div className="text-xs text-gray-400 uppercase mb-1">Category</div>
+                <div className="text-xs text-gray-400 uppercase mb-1">
+                  Category
+                </div>
                 <h3 className="font-bold text-base sm:text-lg mb-2">Title</h3>
                 <p
                   style={{
@@ -122,7 +131,8 @@ const LandScape = () => {
                   }}
                   className="text-xs sm:text-sm text-gray-500"
                 >
-                  Egestas elit dui scelerisque ut eu purus aliquam vitae habitasse.
+                  Egestas elit dui scelerisque ut eu purus aliquam vitae
+                  habitasse.
                 </p>
               </motion.div>
             ))}
