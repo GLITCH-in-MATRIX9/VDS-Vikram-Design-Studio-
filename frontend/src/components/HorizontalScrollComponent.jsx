@@ -1,23 +1,14 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useEffect } from "react";
 import { FiMapPin } from "react-icons/fi";
-import { motion } from "framer-motion";
 import ProjectSectionDisplay from "./ProjectSectionDisplay";
 import LeftArrowIcon from "../assets/Icons/LeftArrowIcon.svg";
 import RightArrowIcon from "../assets/Icons/RightArrowIcon.svg";
 import CloseIcon from "../assets/Icons/CloseIcon.svg";
 
 const HorizontalScrollComponent = ({ onClose, project }) => {
-  const [xOffset, setXOffset] = useState(0);
   const containerRef = useRef(null);
   const contentRef = useRef(null);
-  const [maxScroll, setMaxScroll] = useState(0);
   const scrollAmount = 960;
-
-  // State for managing framer-motion's transition property dynamically
-  const [transition, setTransition] = useState({
-    duration: 1.4,
-    ease: [0.76, 0, 0.24, 1],
-  });
 
   useEffect(() => {
     const container = containerRef.current;
@@ -25,9 +16,7 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
     if (!container || !content) return;
 
     const calculateMaxScroll = () => {
-      const containerWidth = container.offsetWidth;
-      const contentWidth = content.scrollWidth;
-      setMaxScroll(Math.min(0, containerWidth - contentWidth));
+      // This function can be removed if not needed for other purposes
     };
 
     calculateMaxScroll();
@@ -40,16 +29,23 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
   }, [project]);
 
   const scrollLeft = () => {
-    // Ensure the smooth transition is used for button clicks
-    setTransition({ duration: 1.4, ease: [0.76, 0, 0.24, 1] });
-    // Use Math.min to prevent scrolling past the beginning
-    setXOffset((prev) => Math.min(prev + scrollAmount, 0));
+    const container = containerRef.current;
+    if (container) {
+      container.scrollBy({
+        left: -scrollAmount,
+        behavior: 'smooth'
+      });
+    }
   };
 
   const scrollRight = () => {
-    // Ensure the smooth transition is used for button clicks
-    setTransition({ duration: 1.4, ease: [0.76, 0, 0.24, 1] });
-    setXOffset((prev) => Math.max(prev - scrollAmount, maxScroll));
+    const container = containerRef.current;
+    if (container) {
+      container.scrollBy({
+        left: scrollAmount,
+        behavior: 'smooth'
+      });
+    }
   };
 
   return (
@@ -140,7 +136,7 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
           <div className="flex-grow flex-shrink-0 flex items-center gap-6 md:gap-8 w-auto h-full">
             <ProjectSectionDisplay sections={project?.sections} />
           </div>
-        </motion.div>
+        </div>
       </div>
       {/* Project details: tablet size and smaller */}
       <div className="grid grid-cols-2 py-3 leading-[1.4] lg:hidden px-2">
