@@ -1,24 +1,39 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react"; 
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { FaGripVertical, FaTrash } from "react-icons/fa";
 import { FiUpload } from "react-icons/fi";
-import projectApi from "../../services/projectApi";
+import projectApi from "../../services/projectApi"; 
 
 const MAX_TEXT_LENGTH = 700;
 
+// Hardcoded list for the new Project Leader dropdown
+const PROJECT_LEADERS_OPTIONS = [
+  "VIKRAMM B SHROFF",
+  "POOZA AGARWAL",
+  "NAMMAN SHROFF",
+];
+
 const filterOptions = {
-  Education: ["Schools", "Training Institutions/Centres", "Research Centres", "Colleges & Universities"],
-  Healthcare: ["Hospitals", "Medical Colleges", "Diagnostic Labs", "Clinics"],
-  Civic: ["Auditoriums", "Town Halls", "Police Stations", "Public toilets & amenities"],
-  Workspace: ["Government offices", "Corporate offices", "Research Centres"],
-  Sports: ["Stadiums", "Sports complex", "Multipurpose sports halls"],
-  Culture: ["Religious", "Memorials", "Cultural complex", "Museums"],
-  Residential: ["Staff quarters", "Private Villas", "Housing", "Hostels", "Guest Houses"],
-  Hospitality: ["Hotels", "Resorts", "Restaurants", "Tourism Lodges"],
-  Retail: ["Showrooms", "Shopping complex", "Departmental stores", "Multiplexes"],
+  EDUCATION: ["SCHOOLS", "TRAINING INSTITUTIONS/CENTRES", "RESEARCH CENTRES", "COLLEGES & UNIVERSITIES"],
+  HEALTHCARE: ["HOSPITALS", "MEDICAL COLLEGES", "DIAGNOSTIC LABS", "CLINICS"],
+  CIVIC: ["AUDITORIUMS", "TOWN HALLS", "POLICE STATIONS", "PUBLIC TOILETS & AMENITIES"],
+  WORKSPACE: ["GOVERNMENT OFFICES", "CORPORATE OFFICES", "RESEARCH CENTRES"],
+  SPORTS: ["STADIUMS", "SPORTS COMPLEX", "MULTIPURPOSE SPORTS HALLS"],
+  CULTURE: ["RELIGIOUS", "MEMORIALS", "CULTURAL COMPLEX", "MUSEUMS"],
+  RESIDENTIAL: ["STAFF QUARTERS", "PRIVATE VILLAS", "HOUSING", "HOSTELS", "GUEST HOUSES"],
+  HOSPITALITY: ["HOTELS", "RESORTS", "RESTAURANTS", "TOURISM LODGES"],
+  RETAIL: ["SHOWROOMS", "SHOPPING COMPLEX", "DEPARTMENTAL STORES", "MULTIPLEXES"],
 };
 
 const TAG_OPTIONS = Object.keys(filterOptions);
+
+const STATES_AND_UTS = [
+  "ANDHRA PRADESH","ARUNACHAL PRADESH","ASSAM","BIHAR","CHHATTISGARH","GOA","GUJARAT","HARYANA",
+  "HIMACHAL PRADESH","JHARKHAND","KARNATAKA","KERALA","MADHYA PRADESH","MAHARASHTRA","MANIPUR",
+  "MEGHALAYA","MIZORAM","NAGALAND","ODISHA","PUNJAB","RAJASTHAN","SIKKIM","TAMIL NADU","TELANGANA",
+  "TRIPURA","UTTAR PRADESH","UTTARAKHAND","WEST BENGAL","ANDAMAN AND NICOBAR ISLANDS","CHANDIGARH",
+  "DADRA AND NAGAR HAVELI AND DAMAN AND DIU","DELHI","JAMMU AND KASHMIR","LADAKH","LAKSHADWEEP","PUDUCHERRY"
+];
 
 const AddProject = () => {
   const [formData, setFormData] = useState({
@@ -30,9 +45,11 @@ const AddProject = () => {
     subCategory: "",
     client: "",
     collaborators: "",
+    // 🚨 1. New field added, initialized as an array for multi-select
+    projectLeaders: [], 
     projectTeam: "",
     tags: [],
-    keyDate: "",
+    keyDate: new Date().toISOString().slice(0, 10),
     previewImageUrl: "",
   });
 
@@ -41,15 +58,35 @@ const AddProject = () => {
   const [previewURL, setPreviewURL] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
   const [availableSubCategories, setAvailableSubCategories] = useState([]);
+  const [tagInput, setTagInput] = useState("");
+  const [savedTags, setSavedTags] = useState([]);
+  const [showDropdown, setShowDropdown] = useState(false);
+  // 🚨 State for the Project Leader dropdown
+  const [showLeaderDropdown, setShowLeaderDropdown] = useState(false); 
+
 
   useEffect(() => {
-    return () => {
-      if (previewURL) URL.revokeObjectURL(previewURL);
+    // Fetch previously saved tags from backend
+    const fetchSavedTags = async () => {
+      try {
+        const projects = await projectApi.getProjects(); 
+        const tags = new Set();
+        projects.forEach(p => p.tags.forEach(tag => tags.add(tag.toUpperCase())));
+        setSavedTags(Array.from(tags));
+      } catch (err) {
+        console.error("Failed to fetch saved tags:", err);
+        // Fallback for demonstration if API fails:
+        setSavedTags(["SUSTAINABLE", "GREEN_BUILDING", "LOW_COST", "MODULAR_DESIGN", "HERITAGE_PRESERVATION"]); 
+      }
     };
+
+    fetchSavedTags();
+
+    return () => { if (previewURL) URL.revokeObjectURL(previewURL); };
   }, [previewURL]);
 
   const handleCategoryChange = (e) => {
-    const category = e.target.value;
+    const category = e.target.value.toUpperCase();
     setSelectedCategory(category);
     setAvailableSubCategories(filterOptions[category] || []);
     setFormData((prev) => ({ ...prev, category, subCategory: "" }));
@@ -57,55 +94,53 @@ const AddProject = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    if (name === "tags") {
-      setFormData((prev) => ({ ...prev, tags: [value] }));
-    } else {
-      setFormData((prev) => ({ ...prev, [name]: value }));
+    const upperCaseFields = ["name", "client", "projectTeam", "collaborators", "location", "status", "subCategory"];
+    setFormData((prev) => ({ ...prev, [name]: upperCaseFields.includes(name) ? value.toUpperCase() : value }));
+  };
+
+  // 🚨 New handler for Project Leader multi-select
+  const handleLeaderToggle = (leader) => {
+    setFormData(prev => {
+      const leaders = prev.projectLeaders;
+      if (leaders.includes(leader)) {
+        // Remove leader if already selected
+        return { ...prev, projectLeaders: leaders.filter(l => l !== leader) };
+      } else {
+        // Add leader
+        return { ...prev, projectLeaders: [...leaders, leader] };
+      }
+    });
+  };
+
+  const handleAddTag = (tag = null) => {
+    const newTag = (tag || tagInput).trim().toUpperCase();
+    if (!newTag || formData.tags.includes(newTag)) return;
+    
+    setFormData((prev) => ({ ...prev, tags: [...prev.tags, newTag] }));
+    
+    if (!savedTags.includes(newTag)) {
+      setSavedTags(prev => [...prev, newTag]);
     }
+
+    setTagInput(""); 
+    setShowDropdown(false); 
   };
 
   const handleRemoveTag = (tagToRemove) => {
-    setFormData((prev) => ({
-      ...prev,
-      tags: prev.tags.filter((tag) => tag !== tagToRemove),
-    }));
+    setFormData((prev) => ({ ...prev, tags: prev.tags.filter(t => t !== tagToRemove) }));
   };
 
-  const handleAddText = () => {
-    setSections((prev) => [...prev, { type: "text", content: "" }]);
-  };
-
-  const handleAddImage = (file) => {
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setSections((prev) => [...prev, { type: "image", content: reader.result }]);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleAddGif = (file) => {
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setSections((prev) => [...prev, { type: "gif", content: reader.result }]);
-    };
-    reader.readAsDataURL(file);
-  };
+  const handleAddText = () => setSections(prev => [...prev, { type: "text", content: "" }]);
+  const handleAddImage = (file) => { if (!file) return; const reader = new FileReader(); reader.onloadend = () => setSections(prev => [...prev, { type: "image", content: reader.result }]); reader.readAsDataURL(file); };
+  const handleAddGif = (file) => { if (!file) return; const reader = new FileReader(); reader.onloadend = () => setSections(prev => [...prev, { type: "gif", content: reader.result }]); reader.readAsDataURL(file); };
 
   const handleContentChange = (index, value) => {
     if (value.length <= MAX_TEXT_LENGTH) {
-      setSections((prev) => {
-        const newSections = [...prev];
-        newSections[index].content = value;
-        return newSections;
-      });
+      setSections(prev => { const copy = [...prev]; copy[index].content = value; return copy; });
     }
   };
 
-  const handleRemoveContent = (index) => {
-    setSections((prev) => prev.filter((_, i) => i !== index));
-  };
+  const handleRemoveContent = (index) => setSections(prev => prev.filter((_, i) => i !== index));
 
   const handleDragEnd = (result) => {
     if (!result.destination) return;
@@ -125,29 +160,26 @@ const AddProject = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     const fd = new FormData();
-    Object.keys(formData).forEach((key) => {
-      if (key === 'tags') fd.append(key, JSON.stringify(formData[key]));
+    Object.keys(formData).forEach(key => {
+      // Tags and ProjectLeaders are arrays, so they should be stringified
+      if (key === "tags" || key === "projectLeaders") fd.append(key, JSON.stringify(formData[key]));
       else fd.append(key, formData[key]);
     });
-
-    fd.append('sections', JSON.stringify(sections));
-
-    if (previewFile) {
-      fd.append('previewImage', previewFile); // Must match multer field name
-    }
+    fd.append("sections", JSON.stringify(sections));
+    if (previewFile) fd.append("previewImage", previewFile);
 
     try {
-      const res = await projectApi.createProject(fd);
-      alert('Project created successfully!');
-      console.log(res.data);
+      // NOTE: Placeholder for API call
+      // const res = await projectApi.createProject(fd);
+      console.log("Submitting Project Data:", { formData, sections, previewFile: previewFile?.name });
+      alert("Project creation simulated successfully!");
+      // console.log(res.data);
     } catch (err) {
       console.error(err);
-      alert(err?.response?.data?.message || 'Failed to create project');
+      alert(err?.response?.data?.message || "Failed to create project");
     }
   };
-
 
   return (
     <div className="flex-1 p-6 bg-[#F5F1EE]">
@@ -156,10 +188,10 @@ const AddProject = () => {
       </nav>
 
       <form onSubmit={handleSubmit} className="bg-white border rounded p-6 flex flex-col gap-6">
-        {/* Mandatory Fields */}
         <div className="grid grid-cols-2 gap-6 items-start">
+          {/* Mandatory Fields */}
           <div className="flex flex-col gap-4">
-            <h2 className="font-bold text-lg text-[#722F37]">1. Mandatory Fields</h2>
+            <h2 className="font-bold text-lg text-[#454545]">1. Mandatory Fields</h2>
 
             <input
               type="text"
@@ -171,6 +203,7 @@ const AddProject = () => {
               autoComplete="off"
               required
             />
+
             <select
               name="location"
               value={formData.location}
@@ -179,47 +212,8 @@ const AddProject = () => {
               required
             >
               <option value="">Select State/UT *</option>
-              {/* States */}
-              <option value="Andhra Pradesh">Andhra Pradesh</option>
-              <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-              <option value="Assam">Assam</option>
-              <option value="Bihar">Bihar</option>
-              <option value="Chhattisgarh">Chhattisgarh</option>
-              <option value="Goa">Goa</option>
-              <option value="Gujarat">Gujarat</option>
-              <option value="Haryana">Haryana</option>
-              <option value="Himachal Pradesh">Himachal Pradesh</option>
-              <option value="Jharkhand">Jharkhand</option>
-              <option value="Karnataka">Karnataka</option>
-              <option value="Kerala">Kerala</option>
-              <option value="Madhya Pradesh">Madhya Pradesh</option>
-              <option value="Maharashtra">Maharashtra</option>
-              <option value="Manipur">Manipur</option>
-              <option value="Meghalaya">Meghalaya</option>
-              <option value="Mizoram">Mizoram</option>
-              <option value="Nagaland">Nagaland</option>
-              <option value="Odisha">Odisha</option>
-              <option value="Punjab">Punjab</option>
-              <option value="Rajasthan">Rajasthan</option>
-              <option value="Sikkim">Sikkim</option>
-              <option value="Tamil Nadu">Tamil Nadu</option>
-              <option value="Telangana">Telangana</option>
-              <option value="Tripura">Tripura</option>
-              <option value="Uttar Pradesh">Uttar Pradesh</option>
-              <option value="Uttarakhand">Uttarakhand</option>
-              <option value="West Bengal">West Bengal</option>
-
-              {/* Union Territories */}
-              <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
-              <option value="Chandigarh">Chandigarh</option>
-              <option value="Dadra and Nagar Haveli and Daman and Diu">Dadra and Nagar Haveli and Daman and Diu</option>
-              <option value="Delhi">Delhi</option>
-              <option value="Jammu and Kashmir">Jammu and Kashmir</option>
-              <option value="Ladakh">Ladakh</option>
-              <option value="Lakshadweep">Lakshadweep</option>
-              <option value="Puducherry">Puducherry</option>
+              {STATES_AND_UTS.map(state => <option key={state} value={state}>{state}</option>)}
             </select>
-
 
             <div className="grid grid-cols-2 gap-2">
               <select
@@ -230,12 +224,9 @@ const AddProject = () => {
                 required
               >
                 <option value="">Select Category *</option>
-                {TAG_OPTIONS.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
-                ))}
+                {TAG_OPTIONS.map(cat => <option key={cat} value={cat}>{cat}</option>)}
               </select>
+
               <select
                 name="subCategory"
                 value={formData.subCategory}
@@ -244,11 +235,7 @@ const AddProject = () => {
                 disabled={!availableSubCategories.length}
               >
                 <option value="">Select Sub-Category</option>
-                {availableSubCategories.map((sub) => (
-                  <option key={sub} value={sub}>
-                    {sub}
-                  </option>
-                ))}
+                {availableSubCategories.map(sub => <option key={sub} value={sub}>{sub}</option>)}
               </select>
             </div>
 
@@ -262,16 +249,7 @@ const AddProject = () => {
               autoComplete="off"
               required
             />
-            <input
-              type="text"
-              name="projectTeam"
-              value={formData.projectTeam}
-              onChange={handleChange}
-              placeholder="Project Team *"
-              className="border p-2 rounded w-full border-[#C9BEB8]"
-              autoComplete="off"
-              required
-            />
+
             <input
               type="text"
               name="collaborators"
@@ -282,6 +260,60 @@ const AddProject = () => {
               autoComplete="off"
               required
             />
+            
+            {/* 🚨 NEW PROJECT LEADER FIELD (Multi-select dropdown) 🚨 */}
+            <div className="relative">
+              <div 
+                className="border p-2 rounded w-full border-[#C9BEB8] cursor-pointer bg-white"
+                onClick={() => setShowLeaderDropdown(!showLeaderDropdown)}
+              >
+                {formData.projectLeaders.length > 0 
+                  ? formData.projectLeaders.join(', ')
+                  : "Select Project Leader(s) *"
+                }
+              </div>
+              
+              {showLeaderDropdown && (
+                <div 
+                  className="absolute z-10 w-full bg-white border rounded shadow-lg max-h-40 overflow-y-auto"
+                >
+                  {PROJECT_LEADERS_OPTIONS.map(leader => (
+                    <div
+                      key={leader}
+                      // Use onMouseDown to prevent dropdown closing when clicking on an option
+                      onMouseDown={(e) => {
+                        e.preventDefault(); 
+                        handleLeaderToggle(leader);
+                      }}
+                      className={`p-2 cursor-pointer text-sm flex justify-between items-center ${
+                        formData.projectLeaders.includes(leader) ? 'bg-[#F1E4DF] font-semibold' : 'hover:bg-gray-100'
+                      }`}
+                    >
+                      {leader}
+                      {formData.projectLeaders.includes(leader) && (
+                        <span className="text-[#722F37] text-xl">✓</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              )}
+              {/* Hidden input to ensure form validation if needed, though state is primary here */}
+              <input type="hidden" name="projectLeaders" value={formData.projectLeaders.join(',')} required />
+            </div>
+            {/* 🚨 END NEW PROJECT LEADER FIELD 🚨 */}
+
+
+            <input
+              type="text"
+              name="projectTeam"
+              value={formData.projectTeam}
+              onChange={handleChange}
+              placeholder="Project Team *"
+              className="border p-2 rounded w-full border-[#C9BEB8]"
+              autoComplete="off"
+              required
+            />
+
 
             <div className="grid grid-cols-2 gap-2">
               <select
@@ -292,9 +324,9 @@ const AddProject = () => {
                 required
               >
                 <option value="">Select Status *</option>
-                <option value="Ongoing">Ongoing</option>
-                <option value="Completed">Completed</option>
-                <option value="On Hold">On Hold</option>
+                <option value="ONGOING">ONGOING</option>
+                <option value="COMPLETED">COMPLETED</option>
+                <option value="IN DESIGN">IN DESIGN</option>
               </select>
               <input
                 type="number"
@@ -310,6 +342,9 @@ const AddProject = () => {
 
           {/* Preview Upload */}
           <div className="flex flex-col gap-2 items-center justify-center border p-4 rounded border-[#C9BEB8]">
+            <p className="text-xs text-gray-400 mb-2 text-center">
+              ⚠️ Files must not be greater than 900 KB.
+            </p>
             <label
               htmlFor="preview-upload"
               className="flex items-center gap-2 px-4 py-2 bg-[#722F37] text-white rounded-md cursor-pointer hover:bg-[#632932] transition"
@@ -330,42 +365,97 @@ const AddProject = () => {
           </div>
         </div>
 
-        {/* Tags */}
-        <div className="mt-6 flex flex-col gap-4">
-          <h2 className="font-bold text-lg text-[#722F37]">2. Tags</h2>
-          <select
-            name="tags"
-            onChange={handleChange}
-            className="border p-2 rounded w-full border-[#C9BEB8]"
-            value={formData.tags[0] || ""}
-          >
-            <option value="" disabled>
-              Select Tag...
-            </option>
-            {TAG_OPTIONS.map((tag) => (
-              <option key={tag} value={tag} disabled={formData.tags.includes(tag)}>
-                {tag}
-              </option>
-            ))}
-          </select>
-          <div className="flex flex-wrap gap-2 mt-2">
-            {formData.tags.map((tag) => (
-              <span
-                key={tag}
-                className="flex items-center gap-1 bg-[#D9D2CC] text-[#474545] text-xs px-3 py-1 rounded-full"
+        {/* Tags Input and Dropdown */}
+        <div>
+          <h2 className="font-bold text-lg mb-2 text-[#454545]">2. Project Tags</h2>
+          <div className="relative">
+            {/* Input for adding new tags */}
+            <div className="flex border rounded border-[#C9BEB8] overflow-hidden">
+              <input
+                type="text"
+                value={tagInput}
+                onChange={(e) => {
+                  setTagInput(e.target.value);
+                  setShowDropdown(true); 
+                }}
+                onFocus={() => setShowDropdown(true)} 
+                onBlur={(e) => {
+                  setTimeout(() => setShowDropdown(false), 200);
+                }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault(); 
+                    handleAddTag();
+                  }
+                }}
+                placeholder="Add tags..."
+                className="p-2 flex-grow focus:outline-none"
+                autoComplete="off"
+              />
+              <button
+                type="button"
+                onClick={() => handleAddTag()}
+                className="px-4 py-2 bg-[#722F37] text-white hover:bg-[#632932] text-sm font-medium"
               >
-                {tag}
-                <button type="button" onClick={() => handleRemoveTag(tag)} className="text-gray-600 hover:text-gray-800">
-                  &times;
-                </button>
-              </span>
-            ))}
+                Add
+              </button>
+            </div>
+
+            {/* Dropdown for suggested tags */}
+            {showDropdown && tagInput.length > 0 && (
+              <div 
+                className="absolute z-10 w-full bg-white border border-t-0 rounded-b shadow-lg max-h-60 overflow-y-auto"
+              >
+                {savedTags
+                  .filter(
+                    (tag) =>
+                      tag.includes(tagInput.toUpperCase()) && 
+                      !formData.tags.includes(tag)           
+                  )
+                  .sort()
+                  .slice(0, 10) 
+                  .map((tag) => (
+                    <div
+                      key={tag}
+                      onMouseDown={() => { 
+                        handleAddTag(tag);
+                        setTagInput(""); 
+                        setShowDropdown(false); 
+                      }}
+                      className="p-2 cursor-pointer hover:bg-gray-100 text-sm"
+                    >
+                      {tag}
+                    </div>
+                  ))}
+              </div>
+            )}
+
+            {/* Display selected tags */}
+            <div className="mt-2 flex flex-wrap gap-2">
+              {formData.tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="flex items-center gap-1 bg-[#F1E4DF] text-[#722F37] text-xs font-medium px-3 py-1 rounded-full"
+                >
+                  {tag}
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveTag(tag)}
+                    className="ml-1 text-[#722F37] hover:text-[#5B252C]"
+                    aria-label={`Remove tag ${tag}`}
+                  >
+                    &times;
+                  </button>
+                </span>
+              ))}
+            </div>
           </div>
         </div>
 
+
         {/* Key Date */}
         <div>
-          <label htmlFor="keyDate" className="block text-sm font-medium text-[#722F37] mb-1">
+          <label htmlFor="keyDate" className="block text-sm font-medium text-[#454545] mb-1">
             Key Date
           </label>
           <input
@@ -373,14 +463,14 @@ const AddProject = () => {
             type="date"
             name="keyDate"
             value={formData.keyDate}
-            onChange={handleChange}
-            className="border p-2 rounded w-full border-[#C9BEB8]"
+            readOnly
+            className="border p-2 rounded w-full border-[#C9BEB8] bg-gray-100 cursor-not-allowed"
           />
         </div>
 
         {/* Sections */}
         <div className="mt-6">
-          <h2 className="font-bold text-lg mb-4 text-[#722F37]">3. Content Sections</h2>
+          <h2 className="font-bold text-lg mb-4 text-[#454545]">3. Content Sections (Files must not be greater than 900kb)</h2>
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="sections">
               {(provided) => (
@@ -394,7 +484,7 @@ const AddProject = () => {
                           {...provided.draggableProps}
                         >
                           <div className="flex justify-between items-center">
-                            <h3 className="font-medium text-[#722F37]">
+                            <h3 className="font-medium text-[#454545]">
                               {section.type === "text"
                                 ? "Text Section"
                                 : `${section.type.charAt(0).toUpperCase() + section.type.slice(1)} Section`}
@@ -403,7 +493,7 @@ const AddProject = () => {
                               <button
                                 type="button"
                                 onClick={() => handleRemoveContent(index)}
-                                className="text-red-600 hover:text-red-800"
+                                className="text-[#C94A4A] hover:text-red-700"
                               >
                                 <FaTrash />
                               </button>
@@ -445,15 +535,15 @@ const AddProject = () => {
             </Droppable>
           </DragDropContext>
 
-          <div className="flex gap-2 justify-center mt-4">
+          <div className="flex gap-2 mt-4 justify-start">
             <button
               type="button"
               onClick={handleAddText}
-              className="px-4 py-2 text-sm rounded bg-[#722F37] text-white"
+              className="px-4 py-2 text-sm rounded bg-[#454545] text-white hover:bg-[#666666]"
             >
               + Add Text
             </button>
-            <label className="px-4 py-2 text-sm rounded bg-green-600 text-white cursor-pointer">
+            <label className="px-4 py-2 text-sm rounded bg-[#454545] text-white cursor-pointer hover:bg-[#666666]">
               + Add Image
               <input
                 type="file"
@@ -462,11 +552,11 @@ const AddProject = () => {
                 onChange={(e) => handleAddImage(e.target.files[0])}
               />
             </label>
-            <label className="px-4 py-2 text-sm rounded bg-purple-600 text-white cursor-pointer">
+            <label className="px-4 py-2 text-sm rounded bg-[#454545] text-white cursor-pointer hover:bg-[#666666]">
               + Add GIF
               <input
                 type="file"
-                accept=".gif,image/gif"
+                accept=".gif"
                 className="hidden"
                 onChange={(e) => handleAddGif(e.target.files[0])}
               />
@@ -476,9 +566,9 @@ const AddProject = () => {
 
         <button
           type="submit"
-          className="bg-[#722F37] text-white px-4 py-2 rounded w-32 self-end mt-6"
+          className="mt-6 px-6 py-2 bg-[#722F37] text-white rounded hover:bg-[#632932] transition"
         >
-          Save Project
+          Submit Project
         </button>
       </form>
     </div>

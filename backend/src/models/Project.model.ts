@@ -14,6 +14,7 @@ export interface IProject extends Document {
   subCategory?: string;
   client: string;
   collaborators: string;
+  projectLeaders: string[]; 
   projectTeam: string;
   tags: string[];
   keyDate: string; // ISO date string from date input
@@ -42,6 +43,7 @@ const ProjectSchema = new Schema<IProject>(
     subCategory: { type: String, trim: true },
     client: { type: String, required: true, trim: true },
     collaborators: { type: String, required: true, trim: true },
+    projectLeaders: { type: [String], required: true, default: [] },
     projectTeam: { type: String, required: true, trim: true },
     tags: { type: [String], default: [] },
     keyDate: { type: String, required: true },
@@ -53,5 +55,3 @@ const ProjectSchema = new Schema<IProject>(
 );
 
 export const Project = model<IProject>('Project', ProjectSchema);
-
-

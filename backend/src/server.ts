@@ -9,6 +9,7 @@ import projectRoutes from './routes/project.routes';
 import contactRoutes from './routes/contact.routes';
 import { errorHandler } from './middlewares/error.middleware';
 import { generalRateLimit } from './middlewares/rateLimit.middleware';
+import tagRoutes from "./routes/tag.routes";
 
 // Connect to MongoDB
 connectDB(config.mongoUri);
@@ -64,6 +65,7 @@ app.get('/', (req: Request, res: Response) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/contact', contactRoutes);
+app.use("/api/tags", tagRoutes);
 
 // Error & 404 handlers
 app.use(errorHandler);

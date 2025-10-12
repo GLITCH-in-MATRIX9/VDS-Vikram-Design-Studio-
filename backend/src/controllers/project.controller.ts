@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import { Project, IProjectSection } from "../models/Project.model";
 import cloudinary from "../config/cloudinary";
 
-// Create Project
 // ---------------- CREATE PROJECT ----------------
 export const createProject = async (req: Request, res: Response) => {
   try {
@@ -15,6 +14,8 @@ export const createProject = async (req: Request, res: Response) => {
       subCategory,
       client,
       collaborators,
+      // 🚨 ADD projectLeaders to destructuring
+      projectLeaders, 
       projectTeam,
       tags,
       keyDate,
@@ -27,6 +28,22 @@ export const createProject = async (req: Request, res: Response) => {
 
     // Parse sections from string if needed
     const parsedSections = typeof sections === "string" ? JSON.parse(sections) : sections || [];
+    
+    // 🚨 Parse projectLeaders from string (sent from FormData)
+    const parsedProjectLeaders: string[] = 
+      typeof projectLeaders === "string" 
+        ? JSON.parse(projectLeaders) 
+        : Array.isArray(projectLeaders) 
+        ? projectLeaders
+        : [];
+        
+    // 🚨 Parse tags from string (sent from FormData)
+    const parsedTags: string[] = 
+      typeof tags === "string" 
+        ? JSON.parse(tags) 
+        : Array.isArray(tags) 
+        ? tags
+        : [];
 
     // Upload section files to Cloudinary if any
     const updatedSections = await Promise.all(
@@ -53,8 +70,11 @@ export const createProject = async (req: Request, res: Response) => {
       subCategory,
       client,
       collaborators,
+      // 🚨 Use the parsed projectLeaders array
+      projectLeaders: parsedProjectLeaders, 
       projectTeam,
-      tags: typeof tags === "string" ? JSON.parse(tags) : tags || [],
+      // 🚨 Use the parsed tags array
+      tags: parsedTags,
       keyDate,
       sections: updatedSections,
       previewImageUrl,
@@ -69,10 +89,6 @@ export const createProject = async (req: Request, res: Response) => {
   }
 };
 
-
-
-
-
 // ---------------- GET ALL PROJECTS ----------------
 export const getProjects = async (_req: Request, res: Response) => {
   try {
@@ -84,8 +100,6 @@ export const getProjects = async (_req: Request, res: Response) => {
       .json({ message: "Failed to fetch projects", error: err.message });
   }
 };
-
-
 
 
 // ---------------- GET PROJECT BY ID ----------------
@@ -102,10 +116,6 @@ export const getProjectById = async (req: Request, res: Response) => {
 };
 
 
-
-
-// ---------------- UPDATE PROJECT ----------------
-
 // ---------------- UPDATE PROJECT ----------------
 export const updateProject = async (req: Request, res: Response) => {
   try {
@@ -118,6 +128,8 @@ export const updateProject = async (req: Request, res: Response) => {
       subCategory,
       client,
       collaborators,
+      // 🚨 ADD projectLeaders to destructuring
+      projectLeaders, 
       projectTeam,
       tags,
       keyDate,
@@ -126,6 +138,15 @@ export const updateProject = async (req: Request, res: Response) => {
       previewImagePublicId,
     } = req.body as Record<string, any>;
 
+    // 🚨 Parse projectLeaders from string
+    const parsedProjectLeaders: string[] =
+      typeof projectLeaders === "string"
+        ? JSON.parse(projectLeaders)
+        : Array.isArray(projectLeaders)
+        ? projectLeaders
+        : [];
+        
+    // Parse tags from string
     const parsedTags: string[] =
       typeof tags === "string"
         ? JSON.parse(tags)
@@ -172,6 +193,8 @@ export const updateProject = async (req: Request, res: Response) => {
       subCategory,
       client,
       collaborators,
+      // 🚨 Use the parsed projectLeaders array
+      projectLeaders: parsedProjectLeaders, 
       projectTeam,
       tags: parsedTags,
       keyDate,
@@ -188,6 +211,7 @@ export const updateProject = async (req: Request, res: Response) => {
     return res.status(500).json({ message: "Failed to update project", error: err.message });
   }
 };
+// ---------------- DELETE PROJECT ----------------
 export const deleteProject = async (req: Request, res: Response) => {
   try {
     const project = await Project.findById(req.params.id);
@@ -217,6 +241,7 @@ export const deleteProject = async (req: Request, res: Response) => {
   }
 };
 
+// ---------------- TOGGLE PROJECT STATUS ----------------
 export const toggleProjectStatus = async (req: Request, res: Response) => {
   try {
     const project = await Project.findById(req.params.id);
@@ -235,29 +260,32 @@ export const toggleProjectStatus = async (req: Request, res: Response) => {
   }
 };
 
+// ---------------- SEARCH PROJECTS ----------------
 export const searchProjects = async (req: Request, res: Response) => {
-  try {
-    const { q, category, status, year } = req.query;
+  try {
+    const { q, category, status, year } = req.query;
 
-    let filter: any = {};
+    let filter: any = {};
 
-    if (q) {
-      filter.$or = [
-        { name: { $regex: q, $options: "i" } },
-        { client: { $regex: q, $options: "i" } },
-        { location: { $regex: q, $options: "i" } },
-      ];
-    }
+    if (q) {
+      filter.$or = [
+        { name: { $regex: q, $options: "i" } },
+        { client: { $regex: q, $options: "i" } },
+        { location: { $regex: q, $options: "i" } },
+        // 🚨 ADDED: Allow searching by projectLeaders
+        { projectLeaders: { $regex: q, $options: "i" } }, 
+      ];
+    }
 
-    if (category) filter.category = category;
-    if (status) filter.status = status;
-    if (year) filter.year = year;
+    if (category) filter.category = category;
+    if (status) filter.status = status;
+    if (year) filter.year = year;
 
-    const projects = await Project.find(filter).sort({ createdAt: -1 });
-    return res.status(200).json(projects);
-  } catch (err: any) {
-    return res
-      .status(500)
-      .json({ message: "Failed to search projects", error: err.message });
-  }
+    const projects = await Project.find(filter).sort({ createdAt: -1 });
+    return res.status(200).json(projects);
+  } catch (err: any) {
+    return res
+      .status(500)
+      .json({ message: "Failed to search projects", error: err.message });
+  }
 };

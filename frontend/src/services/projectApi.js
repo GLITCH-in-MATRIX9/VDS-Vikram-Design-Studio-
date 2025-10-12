@@ -1,7 +1,7 @@
-// frontend/src/api/projectApi.js
 import axios from "axios";
 
-const API_BASE = "http://localhost:5000/api/projects";
+const API_BASE = `${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/projects`;
+const TAG_BASE = `${import.meta.env.VITE_API_URL || "http://localhost:5000"}/api/tags`;
 
 const projectApi = {
   createProject: async (formData, config = {}) => {
@@ -49,18 +49,26 @@ const projectApi = {
     return response.data;
   },
 
-  // Upload method is correct, server issue is likely due to the file argument
   uploadFile: async (file) => {
     const fd = new FormData();
     fd.append("file", file);
 
     const response = await axios.post(`${API_BASE}/upload`, fd, {
-      // Axios correctly sets Content-Type for FormData, but keeping this is harmless
-      headers: { "Content-Type": "multipart/form-data" }, 
+      headers: { "Content-Type": "multipart/form-data" },
       withCredentials: true,
     });
 
-    return response.data; // { url: "...", public_id: "..." }
+    return response.data;
+  },
+
+  getTags: async () => {
+    const response = await axios.get(TAG_BASE, { withCredentials: true });
+    return response.data; // returns array of tags
+  },
+
+  addTag: async (tag) => {
+    const response = await axios.post(TAG_BASE, { tag }, { withCredentials: true });
+    return response.data;
   },
 };
 
