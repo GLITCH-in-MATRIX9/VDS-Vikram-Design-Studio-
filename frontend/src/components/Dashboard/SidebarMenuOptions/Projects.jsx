@@ -44,7 +44,7 @@ const Projects = () => {
       </div>
 
       {selectedProject && (
-        <div className="border-l border-gray-300 bg-white shadow-lg">
+        <div className="border-l border-gray-300 bg-white shadow-lg absolute z-50 right-0">
           <SidebarRight
             project={selectedProject}
             onClose={handleCloseSidebar}
