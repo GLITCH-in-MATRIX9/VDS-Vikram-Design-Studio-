@@ -21,13 +21,13 @@ const ConfirmDeletionToast = ({ closeToast, project, onDeleteConfirm }) => {
       <div className="flex justify-end gap-2">
         <button
           onClick={closeToast}
-          className="px-3 py-1 text-xs border border-gray-300 rounded hover:bg-gray-100"
+          className="px-3 py-1  border border-gray-300 rounded hover:bg-gray-100"
         >
           Cancel
         </button>
         <button
           onClick={handleConfirm}
-          className="px-3 py-1 text-xs bg-red-600 text-white rounded hover:bg-red-700 transition"
+          className="px-3 py-1  bg-red-600 text-white rounded hover:bg-red-700 transition"
         >
           Yes, Delete
         </button>
@@ -81,7 +81,12 @@ const SidebarRight = ({ project, onClose, onDeleteSuccess, currentUser }) => {
           onDeleteConfirm={executeDelete}
         />
       ),
-      { position: "top-center", autoClose: false, closeOnClick: false, draggable: false }
+      {
+        position: "top-center",
+        autoClose: false,
+        closeOnClick: false,
+        draggable: false,
+      }
     );
   };
 
@@ -92,59 +97,78 @@ const SidebarRight = ({ project, onClose, onDeleteSuccess, currentUser }) => {
   };
 
   return (
-    <aside className="flex flex-col h-screen w-[400px] bg-[#F9F8F7] text-[#333] overflow-y-auto shadow-lg">
+    <aside className="flex flex-col h-screen w-[400px] bg-[#F9F8F7] text-[#333] overflow-y-auto shadow-lg relative">
       <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="flex justify-end p-4">
-        <button onClick={onClose} className="text-gray-600 hover:text-black transition">
+        <button
+          onClick={onClose}
+          className="text-gray-600 hover:text-black transition"
+        >
           <X size={22} />
         </button>
       </div>
 
       <div className="px-6">
         <img
-          src={project.previewImageUrl || "https://picsum.dev/300/200"}
+          src={project.previewImageUrl || "https://picsum.photos/300/200"}
           alt={project.name}
           className="w-full h-60 object-cover rounded-xl shadow-sm"
         />
       </div>
 
       <div className="flex-1 px-6 py-6 space-y-6">
-        <h2 className="text-xl font-bold break-words whitespace-normal max-w-[320px]">
+        <h2 className="text-xl font-semibold text-[#3e3c3c] font-sora break-words whitespace-normal max-w-[320px]">
           {project.name}
         </h2>
 
-        <div className="grid grid-cols-2 gap-y-4 text-sm">
-          <span className="text-gray-500 font-medium">LOCATION</span>
-          <span>{project.location || "Location"}</span>
+        <div className="grid grid-cols-2 gap-y-4 text-xs">
+          <span className="text-[#6E6A6B] font-medium   ">LOCATION</span>
+          <span className=" text-[#474545] uppercase   ">
+            {project.location || "Location"}
+          </span>
 
-          <span className="text-gray-500 font-medium">YEAR</span>
-          <span>{project.year || "2000"}</span>
+          <span className="text-[#6E6A6B] font-medium   ">YEAR</span>
+          <span className=" text-[#474545] uppercase   ">
+            {project.year || "2000"}
+          </span>
 
-          <span className="text-gray-500 font-medium">STATUS</span>
-          <span>{project.status || "Complete"}</span>
+          <span className="text-[#6E6A6B] font-medium   ">STATUS</span>
+          <span className=" text-[#474545] uppercase   ">
+            {project.status || "Complete"}
+          </span>
 
-          <span className="text-gray-500 font-medium">CATEGORY</span>
-          <span>{project.category || "Category"}</span>
+          <span className="text-[#6E6A6B] font-medium   ">CATEGORY</span>
+          <span className=" text-[#474545] uppercase   ">
+            {project.category || "Category"}
+          </span>
 
-          <span className="text-gray-500 font-medium">SUB - CATEGORY</span>
-          <span>{project.subCategory || "Sub - Category"}</span>
+          <span className="text-[#6E6A6B] font-medium   ">SUB - CATEGORY</span>
+          <span className=" text-[#474545] uppercase   ">
+            {project.subCategory || "Sub - Category"}
+          </span>
 
-          <span className="text-gray-500 font-medium">CLIENT</span>
-          <span className="break-words">{project.client || "XYZ"}</span>
+          <span className="text-[#6E6A6B] font-medium   ">CLIENT</span>
+          <span className="break-words text-[#474545] uppercase   ">
+            {project.client || "XYZ"}
+          </span>
 
-          <span className="text-gray-500 font-medium">COLLABORATORS</span>
-          <span className="break-words">{project.collaborators || "XYZ"}</span>
+          <span className="text-[#6E6A6B] font-medium   ">COLLABORATORS</span>
+          <span className="break-words text-[#474545] uppercase   ">
+            {project.collaborators || "XYZ"}
+          </span>
 
-          <span className="text-gray-500 font-medium">TEAM</span>
-          <span className="break-words">{project.projectTeam || "Team"}</span>
+          <span className="text-[#6E6A6B] font-medium   ">TEAM</span>
+          <span className="break-words text-[#474545] uppercase   ">
+            {project.projectTeam || "Team"}
+          </span>
 
-          <span className="text-gray-500 font-medium">TAGS</span>
+          <span className="text-[#6E6A6B] font-medium   ">TAGS</span>
           <div className="flex flex-wrap gap-2">
             {(project.tags || []).map((tag, i) => (
               <span
                 key={i}
-                className="px-3 py-1 text-xs bg-gray-200 rounded-md text-gray-700"
+                className="px-3 py-1  bg-[#B13024] rounded-md text-[#F8F7F8]"
               >
                 {tag}
               </span>
@@ -154,40 +178,41 @@ const SidebarRight = ({ project, onClose, onDeleteSuccess, currentUser }) => {
 
         <hr className="border-gray-300" />
 
-        <div className="grid grid-cols-2 gap-y-3 text-sm">
-          <span className="text-gray-500 font-medium">DATE CREATED</span>
-          <span>
+        <div className="grid grid-cols-2 gap-y-4 text-xs uppercase">
+          <span className="text-[#6E6A6B] font-medium ">DATE CREATED</span>
+          <span className="text-[#474545]">
             {project.createdAt
               ? new Date(project.createdAt).toLocaleDateString()
               : "DD-MM-YYYY"}
           </span>
 
-          <span className="text-gray-500 font-medium">DATE MODIFIED</span>
+          <span className="text-[#6E6A6B] font-medium   ">DATE MODIFIED</span>
           <span>
             {project.updatedAt
               ? new Date(project.updatedAt).toLocaleDateString()
               : "DD-MM-YYYY"}
           </span>
 
-          <span className="text-gray-500 font-medium">MODIFIED BY</span>
+          <span className="text-[#6E6A6B] font-medium   ">MODIFIED BY</span>
           <span className="flex items-center gap-2">
-            <User size={16} /> {currentUser?.name || project.editedBy || "User Name"}
+            <User size={16} />{" "}
+            {currentUser?.name || project.editedBy || "User Name"}
           </span>
         </div>
       </div>
 
-      <div className="px-6 py-4 flex gap-3 border-t border-gray-200">
+      <div className="px-6 py-4 flex gap-3 border-t border-gray-200 sticky bg-[#F9F8F7] bottom-0 ]">
         <button
           onClick={handleModify}
-          className="flex-1 flex items-center justify-center gap-2 px-4 py-2 border border-gray-500 rounded-lg text-gray-700 font-medium hover:bg-gray-100 transition"
+          className="flex-1 flex items-center justify-center cursor-pointer font-medium gap-2 px-4 py-2 border border-[#6E6A6B] rounded-lg text-[#474545] text-xs uppercase hover:bg-[#E6E2E088] transition"
         >
-          <Pencil size={16} /> Modify Project
+          <Pencil size={14} /> Modify Project
         </button>
         <button
           onClick={handleDelete}
-          className="px-4 py-2 border border-[#6E6A6B] rounded-lg text-[#6E6A6B] hover:bg-red-100 transition"
+          className="px-4 py-2 border border-[#6E6A6B] cursor-pointer rounded-lg text-[#6E6A6B] font-medium hover:text-[#B13024] hover:bg-red-100 hover:border-[#B13024] transition"
         >
-          <Trash2 size={18} />
+          <Trash2 size={16} />
         </button>
       </div>
     </aside>
