@@ -14,7 +14,7 @@ const SidebarLeft = ({ user, onLogout }) => {
     { label: "Home", icon: <FaHome />, path: "/admin/dashboard/home" },
     { label: "Projects Portal", icon: <FaBriefcase />, path: "/admin/dashboard/projects" },
     { label: "Hiring Portal", icon: <FaUsers />, path: "/admin/dashboard/hiring" },
-    { label: "Website Content", icon: <FaGlobe />, path: "/admin/dashboard/content" },
+    { label: "Website Content", icon: <FaGlobe />, path: "/admin/dashboard/website-content" },
     { label: "Recent Activity", icon: <FaHistory />, path: "/admin/dashboard/activity" },
     { label: "Settings", icon: <FaCog />, path: "/admin/dashboard/settings" }, 
   ];

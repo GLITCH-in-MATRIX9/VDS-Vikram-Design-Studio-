@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Pencil, Trash2, User, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-import { toast, ToastContainer } from "react-toastify"; 
+import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import projectApi from "../../services/projectApi"; // Import your API helper
 
 // Custom Confirmation Component for deletion
 const ConfirmDeletionToast = ({ closeToast, project, onDeleteConfirm }) => {
@@ -15,7 +15,8 @@ const ConfirmDeletionToast = ({ closeToast, project, onDeleteConfirm }) => {
   return (
     <div className="p-2">
       <p className="font-semibold text-sm mb-3">
-        Are you sure you want to delete <span className="text-red-600 font-bold">"{project.name}"</span>?
+        Are you sure you want to delete{" "}
+        <span className="text-red-600 font-bold">"{project.name}"</span>?
       </p>
       <div className="flex justify-end gap-2">
         <button
@@ -35,26 +36,42 @@ const ConfirmDeletionToast = ({ closeToast, project, onDeleteConfirm }) => {
   );
 };
 
-const SidebarRight = ({ project, onClose, onDeleteSuccess }) => {
+const SidebarRight = ({ project, onClose, onDeleteSuccess, currentUser }) => {
   const navigate = useNavigate();
+  const [tags, setTags] = useState([]);
+
   if (!project) return null;
 
-  const API_URL = "http://localhost:5000/api/projects";
+  // Fetch all tags from backend (optional)
+  useEffect(() => {
+    const fetchTags = async () => {
+      try {
+        const data = await projectApi.getTags();
+        setTags(data);
+      } catch (err) {
+        console.error("Failed to fetch tags:", err);
+      }
+    };
+    fetchTags();
+  }, []);
 
-  // Function to execute project deletion
+  // Delete project
   const executeDelete = async () => {
     try {
-      await axios.delete(`${API_URL}/${project._id}`);
+      await projectApi.deleteProject(project._id);
       toast.success("Project deleted successfully! 🎉");
       if (onDeleteSuccess) onDeleteSuccess();
       onClose();
     } catch (err) {
       console.error("Deletion failed:", err);
-      toast.error(err?.response?.data?.message || "Failed to delete project. Please check the server.");
+      toast.error(
+        err?.response?.data?.message ||
+          "Failed to delete project. Please check the server."
+      );
     }
   };
 
-  // Handle Delete click: show confirmation toast
+  // Show delete confirmation toast
   const handleDelete = () => {
     toast.warn(
       ({ closeToast }) => (
@@ -64,16 +81,11 @@ const SidebarRight = ({ project, onClose, onDeleteSuccess }) => {
           onDeleteConfirm={executeDelete}
         />
       ),
-      {
-        position: "top-center",
-        autoClose: false, // keep open for confirmation
-        closeOnClick: false,
-        draggable: false,
-      }
+      { position: "top-center", autoClose: false, closeOnClick: false, draggable: false }
     );
   };
 
-  // Navigate to edit project
+  // Navigate to edit project page
   const handleModify = () => {
     navigate(`/admin/dashboard/projects/edit/${project._id}`);
     onClose();
@@ -93,12 +105,14 @@ const SidebarRight = ({ project, onClose, onDeleteSuccess }) => {
         <img
           src={project.previewImageUrl || "https://picsum.dev/300/200"}
           alt={project.name}
-          className="w-full h-60 object-cover rounded-xl shadow-sm opacity-100"
+          className="w-full h-60 object-cover rounded-xl shadow-sm"
         />
       </div>
 
       <div className="flex-1 px-6 py-6 space-y-6">
-        <h2 className="text-xl font-bold break-words whitespace-normal max-w-[320px]">{project.name}</h2>
+        <h2 className="text-xl font-bold break-words whitespace-normal max-w-[320px]">
+          {project.name}
+        </h2>
 
         <div className="grid grid-cols-2 gap-y-4 text-sm">
           <span className="text-gray-500 font-medium">LOCATION</span>
@@ -128,7 +142,12 @@ const SidebarRight = ({ project, onClose, onDeleteSuccess }) => {
           <span className="text-gray-500 font-medium">TAGS</span>
           <div className="flex flex-wrap gap-2">
             {(project.tags || []).map((tag, i) => (
-              <span key={i} className="px-3 py-1 text-xs bg-gray-200 rounded-md text-gray-700">{tag}</span>
+              <span
+                key={i}
+                className="px-3 py-1 text-xs bg-gray-200 rounded-md text-gray-700"
+              >
+                {tag}
+              </span>
             ))}
           </div>
         </div>
@@ -137,13 +156,23 @@ const SidebarRight = ({ project, onClose, onDeleteSuccess }) => {
 
         <div className="grid grid-cols-2 gap-y-3 text-sm">
           <span className="text-gray-500 font-medium">DATE CREATED</span>
-          <span>{project.createdAt ? new Date(project.createdAt).toLocaleDateString() : "DD-MM-YYYY"}</span>
+          <span>
+            {project.createdAt
+              ? new Date(project.createdAt).toLocaleDateString()
+              : "DD-MM-YYYY"}
+          </span>
 
           <span className="text-gray-500 font-medium">DATE MODIFIED</span>
-          <span>{project.updatedAt ? new Date(project.updatedAt).toLocaleDateString() : "DD-MM-YYYY"}</span>
+          <span>
+            {project.updatedAt
+              ? new Date(project.updatedAt).toLocaleDateString()
+              : "DD-MM-YYYY"}
+          </span>
 
           <span className="text-gray-500 font-medium">MODIFIED BY</span>
-          <span className="flex items-center gap-2"><User size={16} /> {project.editedBy || "User Name"}</span>
+          <span className="flex items-center gap-2">
+            <User size={16} /> {currentUser?.name || project.editedBy || "User Name"}
+          </span>
         </div>
       </div>
 

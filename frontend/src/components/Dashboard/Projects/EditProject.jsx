@@ -4,7 +4,7 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { FaGripVertical, FaTrash } from "react-icons/fa";
 import { FiUpload } from "react-icons/fi";
 import { useParams, useNavigate } from "react-router-dom";
-import projectApi from "../../services/projectApi";
+import projectApi from "../../../services/projectApi";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -44,7 +44,7 @@ const EditProject = () => {
 
   // Unique key for sections is crucial for mapping and dnd, so we'll use a unique ID generator
   // Note: Using a simple counter for new items, but keys from fetched data should be preserved if available
-  const [nextNewSectionId, setNextNewSectionId] = useState(0); 
+  const [nextNewSectionId, setNextNewSectionId] = useState(0);
   const [sections, setSections] = useState([]);
   const [previewURL, setPreviewURL] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
@@ -71,11 +71,11 @@ const EditProject = () => {
         });
         setSelectedCategory(project.category || "");
         setAvailableSubCategories(filterOptions[project.category] || []);
-        
+
         // Assign temporary unique keys to fetched sections for use in D&D
         const sectionsWithKeys = (project.sections || []).map((section, index) => ({
-            ...section,
-            tempId: `fetched-${index}`,
+          ...section,
+          tempId: `fetched-${index}`,
         }));
 
         setSections(sectionsWithKeys);
@@ -146,7 +146,7 @@ const EditProject = () => {
 
     const localUrl = URL.createObjectURL(file);
     const tempSection = { type, content: localUrl, tempId: tempId };
-    
+
     // 1. Add temporary section
     setSections((prev) => [...prev, tempSection]);
 
@@ -160,7 +160,7 @@ const EditProject = () => {
       );
     } else {
       // If upload failed, remove the temporary section
-       setSections((prev) => prev.filter(s => s.tempId !== tempId));
+      setSections((prev) => prev.filter(s => s.tempId !== tempId));
     }
   };
 

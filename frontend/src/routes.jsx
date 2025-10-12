@@ -18,8 +18,10 @@ import ForgotPassword from "./pages/authentication/ForgotPassword";
 // Admin Pages
 import DashboardLayout from "./pages/dashboard/DashboardLayout";
 import Projects from "./components/Dashboard/SidebarMenuOptions/Projects";
-import EditProject from "./components/Dashboard/EditProject";
+import EditProject from "./components/Dashboard/Projects/EditProject";
 import AdminHome from "./components/Dashboard/SidebarMenuOptions/AdminHome";
+import WebsiteContentPage from "./components/Dashboard/SidebarMenuOptions/WebsiteContentPage";
+import Settings from "./components/Dashboard/SidebarMenuOptions/Settings";
 
 // Misc
 import NotFound from "./pages/NotFound";
@@ -52,6 +54,9 @@ const AppRoutes = () => {
           <Route path="home" element={<AdminHome />} />
           <Route path="projects" element={<Projects />} />
           <Route path="projects/edit/:id" element={<EditProject />} />
+          <Route path="website-content" element={<WebsiteContentPage />} />
+          <Route path="settings" element={<Settings />} />
+
         </Route>
       </Route>
 

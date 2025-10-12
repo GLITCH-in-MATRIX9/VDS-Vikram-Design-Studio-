@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react"; 
+import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { FaGripVertical, FaTrash } from "react-icons/fa";
 import { FiUpload } from "react-icons/fi";
-import projectApi from "../../services/projectApi"; 
+import projectApi from "../../../services/projectApi";
 
 const MAX_TEXT_LENGTH = 700;
 
@@ -28,11 +28,11 @@ const filterOptions = {
 const TAG_OPTIONS = Object.keys(filterOptions);
 
 const STATES_AND_UTS = [
-  "ANDHRA PRADESH","ARUNACHAL PRADESH","ASSAM","BIHAR","CHHATTISGARH","GOA","GUJARAT","HARYANA",
-  "HIMACHAL PRADESH","JHARKHAND","KARNATAKA","KERALA","MADHYA PRADESH","MAHARASHTRA","MANIPUR",
-  "MEGHALAYA","MIZORAM","NAGALAND","ODISHA","PUNJAB","RAJASTHAN","SIKKIM","TAMIL NADU","TELANGANA",
-  "TRIPURA","UTTAR PRADESH","UTTARAKHAND","WEST BENGAL","ANDAMAN AND NICOBAR ISLANDS","CHANDIGARH",
-  "DADRA AND NAGAR HAVELI AND DAMAN AND DIU","DELHI","JAMMU AND KASHMIR","LADAKH","LAKSHADWEEP","PUDUCHERRY"
+  "ANDHRA PRADESH", "ARUNACHAL PRADESH", "ASSAM", "BIHAR", "CHHATTISGARH", "GOA", "GUJARAT", "HARYANA",
+  "HIMACHAL PRADESH", "JHARKHAND", "KARNATAKA", "KERALA", "MADHYA PRADESH", "MAHARASHTRA", "MANIPUR",
+  "MEGHALAYA", "MIZORAM", "NAGALAND", "ODISHA", "PUNJAB", "RAJASTHAN", "SIKKIM", "TAMIL NADU", "TELANGANA",
+  "TRIPURA", "UTTAR PRADESH", "UTTARAKHAND", "WEST BENGAL", "ANDAMAN AND NICOBAR ISLANDS", "CHANDIGARH",
+  "DADRA AND NAGAR HAVELI AND DAMAN AND DIU", "DELHI", "JAMMU AND KASHMIR", "LADAKH", "LAKSHADWEEP", "PUDUCHERRY"
 ];
 
 const AddProject = () => {
@@ -46,7 +46,7 @@ const AddProject = () => {
     client: "",
     collaborators: "",
     // 🚨 1. New field added, initialized as an array for multi-select
-    projectLeaders: [], 
+    projectLeaders: [],
     projectTeam: "",
     tags: [],
     keyDate: new Date().toISOString().slice(0, 10),
@@ -62,21 +62,21 @@ const AddProject = () => {
   const [savedTags, setSavedTags] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
   // 🚨 State for the Project Leader dropdown
-  const [showLeaderDropdown, setShowLeaderDropdown] = useState(false); 
+  const [showLeaderDropdown, setShowLeaderDropdown] = useState(false);
 
 
   useEffect(() => {
     // Fetch previously saved tags from backend
     const fetchSavedTags = async () => {
       try {
-        const projects = await projectApi.getProjects(); 
+        const projects = await projectApi.getProjects();
         const tags = new Set();
         projects.forEach(p => p.tags.forEach(tag => tags.add(tag.toUpperCase())));
         setSavedTags(Array.from(tags));
       } catch (err) {
         console.error("Failed to fetch saved tags:", err);
         // Fallback for demonstration if API fails:
-        setSavedTags(["SUSTAINABLE", "GREEN_BUILDING", "LOW_COST", "MODULAR_DESIGN", "HERITAGE_PRESERVATION"]); 
+        setSavedTags(["SUSTAINABLE", "GREEN_BUILDING", "LOW_COST", "MODULAR_DESIGN", "HERITAGE_PRESERVATION"]);
       }
     };
 
@@ -115,15 +115,15 @@ const AddProject = () => {
   const handleAddTag = (tag = null) => {
     const newTag = (tag || tagInput).trim().toUpperCase();
     if (!newTag || formData.tags.includes(newTag)) return;
-    
+
     setFormData((prev) => ({ ...prev, tags: [...prev.tags, newTag] }));
-    
+
     if (!savedTags.includes(newTag)) {
       setSavedTags(prev => [...prev, newTag]);
     }
 
-    setTagInput(""); 
-    setShowDropdown(false); 
+    setTagInput("");
+    setShowDropdown(false);
   };
 
   const handleRemoveTag = (tagToRemove) => {
@@ -260,21 +260,21 @@ const AddProject = () => {
               autoComplete="off"
               required
             />
-            
+
             {/* 🚨 NEW PROJECT LEADER FIELD (Multi-select dropdown) 🚨 */}
             <div className="relative">
-              <div 
+              <div
                 className="border p-2 rounded w-full border-[#C9BEB8] cursor-pointer bg-white"
                 onClick={() => setShowLeaderDropdown(!showLeaderDropdown)}
               >
-                {formData.projectLeaders.length > 0 
+                {formData.projectLeaders.length > 0
                   ? formData.projectLeaders.join(', ')
                   : "Select Project Leader(s) *"
                 }
               </div>
-              
+
               {showLeaderDropdown && (
-                <div 
+                <div
                   className="absolute z-10 w-full bg-white border rounded shadow-lg max-h-40 overflow-y-auto"
                 >
                   {PROJECT_LEADERS_OPTIONS.map(leader => (
@@ -282,12 +282,11 @@ const AddProject = () => {
                       key={leader}
                       // Use onMouseDown to prevent dropdown closing when clicking on an option
                       onMouseDown={(e) => {
-                        e.preventDefault(); 
+                        e.preventDefault();
                         handleLeaderToggle(leader);
                       }}
-                      className={`p-2 cursor-pointer text-sm flex justify-between items-center ${
-                        formData.projectLeaders.includes(leader) ? 'bg-[#F1E4DF] font-semibold' : 'hover:bg-gray-100'
-                      }`}
+                      className={`p-2 cursor-pointer text-sm flex justify-between items-center ${formData.projectLeaders.includes(leader) ? 'bg-[#F1E4DF] font-semibold' : 'hover:bg-gray-100'
+                        }`}
                     >
                       {leader}
                       {formData.projectLeaders.includes(leader) && (
@@ -376,15 +375,15 @@ const AddProject = () => {
                 value={tagInput}
                 onChange={(e) => {
                   setTagInput(e.target.value);
-                  setShowDropdown(true); 
+                  setShowDropdown(true);
                 }}
-                onFocus={() => setShowDropdown(true)} 
+                onFocus={() => setShowDropdown(true)}
                 onBlur={(e) => {
                   setTimeout(() => setShowDropdown(false), 200);
                 }}
                 onKeyDown={(e) => {
                   if (e.key === "Enter") {
-                    e.preventDefault(); 
+                    e.preventDefault();
                     handleAddTag();
                   }
                 }}
@@ -403,24 +402,24 @@ const AddProject = () => {
 
             {/* Dropdown for suggested tags */}
             {showDropdown && tagInput.length > 0 && (
-              <div 
+              <div
                 className="absolute z-10 w-full bg-white border border-t-0 rounded-b shadow-lg max-h-60 overflow-y-auto"
               >
                 {savedTags
                   .filter(
                     (tag) =>
-                      tag.includes(tagInput.toUpperCase()) && 
-                      !formData.tags.includes(tag)           
+                      tag.includes(tagInput.toUpperCase()) &&
+                      !formData.tags.includes(tag)
                   )
                   .sort()
-                  .slice(0, 10) 
+                  .slice(0, 10)
                   .map((tag) => (
                     <div
                       key={tag}
-                      onMouseDown={() => { 
+                      onMouseDown={() => {
                         handleAddTag(tag);
-                        setTagInput(""); 
-                        setShowDropdown(false); 
+                        setTagInput("");
+                        setShowDropdown(false);
                       }}
                       className="p-2 cursor-pointer hover:bg-gray-100 text-sm"
                     >
