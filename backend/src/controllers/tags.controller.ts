@@ -1,11 +1,11 @@
 import { Request, Response } from "express";
-import { Tag } from "../models/Tag";
+import { Tag } from "../models/Tags.model";
 
 // Get all tags
 export const getTags = async (req: Request, res: Response) => {
   try {
     const tags = await Tag.find().sort({ name: 1 });
-    res.json(tags.map(t => t.name));
+    res.json(tags.map((t) => t.name));
   } catch (err) {
     res.status(500).json({ message: "Failed to fetch tags" });
   }
@@ -18,7 +18,8 @@ export const addTag = async (req: Request, res: Response) => {
 
   try {
     const existing = await Tag.findOne({ name: name.toUpperCase() });
-    if (existing) return res.status(409).json({ message: "Tag already exists" });
+    if (existing)
+      return res.status(409).json({ message: "Tag already exists" });
 
     const tag = new Tag({ name: name.toUpperCase() });
     await tag.save();
