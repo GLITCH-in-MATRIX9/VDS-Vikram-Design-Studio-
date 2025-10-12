@@ -18,6 +18,7 @@ const AdminHome = () => {
     newApplicants: 0,
     shortlisted: 0,
   });
+  const [isStatsLoading, setIsStatsLoading] = useState(true);
 
   const tooltipContent =
     "This dashboard gives you a quick overview of key metrics. Monitor project status, live applicant counts, and a summary of recent changes.";
@@ -38,6 +39,7 @@ const AdminHome = () => {
 
   // Fetch project stats
   const fetchStats = async () => {
+    setIsStatsLoading(true); // <-- Start loading
     try {
       const res = await axios.get(API_URL, {
         headers: {
@@ -73,6 +75,8 @@ const AdminHome = () => {
       });
     } catch (err) {
       console.error("Error fetching project stats:", err);
+    } finally {
+      setIsStatsLoading(false); // <-- Stop loading
     }
   };
 
@@ -121,20 +125,31 @@ const AdminHome = () => {
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 flex-1">
-          <StatCard value={stats.totalProjects} label="Total Projects" />
-          <StatCard value={stats.liveProjects} label="Live Projects" />
-          <StatCard
-            value={stats.positions}
-            label="Positions Open : Categories"
-          />
-          <StatCard value={stats.applicantsTotal} label="Applicants Total" />
-          <StatCard
-            value={stats.newApplicants}
-            label="New Applicants Since DD/MM/YY"
-          />
-          <StatCard value={stats.shortlisted} label="Shortlisted Candidates" />
-        </div>
+        {isStatsLoading ? (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 flex-1">
+            {[...Array(6)].map((_, i) => (
+              <StatCardSkeleton key={i} />
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 flex-1">
+            <StatCard value={stats.totalProjects} label="Total Projects" />
+            <StatCard value={stats.liveProjects} label="Live Projects" />
+            <StatCard
+              value={stats.positions}
+              label="Positions Open : Categories"
+            />
+            <StatCard value={stats.applicantsTotal} label="Applicants Total" />
+            <StatCard
+              value={stats.newApplicants}
+              label="New Applicants Since DD/MM/YY"
+            />
+            <StatCard
+              value={stats.shortlisted}
+              label="Shortlisted Candidates"
+            />
+          </div>
+        )}
 
         <div className="w-full lg:w-1/3 border rounded-lg p-6 shadow-sm min-h-[250px] border-[#7E797A]">
           <h2 className={`font-semibold mb-2 uppercase ${textColor}`}>
@@ -155,6 +170,13 @@ const StatCard = ({ value, label }) => (
       {value}
     </div>
     <p className={`text-sm uppercase ${textColor}`}>{label}</p>
+  </div>
+);
+
+const StatCardSkeleton = () => (
+  <div className="bg-white shadow rounded-lg p-8 animate-pulse">
+    <div className="h-8 bg-gray-200 rounded w-1/4 mb-3"></div>
+    <div className="h-4 bg-gray-200 rounded w-3/4"></div>
   </div>
 );
 
