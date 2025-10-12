@@ -24,5 +24,5 @@ const fileFilter: multer.Options['fileFilter'] = (_req, file, cb) => {
 export const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 20 * 1024 * 1024 }, // 20MB - increased for GIFs
+  limits: { fileSize: 20 * 1024 * 1024, fieldSize: 20 * 1024 * 1024 }, // 20MB - increased for GIFs
 });
