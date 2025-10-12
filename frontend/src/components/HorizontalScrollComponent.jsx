@@ -90,10 +90,10 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
           // Animate the 'x' property based on our state
           animate={{ x: xOffset }}
           transition={transition}
-          className="flex flex-nowrap h-full"
+          className="flex flex-nowrap h-full items-center"
         >
           {/* Project details desktop: a fixed-width container */}
-          <div className="hidden lg:flex w-[240px] leading-[1.4] flex-col pt-6 ml-12 pr-3 text-right items-end flex-shrink-0">
+          <div className="hidden lg:flex w-[240px] leading-[1.4] flex-col ml-12 pr-3 text-right items-end flex-shrink-0">
             <div className="flex flex-col gap-1 text-xs sm:text-sm">
               <div className="text-[#7E797A] font-medium text-xs uppercase">
                 {project?.category || "RESIDENTIAL"}
@@ -117,6 +117,7 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
               <div>
                 <div className="text-[#6E6A6B] mb-1">PROJECT TEAM</div>
                 <div>
+                  {project?.projectLeaders + " | "}
                   {project?.project_team || project?.projectTeam || "Team Name"}
                 </div>
               </div>
