@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getTags, addTag } from "../controllers/tag.controller";
+import { getTags, addTag } from "../controllers/tags.controller";
 import { protect, requireRole } from "../middlewares/auth.middleware";
 
 const router = Router();
