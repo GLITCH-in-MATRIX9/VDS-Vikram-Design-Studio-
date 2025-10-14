@@ -5,32 +5,33 @@ import { useState, useEffect } from "react";
 import { FaTimes } from "react-icons/fa";
 import CloseIcon from "../assets/Icons/CloseIcon.svg";
 import SubCategorySelectedIcon from "../assets/Icons/SubCategorySelected.svg";
+import { useFilters } from "../context/filterContext";
 const filterOptions = {
-  EDUCATION: [
+  Education: [
     "Schools",
     "Training Institutions/Centres",
     "Research Centres",
     "Colleges & Universities",
   ],
-  HEALTHCARE: ["Hospitals", "Medical Colleges", "Diagnostic Labs", "Clinics"],
-  CIVIC: [
+  Healthcare: ["Hospitals", "Medical Colleges", "Diagnostic Labs", "Clinics"],
+  Civic: [
     "Auditoriums",
     "Town Halls",
     "Police Stations",
     "Public toilets & amenities",
   ],
-  WORKSPACE: ["Government offices", "Corporate offices", "Research Centres"],
-  SPORTS: ["Stadiums", "Sports complex", "Multipurpose sports halls"],
-  CULTURE: ["Religious", "Memorials", "Cultural complex", "Museums"],
-  RESIDENTIAL: [
+  Workspace: ["Government offices", "Corporate offices", "Research Centres"],
+  Sports: ["Stadiums", "Sports complex", "Multipurpose sports halls"],
+  Culture: ["Religious", "Memorials", "Cultural complex", "Museums"],
+  Residential: [
     "Staff quarters",
     "Private Villas",
     "Housing",
     "Hostels",
     "Guest Houses",
   ],
-  HOSPITALITY: ["Hotels", "Resorts", "Restaurants", "Tourism Lodges"],
-  RETAIL: [
+  Hospitality: ["Hotels", "Resorts", "Restaurants", "Tourism Lodges"],
+  Retail: [
     "Showrooms",
     "Shopping complex",
     "Departmental stores",
@@ -40,12 +41,23 @@ const filterOptions = {
 
 const FilterSidebar = ({ isOpen, onClose }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const {
+    categoryContext,
+    setCategoryContext,
+    subCategoryContext,
+    setSubCategoryContext,
+    clearFilters,
+  } = useFilters();
 
   useEffect(() => {
     if (!isOpen) {
       setSelectedCategory(null);
     }
   }, [isOpen]);
+
+  const handleApplyFilters = () => {
+    onClose(); // Close the sidebar
+  };
 
   return (
     <AnimatePresence>
@@ -61,29 +73,40 @@ const FilterSidebar = ({ isOpen, onClose }) => {
           className="fixed top-20 right-0 h-[calc(100vh-80px)] w-80 bg-[#f3efee] shadow-lg z-[99] flex flex-col"
         >
           {/* Filter Categories */}
-          <div className="flex-1 overflow-y-auto pb-4">
+          <div className="flex-1 overflow-y-auto pb-4 ">
             {Object.keys(filterOptions).map((category) => (
               <div key={category}>
                 <div
                   className="font-inter flex items-center gap-1 px-6 py-3 cursor-pointer hover:bg-gray-100"
-                  onClick={() =>
+                  onClick={() => {
                     setSelectedCategory(
-                      selectedCategory === category ? null : category
-                    )
-                  }
+                      selectedCategory?.toUpperCase() ===
+                        category?.toUpperCase()
+                        ? null
+                        : category
+                    );
+                    setCategoryContext(
+                      categoryContext?.toUpperCase() === category?.toUpperCase()
+                        ? null
+                        : category
+                    );
+                    setSubCategoryContext(null);
+                  }}
                 >
-                  <span className="text-gray-[#474545] font-medium text-[10px]">
+                  <span className="text-gray-[#474545] font-medium text-[10px] uppercase ">
                     {category}
                   </span>
                   <img
                     src={CloseIcon}
-                    className={`text-gray-[#474545] transition w-[6px] ${
-                      selectedCategory === category && "rotate-[45deg]"
+                    className={`text-gray-[#474545] transition w-[6px] rotate-[45deg] ${
+                      selectedCategory?.toUpperCase() ===
+                        category?.toUpperCase() && "rotate-0"
                     }`}
                   />
                 </div>
                 <AnimatePresence>
-                  {selectedCategory === category && (
+                  {selectedCategory?.toUpperCase() ===
+                    category?.toUpperCase() && (
                     <motion.div
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
@@ -95,6 +118,12 @@ const FilterSidebar = ({ isOpen, onClose }) => {
                         {filterOptions[category].map((option) => (
                           <li
                             key={option}
+                            onClick={() => {
+                              setCategoryContext(category); // Set the parent category
+                              setSubCategoryContext(
+                                subCategoryContext === option ? null : option
+                              );
+                            }}
                             className="py-2 text-[#474545] transition cursor-pointer text-[8px] font-medium uppercase flex gap-1 items-center"
                           >
                             <img
