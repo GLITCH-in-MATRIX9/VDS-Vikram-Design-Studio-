@@ -208,7 +208,14 @@ const Navbar = () => {
                   setMobileFilterOpen((prev) => !prev);
                   setMenuOpen(false);
                 }}
+                className="relative"
               >
+                {/* Badge */}
+                <div
+                  className={`badge h-[6px] w-[6px] rounded-2xl transition bg-[#C94A4A] absolute top-[-2px] right-[-2px] opacity-0 ${
+                    (categoryContext || subCategoryContext) && "opacity-100"
+                  }`}
+                ></div>
                 <img
                   src={filterIcon}
                   alt={"filter"}
@@ -414,10 +421,7 @@ const Navbar = () => {
       </AnimatePresence>
 
       {/* Render the new FilterSidebar component for mobile only */}
-      <FilterSidebar
-        isOpen={mobileFilterOpen}
-        onClose={() => setMobileFilterOpen(false)}
-      />
+      <FilterSidebar isOpen={mobileFilterOpen} />
     </>
   );
 };

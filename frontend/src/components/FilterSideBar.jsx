@@ -1,7 +1,7 @@
 // src/components/FilterSidebar.jsx
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import CloseIcon from "../assets/Icons/CloseIcon.svg";
 import SubCategorySelectedIcon from "../assets/Icons/SubCategorySelected.svg";
@@ -39,25 +39,16 @@ const filterOptions = {
   ],
 };
 
-const FilterSidebar = ({ isOpen, onClose }) => {
+const FilterSidebar = ({ isOpen }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const {
     categoryContext,
     setCategoryContext,
     subCategoryContext,
     setSubCategoryContext,
-    clearFilters,
   } = useFilters();
 
-  useEffect(() => {
-    if (!isOpen) {
-      setSelectedCategory(null);
-    }
-  }, [isOpen]);
-
-  const handleApplyFilters = () => {
-    onClose(); // Close the sidebar
-  };
+  console.log(subCategoryContext);
 
   return (
     <AnimatePresence>
@@ -70,7 +61,7 @@ const FilterSidebar = ({ isOpen, onClose }) => {
           exit={{ x: "100%" }}
           transition={{ type: "tween", duration: 1, ease: [0.83, 0, 0.17, 1] }}
           // Adjusted classes for positioning and height
-          className="fixed top-20 right-0 h-[calc(100vh-80px)] w-80 bg-[#f3efee] shadow-lg z-[99] flex flex-col"
+          className="fixed mt-[2px] right-0 h-[calc(100vh-80px)] w-[187px] bg-[#f3efee] z-[99] flex flex-col shadow-[-2px_0_2px_0_#3E3C3C0A,-4px_0_8px_-4px_#3E3C3C29]"
         >
           {/* Filter Categories */}
           <div className="flex-1 overflow-y-auto pb-4 ">
@@ -98,9 +89,11 @@ const FilterSidebar = ({ isOpen, onClose }) => {
                   </span>
                   <img
                     src={CloseIcon}
-                    className={`text-gray-[#474545] transition w-[6px] rotate-[45deg] ${
+                    className={`text-gray-[#474545] transition w-[6px] ${
                       selectedCategory?.toUpperCase() ===
-                        category?.toUpperCase() && "rotate-0"
+                      category?.toUpperCase()
+                        ? "rotate-0"
+                        : "rotate-[-45deg]"
                     }`}
                   />
                 </div>
@@ -118,10 +111,12 @@ const FilterSidebar = ({ isOpen, onClose }) => {
                         {filterOptions[category].map((option) => (
                           <li
                             key={option}
-                            onClick={() => {
-                              setCategoryContext(category); // Set the parent category
+                            onClick={(prev) => {
                               setSubCategoryContext(
-                                subCategoryContext === option ? null : option
+                                subCategoryContext?.toUpperCase() ===
+                                  option.toUpperCase()
+                                  ? null
+                                  : option
                               );
                             }}
                             className="py-2 text-[#474545] transition cursor-pointer text-[8px] font-medium uppercase flex gap-1 items-center"
