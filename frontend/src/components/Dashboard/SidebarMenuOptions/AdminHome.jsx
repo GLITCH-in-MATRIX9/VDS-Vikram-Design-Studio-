@@ -86,7 +86,7 @@ const AdminHome = () => {
   }, []);
 
   return (
-    <div className="p-10 bg-[#f3efee] min-h-screen relative">
+    <div className="p-10 bg-[#F2EFEE] min-h-screen relative">
       <div className="flex justify-between items-start mb-10 gap-4">
         <h1 className={`text-2xl font-semibold uppercase text-[#6E6A6B]`}>
           Welcome, {user.name || "User"}

@@ -118,7 +118,7 @@ const Home = () => {
       >
         <motion.div
           style={{ z }}
-          className="w-full flex flex-col items-center gap-3 md:gap-6 xl:gap-8"
+          className="w-full flex flex-col items-center gap-3 md:gap-6 lg:gap-8"
         >
           {filteredProjects.length === 0 ? (
             <div className="text-center py-20">

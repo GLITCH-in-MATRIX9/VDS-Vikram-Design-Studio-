@@ -61,7 +61,7 @@ const FilterSidebar = ({ isOpen }) => {
           exit={{ x: "100%" }}
           transition={{ type: "tween", duration: 1, ease: [0.83, 0, 0.17, 1] }}
           // Adjusted classes for positioning and height
-          className="fixed mt-[2px] right-0 h-[calc(100vh-80px)] w-[187px] bg-[#f3efee] z-[99] flex flex-col shadow-[-2px_0_2px_0_#3E3C3C0A,-4px_0_8px_-4px_#3E3C3C29]"
+          className="fixed mt-[2px] right-0 h-[calc(100vh-80px)] w-[187px] bg-[#F2EFEE] z-[99] flex flex-col shadow-[-2px_0_2px_0_#3E3C3C0A,-4px_0_8px_-4px_#3E3C3C29]"
         >
           {/* Filter Categories */}
           <div className="flex-1 overflow-y-auto pb-4 ">
@@ -105,7 +105,7 @@ const FilterSidebar = ({ isOpen }) => {
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}
                       transition={{ duration: 0.3, ease: "easeInOut" }}
-                      className="overflow-hidden bg-[#f3efee]"
+                      className="overflow-hidden bg-[#F2EFEE]"
                     >
                       <ul className=" pl-9">
                         {filterOptions[category].map((option) => (

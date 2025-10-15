@@ -105,7 +105,7 @@ const Navbar = () => {
   return (
     <>
       {/* Main Navbar */}
-      <nav className="w-full px-4 md:px-8 xl:px-20 bg-[#f2efee]  relative z-50">
+      <nav className="w-full px-4 md:px-8 lg:px-20 bg-[#f2efee]  relative z-50">
         <div className="  mx-auto py-4 flex justify-between items-center">
           {/* Left - Logo */}
           <div className="flex items-center space-x-3">
@@ -119,7 +119,7 @@ const Navbar = () => {
                 alt="Vikram Design Studio Logo"
                 className="h-6 md:h-12 w-auto"
               />
-              <span className="text-[#454545] leading-[1em] text-xs md:text-xl xl:text-2xl font-humanist">
+              <span className="text-[#454545] leading-[1em] text-xs md:text-xl lg:text-2xl font-humanist">
                 Vikram Design Studio
               </span>
             </Link>
@@ -245,7 +245,7 @@ const Navbar = () => {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 1 }}
             transition={{ duration: 1, ease: [0.83, 0, 0.17, 1] }}
-            className="w-full bg-[#f3efee] border-b border-[#e0dcd7] overflow-hidden z-40"
+            className="w-full bg-[#F2EFEE] border-b border-[#e0dcd7] overflow-hidden z-40"
           >
             <div className="max-w-7xl mx-auto px-6 py-3 grid grid-cols-2 md:flex justify-evenly flex-wrap gap-2">
               {Object.keys(filterOptions).map((category) => (
@@ -299,7 +299,7 @@ const Navbar = () => {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.8, ease: [0.83, 0, 0.17, 1] }}
-            className="w-full bg-[#f3efee] overflow-hidden z-30"
+            className="w-full bg-[#F2EFEE] overflow-hidden z-30"
           >
             <div className="max-w-7xl mx-auto px-6 py-3 flex justify-evenly flex-wrap gap-2 text-[#474545]">
               {filterOptions[selectedCategory].map((option, i) => (
