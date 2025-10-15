@@ -1,9 +1,18 @@
 import { Request, Response } from 'express';
 import { sendEmail } from '../utils/emailService';
+import { RecaptchaRequest } from '../middlewares/recaptcha.middleware';
 
-export const sendContactEmail = async (req: Request, res: Response) => {
+export const sendContactEmail = async (req: RecaptchaRequest, res: Response) => {
   try {
-    const { name, email, subject, message } = req.body;
+    const { name, email, subject, message, recaptchaToken } = req.body;
+
+    // Check if reCAPTCHA was verified (middleware should handle this, but double-check)
+    if (!req.recaptchaValid && process.env.NODE_ENV !== 'development') {
+      return res.status(400).json({
+        message: 'reCAPTCHA verification is required',
+        success: false
+      });
+    }
 
     // Comprehensive validation
     if (!name || !email || !subject || !message) {

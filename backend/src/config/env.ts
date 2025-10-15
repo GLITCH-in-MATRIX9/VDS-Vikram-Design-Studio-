@@ -19,7 +19,9 @@ const validateEnv = () => {
     'CLOUDINARY_CLOUD_NAME',
     'CLOUDINARY_API_KEY',
     'CLOUDINARY_API_SECRET',
-    'CLOUDINARY_FOLDER_NAME'
+    'CLOUDINARY_FOLDER_NAME',
+    // reCAPTCHA requirements
+    'RECAPTCHA_SECRET_KEY'
   ];
 
   const missingVars = requiredEnvVars.filter(v => !process.env[v]);
@@ -49,6 +51,9 @@ export const config = {
     apiKey: process.env.CLOUDINARY_API_KEY!,
     apiSecret: process.env.CLOUDINARY_API_SECRET!,
     folderName: process.env.CLOUDINARY_FOLDER_NAME!,
+  },
+  recaptcha: {
+    secretKey: process.env.RECAPTCHA_SECRET_KEY!,
   }
 };
 
