@@ -19,7 +19,7 @@ const itemVariants = {
 const Heading = () => {
   return (
     <motion.div
-      className="grid grid-cols-1 lg:grid-cols-3 gap-20 px-4 md:px-8 lg:px-20 py-16 bg-[#f8f6f5] text-[#333333]"
+      className="grid grid-cols-1 lg:grid-cols-3 gap-20 text-[#474545] px-4 md:px-8 lg:px-20 py-8 md:py-12 lg:py-20"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
@@ -28,7 +28,7 @@ const Heading = () => {
       <div className="lg:col-span-2 space-y-6">
         {/* Heading */}
         <motion.h1
-          className="font-sora font-semibold text-[72px] leading-[80px] tracking-[-0.01em]"
+          className="font-sora text-[#3E3C3C] font-semibold text-[40px] md:text-[56px] lg:text-[72px] leading-[48px] md:leading-[64px] lg:leading-[80px] tracking-[-0.01em] uppercase"
           variants={itemVariants}
         >
           TEAM
@@ -36,7 +36,7 @@ const Heading = () => {
 
         {/* Paragraphs */}
         <motion.p
-          className="font-inter font-normal text-[16px] leading-[140%] tracking-[0]"
+          className="font-inter font-normal text-xs md:text-sm leading-[1.4em] tracking-[-0.01em]"
           variants={itemVariants}
         >
           Vikram Design Studio is led by a multidisciplinary team of architects,
@@ -46,7 +46,7 @@ const Heading = () => {
           shared values and a design-first approach.
         </motion.p>
         <motion.p
-          className="font-inter font-normal text-[16px] leading-[140%] tracking-[0]"
+          className="font-inter font-normal text-xs md:text-sm leading-[1.4em] tracking-[-0.01em]"
           variants={itemVariants}
         >
           While Guwahati remains our operational core, major design decisions
@@ -55,7 +55,7 @@ const Heading = () => {
           rooted while scaling outwardly.
         </motion.p>
         <motion.p
-          className="font-inter font-normal text-[16px] leading-[140%] tracking-[0]"
+          className="font-inter font-normal text-xs md:text-sm leading-[1.4em] tracking-[-0.01em]"
           variants={itemVariants}
         >
           Our studio values clarity, collaboration, and curiosity. We believe

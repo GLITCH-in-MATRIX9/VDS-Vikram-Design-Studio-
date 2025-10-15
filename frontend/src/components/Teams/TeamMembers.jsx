@@ -44,9 +44,9 @@ const itemVariants = {
 
 const TeamMembers = () => {
   return (
-    <div className="bg-[#f5f4f3] min-h-screen px-4 md:px-8 lg:px-20 z py-12">
+    <div className="bg-[#f2efee] min-h-screen px-4 md:px-8 lg:px-20 z py-12 md:py-20">
       <motion.h1
-        className="font-sora font-semibold text-[56px] leading-[64px] tracking-[-0.01em] text-[#3E3C3C] mb-32"
+        className="font-sora font-semibold text-[28px] md:text-[40px] lg:text-[56px] leading-[36px] md:leading-[48px] lg:leading-[64px] tracking-[-0.01em] text-[#3E3C3C] mb-12 lg:mb-20"
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -58,14 +58,14 @@ const TeamMembers = () => {
       <table className="w-full border-collapse font-sora text-[#3E3C3C]">
         <thead>
           <motion.tr
-            className="border-b border-[#d6d6d6] font-semibold text-[14px] text-left"
+            className="border-b border-[#C1C7CD] font-medium text-xs text-[#474545] text-left uppercase"
             initial={{ opacity: 0, y: -10 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.4 }}
           >
-            <th className="pb-4 w-[45%]">TEAM MEMBER</th>
-            <th className="pb-4 w-[55%]">DESIGNATION</th>
+            <th className="w-[45%] py-4 pl-3 ">Team Member</th>
+            <th className="w-[55%] py-4 pl-3">Designation</th>
           </motion.tr>
         </thead>
         <motion.tbody
@@ -79,8 +79,8 @@ const TeamMembers = () => {
               key={index}
               variants={itemVariants} // Applies item animation to each row
             >
-              <td className="py-2 text-[14px]">{name}</td>
-              <td className="py-2 text-[14px]">{designation}</td>
+              <td className="p-3 text-sm align-top">{name}</td>
+              <td className="p-3 text-sm align-top">{designation}</td>
             </motion.tr>
           ))}
         </motion.tbody>
