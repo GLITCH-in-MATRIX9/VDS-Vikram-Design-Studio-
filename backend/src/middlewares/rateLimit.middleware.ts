@@ -6,8 +6,25 @@ interface RateLimitOptions {
   message?: string;
 }
 
-// Simple in-memory rate limiter (for production, use Redis)
+// Memory-optimized in-memory rate limiter with automatic cleanup
 const requestCounts = new Map<string, { count: number; resetTime: number }>();
+
+// Cleanup interval to prevent memory leaks
+setInterval(() => {
+  const now = Date.now();
+  for (const [key, value] of requestCounts.entries()) {
+    if (value.resetTime < now) {
+      requestCounts.delete(key);
+    }
+  }
+  // Limit map size to prevent memory bloat
+  if (requestCounts.size > 1000) {
+    const entries = Array.from(requestCounts.entries());
+    entries.sort((a, b) => a[1].resetTime - b[1].resetTime);
+    const toDelete = entries.slice(0, 200); // Remove oldest 200 entries
+    toDelete.forEach(([key]) => requestCounts.delete(key));
+  }
+}, 60000); // Cleanup every minute
 
 export const rateLimit = (options: RateLimitOptions) => {
   const { windowMs, max, message = 'Too many requests, please try again later.' } = options;
@@ -15,14 +32,6 @@ export const rateLimit = (options: RateLimitOptions) => {
   return (req: Request, res: Response, next: NextFunction) => {
     const clientId = req.ip || 'unknown';
     const now = Date.now();
-    const windowStart = now - windowMs;
-
-    // Clean up old entries
-    for (const [key, value] of requestCounts.entries()) {
-      if (value.resetTime < now) {
-        requestCounts.delete(key);
-      }
-    }
 
     // Get or create client record
     let clientRecord = requestCounts.get(clientId);

@@ -1,6 +1,54 @@
 import multer from 'multer';
+import cloudinary from '../config/cloudinary';
+import { v2 as cloudinaryUploader } from 'cloudinary';
 
-const storage = multer.memoryStorage();
+// Custom file interface for Cloudinary direct upload
+interface CloudinaryFile extends Express.Multer.File {
+  url: string;
+  publicId: string;
+  originalName: string;
+  size: number;
+}
+
+// Direct upload to Cloudinary without storing in memory
+const cloudinaryStorage = {
+  _handleFile: async (req: any, file: any, cb: any) => {
+    try {
+      const result = await new Promise((resolve, reject) => {
+        const uploadStream = cloudinaryUploader.uploader.upload_stream(
+          {
+            folder: 'VDS_FOLDER',
+            resource_type: 'auto',
+            quality: 'auto',
+            fetch_format: 'auto',
+            chunk_size: 6000000, // 6MB chunks
+            timeout: 60000 // 60 second timeout
+          },
+          (error, result) => {
+            if (error) reject(error);
+            else resolve(result);
+          }
+        );
+        
+        file.stream.pipe(uploadStream);
+      });
+      
+      cb(null, {
+        url: (result as any).secure_url,
+        publicId: (result as any).public_id,
+        originalName: file.originalname,
+        size: (result as any).bytes
+      });
+    } catch (error) {
+      cb(error);
+    }
+  },
+  
+  _removeFile: (req: any, file: any, cb: any) => {
+    // No cleanup needed for direct upload
+    cb(null);
+  }
+};
 
 const fileFilter: multer.Options['fileFilter'] = (_req, file, cb) => {
   // Allow all image types including GIFs
@@ -22,7 +70,11 @@ const fileFilter: multer.Options['fileFilter'] = (_req, file, cb) => {
 };
 
 export const upload = multer({
-  storage,
+  storage: cloudinaryStorage,
   fileFilter,
-  limits: { fileSize: 20 * 1024 * 1024, fieldSize: 20 * 1024 * 1024 }, // 20MB - increased for GIFs
+  limits: { 
+    fileSize: 10 * 1024 * 1024, // 10MB limit
+    files: 5, // Limit number of files
+    fields: 20 // Limit number of fields
+  },
 });

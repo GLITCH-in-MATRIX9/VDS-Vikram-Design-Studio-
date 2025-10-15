@@ -40,9 +40,20 @@ app.use(cors({
   credentials: true,
 }));
 
-// Parse JSON & URL-encoded payloads
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ extended: true }));
+// Parse JSON & URL-encoded payloads with memory optimization
+app.use(express.json({ 
+  limit: '10mb', // Reduced from 50mb
+  verify: (req, res, buf) => {
+    // Add memory monitoring
+    if (buf.length > 5 * 1024 * 1024) { // 5MB warning
+      console.warn('Large request detected:', buf.length, 'bytes');
+    }
+  }
+}));
+app.use(express.urlencoded({ 
+  extended: true, 
+  limit: '10mb' // Add limit for URL-encoded data
+}));
 
 app.use(generalRateLimit);
 
@@ -73,8 +84,31 @@ app.use('*', (req: Request, res: Response) =>
   res.status(404).json({ message: 'Route not found' })
 );
 
+// Memory monitoring
+const logMemoryUsage = () => {
+  const used = process.memoryUsage();
+  console.log('Memory Usage:', {
+    rss: `${Math.round(used.rss / 1024 / 1024)} MB`,
+    heapTotal: `${Math.round(used.heapTotal / 1024 / 1024)} MB`,
+    heapUsed: `${Math.round(used.heapUsed / 1024 / 1024)} MB`,
+    external: `${Math.round(used.external / 1024 / 1024)} MB`
+  });
+};
+
+// Log memory usage every 5 minutes
+setInterval(logMemoryUsage, 5 * 60 * 1000);
+
+// Force garbage collection if available
+if (global.gc) {
+  setInterval(() => {
+    global.gc!();
+    console.log('Garbage collection triggered');
+  }, 10 * 60 * 1000); // Every 10 minutes
+}
+
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
   console.log(`📁 Uploads directory: ${uploadsPath}`);
   console.log(`🌐 Allowed CORS origins:`, allowedOrigins);
+  logMemoryUsage();
 });

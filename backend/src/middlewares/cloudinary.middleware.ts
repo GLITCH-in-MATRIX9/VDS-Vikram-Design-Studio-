@@ -11,16 +11,31 @@ const uploadBufferToCloudinary = (
     const uploadStream = cloudinary.uploader.upload_stream(
       { 
         folder,
-        resource_type: resourceType, // Use 'auto' for GIFs to let Cloudinary detect the type
-        quality: 'auto', // Optimize quality automatically
-        fetch_format: 'auto' // Let Cloudinary choose the best format
+        resource_type: resourceType,
+        quality: 'auto',
+        fetch_format: 'auto',
+        // Add memory optimization settings
+        chunk_size: 6000000, // 6MB chunks
+        timeout: 60000 // 60 second timeout
       },
       (error, result) => {
         if (error) return reject(error);
         resolve(result);
       }
     );
-    streamifier.createReadStream(buffer).pipe(uploadStream);
+    
+    const readStream = streamifier.createReadStream(buffer);
+    readStream.pipe(uploadStream);
+    
+    // Clean up streams to prevent memory leaks
+    readStream.on('end', () => {
+      readStream.destroy();
+    });
+    
+    uploadStream.on('error', (err) => {
+      readStream.destroy();
+      reject(err);
+    });
   });
 };
 

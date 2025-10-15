@@ -10,7 +10,6 @@ import {
 } from "../controllers/project.controller";
 import { upload } from "../middlewares/upload";
 import { protect, requireRole } from "../middlewares/auth.middleware";
-import { uploadToCloudinary } from "../middlewares/cloudinary.middleware";
 
 const router = Router();
 
@@ -28,7 +27,6 @@ router.post(
     { name: "previewImage", maxCount: 1 },  
     { name: "sections", maxCount: 10 },
   ]),
-  uploadToCloudinary,
   createProject
 );
 
@@ -37,12 +35,17 @@ router.post(
   protect,
   requireRole(["admin", "super_admin"]),
   upload.single("file"), 
-  uploadToCloudinary,
   (req, res) => {
-    if (!req.body.previewImageUrl) {
+    const file = req.file as any;
+    if (!file?.url) {
       return res.status(400).json({ message: "No file uploaded" });
     }
-    res.status(200).json({ url: req.body.previewImageUrl });
+    res.status(200).json({ 
+      url: file.url,
+      publicId: file.publicId,
+      originalName: file.originalName,
+      size: file.size
+    });
   }
 );
 
@@ -52,19 +55,18 @@ router.post(
   protect,
   requireRole(["admin", "super_admin"]),
   upload.single("gif"), 
-  uploadToCloudinary,
   (req, res) => {
-    if (!req.body.previewImageUrl) {
+    const file = req.file as any;
+    if (!file?.url) {
       return res.status(400).json({ message: "No GIF file uploaded" });
     }
     res.status(200).json({ 
       message: "GIF uploaded successfully",
-      url: req.body.previewImageUrl,
-      publicId: req.body.previewImagePublicId,
+      url: file.url,
+      publicId: file.publicId,
       fileInfo: {
-        originalName: req.file?.originalname,
-        mimetype: req.file?.mimetype,
-        size: req.file?.size
+        originalName: file.originalName,
+        size: file.size
       }
     });
   }
@@ -78,7 +80,6 @@ router.put(
     { name: "previewImage", maxCount: 1 },
     { name: "sections", maxCount: 10 },
   ]),
-  uploadToCloudinary,
   updateProject
 );
 

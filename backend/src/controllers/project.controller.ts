@@ -22,9 +22,10 @@ export const createProject = async (req: Request, res: Response) => {
       sections,
     } = req.body;
 
-    // Preview image uploaded via middleware
-    const previewImageUrl = req.body.previewImageUrl || "";
-    const previewImagePublicId = req.body.previewImagePublicId || "";
+    // Preview image uploaded via direct upload middleware
+    const files = req.files as any;
+    const previewImageUrl = files?.previewImage?.[0]?.url || req.body.previewImageUrl || "";
+    const previewImagePublicId = files?.previewImage?.[0]?.publicId || req.body.previewImagePublicId || "";
 
     // Parse sections from string if needed
     const parsedSections = typeof sections === "string" ? JSON.parse(sections) : sections || [];
@@ -45,21 +46,19 @@ export const createProject = async (req: Request, res: Response) => {
         ? tags
         : [];
 
-    // Upload section files to Cloudinary if any
-    const updatedSections = await Promise.all(
-      parsedSections.map(async (sec: any) => {
-        if (sec.file) {
-          const result = await cloudinary.uploader.upload(sec.file, { 
-            folder: "projects/sections",
-            resource_type: 'auto', // Let Cloudinary auto-detect for GIFs
-            quality: 'auto',
-            fetch_format: 'auto'
-          });
-          return { type: sec.type, content: result.secure_url };
-        }
-        return sec; // already a URL
-      })
-    );
+    // Handle section files uploaded via direct upload middleware
+    const updatedSections = parsedSections.map((sec: any, index: number) => {
+      // Check if there are uploaded section files
+      const sectionFile = files?.sections?.[index];
+      if (sectionFile) {
+        return { 
+          type: sec.type || 'image', 
+          content: sectionFile.url 
+        };
+      }
+      // If no file uploaded, use existing content (already a URL)
+      return sec;
+    });
 
     const project = new Project({
       name,
@@ -156,21 +155,22 @@ export const updateProject = async (req: Request, res: Response) => {
 
     const parsedSections = typeof sections === "string" ? JSON.parse(sections) : Array.isArray(sections) ? sections : [];
 
-    // Upload section files if any
-    const updatedSections = await Promise.all(
-      parsedSections.map(async (sec: any) => {
-        if (sec.file) {
-          const result = await cloudinary.uploader.upload(sec.file, { 
-            folder: "projects/sections",
-            resource_type: 'auto', // Let Cloudinary auto-detect for GIFs
-            quality: 'auto',
-            fetch_format: 'auto'
-          });
-          return { type: sec.type, content: result.secure_url };
-        }
-        return sec; // already a URL
-      })
-    );
+    // Get files from request
+    const files = req.files as any;
+
+    // Handle section files uploaded via direct upload middleware
+    const updatedSections = parsedSections.map((sec: any, index: number) => {
+      // Check if there are uploaded section files
+      const sectionFile = files?.sections?.[index];
+      if (sectionFile) {
+        return { 
+          type: sec.type || 'image', 
+          content: sectionFile.url 
+        };
+      }
+      // If no file uploaded, use existing content (already a URL)
+      return sec;
+    });
 
     const existing = await Project.findById(req.params.id);
     if (!existing) return res.status(404).json({ message: "Project not found" });
