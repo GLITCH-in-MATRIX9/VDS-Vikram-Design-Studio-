@@ -74,7 +74,7 @@ const AboutSection = ({ data }) => {
   };
 
   return (
-    <section className="px-4 md:px-8 xl:px-20 py-12 md:py-20 bg-[#F2EFEE] ">
+    <section className="px-4 md:px-8 lg:px-20 py-12 md:py-20 bg-[#F2EFEE] ">
       <div className="flex flex-col gap-12 max-w-screen-xl mx-auto">
         {/* Big heading */}
         <motion.h1
@@ -92,7 +92,7 @@ const AboutSection = ({ data }) => {
         {/* Introductory paragraphs */}
         <motion.div
           className="font-inter leading-[1.4em] max-w-4xl space-y-4 sm:space-y-6 
-            text-xs md:text-sm xl:text-base text-[#454545]"
+            text-xs md:text-sm lg:text-base text-[#454545]"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
@@ -140,13 +140,13 @@ const AboutSection = ({ data }) => {
             {data.carousel_cards.map((card) => (
               <motion.div
                 key={card.id}
-                className="flex flex-col gap-4 w-[250px] xl:w-[400px] flex-shrink-0"
+                className="flex flex-col gap-4 w-[250px] lg:w-[400px] flex-shrink-0"
                 variants={itemVariants}
               >
                 <img
                   src={card.img_src}
                   alt={`${card.project_name} image`}
-                  className="w-full h-[140px] xl:h-[225px] rounded-2xl object-cover object-center grid place-content-center bg-[#D1D1D1] text-xs"
+                  className="w-full h-[140px] lg:h-[225px] rounded-2xl object-cover object-center grid place-content-center bg-[#D1D1D1] text-xs"
                   loading="lazy"
                 />
                 <div>

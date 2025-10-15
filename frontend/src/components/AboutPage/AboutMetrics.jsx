@@ -52,22 +52,22 @@ const CountUp = ({ end, duration = 2000, format = false }) => {
 
 const AboutMetrics = () => {
   return (
-    <section className="bg-[#f2efee] px-4 md:px-8 xl:px-20 py-12 md:py-16">
-      <div className="  mx-auto flex flex-wrap gap-4 md:gap-5 xl:gap-6 justify-center">
+    <section className="bg-[#f2efee] px-4 md:px-8 lg:px-20 py-12 md:py-16">
+      <div className="  mx-auto flex flex-wrap gap-4 md:gap-5 lg:gap-6 justify-center">
         {/* Projects Completed */}
         <div className="shadow-[0_16px_32px_#3E3C3C1A] flex-1 basis-full md:basis-0">
-          <div className="h-[160px] md:h-[256px] xl:h-[205px] bg-[#F9F8F7] rounded-md shadow-[0_4px_2px_#3e3c3c0a] py-5 px-6 md:py-16 md:px-8 flex items-center justify-between">
-            <div className="flex flex-col xl:flex-row xl:items-center items-start gap-6 md:gap-8">
+          <div className="h-[160px] md:h-[256px] lg:h-[205px] bg-[#F9F8F7] rounded-md shadow-[0_4px_2px_#3e3c3c0a] py-5 px-6 md:py-16 md:px-8 flex items-center justify-between">
+            <div className="flex flex-col lg:flex-row lg:items-center items-start gap-6 md:gap-8">
               <img
                 src={BuildingImg}
                 alt="Projects"
-                className="h-12 w-12 xl:h-16 xl:w-16 object-contain"
+                className="h-12 w-12 lg:h-16 lg:w-16 object-contain"
               />
               <div>
-                <h3 className="font-sora font-semibold text-xl md:text-[28px] xl:text-[40px] leading-[1.1em] md:leading-[36px] xl:leading-[48px] tracking-[-0.01em] text-[#474545]">
+                <h3 className="font-sora font-semibold text-xl md:text-[28px] lg:text-[40px] leading-[1.1em] md:leading-[36px] lg:leading-[48px] tracking-[-0.01em] text-[#474545]">
                   <CountUp end={200} />
                 </h3>
-                <p className="font-inter font-medium text-[8px] xl:text-[12px] leading-[100%] tracking-[0] uppercase text-[#6D6D6D]">
+                <p className="font-inter font-medium text-[8px] lg:text-[12px] leading-[100%] tracking-[0] uppercase text-[#6D6D6D]">
                   Number of Projects Completed
                 </p>
               </div>
@@ -77,21 +77,21 @@ const AboutMetrics = () => {
 
         {/* Total Square Footage */}
         <div className="shadow-[0_16px_32px_#3E3C3C1A] flex-1">
-          <div className="h-[160px] md:h-[256px] xl:h-[205px] bg-[#F9F8F7] rounded-md shadow-[0_4px_2px_#3e3c3c0a] py-5 px-6 md:py-16 md:px-8 flex items-center justify-between">
-            <div className="flex flex-col xl:flex-row xl:items-center items-start gap-6 md:gap-8">
+          <div className="h-[160px] md:h-[256px] lg:h-[205px] bg-[#F9F8F7] rounded-md shadow-[0_4px_2px_#3e3c3c0a] py-5 px-6 md:py-16 md:px-8 flex items-center justify-between">
+            <div className="flex flex-col lg:flex-row lg:items-center items-start gap-6 md:gap-8">
               <img
                 src={ClipboardImg}
                 alt="Square Footage"
-                className="h-12 w-12 xl:h-16 xl:w-16 object-contain"
+                className="h-12 w-12 lg:h-16 lg:w-16 object-contain"
               />
               <div>
-                <h3 className="font-sora font-semibold text-xl md:text-[28px] xl:text-[40px] leading-[1.1em] md:leading-[36px] xl:leading-[48px] tracking-[-0.01em] text-[#474545]">
+                <h3 className="font-sora font-semibold text-xl md:text-[28px] lg:text-[40px] leading-[1.1em] md:leading-[36px] lg:leading-[48px] tracking-[-0.01em] text-[#474545]">
                   <CountUp end={20000} format />{" "}
-                  <span className="text-[9px] md:text-xs xl:text-lg font-semibold">
+                  <span className="text-[9px] md:text-xs lg:text-lg font-semibold">
                     sq.ft.
                   </span>
                 </h3>
-                <p className="font-inter font-medium text-[8px] xl:text-[12px] leading-[100%] tracking-[0] uppercase text-[#6D6D6D]">
+                <p className="font-inter font-medium text-[8px] lg:text-[12px] leading-[100%] tracking-[0] uppercase text-[#6D6D6D]">
                   Total Square Foot Area Designed Till Date
                 </p>
               </div>
@@ -101,18 +101,18 @@ const AboutMetrics = () => {
 
         {/* Years in Industry */}
         <div className="shadow-[0_16px_32px_#3E3C3C1A] flex-1">
-          <div className="h-[160px] md:h-[256px] xl:h-[205px] bg-[#F9F8F7] rounded-md shadow-[0_4px_2px_#3e3c3c0a] py-5 px-6 md:py-16 md:px-8 flex items-center justify-between">
-            <div className="flex flex-col xl:flex-row xl:items-center items-start gap-6 md:gap-8">
+          <div className="h-[160px] md:h-[256px] lg:h-[205px] bg-[#F9F8F7] rounded-md shadow-[0_4px_2px_#3e3c3c0a] py-5 px-6 md:py-16 md:px-8 flex items-center justify-between">
+            <div className="flex flex-col lg:flex-row lg:items-center items-start gap-6 md:gap-8">
               <img
                 src={CertificateImg}
                 alt="Experience"
-                className="h-12 w-12 xl:h-16 xl:w-16 object-contain"
+                className="h-12 w-12 lg:h-16 lg:w-16 object-contain"
               />
               <div>
-                <h3 className="font-sora font-semibold text-xl md:text-[28px] xl:text-[40px] leading-[1.1em] md:leading-[36px] xl:leading-[48px] tracking-[-0.01em] text-[#474545]">
+                <h3 className="font-sora font-semibold text-xl md:text-[28px] lg:text-[40px] leading-[1.1em] md:leading-[36px] lg:leading-[48px] tracking-[-0.01em] text-[#474545]">
                   <CountUp end={25} />
                 </h3>
-                <p className="font-inter font-medium text-[8px] xl:text-[12px] leading-[100%] tracking-[0] uppercase text-[#6D6D6D]">
+                <p className="font-inter font-medium text-[8px] lg:text-[12px] leading-[100%] tracking-[0] uppercase text-[#6D6D6D]">
                   Years in the Industry
                 </p>
               </div>

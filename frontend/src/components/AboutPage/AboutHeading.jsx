@@ -1,6 +1,5 @@
 import React from "react";
 import { motion } from "framer-motion";
-import aboutImgUrl from "../../assets/Team/ABOUT IMAGE.jpg";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -19,11 +18,11 @@ const itemVariants = {
 
 const AboutHeading = () => {
   return (
-    <section className="bg-[#f2efee] px-4 md:px-8 xl:px-20 py-8 md:py-12 xl:py-20">
+    <section className="bg-[#f2efee] px-4 md:px-8 lg:px-20 py-8 md:py-12 lg:py-20">
       <div className="  mx-auto">
         <motion.h1
-          className="font-sora text-[40px] md:text-[56px] xl:text-7xl font-semibold text-[#3E3C3C] 
-            mb-6 xl:mb-16 tracking-[-0.01em] leading-[48px] md:leading-[64px] xl:leading-[80px] uppercase"
+          className="font-sora font-semibold text-[40px] md:text-[56px] lg:text-[72px] leading-[48px] md:leading-[64px] lg:leading-[80px] tracking-[-0.01em] text-[#3E3C3C] 
+            mb-6 lg:mb-16 uppercase"
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
@@ -34,7 +33,7 @@ const AboutHeading = () => {
       </div>
 
       <motion.div
-        className="  mx-auto grid grid-cols-1 xl:grid-cols-3 gap-6"
+        className="  mx-auto grid grid-cols-1 lg:grid-cols-3 gap-6"
         variants={containerVariants}
         initial="hidden"
         whileInView="visible"
@@ -43,7 +42,7 @@ const AboutHeading = () => {
         {/* Main left section: big heading and two-column story */}
         <motion.div className="lg:col-span-2">
           <motion.h2
-            className="font-sora hidden xl:block text-xl font-semibold text-[#6D6D6D] mb-8"
+            className="font-sora hidden lg:block text-xl font-semibold text-[#6D6D6D] mb-8"
             variants={itemVariants}
           >
             Vikram Design Studio (VDS) didn’t start with blueprints –<br />
@@ -51,9 +50,9 @@ const AboutHeading = () => {
           </motion.h2>
 
           {/* Two columns for the story */}
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 sm:gap-8 text-[#474545] leading-[1.4em] text-sm sm:text-base">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 font-inter text-[#474545] leading-[1.4em] text-xs md:text-sm lg:text-base">
             <motion.div
-              className="font-inter space-y-3 sm:space-y-4 text-sm"
+              className="space-y-3 sm:space-y-4"
               variants={containerVariants}
             >
               <motion.p variants={itemVariants}>
@@ -84,7 +83,7 @@ const AboutHeading = () => {
             </motion.div>
 
             <motion.div
-              className="font-inter space-y-3 sm:space-y-4 text-sm"
+              className="space-y-3 sm:space-y-4"
               variants={containerVariants}
             >
               <motion.p variants={itemVariants}>
@@ -116,7 +115,7 @@ const AboutHeading = () => {
 
         {/* Image placeholder: visible only on large screens (desktop) */}
         <motion.div
-          className="hidden xl:block w-full h-full xl:ml-2"
+          className="hidden lg:block w-full h-full lg:ml-2"
           variants={itemVariants}
         >
           <div className="w-full h-full object-cover rounded-xl">
