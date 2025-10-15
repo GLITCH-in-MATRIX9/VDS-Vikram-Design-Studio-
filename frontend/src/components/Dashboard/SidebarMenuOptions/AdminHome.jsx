@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { FaQuestionCircle, FaDownload } from "react-icons/fa";
-import axios from "axios";
+import projectApi from "../../../services/projectApi";
+import authApi from "../../../services/authApi";
 
 const textColor = "text-[#474545]";
-const API_URL = "https://vds-vikram-design-studio.onrender.com/api/projects"; // replace with your backend
-const USER_API =
-  "https://vds-vikram-design-studio.onrender.com/api/auth/profile"; // Corrected route
 
 const AdminHome = () => {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -26,12 +24,8 @@ const AdminHome = () => {
   // Fetch user info
   const fetchUser = async () => {
     try {
-      const res = await axios.get(USER_API, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // assuming JWT in localStorage
-        },
-      });
-      setUser(res.data.user);
+      const userData = authApi.getProfile();
+      setUser(userData);
     } catch (err) {
       console.error("Error fetching user info:", err);
     }
@@ -41,12 +35,7 @@ const AdminHome = () => {
   const fetchStats = async () => {
     setIsStatsLoading(true); // <-- Start loading
     try {
-      const res = await axios.get(API_URL, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      const projects = res.data;
+      const projects = await projectApi.getProjects();
       const totalProjects = projects.length;
       const liveProjects = projects.filter((p) => p.active).length;
       const positions = `${liveProjects}:${
