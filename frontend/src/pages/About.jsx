@@ -14,7 +14,7 @@ const About = () => {
       <AboutMetrics />
       <SectionDivider />
       {aboutSectionData.map((sectionData, index) => (
-        sectionData.heading.toLowerCase() !== "engineering" && // disable Engineering section
+        sectionData.heading.toLowerCase() !== "engineering" && 
           <>
             <AboutSection key={sectionData.id} data={sectionData}/>
             {index !== aboutSectionData.length - 1 && <SectionDivider/>}
