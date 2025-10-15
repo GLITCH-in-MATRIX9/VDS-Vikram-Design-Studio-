@@ -42,17 +42,17 @@ app.use(cors({
 
 // Parse JSON & URL-encoded payloads with memory optimization
 app.use(express.json({ 
-  limit: '10mb', // Reduced from 50mb
+  limit: '30mb',
   verify: (req, res, buf) => {
     // Add memory monitoring
-    if (buf.length > 5 * 1024 * 1024) { // 5MB warning
+    if (buf.length > 15 * 1024 * 1024) { // 15MB warning
       console.warn('Large request detected:', buf.length, 'bytes');
     }
   }
 }));
 app.use(express.urlencoded({ 
   extended: true, 
-  limit: '10mb' // Add limit for URL-encoded data
+  limit: '30mb' // Updated to match file size limit
 }));
 
 app.use(generalRateLimit);

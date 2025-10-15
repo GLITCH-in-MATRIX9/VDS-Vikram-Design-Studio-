@@ -73,8 +73,8 @@ export const upload = multer({
   storage: cloudinaryStorage,
   fileFilter,
   limits: { 
-    fileSize: 10 * 1024 * 1024, // 10MB limit
-    files: 5, // Limit number of files
-    fields: 20 // Limit number of fields
+    fileSize: 30 * 1024 * 1024, // 30MB limit
+    files: 25, // Limit number of files
+    fields: 25 // Limit number of fields
   },
 });
