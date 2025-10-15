@@ -91,17 +91,22 @@ export const createProject = async (req: Request, res: Response) => {
 // ---------------- GET ALL PROJECTS ----------------
 export const getProjects = async (_req: Request, res: Response) => {
   try {
-    const projects = await Project.aggregate([
-      { $sort: { createdAt: -1 } } // sort by createdAt descending
-    ]).allowDiskUse(true); // enables disk-based sorting
+    const projects = await Project.aggregate(
+      [
+        { $sort: { createdAt: -1 } } // sort by createdAt descending
+      ],
+      { allowDiskUse: true } // enable disk-based sorting
+    );
 
     return res.status(200).json(projects);
   } catch (err: any) {
+    console.error("Error fetching projects:", err); // full backend log
     return res
       .status(500)
       .json({ message: "Failed to fetch projects", error: err.message });
   }
 };
+
 
 
 

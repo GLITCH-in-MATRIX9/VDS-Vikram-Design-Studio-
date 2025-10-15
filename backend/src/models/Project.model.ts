@@ -54,4 +54,6 @@ const ProjectSchema = new Schema<IProject>(
   { timestamps: true }
 );
 
+ProjectSchema.index({ createdAt: -1 });
+
 export const Project = model<IProject>('Project', ProjectSchema);
