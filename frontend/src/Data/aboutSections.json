@@ -42,7 +42,7 @@
         "id": 4,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548868/Architecture-4-Shanti_Villa_gpt376.webp",
         "project_name": "Shanti Villa",
-        "project_location": "Location Name, City Name",
+        "project_location": "Dimapur, Nagaland",
         "text": "This text will wrap to the next line and is meant to be a caption for the image above"
       },
       {
@@ -63,7 +63,7 @@
         "id": 7,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548873/Architecture-7-Bhupen_Hazarika_Museum_lgnqbh.webp",
         "project_name": "Bhupen Hazarika Museum",
-        "project_location": "Location Name, City Name",
+        "project_location": "Guwahati, Assam",
         "text": "This text will wrap to the next line and is meant to be a caption for the image above"
       },
       {
@@ -100,49 +100,49 @@
         "id": 1,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548876/01-The_CA_Studio_converted_compressed_msxnum.webp",
         "project_name": "The CA Studio",
-        "project_location": "Location Name, City Name",
+        "project_location": "Guwahati, Assam",
         "text": "This text will wrap to the next line and is meant to be a caption for the image above"
       },
       {
         "id": 2,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548876/01-The_CA_Studio_converted_compressed_msxnum.webp",
+        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548877/02-The_CA_Studio_converted_compressed_pozotk.webp",
         "project_name": "The CA Studio",
-        "project_location": "Location Name, City Name",
+        "project_location": "Guwahati, Assam",
         "text": "This text will wrap to the next line and is meant to be a caption for the image above"
       },
       {
         "id": 3,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548879/03-Shanti_Villa_converted_compressed_n04npf.webp",
         "project_name": "Shanti Villa",
-        "project_location": "Location Name, City Name",
+        "project_location": "Dimapur, Nagaland",
         "text": "This text will wrap to the next line and is meant to be a caption for the image above"
       },
       {
         "id": 4,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548880/04-Shanti_Villa_converted_compressed_tiyi2a.webp",
         "project_name": "Shanti Villa",
-        "project_location": "Location Name, City Name",
+        "project_location": "Dimapur, Nagaland",
         "text": "This text will wrap to the next line and is meant to be a caption for the image above"
       },
       {
         "id": 5,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548881/05-Shanti_Villa_converted_compressed_cjjblm.webp",
         "project_name": "Shanti Villa",
-        "project_location": "Location Name, City Name",
+        "project_location": "Dimapur, Nagaland",
         "text": "This text will wrap to the next line and is meant to be a caption for the image above"
       },
       {
         "id": 6,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548884/06-Shanti_Villa_converted_compressed_lyfidw.webp",
         "project_name": "Shanti Villa",
-        "project_location": "Location Name, City Name",
+        "project_location": "Dimapur, Nagaland",
         "text": "This text will wrap to the next line and is meant to be a caption for the image above"
       },
       {
         "id": 7,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548885/07-Sethi_Penthouse_converted_compressed_momzty.webp",
         "project_name": "Sethi Penthouse",
-        "project_location": "Location Name, City Name",
+        "project_location": "Guwahati, Assam",
         "text": "This text will wrap to the next line and is meant to be a caption for the image above"
       },
       {
