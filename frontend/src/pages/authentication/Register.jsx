@@ -4,8 +4,16 @@ import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { motion } from "framer-motion";
 // ⬅️ ADD FiEye and FiEyeOff imports
-import { FiUser, FiLock, FiMail, FiUserPlus, FiArrowLeft, FiEye, FiEyeOff } from "react-icons/fi"; 
-import { AuthContext } from '../../context/authContext'; 
+import {
+  FiUser,
+  FiLock,
+  FiMail,
+  FiUserPlus,
+  FiArrowLeft,
+  FiEye,
+  FiEyeOff,
+} from "react-icons/fi";
+import { AuthContext } from "../../context/authContext";
 
 const registerVariants = {
   hidden: { opacity: 0, y: -20 },
@@ -13,18 +21,17 @@ const registerVariants = {
 };
 
 export default function Register() {
-  const { register, user } = useContext(AuthContext); 
+  const { register, user } = useContext(AuthContext);
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isDesktop, setIsDesktop] = useState(false);
 
-  const [showPassword, setShowPassword] = useState(false); 
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    
     if (user) {
       navigate("/admin/dashboard");
     }
@@ -40,18 +47,18 @@ export default function Register() {
 
     // Input validation (basic client-side checks)
     if (password.length < 6) {
-        return setError("Password must be at least 6 characters.");
+      return setError("Password must be at least 6 characters.");
     }
 
     // Call the register function from AuthContext
-    const result = await register(name, email, password); 
+    const result = await register(name, email, password);
 
     if (result.success) {
       // Registration successful (and user is automatically logged in)
       navigate("/admin/dashboard/home");
     } else {
       // Display error message from the backend (e.g., "Registration is disabled" or "Email already exists")
-      setError(result.message || "Registration failed. Please try again."); 
+      setError(result.message || "Registration failed. Please try again.");
     }
   };
 
@@ -65,7 +72,7 @@ export default function Register() {
   }
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[#f3efee] p-4">
+    <div className="flex items-center justify-center min-h-screen bg-[#F2EFEE] p-4">
       <motion.form
         onSubmit={handleRegister}
         className="bg-white shadow-xl rounded-3xl px-10 py-8 w-full max-w-md flex flex-col gap-6 border border-gray-200"
@@ -119,7 +126,7 @@ export default function Register() {
           </span>
           <input
             // ⬅️ CONDITIONAL TYPE: 'text' if showPassword is true, 'password' otherwise
-            type={showPassword ? 'text' : 'password'}
+            type={showPassword ? "text" : "password"}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password (min 6 chars)"
@@ -127,13 +134,13 @@ export default function Register() {
             // ⬅️ ADD pr-10 to make room for the toggle button
             className="w-full pl-10 pr-10 py-3 border border-gray-300 rounded-xl focus:ring-1 focus:ring-[#7E797A] focus:outline-none text-[#474545] bg-[#F9F8F7] transition"
           />
-          
+
           {/* ⬅️ TOGGLE BUTTON */}
           <button
             type="button"
             onClick={() => setShowPassword(!showPassword)}
             className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-[#474545] transition duration-150"
-            aria-label={showPassword ? 'Hide password' : 'Show password'}
+            aria-label={showPassword ? "Hide password" : "Show password"}
           >
             {/* ⬅️ CONDITIONAL ICON */}
             {showPassword ? <FiEyeOff size={18} /> : <FiEye size={18} />}
