@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { FaQuestionCircle, FaDownload } from "react-icons/fa";
-import axios from "axios";
+import projectApi from "../../../services/projectApi";
+import authApi from "../../../services/authApi";
 
 const textColor = "text-[#474545]";
-const API_URL = "https://vds-vikram-design-studio.onrender.com/api/projects"; // replace with your backend
-const USER_API =
-  "https://vds-vikram-design-studio.onrender.com/api/auth/profile"; // Corrected route
 
 const AdminHome = () => {
   const [showTooltip, setShowTooltip] = useState(false);
@@ -26,12 +24,8 @@ const AdminHome = () => {
   // Fetch user info
   const fetchUser = async () => {
     try {
-      const res = await axios.get(USER_API, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`, // assuming JWT in localStorage
-        },
-      });
-      setUser(res.data.user);
+      const userData = authApi.getProfile();
+      setUser(userData);
     } catch (err) {
       console.error("Error fetching user info:", err);
     }
@@ -41,12 +35,7 @@ const AdminHome = () => {
   const fetchStats = async () => {
     setIsStatsLoading(true); // <-- Start loading
     try {
-      const res = await axios.get(API_URL, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-      const projects = res.data;
+      const projects = await projectApi.getProjects();
       const totalProjects = projects.length;
       const liveProjects = projects.filter((p) => p.active).length;
       const positions = `${liveProjects}:${
@@ -86,7 +75,7 @@ const AdminHome = () => {
   }, []);
 
   return (
-    <div className="p-10 bg-[#f3efee] min-h-screen relative">
+    <div className="p-10 bg-[#F2EFEE] min-h-screen relative">
       <div className="flex justify-between items-start mb-10 gap-4">
         <h1 className={`text-2xl font-semibold uppercase text-[#6E6A6B]`}>
           Welcome, {user.name || "User"}
@@ -124,15 +113,15 @@ const AdminHome = () => {
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-6">
+      <div className="flex flex-col xl:flex-row gap-6">
         {isStatsLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 flex-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-6 flex-1">
             {[...Array(6)].map((_, i) => (
               <StatCardSkeleton key={i} />
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 flex-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-6 flex-1">
             <StatCard value={stats.totalProjects} label="Total Projects" />
             <StatCard value={stats.liveProjects} label="Live Projects" />
             <StatCard
@@ -151,7 +140,7 @@ const AdminHome = () => {
           </div>
         )}
 
-        <div className="w-full lg:w-1/3 border rounded-lg p-6 shadow-sm min-h-[250px] border-[#7E797A]">
+        <div className="w-full xl:w-1/3 border rounded-lg p-6 shadow-sm min-h-[250px] border-[#7E797A]">
           <h2 className={`font-semibold mb-2 uppercase ${textColor}`}>
             Edit History
           </h2>

@@ -68,14 +68,14 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
       {/* Left/right scroll buttons (only visible on desktop) for navigating through the gallery */}
       <button
         onClick={scrollLeft}
-        className="absolute z-10 left-2 top-1/2 transform -translate-y-1/2 bg-[#2B262433] w-8 h-8 rounded-full shadow-md transition hidden lg:flex items-center justify-center"
+        className="absolute z-10 left-2 top-1/2 transform -translate-y-1/2 bg-[#2B262433] w-8 h-8 rounded-full shadow-md transition hidden xl:flex items-center justify-center"
       >
         <img src={LeftArrowIcon} alt="Scroll Left" className="w-4" />
       </button>
 
       <button
         onClick={scrollRight}
-        className="absolute z-10 right-2 top-1/2 transform -translate-y-1/2 bg-[#2B262433] w-8 h-8 rounded-full shadow-md transition hidden lg:flex items-center justify-center"
+        className="absolute z-10 right-2 top-1/2 transform -translate-y-1/2 bg-[#2B262433] w-8 h-8 rounded-full shadow-md transition hidden xl:flex items-center justify-center"
       >
         <img src={RightArrowIcon} className="w-4" />
       </button>
@@ -93,7 +93,7 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
           className="flex flex-nowrap h-full items-center"
         >
           {/* Project details desktop: a fixed-width container */}
-          <div className="hidden lg:flex w-[240px] leading-[1.4] flex-col ml-12 pr-3 text-right items-end flex-shrink-0">
+          <div className="hidden xl:flex w-[240px] leading-[1.4] flex-col ml-12 pr-3 text-right items-end flex-shrink-0">
             <div className="flex flex-col gap-1 text-xs sm:text-sm">
               <div className="text-[#7E797A] font-medium text-xs uppercase">
                 {project?.category || "RESIDENTIAL"}
@@ -139,7 +139,7 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
         </motion.div>
       </div>
       {/* Project details: tablet size and smaller */}
-      <div className="grid grid-cols-2 py-3 leading-[1.4] lg:hidden px-2">
+      <div className="grid grid-cols-2 py-3 leading-[1.4] xl:hidden px-2">
         <div className="project-type">
           <div className="text-[#7E797A] font-medium text-xs uppercase">
             {project?.category || "RESIDENTIAL"}

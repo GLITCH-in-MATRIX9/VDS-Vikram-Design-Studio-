@@ -1,6 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useFilters } from "../context/filterContext";
 import CategorySelectedIcon from "../assets/Icons/CategorySelected.svg";
 import SubCategorySelectedIcon from "../assets/Icons/SubCategorySelected.svg";
 import CloseIcon from "../assets/Icons/CloseIcon.svg";
@@ -61,6 +62,14 @@ const Navbar = () => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [selectedSubCategory, setSelectedSubCategory] = useState(null);
 
+  const {
+    categoryContext,
+    setCategoryContext,
+    subCategoryContext,
+    setSubCategoryContext,
+    clearFilters,
+  } = useFilters();
+
   useEffect(() => {
     // If the menu is open, add the 'no-scroll' class to the body
     if (menuOpen) {
@@ -76,11 +85,22 @@ const Navbar = () => {
   const location = useLocation();
   const isHome = location.pathname === "/";
 
+  const handleFilterClose = () => {
+    setFilterOpen(false);
+    clearFilters();
+  };
+
   const closeAllMenus = () => {
     setMenuOpen(false);
-    setFilterOpen(false);
-    setMobileFilterOpen(false);
+    handleFilterClose();
   };
+
+  useEffect(() => {
+    if (!isHome) {
+      clearFilters();
+      setFilterOpen(false);
+    }
+  }, [isHome, clearFilters]);
 
   return (
     <>
@@ -97,9 +117,9 @@ const Navbar = () => {
               <img
                 src={logo}
                 alt="Vikram Design Studio Logo"
-                className="h-6 md:h-12 w-auto"
+                className="h-8 md:h-12 w-auto"
               />
-              <span className="text-[#454545] leading-[1em] text-xs md:text-xl xl:text-2xl font-humanist">
+              <span className="text-[#454545] leading-[1em] hidden md:block text-xs md:text-xl xl:text-2xl font-humanist">
                 Vikram Design Studio
               </span>
             </Link>
@@ -171,7 +191,7 @@ const Navbar = () => {
               ) : (
                 <div
                   onClick={() => {
-                    setFilterOpen(false);
+                    handleFilterClose();
                     setMenuOpen(false);
                   }}
                   className="cursor-pointer"
@@ -188,11 +208,18 @@ const Navbar = () => {
                   setMobileFilterOpen((prev) => !prev);
                   setMenuOpen(false);
                 }}
+                className="relative"
               >
+                {/* Badge */}
+                <div
+                  className={`badge h-[6px] w-[6px] rounded-2xl transition bg-[#C94A4A] absolute top-[-2px] right-[-2px] opacity-0 ${
+                    (categoryContext || subCategoryContext) && "opacity-100"
+                  }`}
+                ></div>
                 <img
                   src={filterIcon}
-                  alt="filter"
-                  className={`h-4 w-4 object-contain ${
+                  alt={"filter"}
+                  className={`h-3 object-contain ${
                     !isHome && "invisible pointer-events-none"
                   }`}
                 />
@@ -201,7 +228,7 @@ const Navbar = () => {
                 <img
                   src={hamburgerIcon}
                   alt="menu"
-                  className="h-8 w-8 object-contain"
+                  className="w-4 object-contain"
                 />
               </button>
             </div>
@@ -218,7 +245,7 @@ const Navbar = () => {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 1 }}
             transition={{ duration: 1, ease: [0.83, 0, 0.17, 1] }}
-            className="w-full bg-[#f3efee] border-b border-[#e0dcd7] overflow-hidden z-40"
+            className="w-full bg-[#F2EFEE] border-b border-[#e0dcd7] overflow-hidden z-40"
           >
             <div className="max-w-7xl mx-auto px-6 py-3 grid grid-cols-2 md:flex justify-evenly flex-wrap gap-2">
               {Object.keys(filterOptions).map((category) => (
@@ -226,22 +253,33 @@ const Navbar = () => {
                   key={category}
                   onClick={() => {
                     setSelectedCategory(
-                      selectedCategory === category ? null : category
+                      selectedCategory?.toUpperCase() ===
+                        category?.toUpperCase()
+                        ? null
+                        : category
+                    );
+                    setCategoryContext(
+                      categoryContext?.toUpperCase() === category?.toUpperCase()
+                        ? null
+                        : category
                     );
                     setSelectedSubCategory(null);
+                    setSubCategoryContext(null);
                   }}
                   className={`flex gap-2 items-center px-4 py-2 rounded-md font-inter font-medium transition text-[#474545] uppercase ${
                     selectedCategory === null
                       ? "text-[#474545]"
-                      : selectedCategory === category
+                      : selectedCategory?.toUpperCase() ===
+                        category?.toUpperCase()
                       ? "text-[#474545]"
                       : " text-[#BEBBBC]"
-                  } text-xs lg:text-sm `}
+                  } text-xs xl:text-sm `}
                 >
                   <img
                     src={CategorySelectedIcon}
                     className={`transition w-3 h-3 opacity-0 ${
-                      selectedCategory === category && "opacity-100"
+                      selectedCategory?.toUpperCase() ===
+                        category?.toUpperCase() && "opacity-100"
                     } `}
                   />
                   {category}
@@ -261,21 +299,30 @@ const Navbar = () => {
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
             transition={{ duration: 0.8, ease: [0.83, 0, 0.17, 1] }}
-            className="w-full bg-[#f3efee] overflow-hidden z-30"
+            className="w-full bg-[#F2EFEE] overflow-hidden z-30"
           >
             <div className="max-w-7xl mx-auto px-6 py-3 flex justify-evenly flex-wrap gap-2 text-[#474545]">
               {filterOptions[selectedCategory].map((option, i) => (
                 <div
                   key={i}
-                  onClick={() =>
+                  onClick={() => {
                     setSelectedSubCategory(
-                      selectedSubCategory === option ? null : option
-                    )
-                  }
-                  className={`px-3 py-1 text-[10px] rounded-md cursor-pointer transition uppercase lg:text-xs flex gap-1 items-center ${
+                      selectedSubCategory?.toUpperCase() ===
+                        option.toUpperCase()
+                        ? null
+                        : option
+                    );
+                    setSubCategoryContext(
+                      subCategoryContext?.toUpperCase() === option.toUpperCase()
+                        ? null
+                        : option
+                    );
+                  }}
+                  className={`px-3 py-1 text-[10px] rounded-md cursor-pointer transition uppercase xl:text-xs flex gap-1 items-center ${
                     selectedSubCategory === null
                       ? "text-[#474545]"
-                      : selectedSubCategory === option
+                      : selectedSubCategory?.toUpperCase() ===
+                        option.toUpperCase()
                       ? "text-[#474545]"
                       : " text-[#BEBBBC]"
                   }`}
@@ -283,7 +330,8 @@ const Navbar = () => {
                   <img
                     src={SubCategorySelectedIcon}
                     className={`transition w-[5.25px] h-[5.25px] opacity-0 ${
-                      selectedSubCategory === option && "opacity-100"
+                      selectedSubCategory?.toUpperCase() ===
+                        option.toUpperCase() && "opacity-100"
                     } `}
                   />
                   {option}
@@ -308,11 +356,11 @@ const Navbar = () => {
             <div className="w-full h-full flex flex-col shadow-[-4px_0px_8px_-4px_#3E3C3C29]">
               <div className="w-full flex justify-end pt-6 pr-6">
                 <button onClick={() => closeAllMenus()}>
-                  <img src={closeIcon} alt="close" className="h-6 w-6" />
+                  <img src={closeIcon} alt="close" className="h-4" />
                 </button>
               </div>
 
-              <ul className="flex flex-col mt-30 text-[#af2b1e] font-semibold text-xs gap-6 ml-6">
+              <ul className="flex flex-col mt-30 text-[#C94A4A] font-semibold text-xs gap-6 ml-6">
                 <li>
                   <Link to="/" onClick={closeAllMenus}>
                     HOME
@@ -337,7 +385,7 @@ const Navbar = () => {
               </ul>
 
               <div className="mt-auto flex flex-col gap-8 px-4 pb-6">
-                <div className="flex space-x-6 text-[#af2b1e] justify-center">
+                <div className="flex space-x-6 text-[#C94A4A] justify-center">
                   <a
                     href="https://www.youtube.com/@vikramdesignstudio4300/featured"
                     target="_blank"
@@ -373,10 +421,7 @@ const Navbar = () => {
       </AnimatePresence>
 
       {/* Render the new FilterSidebar component for mobile only */}
-      <FilterSidebar
-        isOpen={mobileFilterOpen}
-        onClose={() => setMobileFilterOpen(false)}
-      />
+      <FilterSidebar isOpen={mobileFilterOpen} />
     </>
   );
 };

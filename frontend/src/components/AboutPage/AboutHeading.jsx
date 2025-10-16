@@ -1,6 +1,5 @@
 import React from "react";
 import { motion } from "framer-motion";
-import aboutImgUrl from "../../assets/Team/ABOUT IMAGE.jpg";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -22,8 +21,8 @@ const AboutHeading = () => {
     <section className="bg-[#f2efee] px-4 md:px-8 xl:px-20 py-8 md:py-12 xl:py-20">
       <div className="  mx-auto">
         <motion.h1
-          className="font-sora text-[40px] md:text-[56px] xl:text-7xl font-semibold text-[#3E3C3C] 
-            mb-6 xl:mb-16 tracking-[-0.01em] leading-[48px] md:leading-[64px] xl:leading-[80px] uppercase"
+          className="font-sora font-semibold text-[40px] md:text-[56px] xl:text-[72px] leading-[48px] md:leading-[64px] xl:leading-[80px] tracking-[-0.01em] text-[#3E3C3C] 
+            mb-6 xl:mb-16 uppercase"
           initial={{ opacity: 0, y: -20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.5 }}
@@ -41,7 +40,7 @@ const AboutHeading = () => {
         viewport={{ once: true, amount: 0.1 }}
       >
         {/* Main left section: big heading and two-column story */}
-        <motion.div className="lg:col-span-2">
+        <motion.div className="xl:col-span-2">
           <motion.h2
             className="font-sora hidden xl:block text-xl font-semibold text-[#6D6D6D] mb-8"
             variants={itemVariants}
@@ -51,9 +50,9 @@ const AboutHeading = () => {
           </motion.h2>
 
           {/* Two columns for the story */}
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 sm:gap-8 text-[#474545] leading-[1.4em] text-sm sm:text-base">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 sm:gap-8 font-inter text-[#474545] leading-[1.4em] text-xs md:text-sm xl:text-base">
             <motion.div
-              className="font-inter space-y-3 sm:space-y-4 text-sm"
+              className="space-y-3 sm:space-y-4"
               variants={containerVariants}
             >
               <motion.p variants={itemVariants}>
@@ -84,7 +83,7 @@ const AboutHeading = () => {
             </motion.div>
 
             <motion.div
-              className="font-inter space-y-3 sm:space-y-4 text-sm"
+              className="space-y-3 sm:space-y-4"
               variants={containerVariants}
             >
               <motion.p variants={itemVariants}>

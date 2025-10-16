@@ -1,6 +1,13 @@
 import React from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FaHome, FaBriefcase, FaUsers, FaGlobe, FaHistory, FaCog } from "react-icons/fa";
+import {
+  FaHome,
+  FaBriefcase,
+  FaUsers,
+  FaGlobe,
+  FaHistory,
+  FaCog,
+} from "react-icons/fa";
 import logo from "../../assets/navbar/VDSLOGOADMIN.png";
 
 const SidebarLeft = ({ user, onLogout }) => {
@@ -12,11 +19,27 @@ const SidebarLeft = ({ user, onLogout }) => {
 
   const navItems = [
     { label: "Home", icon: <FaHome />, path: "/admin/dashboard/home" },
-    { label: "Projects Portal", icon: <FaBriefcase />, path: "/admin/dashboard/projects" },
-    { label: "Hiring Portal", icon: <FaUsers />, path: "/admin/dashboard/hiring" },
-    { label: "Website Content", icon: <FaGlobe />, path: "/admin/dashboard/website-content" },
-    { label: "Recent Activity", icon: <FaHistory />, path: "/admin/dashboard/activity" },
-    { label: "Settings", icon: <FaCog />, path: "/admin/dashboard/settings" }, 
+    {
+      label: "Projects Portal",
+      icon: <FaBriefcase />,
+      path: "/admin/dashboard/projects",
+    },
+    {
+      label: "Hiring Portal",
+      icon: <FaUsers />,
+      path: "/admin/dashboard/hiring",
+    },
+    {
+      label: "Website Content",
+      icon: <FaGlobe />,
+      path: "/admin/dashboard/website-content",
+    },
+    {
+      label: "Recent Activity",
+      icon: <FaHistory />,
+      path: "/admin/dashboard/activity",
+    },
+    { label: "Settings", icon: <FaCog />, path: "/admin/dashboard/settings" },
   ];
 
   const userName = user?.name || user?.email || "Admin User";
@@ -45,7 +68,7 @@ const SidebarLeft = ({ user, onLogout }) => {
 
             const baseClasses = `
               flex items-center gap-3 px-4 py-3 rounded
-              ${isActive ? "bg-[#f3efee] text-[#474545] font-bold" : ""}
+              ${isActive ? "bg-[#F2EFEE] text-[#474545] font-bold" : ""}
             `;
 
             const activeClasses = isDisabled

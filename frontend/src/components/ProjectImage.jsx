@@ -2,7 +2,7 @@
 import React, { useState, useEffect } from "react";
 
 const ProjectImage = ({ src, alt }) => {
-  const [orientation, setOrientation] = useState('loading');
+  const [orientation, setOrientation] = useState("loading");
 
   useEffect(() => {
     const img = new Image();
@@ -10,28 +10,33 @@ const ProjectImage = ({ src, alt }) => {
 
     img.onload = () => {
       if (img.height > img.width) {
-        setOrientation('portrait');
+        setOrientation("portrait");
       } else {
-        setOrientation('landscape');
+        setOrientation("landscape");
       }
     };
 
     img.onerror = () => {
       console.error("Image failed to load:", src);
-      setOrientation('landscape'); // Default to landscape on error
+      setOrientation("landscape"); // Default to landscape on error
     };
+  }, [src]);
 
-  }, [src]); 
-
-  if (orientation === 'loading') {
-    return <div className="w-full h-full bg-gray-200 animate-pulse rounded-lg"></div>;
+  if (orientation === "loading") {
+    return (
+      <div className="w-full h-full bg-gray-200 animate-pulse rounded-lg"></div>
+    );
   }
 
-  const isPortrait = orientation === 'portrait';
+  const isPortrait = orientation === "portrait";
 
   return (
     <div
-      className={`${isPortrait ? 'aspect-[2/3] h-[calc(95vw/16*9)] sm:h-[225px] lg:h-[450px]' : 'aspect-video w-[95vw] sm:w-[400px] lg:w-[800px]'} rounded-lg shadow-md overflow-hidden`}
+      className={`${
+        isPortrait
+          ? "aspect-[2/3] h-[calc(95vw/16*9)] sm:h-[225px] xl:h-[450px]"
+          : "aspect-video w-[95vw] sm:w-[400px] xl:w-[800px]"
+      } rounded-lg shadow-md overflow-hidden`}
     >
       <img
         src={src}

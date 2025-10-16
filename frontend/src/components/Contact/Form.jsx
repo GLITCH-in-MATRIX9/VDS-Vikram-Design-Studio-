@@ -1,5 +1,5 @@
-import React from 'react';
-import { motion } from 'framer-motion';
+import React from "react";
+import { motion } from "framer-motion";
 import { LuSend } from "react-icons/lu";
 
 const containerVariants = {
@@ -14,29 +14,29 @@ const containerVariants = {
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: 'easeOut' } },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } },
 };
 
 const Form = () => {
   const [formData, setFormData] = React.useState({
-    firstName: '',
-    lastName: '',
-    company: '',
-    mobileNumber: '',
-    emailAddress: '',
-    message: '',
+    firstName: "",
+    lastName: "",
+    company: "",
+    mobileNumber: "",
+    emailAddress: "",
+    message: "",
     captcha: false,
   });
-  
+
   const [isFilled, setIsFilled] = React.useState(false);
 
   React.useEffect(() => {
     setIsFilled(
-      formData.firstName !== '' &&
-      formData.mobileNumber !== '' &&
-      formData.emailAddress !== '' &&
-      formData.message !== '' &&
-      formData.captcha
+      formData.firstName !== "" &&
+        formData.mobileNumber !== "" &&
+        formData.emailAddress !== "" &&
+        formData.message !== "" &&
+        formData.captcha
     );
   }, [formData]);
 
@@ -44,51 +44,56 @@ const Form = () => {
     const { name, value, type, checked } = e.target;
     setFormData((prevData) => ({
       ...prevData,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: type === "checkbox" ? checked : value,
     }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const API_ENDPOINT = 'endpoint goes here';
+    const API_ENDPOINT = "endpoint goes here";
 
     try {
       const response = await fetch(API_ENDPOINT, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
         body: JSON.stringify(formData),
       });
 
       if (response.ok) {
-        console.log('Form submitted successfully!');
-        alert('Thank you for your message!');
+        console.log("Form submitted successfully!");
+        alert("Thank you for your message!");
         setFormData({
-          firstName: '', lastName: '', company: '', mobileNumber: '',
-          emailAddress: '', message: '', captcha: false,
+          firstName: "",
+          lastName: "",
+          company: "",
+          mobileNumber: "",
+          emailAddress: "",
+          message: "",
+          captcha: false,
         });
       } else {
-        console.error('Form submission failed!');
-        alert('Something went wrong. Please try again.');
+        console.error("Form submission failed!");
+        alert("Something went wrong. Please try again.");
       }
     } catch (error) {
-      console.error('An error occurred:', error);
-      alert('An error occurred. Please check your connection.');
+      console.error("An error occurred:", error);
+      alert("An error occurred. Please check your connection.");
     }
   };
 
   return (
     <motion.section
-      className='my-3 md:my-6 lg:my-12 flex flex-col justify-center align-middle gap-6 md:gap-12'
+      className="my-3 md:my-6 xl:my-12 flex flex-col justify-center align-middle gap-6 md:gap-12"
       variants={containerVariants}
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, amount: 0.2 }}
     >
       <motion.h2
-        className='font-sora font-semibold uppercase text-center text-base md:text-[28px] lg:text-[40px] text-[#343A3F]'
+        className="font-sora font-semibold uppercase text-center text-base md:text-[28px] xl:text-[40px] text-[#343A3F]"
         variants={itemVariants}
       >
         Your next project starts here
@@ -96,7 +101,7 @@ const Form = () => {
 
       <motion.form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-4 lg:gap-6 space-y-6 w-[90%] md:w-[542px] lg:w-[616px] mx-auto text-xs md:text-sm lg:text-base font-inter text-[#474545]"
+        className="flex flex-col gap-4 xl:gap-6 space-y-6 w-[90%] md:w-[542px] xl:w-[616px] mx-auto text-xs md:text-sm xl:text-base font-inter text-[#474545]"
         variants={containerVariants}
       >
         <div className="my-0 grid grid-cols-2 gap-x-3 md:gap-x-4">
@@ -123,7 +128,7 @@ const Form = () => {
           </motion.div>
         </div>
 
-        <motion.div className='my-0' variants={itemVariants}>
+        <motion.div className="my-0" variants={itemVariants}>
           <input
             type="text"
             name="company"
@@ -134,7 +139,7 @@ const Form = () => {
           />
         </motion.div>
 
-        <motion.div className='my-0' variants={itemVariants}>
+        <motion.div className="my-0" variants={itemVariants}>
           <input
             type="tel"
             name="mobileNumber"
@@ -146,7 +151,7 @@ const Form = () => {
           />
         </motion.div>
 
-        <motion.div className='my-0' variants={itemVariants}>
+        <motion.div className="my-0" variants={itemVariants}>
           <input
             type="email"
             name="emailAddress"
@@ -158,7 +163,7 @@ const Form = () => {
           />
         </motion.div>
 
-        <motion.div className='my-0' variants={itemVariants}>
+        <motion.div className="my-0" variants={itemVariants}>
           <textarea
             name="message"
             onChange={handleChange}
@@ -170,7 +175,10 @@ const Form = () => {
           ></textarea>
         </motion.div>
 
-        <motion.div className="flex flex-row items-start justify-between gap-4 my-0" variants={itemVariants}>
+        <motion.div
+          className="flex flex-row items-start justify-between gap-4 my-0"
+          variants={itemVariants}
+        >
           <div className="flex items-center my-0">
             <input
               id="captcha"
@@ -186,7 +194,10 @@ const Form = () => {
           </div>
           <button
             type="submit"
-            className={`flex items-center gap-1 ${isFilled ? "bg-[#474545]" : "bg-[#7E797A] cursor-not-allowed"} font-medium rounded-lg px-4 py-2 uppercase text-white text-xs md:text-sm lg:text-base`}>
+            className={`flex items-center gap-1 ${
+              isFilled ? "bg-[#474545]" : "bg-[#7E797A] cursor-not-allowed"
+            } font-medium rounded-lg px-4 py-2 uppercase text-white text-xs md:text-sm xl:text-base`}
+          >
             Send Message
             <LuSend />
           </button>

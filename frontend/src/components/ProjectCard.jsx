@@ -11,7 +11,7 @@ const ProjectCard = ({ project }) => {
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); 
+      setIsMobile(window.innerWidth <= 768);
     };
     handleResize();
     window.addEventListener("resize", handleResize);
@@ -42,10 +42,9 @@ const ProjectCard = ({ project }) => {
             onClick={handleToggleExpand}
           >
             {/* Main grid container: 1 column on mobile, 3 columns on desktop for centering */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 justify-items-center items-center px-4 lg:px-0">
-              
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-0 justify-items-center items-center px-4 xl:px-0">
               {/* Left Column (Desktop Only) - Text Content, right-aligned */}
-              <div className="hidden lg:flex flex-col items-end text-right w-full lg:pl-4 lg:pr-8">
+              <div className="hidden xl:flex flex-col items-end text-right w-full xl:pl-4 xl:pr-8">
                 <p className="text-xs text-[#7E797A] uppercase">
                   {project?.category || "Residential"}
                 </p>
@@ -62,12 +61,15 @@ const ProjectCard = ({ project }) => {
               </div>
 
               {/* Center Column (Desktop) / Main Column (Mobile) - Image Gallery */}
-              <div className="order-1 lg:order-2 flex items-start w-full max-w-[400px] lg:max-w-[800px]">
-                <ProjectImageGallery sections={project.sections} isZoomed={false} />
+              <div className="order-1 xl:order-2 flex items-start w-full max-w-[400px] xl:max-w-[800px]">
+                <ProjectImageGallery
+                  sections={project.sections}
+                  isZoomed={false}
+                />
               </div>
 
               {/* Mobile-only Text Content - Centered below image */}
-              <div className="lg:hidden max-w-[400px] lg:max-w-[800px] order-2 flex gap-1 flex-col w-full py-3">
+              <div className="xl:hidden max-w-[400px] xl:max-w-[800px] order-2 flex gap-1 flex-col w-full py-3">
                 <p className="text-xs text-[#7E797A] uppercase">
                   {project?.category || "Residential"}
                 </p>
@@ -87,7 +89,10 @@ const ProjectCard = ({ project }) => {
             transition={{ duration: 0.3, ease: "easeInOut" }}
             className="w-full overflow-hidden"
           >
-            <HorizontalScrollComponent onClose={handleToggleExpand} project={project} />
+            <HorizontalScrollComponent
+              onClose={handleToggleExpand}
+              project={project}
+            />
           </motion.div>
         )}
       </AnimatePresence>

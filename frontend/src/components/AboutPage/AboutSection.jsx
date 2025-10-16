@@ -92,7 +92,7 @@ const AboutSection = ({ data }) => {
         {/* Introductory paragraphs */}
         <motion.div
           className="font-inter leading-[1.4em] max-w-4xl space-y-4 sm:space-y-6 
-            text-xs md:text-sm xl:text-base text-[#454545]"
+            text-xs md:text-sm xl:text-base text-[#474545]"
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"

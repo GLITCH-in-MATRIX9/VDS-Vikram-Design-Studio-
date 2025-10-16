@@ -1,35 +1,38 @@
-import { BrowserRouter, useLocation } from 'react-router-dom';
-import Routes from './routes';
-import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import { AuthProvider } from './context/authContext';
-import React, { useState } from 'react';
-import LoadingScreen from './components/LoadingScreen';
-import SectionDivider from './components/SectionDivider';
+import { BrowserRouter, useLocation } from "react-router-dom";
+import Routes from "./routes";
+import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
+import { AuthProvider } from "./context/authContext";
+import { FilterProvider } from "./context/filterContext";
+import React, { useState } from "react";
+import LoadingScreen from "./components/LoadingScreen";
+import SectionDivider from "./components/SectionDivider";
 
 // ✅ Import Toastify
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
     <AuthProvider>
-      <BrowserRouter>
-        <AppContent />
-        {/* ✅ ToastContainer at root */}
-        <ToastContainer 
-          position="top-right" 
-          autoClose={3000} 
-          hideProgressBar={false} 
-          newestOnTop={true} 
-          closeOnClick 
-          rtl={false} 
-          pauseOnFocusLoss 
-          draggable 
-          pauseOnHover 
-          theme="colored"
-        />
-      </BrowserRouter>
+      <FilterProvider>
+        <BrowserRouter>
+          <AppContent />
+          {/* ✅ ToastContainer at root */}
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={true}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="colored"
+          />
+        </BrowserRouter>
+      </FilterProvider>
     </AuthProvider>
   );
 }
@@ -38,9 +41,9 @@ function AppContent() {
   const location = useLocation();
   const [isLoading, setIsLoading] = useState(true);
 
-  const isAdmin = location.pathname.startsWith('/admin');
-  const isContact = location.pathname.startsWith('/contact');
-  const isCareer = location.pathname.startsWith('/career');
+  const isAdmin = location.pathname.startsWith("/admin");
+  const isContact = location.pathname.startsWith("/contact");
+  const isCareer = location.pathname.startsWith("/career");
 
   const showNavbar = !isAdmin;
   const showFooter = !isAdmin && !isCareer;
