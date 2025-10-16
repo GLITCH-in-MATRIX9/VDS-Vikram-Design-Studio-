@@ -117,9 +117,9 @@ const Navbar = () => {
               <img
                 src={logo}
                 alt="Vikram Design Studio Logo"
-                className="h-6 md:h-12 w-auto"
+                className="h-8 md:h-12 w-auto"
               />
-              <span className="text-[#454545] leading-[1em] text-xs md:text-xl lg:text-2xl font-humanist">
+              <span className="text-[#454545] leading-[1em] hidden md:block text-xs md:text-xl lg:text-2xl font-humanist">
                 Vikram Design Studio
               </span>
             </Link>
