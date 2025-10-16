@@ -113,15 +113,15 @@ const AdminHome = () => {
         </div>
       </div>
 
-      <div className="flex flex-col lg:flex-row gap-6">
+      <div className="flex flex-col xl:flex-row gap-6">
         {isStatsLoading ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 flex-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-6 flex-1">
             {[...Array(6)].map((_, i) => (
               <StatCardSkeleton key={i} />
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-6 flex-1">
+          <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-2 gap-6 flex-1">
             <StatCard value={stats.totalProjects} label="Total Projects" />
             <StatCard value={stats.liveProjects} label="Live Projects" />
             <StatCard
@@ -140,7 +140,7 @@ const AdminHome = () => {
           </div>
         )}
 
-        <div className="w-full lg:w-1/3 border rounded-lg p-6 shadow-sm min-h-[250px] border-[#7E797A]">
+        <div className="w-full xl:w-1/3 border rounded-lg p-6 shadow-sm min-h-[250px] border-[#7E797A]">
           <h2 className={`font-semibold mb-2 uppercase ${textColor}`}>
             Edit History
           </h2>

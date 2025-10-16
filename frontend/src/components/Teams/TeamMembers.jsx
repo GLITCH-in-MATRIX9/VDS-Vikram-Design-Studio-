@@ -44,9 +44,9 @@ const itemVariants = {
 
 const TeamMembers = () => {
   return (
-    <div className="bg-[#f2efee] min-h-screen px-4 md:px-8 lg:px-20 z py-12 md:py-20">
+    <div className="bg-[#f2efee] min-h-screen px-4 md:px-8 xl:px-20 z py-12 md:py-20">
       <motion.h1
-        className="font-sora font-semibold text-[28px] md:text-[40px] lg:text-[56px] leading-[36px] md:leading-[48px] lg:leading-[64px] tracking-[-0.01em] text-[#3E3C3C] mb-12 lg:mb-20"
+        className="font-sora font-semibold text-[28px] md:text-[40px] xl:text-[56px] leading-[36px] md:leading-[48px] xl:leading-[64px] tracking-[-0.01em] text-[#3E3C3C] mb-12 xl:mb-20"
         initial={{ opacity: 0, y: -20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}

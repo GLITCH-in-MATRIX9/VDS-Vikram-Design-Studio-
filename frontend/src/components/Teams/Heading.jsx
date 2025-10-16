@@ -19,16 +19,16 @@ const itemVariants = {
 const Heading = () => {
   return (
     <motion.div
-      className="grid grid-cols-1 lg:grid-cols-3 gap-20 text-[#474545] px-4 md:px-8 lg:px-20 py-8 md:py-12 lg:py-20"
+      className="grid grid-cols-1 xl:grid-cols-3 gap-20 text-[#474545] px-4 md:px-8 xl:px-20 py-8 md:py-12 xl:py-20"
       variants={containerVariants}
       initial="hidden"
       animate="visible"
     >
       {/* Left Content */}
-      <div className="lg:col-span-2 space-y-6">
+      <div className="xl:col-span-2 space-y-6">
         {/* Heading */}
         <motion.h1
-          className="font-sora text-[#3E3C3C] font-semibold text-[40px] md:text-[56px] lg:text-[72px] leading-[48px] md:leading-[64px] lg:leading-[80px] tracking-[-0.01em] uppercase"
+          className="font-sora text-[#3E3C3C] font-semibold text-[40px] md:text-[56px] xl:text-[72px] leading-[48px] md:leading-[64px] xl:leading-[80px] tracking-[-0.01em] uppercase"
           variants={itemVariants}
         >
           TEAM

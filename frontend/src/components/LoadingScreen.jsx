@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import React, { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const words = [
   ["V", " ", "D", " ", "S"],
@@ -49,7 +49,7 @@ const LoadingScreen = ({ onAnimationComplete }) => {
     if (showFinalLogo) {
       // First, let the logo shrink and move to the top corner.
       const cornerAnimationDuration = 1000; // This is how long the logo takes to move.
-      const fadeOutDuration = 1000;        // This is how long the black screen fades out.
+      const fadeOutDuration = 1000; // This is how long the black screen fades out.
 
       // After all the animations are done, let's show the main app content.
       const totalAnimationTime = cornerAnimationDuration + fadeOutDuration;
@@ -79,9 +79,9 @@ const LoadingScreen = ({ onAnimationComplete }) => {
           {showFinalLogo ? (
             // The logo shrinks and slides to the top-left corner, like a curtain call.
             <motion.h1
-              className="font-sora text-white text-6xl md:text-8xl lg:text-9xl tracking-wider uppercase"
+              className="font-sora text-white text-6xl md:text-8xl xl:text-9xl tracking-wider uppercase"
               initial={{ opacity: 0, scale: 1, x: 0, y: 0 }}
-              animate={{ opacity: 1, scale: 0.2, x: '-45vw', y: '-45vh' }}
+              animate={{ opacity: 1, scale: 0.2, x: "-45vw", y: "-45vh" }}
               transition={{ duration: 1, ease: "easeInOut" }}
             >
               V D S
@@ -90,14 +90,18 @@ const LoadingScreen = ({ onAnimationComplete }) => {
             // Each word animates in, letter by letter, for a lively intro.
             <motion.h1
               key={currentWordIndex}
-              className="font-sora text-white text-6xl md:text-8xl lg:text-9xl tracking-wider uppercase"
+              className="font-sora text-white text-6xl md:text-8xl xl:text-9xl tracking-wider uppercase"
               variants={containerVariants}
               initial="hidden"
               animate="visible"
             >
               <AnimatePresence>
                 {words[currentWordIndex].map((letter, index) => (
-                  <motion.span key={index} variants={letterVariants} className="inline-block">
+                  <motion.span
+                    key={index}
+                    variants={letterVariants}
+                    className="inline-block"
+                  >
                     {letter}
                   </motion.span>
                 ))}

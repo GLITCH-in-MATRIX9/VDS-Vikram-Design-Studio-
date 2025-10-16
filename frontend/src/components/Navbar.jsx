@@ -105,7 +105,7 @@ const Navbar = () => {
   return (
     <>
       {/* Main Navbar */}
-      <nav className="w-full px-4 md:px-8 lg:px-20 bg-[#f2efee]  relative z-50">
+      <nav className="w-full px-4 md:px-8 xl:px-20 bg-[#f2efee]  relative z-50">
         <div className="  mx-auto py-4 flex justify-between items-center">
           {/* Left - Logo */}
           <div className="flex items-center space-x-3">
@@ -119,7 +119,7 @@ const Navbar = () => {
                 alt="Vikram Design Studio Logo"
                 className="h-8 md:h-12 w-auto"
               />
-              <span className="text-[#454545] leading-[1em] hidden md:block text-xs md:text-xl lg:text-2xl font-humanist">
+              <span className="text-[#454545] leading-[1em] hidden md:block text-xs md:text-xl xl:text-2xl font-humanist">
                 Vikram Design Studio
               </span>
             </Link>
@@ -273,7 +273,7 @@ const Navbar = () => {
                         category?.toUpperCase()
                       ? "text-[#474545]"
                       : " text-[#BEBBBC]"
-                  } text-xs lg:text-sm `}
+                  } text-xs xl:text-sm `}
                 >
                   <img
                     src={CategorySelectedIcon}
@@ -318,7 +318,7 @@ const Navbar = () => {
                         : option
                     );
                   }}
-                  className={`px-3 py-1 text-[10px] rounded-md cursor-pointer transition uppercase lg:text-xs flex gap-1 items-center ${
+                  className={`px-3 py-1 text-[10px] rounded-md cursor-pointer transition uppercase xl:text-xs flex gap-1 items-center ${
                     selectedSubCategory === null
                       ? "text-[#474545]"
                       : selectedSubCategory?.toUpperCase() ===

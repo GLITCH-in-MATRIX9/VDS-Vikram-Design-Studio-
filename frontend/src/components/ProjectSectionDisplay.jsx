@@ -9,7 +9,7 @@ const ProjectSectionDisplay = ({ sections }) => {
         return (
           <div
             key={index}
-            className="flex-shrink-0 flex flex-col gap-4 items-center px-2 lg:px-6 justify-center"
+            className="flex-shrink-0 flex flex-col gap-4 items-center px-2 xl:px-6 justify-center"
             // Removed inline width here. Each block will have its own width defined inside.
           >
             {section.type === "text" ? (

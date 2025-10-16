@@ -1,12 +1,18 @@
-import React from 'react';
-import { FaYoutube, FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
-import logo from '../../assets/navbar/LogoIcon.png';
+import React from "react";
+import {
+  FaYoutube,
+  FaFacebookF,
+  FaTwitter,
+  FaInstagram,
+  FaLinkedinIn,
+} from "react-icons/fa";
+import logo from "../../assets/navbar/LogoIcon.png";
 
 const CareerFooter = () => {
   return (
     <footer className="bg-white border-t border-gray-200 text-gray-700">
       {/* Logo and Newsletter */}
-      <div className="px-6 md:px-12 lg:px-24 py-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+      <div className="px-6 md:px-12 xl:px-24 py-8 grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
         <div className="flex items-center space-x-3">
           <img src={logo} alt="Logo" className="h-8 w-auto" />
           <span className="text-md font-medium">Vikram Design Studio</span>
@@ -24,7 +30,7 @@ const CareerFooter = () => {
       </div>
 
       {/* Main Footer Content */}
-      <div className="px-6 md:px-12 lg:px-24 py-8 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
+      <div className="px-6 md:px-12 xl:px-24 py-8 grid grid-cols-2 md:grid-cols-4 gap-8 text-sm">
         {/* Column One */}
         <div>
           <h4 className="font-semibold mb-2">Column One</h4>
@@ -72,7 +78,7 @@ const CareerFooter = () => {
       </div>
 
       {/* Bottom Footer Bar */}
-      <div className="px-6 md:px-12 lg:px-24 py-6 border-t border-gray-200 text-sm flex flex-col md:flex-row justify-between items-center">
+      <div className="px-6 md:px-12 xl:px-24 py-6 border-t border-gray-200 text-sm flex flex-col md:flex-row justify-between items-center">
         <p className="mb-4 md:mb-0">CompanyName © 202X. All rights reserved.</p>
         <div className="flex space-x-4">
           <span>ELEVEN</span>
