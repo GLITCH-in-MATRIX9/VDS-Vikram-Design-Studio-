@@ -10,19 +10,21 @@ import {
 } from "../controllers/project.controller";
 import { upload } from "../middlewares/upload";
 import { protect, requireRole } from "../middlewares/auth.middleware";
+import { validateBase64Content, cleanBase64Response } from "../middlewares/base64Validator";
 
 const router = Router();
 
 // Public routes
-router.get("/", getProjects);
-router.get("/search", searchProjects);
-router.get("/:id", getProjectById);
+router.get("/", cleanBase64Response, getProjects);
+router.get("/search", cleanBase64Response, searchProjects);
+router.get("/:id", cleanBase64Response, getProjectById);
 
 // Protected routes
 router.post(
   "/",
   protect,
   requireRole(["admin", "super_admin"]),
+  validateBase64Content,
   upload.fields([
     { name: "previewImage", maxCount: 1 },  
     { name: "sections", maxCount: 10 },
@@ -76,6 +78,7 @@ router.put(
   "/:id",
   protect,
   requireRole(["admin", "super_admin"]),
+  validateBase64Content,
   upload.fields([
     { name: "previewImage", maxCount: 1 },
     { name: "sections", maxCount: 10 },

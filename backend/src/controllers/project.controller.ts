@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { Project, IProjectSection } from "../models/Project.model";
 import cloudinary from "../config/cloudinary";
+import { isBase64Image, convertBase64ToCloudinary } from "../utils/imageProcessor";
 
 // ---------------- CREATE PROJECT ----------------
 export const createProject = async (req: Request, res: Response) => {
@@ -47,7 +48,7 @@ export const createProject = async (req: Request, res: Response) => {
         : [];
 
     // Handle section files uploaded via direct upload middleware
-    const updatedSections = parsedSections.map((sec: any, index: number) => {
+    const updatedSections = await Promise.all(parsedSections.map(async (sec: any, index: number) => {
       // Check if there are uploaded section files
       const sectionFile = files?.sections?.[index];
       if (sectionFile) {
@@ -56,9 +57,28 @@ export const createProject = async (req: Request, res: Response) => {
           content: sectionFile.url 
         };
       }
+      
+      // ⚠️ CRITICAL: Handle base64 images by converting to Cloudinary
+      if (sec.content && typeof sec.content === 'string' && isBase64Image(sec.content)) {
+        console.log('🔄 Converting base64 image to Cloudinary...');
+        try {
+          const result = await convertBase64ToCloudinary(
+            sec.content,
+            `VDS_FOLDER/${name.replace(/[^a-zA-Z0-9]/g, '_')}`
+          );
+          return {
+            type: sec.type || 'image',
+            content: result.url
+          };
+        } catch (error: any) {
+          console.error('❌ Failed to convert base64 image:', error);
+          throw new Error(`Failed to process image: ${error.message}`);
+        }
+      }
+      
       // If no file uploaded, use existing content (already a URL)
       return sec;
-    });
+    }));
 
     const project = new Project({
       name,
@@ -98,7 +118,10 @@ export const getProjects = async (_req: Request, res: Response) => {
       { allowDiskUse: true } // enable disk-based sorting
     );
 
-    return res.status(200).json(projects);
+    // Return projects as-is since base64 images have been migrated to Cloudinary URLs
+    const optimizedProjects = projects;
+
+    return res.status(200).json(optimizedProjects);
   } catch (err: any) {
     console.error("Error fetching projects:", err); // full backend log
     return res
@@ -168,7 +191,7 @@ export const updateProject = async (req: Request, res: Response) => {
     const files = req.files as any;
 
     // Handle section files uploaded via direct upload middleware
-    const updatedSections = parsedSections.map((sec: any, index: number) => {
+    const updatedSections = await Promise.all(parsedSections.map(async (sec: any, index: number) => {
       // Check if there are uploaded section files
       const sectionFile = files?.sections?.[index];
       if (sectionFile) {
@@ -177,9 +200,28 @@ export const updateProject = async (req: Request, res: Response) => {
           content: sectionFile.url 
         };
       }
+      
+      // ⚠️ CRITICAL: Handle base64 images by converting to Cloudinary
+      if (sec.content && typeof sec.content === 'string' && isBase64Image(sec.content)) {
+        console.log('🔄 Converting base64 image to Cloudinary...');
+        try {
+          const result = await convertBase64ToCloudinary(
+            sec.content,
+            `VDS_FOLDER/${name.replace(/[^a-zA-Z0-9]/g, '_')}`
+          );
+          return {
+            type: sec.type || 'image',
+            content: result.url
+          };
+        } catch (error: any) {
+          console.error('❌ Failed to convert base64 image:', error);
+          throw new Error(`Failed to process image: ${error.message}`);
+        }
+      }
+      
       // If no file uploaded, use existing content (already a URL)
       return sec;
-    });
+    }));
 
     const existing = await Project.findById(req.params.id);
     if (!existing) return res.status(404).json({ message: "Project not found" });

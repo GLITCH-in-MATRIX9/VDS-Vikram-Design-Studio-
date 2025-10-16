@@ -7,7 +7,14 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/server.js",
     "start:optimized": "node --max-old-space-size=512 --expose-gc dist/server.js",
-    "start:production": "NODE_ENV=production node --max-old-space-size=512 --expose-gc dist/server.js"
+    "start:production": "NODE_ENV=production node --max-old-space-size=512 --expose-gc dist/server.js",
+    "migrate:base64": "ts-node src/scripts/migrateBase64Images.ts",
+    "migrate:base64:check": "node run-migration.js",
+    "test:cloudinary": "node test-cloudinary.js",
+    "verify:migration": "node verify-migration.js",
+    "check:base64": "node check-remaining-base64.js",
+    "clean:base64": "node force-clean-base64.js",
+    "deep:clean": "node deep-clean-base64.js"
   },
   "dependencies": {
     "@types/nodemailer": "^7.0.1",
