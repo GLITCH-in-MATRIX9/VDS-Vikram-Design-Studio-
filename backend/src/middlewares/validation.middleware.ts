@@ -1,80 +1,106 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response, NextFunction } from "express";
 
-export const validateProject = (req: Request, res: Response, next: NextFunction) => {
-  const { name, location, status, category, client, collaborators, projectTeam, keyDate } = req.body;
+export const validateProject = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const {
+    name,
+    location,
+    status,
+    category,
+    client,
+    collaborators,
+    projectTeam,
+    keyDate,
+  } = req.body;
 
   const errors: string[] = [];
 
   if (!name || name.trim().length === 0) {
-    errors.push('Project name is required');
+    errors.push("Project name is required");
   }
 
   if (!location || location.trim().length === 0) {
-    errors.push('Location is required');
+    errors.push("Location is required");
   }
 
-  if (!status || !['Ongoing', 'Completed', 'On Hold'].includes(status)) {
-    errors.push('Status must be one of: Ongoing, Completed, On Hold');
+  if (
+    !status ||
+    !["ON-SITE", "DESIGN STAGE", "COMPLETED", "UNBUILT"].includes(
+      status.toUpperCase()
+    )
+  ) {
+    errors.push(
+      "Status must be one of: ON-SITE, DESIGN STAGE, COMPLETED, UNBUILT"
+    );
   }
 
   if (!category || category.trim().length === 0) {
-    errors.push('Category is required');
+    errors.push("Category is required");
   }
 
   if (!client || client.trim().length === 0) {
-    errors.push('Client is required');
+    errors.push("Client is required");
   }
 
   if (!collaborators || collaborators.trim().length === 0) {
-    errors.push('Collaborators is required');
+    errors.push("Collaborators is required");
   }
 
   if (!projectTeam || projectTeam.trim().length === 0) {
-    errors.push('Project team is required');
+    errors.push("Project team is required");
   }
 
   if (!keyDate || keyDate.trim().length === 0) {
-    errors.push('Key date is required');
+    errors.push("Key date is required");
   }
 
   // Validate tags if provided
   if (req.body.tags) {
     try {
-      const tags = typeof req.body.tags === 'string' ? JSON.parse(req.body.tags) : req.body.tags;
+      const tags =
+        typeof req.body.tags === "string"
+          ? JSON.parse(req.body.tags)
+          : req.body.tags;
       if (!Array.isArray(tags)) {
-        errors.push('Tags must be an array');
+        errors.push("Tags must be an array");
       }
     } catch (error) {
-      errors.push('Invalid tags format');
+      errors.push("Invalid tags format");
     }
   }
 
   // Validate sections if provided
   if (req.body.sections) {
     try {
-      const sections = typeof req.body.sections === 'string' ? JSON.parse(req.body.sections) : req.body.sections;
+      const sections =
+        typeof req.body.sections === "string"
+          ? JSON.parse(req.body.sections)
+          : req.body.sections;
       if (!Array.isArray(sections)) {
-        errors.push('Sections must be an array');
+        errors.push("Sections must be an array");
       } else {
         for (const section of sections) {
-          if (!section.type || !['text', 'image'].includes(section.type)) {
-            errors.push('Each section must have a valid type (text or image)');
+          if (!section.type || !["text", "image"].includes(section.type)) {
+            errors.push("Each section must have a valid type (text or image)");
             break;
           }
           if (!section.content || section.content.trim().length === 0) {
-            errors.push('Each section must have content');
+            errors.push("Each section must have content");
             break;
           }
         }
       }
     } catch (error) {
-      errors.push('Invalid sections format');
+      errors.push("Invalid sections format");
     }
   }
 
   if (errors.length > 0) {
     return res.status(400).json({
-      message: 'Validation failed',
+      message: "Validation failed",
       errors,
     });
   }
@@ -82,26 +108,30 @@ export const validateProject = (req: Request, res: Response, next: NextFunction)
   next();
 };
 
-export const validateAuth = (req: Request, res: Response, next: NextFunction) => {
+export const validateAuth = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { email, password } = req.body;
 
   const errors: string[] = [];
 
   if (!email || email.trim().length === 0) {
-    errors.push('Email is required');
+    errors.push("Email is required");
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    errors.push('Email must be valid');
+    errors.push("Email must be valid");
   }
 
   if (!password || password.trim().length === 0) {
-    errors.push('Password is required');
+    errors.push("Password is required");
   } else if (password.length < 6) {
-    errors.push('Password must be at least 6 characters');
+    errors.push("Password must be at least 6 characters");
   }
 
   if (errors.length > 0) {
     return res.status(400).json({
-      message: 'Validation failed',
+      message: "Validation failed",
       errors,
     });
   }
@@ -109,30 +139,34 @@ export const validateAuth = (req: Request, res: Response, next: NextFunction) =>
   next();
 };
 
-export const validateRegister = (req: Request, res: Response, next: NextFunction) => {
+export const validateRegister = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { email, password, name } = req.body;
 
   const errors: string[] = [];
 
   if (!email || email.trim().length === 0) {
-    errors.push('Email is required');
+    errors.push("Email is required");
   } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    errors.push('Email must be valid');
+    errors.push("Email must be valid");
   }
 
   if (!password || password.trim().length === 0) {
-    errors.push('Password is required');
+    errors.push("Password is required");
   } else if (password.length < 6) {
-    errors.push('Password must be at least 6 characters');
+    errors.push("Password must be at least 6 characters");
   }
 
   if (name && name.trim().length === 0) {
-    errors.push('Name cannot be empty');
+    errors.push("Name cannot be empty");
   }
 
   if (errors.length > 0) {
     return res.status(400).json({
-      message: 'Validation failed',
+      message: "Validation failed",
       errors,
     });
   }

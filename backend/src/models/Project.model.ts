@@ -9,7 +9,8 @@ export interface IProject extends Document {
   name: string; // Project Name (frontend field)
   location: string;
   year?: string;
-  status: 'ONGOING' | 'COMPLETED' | 'IN DESIGN';
+  status: 'On-site' | 'Design stage' | 'Completed' | 'Unbuilt';
+
   category: string;
   subCategory?: string;
   client: string;
@@ -38,7 +39,7 @@ const ProjectSchema = new Schema<IProject>(
     name: { type: String, required: true, trim: true },
     location: { type: String, required: true, trim: true },
     year: { type: String },
-    status: { type: String, enum: ['ONGOING', 'COMPLETED', 'IN DESIGN'], required: true },
+    status: { type: String, enum: ['On-site', 'Design stage', 'Completed', 'Unbuilt'], required: true },
     category: { type: String, required: true, trim: true },
     subCategory: { type: String, trim: true },
     client: { type: String, required: true, trim: true },

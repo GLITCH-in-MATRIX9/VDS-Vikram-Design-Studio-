@@ -3,7 +3,7 @@ declare module 'google-recaptcha' {
     secret: string;
   }
 
-  interface RecaptchaResponse {
+  export interface RecaptchaResponse {
     success: boolean;
     'error-codes'?: string[];
     score?: number;
@@ -11,8 +11,12 @@ declare module 'google-recaptcha' {
 
   class Recaptcha {
     constructor(options: RecaptchaOptions);
-    verify(token: string, remoteip: string, callback: (error: any, data: RecaptchaResponse) => void): void;
+    verify(
+      token: string,
+      remoteip: string,
+      callback: (error: any, data: RecaptchaResponse) => void
+    ): void;
   }
 
-  export = Recaptcha;
+  export default Recaptcha;
 }

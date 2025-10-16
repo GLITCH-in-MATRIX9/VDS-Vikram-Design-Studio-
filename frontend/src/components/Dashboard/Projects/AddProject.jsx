@@ -156,6 +156,18 @@ const AddProject = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    // 🚨 FIX: Explicitly handle the 'year' field to ensure it is stored as intended
+    if (name === "year") {
+      setFormData((prev) => ({
+        ...prev,
+        // Store the value as a number-string directly. 
+        // The empty string check is important to allow the user to clear the field.
+        [name]: value,
+      }));
+      return; // Exit early to skip the uppercase logic
+    }
+
     const upperCaseFields = [
       "name",
       "client",
@@ -165,6 +177,8 @@ const AddProject = () => {
       "status",
       "subCategory",
     ];
+
+    // Apply uppercase logic for other string fields
     setFormData((prev) => ({
       ...prev,
       [name]: upperCaseFields.includes(name) ? value.toUpperCase() : value,
@@ -401,11 +415,10 @@ const AddProject = () => {
                         e.preventDefault();
                         handleLeaderToggle(leader);
                       }}
-                      className={`p-2 cursor-pointer text-sm flex justify-between items-center ${
-                        formData.projectLeaders.includes(leader)
-                          ? "bg-[#F1E4DF] font-semibold"
-                          : "hover:bg-gray-100"
-                      }`}
+                      className={`p-2 cursor-pointer text-sm flex justify-between items-center ${formData.projectLeaders.includes(leader)
+                        ? "bg-[#F1E4DF] font-semibold"
+                        : "hover:bg-gray-100"
+                        }`}
                     >
                       {leader}
                       {formData.projectLeaders.includes(leader) && (
@@ -444,11 +457,13 @@ const AddProject = () => {
                 className="border p-2 rounded w-full border-[#C9BEB8]"
                 required
               >
-                <option value="">Select Status *</option>
-                <option value="ONGOING">ONGOING</option>
+                <option value="ON-SITE">ON-SITE</option>
+                <option value="DESIGN STAGE">DESIGN STAGE</option>
                 <option value="COMPLETED">COMPLETED</option>
-                <option value="IN DESIGN">IN DESIGN</option>
+                <option value="UNBUILT">UNBUILT</option>
+
               </select>
+
               <input
                 type="number"
                 name="year"
@@ -620,10 +635,9 @@ const AddProject = () => {
                             <h3 className="font-medium text-[#454545]">
                               {section.type === "text"
                                 ? "Text Section"
-                                : `${
-                                    section.type.charAt(0).toUpperCase() +
-                                    section.type.slice(1)
-                                  } Section`}
+                                : `${section.type.charAt(0).toUpperCase() +
+                                section.type.slice(1)
+                                } Section`}
                             </h3>
                             <div className="flex gap-2 items-center">
                               <button

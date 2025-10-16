@@ -109,7 +109,7 @@ const Home = () => {
       </div>
     );
   }
-  console.log(filteredProjects);
+  // console.log(filteredProjects);
   return (
     <ReactLenis root options={lenisOptions}>
       <motion.div

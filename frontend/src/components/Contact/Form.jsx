@@ -1,14 +1,16 @@
 import React from "react";
 import { motion } from "framer-motion";
 import { LuSend } from "react-icons/lu";
+import ReCAPTCHA from "react-google-recaptcha";
+
+// ✅ Load Google reCAPTCHA site key securely from .env
+const SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY; 
 
 const containerVariants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: {
-      staggerChildren: 0.1,
-    },
+    transition: { staggerChildren: 0.1 },
   },
 };
 
@@ -25,45 +27,47 @@ const Form = () => {
     mobileNumber: "",
     emailAddress: "",
     message: "",
-    captcha: false,
+    recaptchaToken: "",
   });
 
   const [isFilled, setIsFilled] = React.useState(false);
 
+  // ✅ Enable submit only when required fields + captcha are filled
   React.useEffect(() => {
     setIsFilled(
-      formData.firstName !== "" &&
-        formData.mobileNumber !== "" &&
-        formData.emailAddress !== "" &&
-        formData.message !== "" &&
-        formData.captcha
+      formData.firstName &&
+        formData.mobileNumber &&
+        formData.emailAddress &&
+        formData.message &&
+        formData.recaptchaToken
     );
   }, [formData]);
 
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: type === "checkbox" ? checked : value,
-    }));
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  // ✅ Captures the token returned by Google reCAPTCHA
+  const handleRecaptchaChange = (token) => {
+    setFormData((prev) => ({ ...prev, recaptchaToken: token }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const API_ENDPOINT = "endpoint goes here";
+    const API_ENDPOINT = "/api/contact"; // <-- your backend endpoint
 
     try {
       const response = await fetch(API_ENDPOINT, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
+      const result = await response.json();
+
       if (response.ok) {
-        console.log("Form submitted successfully!");
         alert("Thank you for your message!");
         setFormData({
           firstName: "",
@@ -72,14 +76,13 @@ const Form = () => {
           mobileNumber: "",
           emailAddress: "",
           message: "",
-          captcha: false,
+          recaptchaToken: "",
         });
       } else {
-        console.error("Form submission failed!");
-        alert("Something went wrong. Please try again.");
+        alert(result.message || "Something went wrong. Please try again.");
       }
-    } catch (error) {
-      console.error("An error occurred:", error);
+    } catch (err) {
+      console.error("Error:", err);
       alert("An error occurred. Please check your connection.");
     }
   };
@@ -104,7 +107,8 @@ const Form = () => {
         className="flex flex-col gap-4 xl:gap-6 space-y-6 w-[90%] md:w-[542px] xl:w-[616px] mx-auto text-xs md:text-sm xl:text-base font-inter text-[#474545]"
         variants={containerVariants}
       >
-        <div className="my-0 grid grid-cols-2 gap-x-3 md:gap-x-4">
+        {/* First + Last Name */}
+        <div className="grid grid-cols-2 gap-x-3 md:gap-x-4">
           <motion.div variants={itemVariants}>
             <input
               type="text"
@@ -113,7 +117,7 @@ const Form = () => {
               value={formData.firstName}
               placeholder="First Name *"
               required
-              className="block w-full px-4 py-3 bg-[#F9F8F7] outline-[0.5px] rounded-2xl focus:outline-1 outline-[#7E797A] focus:outline-[#474545]"
+              className="block w-full px-4 py-3 bg-[#F9F8F7] rounded-2xl outline-[#7E797A] focus:outline-[#474545]"
             />
           </motion.div>
           <motion.div variants={itemVariants}>
@@ -123,23 +127,25 @@ const Form = () => {
               onChange={handleChange}
               value={formData.lastName}
               placeholder="Last Name"
-              className="block w-full px-4 py-3 bg-[#F9F8F7] outline-[0.5px] rounded-2xl focus:outline-1 outline-[#7E797A] focus:outline-[#474545]"
+              className="block w-full px-4 py-3 bg-[#F9F8F7] rounded-2xl outline-[#7E797A] focus:outline-[#474545]"
             />
           </motion.div>
         </div>
 
-        <motion.div className="my-0" variants={itemVariants}>
+        {/* Company */}
+        <motion.div variants={itemVariants}>
           <input
             type="text"
             name="company"
             onChange={handleChange}
             value={formData.company}
             placeholder="Company"
-            className="w-full px-4 py-3 bg-[#F9F8F7] outline-[0.5px] rounded-2xl focus:outline-1 outline-[#7E797A] focus:outline-[#474545]"
+            className="w-full px-4 py-3 bg-[#F9F8F7] rounded-2xl outline-[#7E797A] focus:outline-[#474545]"
           />
         </motion.div>
 
-        <motion.div className="my-0" variants={itemVariants}>
+        {/* Mobile */}
+        <motion.div variants={itemVariants}>
           <input
             type="tel"
             name="mobileNumber"
@@ -147,11 +153,12 @@ const Form = () => {
             value={formData.mobileNumber}
             placeholder="Mobile Number *"
             required
-            className="w-full px-4 py-3 bg-[#F9F8F7] outline-[0.5px] rounded-2xl focus:outline-1 outline-[#7E797A] focus:outline-[#474545]"
+            className="w-full px-4 py-3 bg-[#F9F8F7] rounded-2xl outline-[#7E797A] focus:outline-[#474545]"
           />
         </motion.div>
 
-        <motion.div className="my-0" variants={itemVariants}>
+        {/* Email */}
+        <motion.div variants={itemVariants}>
           <input
             type="email"
             name="emailAddress"
@@ -159,11 +166,12 @@ const Form = () => {
             value={formData.emailAddress}
             placeholder="Email Address *"
             required
-            className="w-full px-4 py-3 bg-[#F9F8F7] outline-[0.5px] rounded-2xl focus:outline-1 outline-[#7E797A] focus:outline-[#474545]"
+            className="w-full px-4 py-3 bg-[#F9F8F7] rounded-2xl outline-[#7E797A] focus:outline-[#474545]"
           />
         </motion.div>
 
-        <motion.div className="my-0" variants={itemVariants}>
+        {/* Message */}
+        <motion.div variants={itemVariants}>
           <textarea
             name="message"
             onChange={handleChange}
@@ -171,30 +179,21 @@ const Form = () => {
             placeholder="Message *"
             rows="6"
             required
-            className="w-full px-4 py-3 bg-[#F9F8F7] outline-[0.5px] rounded-2xl focus:outline-1 outline-[#7E797A] focus:outline-[#474545]"
+            className="w-full px-4 py-3 bg-[#F9F8F7] rounded-2xl outline-[#7E797A] focus:outline-[#474545]"
           ></textarea>
         </motion.div>
 
-        <motion.div
-          className="flex flex-row items-start justify-between gap-4 my-0"
-          variants={itemVariants}
-        >
-          <div className="flex items-center my-0">
-            <input
-              id="captcha"
-              type="checkbox"
-              onChange={handleChange}
-              name="captcha"
-              checked={formData.captcha}
-              className="w-4 h-4 bg-[#474545] text-[#474545] rounded-0"
-            />
-            <label htmlFor="captcha" className="ml-2 text-sm text-gray-600">
-              Captcha
-            </label>
-          </div>
+        {/* ✅ Google reCAPTCHA */}
+        <motion.div className="flex justify-center" variants={itemVariants}>
+          <ReCAPTCHA sitekey={SITE_KEY} onChange={handleRecaptchaChange} />
+        </motion.div>
+
+        {/* Submit Button */}
+        <motion.div className="flex justify-center" variants={itemVariants}>
           <button
             type="submit"
-            className={`flex items-center gap-1 ${
+            disabled={!isFilled}
+            className={`flex items-center gap-1 justify-center ${
               isFilled ? "bg-[#474545]" : "bg-[#7E797A] cursor-not-allowed"
             } font-medium rounded-lg px-4 py-2 uppercase text-white text-xs md:text-sm xl:text-base`}
           >
