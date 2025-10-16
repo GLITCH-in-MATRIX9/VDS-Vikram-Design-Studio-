@@ -4,7 +4,7 @@
  */
 import mongoose from 'mongoose';
 import { Project } from '../models/Project.model';
-import { connectDB } from '../config/db';
+import  connectDB from '../config/db';
 
 const cleanBase64Images = async () => {
   try {
