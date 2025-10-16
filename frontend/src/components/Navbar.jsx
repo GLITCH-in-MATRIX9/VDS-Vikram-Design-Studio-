@@ -42,6 +42,7 @@ const filterOptions = {
   Residential: [
     "Staff quarters",
     "Private Villas",
+    "Private Apartments",
     "Housing",
     "Hostels",
     "Guest Houses",

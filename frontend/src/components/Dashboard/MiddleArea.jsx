@@ -86,6 +86,7 @@ const MiddleArea = ({ onProjectClick, filterState, onFilterChange }) => {
     Residential: [
       "Staff quarters",
       "Private Villas",
+      "Private Apartments",
       "Housing",
       "Hostels",
       "Guest Houses",

@@ -36,6 +36,7 @@ const filterOptions = {
   RESIDENTIAL: [
     "STAFF QUARTERS",
     "PRIVATE VILLAS",
+    "PRIVATE APARTMENTS",
     "HOUSING",
     "HOSTELS",
     "GUEST HOUSES",
