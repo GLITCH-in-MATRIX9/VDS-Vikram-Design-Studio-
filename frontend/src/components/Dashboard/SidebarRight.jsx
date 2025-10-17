@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import projectApi from "../../services/projectApi";
-import { AuthContext } from "../../context/AuthContext"; // AuthContext import
+import { AuthContext } from "../../context/authContext";
 
 // Custom Confirmation Component for deletion
 const ConfirmDeletionToast = ({ closeToast, project, onDeleteConfirm }) => {
