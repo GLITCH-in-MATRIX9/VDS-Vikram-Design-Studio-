@@ -116,7 +116,7 @@ const Home = () => {
     setFilteredProjects(result);
   }, [projects, categoryContext, subCategoryContext, searchQuery]);
 
-  if (loading) return <LoadingScreen />;
+  // if (loading) return <LoadingScreen />;
 
   if (error)
     return (
@@ -145,7 +145,7 @@ const Home = () => {
         >
           {filteredProjects.length === 0 ? (
             <div className="text-center py-20">
-              <p className="text-gray-600 text-lg">No projects found.</p>
+              <p className="text-gray-600 text-lg"></p>
             </div>
           ) : (
             filteredProjects.map((project) => (

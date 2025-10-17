@@ -1,117 +1,69 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const words = [
-  ["V", " ", "D", " ", "S"],
-  ["ভ", " ", "D", " ", "স"],
-  ["V", " ", "র", " ", "S"],
-  ["V", " ", "D", " ", "S"],
-];
-
-const containerVariants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.15,
-      delayChildren: 0.2,
-    },
-  },
-};
-
-const letterVariants = {
-  hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } },
-};
-
-const LoadingScreen = ({ onAnimationComplete }) => {
-  const [currentWordIndex, setCurrentWordIndex] = useState(0);
-  const [showFinalLogo, setShowFinalLogo] = useState(false);
-  const [showLoadingScreen, setShowLoadingScreen] = useState(true);
+const WebsiteLoader = ({ onAnimationComplete }) => {
+  const [showLoader, setShowLoader] = useState(true);
+  const [overlayVisible, setOverlayVisible] = useState(false);
+  const [fadeVideo, setFadeVideo] = useState(false);
+  const finishedRef = useRef(false);
 
   useEffect(() => {
-    // Let's start by cycling through the animated words one by one.
-    if (currentWordIndex < words.length - 1) {
-      const timer = setTimeout(() => {
-        setCurrentWordIndex((prevIndex) => prevIndex + 1);
-      }, 1000);
-      return () => clearTimeout(timer);
-    } else {
-      // Now, let's reveal the final VDS logo after the word animation finishes.
-      const finalLogoTimer = setTimeout(() => {
-        setShowFinalLogo(true);
-      }, 1000);
-      return () => clearTimeout(finalLogoTimer);
-    }
-  }, [currentWordIndex]);
+    // Start overlay & video fade after 4 seconds
+    const overlayTimer = setTimeout(() => {
+      setOverlayVisible(true);
+      setFadeVideo(true);
+    }, 4000);
 
-  useEffect(() => {
-    if (showFinalLogo) {
-      // First, let the logo shrink and move to the top corner.
-      const cornerAnimationDuration = 1000; // This is how long the logo takes to move.
-      const fadeOutDuration = 1000; // This is how long the black screen fades out.
+    // Unmount loader after overlay finishes (4 + 1s)
+    const endTimer = setTimeout(() => {
+      if (!finishedRef.current) {
+        finishedRef.current = true;
+        setShowLoader(false);
+        if (typeof onAnimationComplete === "function") onAnimationComplete();
+      }
+    }, 5000); // total animation 5 seconds
 
-      // After all the animations are done, let's show the main app content.
-      const totalAnimationTime = cornerAnimationDuration + fadeOutDuration;
-      const completeTimer = setTimeout(() => {
-        onAnimationComplete();
-      }, totalAnimationTime);
-
-      // Fade out the loading screen after the logo animation finishes.
-      const fadeOutTimer = setTimeout(() => {
-        setShowLoadingScreen(false);
-      }, cornerAnimationDuration);
-
-      return () => {
-        clearTimeout(completeTimer);
-        clearTimeout(fadeOutTimer);
-      };
-    }
-  }, [showFinalLogo, onAnimationComplete]);
+    return () => {
+      clearTimeout(overlayTimer);
+      clearTimeout(endTimer);
+    };
+  }, [onAnimationComplete]);
 
   return (
     <AnimatePresence>
-      {showLoadingScreen && (
+      {showLoader && (
         <motion.div
-          className="fixed inset-0 flex items-center justify-center bg-black z-50 overflow-hidden"
-          exit={{ opacity: 0, transition: { duration: 1, ease: "easeOut" } }}
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black overflow-hidden"
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          transition={{ duration: 0.1 }}
         >
-          {showFinalLogo ? (
-            // The logo shrinks and slides to the top-left corner, like a curtain call.
-            <motion.h1
-              className="font-sora text-white text-6xl md:text-8xl xl:text-9xl tracking-wider uppercase"
-              initial={{ opacity: 0, scale: 1, x: 0, y: 0 }}
-              animate={{ opacity: 1, scale: 0.2, x: "-45vw", y: "-45vh" }}
-              transition={{ duration: 1, ease: "easeInOut" }}
-            >
-              V D S
-            </motion.h1>
-          ) : (
-            // Each word animates in, letter by letter, for a lively intro.
-            <motion.h1
-              key={currentWordIndex}
-              className="font-sora text-white text-6xl md:text-8xl xl:text-9xl tracking-wider uppercase"
-              variants={containerVariants}
-              initial="hidden"
-              animate="visible"
-            >
-              <AnimatePresence>
-                {words[currentWordIndex].map((letter, index) => (
-                  <motion.span
-                    key={index}
-                    variants={letterVariants}
-                    className="inline-block"
-                  >
-                    {letter}
-                  </motion.span>
-                ))}
-              </AnimatePresence>
-            </motion.h1>
-          )}
+          {/* Video container */}
+          <div className="relative w-full h-full flex justify-center items-center">
+            <motion.video
+              src="/WebsiteLoader.mp4"
+              autoPlay
+              muted
+              playsInline
+              className="object-contain w-full max-w-[1440px] h-auto"
+              style={{ maxHeight: "100vh" }}
+              initial={{ opacity: 1 }}
+              animate={fadeVideo ? { opacity: 0 } : { opacity: 1 }}
+              transition={{ duration: 1.2, ease: "easeInOut" }} // fades out over 1 second
+            />
+
+            {/* Overlay container slides upward */}
+            <motion.div
+              className="absolute bottom-0 left-0 right-0 bg-[#f3efee]"
+              initial={{ height: "0%" }}
+              animate={overlayVisible ? { height: "100%" } : { height: "0%" }}
+              transition={{ duration: 1.2, ease: "easeInOut" }}
+            />
+          </div>
         </motion.div>
       )}
     </AnimatePresence>
   );
 };
 
-export default LoadingScreen;
+export default WebsiteLoader;
