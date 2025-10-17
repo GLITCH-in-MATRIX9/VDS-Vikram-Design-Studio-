@@ -40,7 +40,7 @@ export const createProject = async (req: Request, res: Response) => {
         `VDS_FOLDER/${name.replace(/[^a-zA-Z0-9]/g, "_")}`
       );
       previewImageUrl = result.url;
-      previewImagePublicId = result.public_id;
+      previewImagePublicId = result.publicId;
     }
 
     const parsedSections = typeof sections === "string" ? JSON.parse(sections) : sections || [];
@@ -119,7 +119,7 @@ export const updateProject = async (req: Request, res: Response) => {
         `VDS_FOLDER/${name.replace(/[^a-zA-Z0-9]/g, "_")}`
       );
       previewImageUrl = result.url;
-      previewImagePublicId = result.public_id;
+      previewImagePublicId = result.publicId;
     }
 
     const parsedSections = typeof sections === "string" ? JSON.parse(sections) : Array.isArray(sections) ? sections : [];

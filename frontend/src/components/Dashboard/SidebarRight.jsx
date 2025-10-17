@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext } from "react";
-import { Pencil, Trash2, User, X } from "lucide-react";
+import { Pencil, Trash2, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -165,8 +165,6 @@ const SidebarRight = ({ project, onClose, onDeleteSuccess }) => {
           <span className="text-[#474545]">
             {project.updatedAt ? new Date(project.updatedAt).toLocaleDateString() : "DD-MM-YYYY"}
           </span>
-
-          {/* "Modified By" removed */}
         </div>
       </div>
 
