@@ -40,7 +40,7 @@ const ConfirmDeletionToast = ({ closeToast, project, onDeleteConfirm }) => {
 const SidebarRight = ({ project, onClose, onDeleteSuccess }) => {
   const navigate = useNavigate();
   const [tags, setTags] = useState([]);
-  const { user: currentUser } = useContext(AuthContext); // get logged-in user
+  const { user: currentUser } = useContext(AuthContext);
 
   if (!project) return null;
 
@@ -86,19 +86,10 @@ const SidebarRight = ({ project, onClose, onDeleteSuccess }) => {
     );
   };
 
-  // Navigate to edit project page
-  const handleModify = async () => {
-    try {
-      // Optional: record the user modifying the project before navigation
-      await projectApi.updateProject(project._id, { editedBy: currentUser?.name || "Unknown" });
-      navigate(`/admin/dashboard/projects/edit/${project._id}`);
-      onClose();
-    } catch (err) {
-      console.error("Update failed:", err);
-      toast.error(
-        err?.response?.data?.message || "Failed to update project. Please try again."
-      );
-    }
+  // Navigate to edit project page WITHOUT modifying backend
+  const handleModify = () => {
+    navigate(`/admin/dashboard/projects/edit/${project._id}`);
+    onClose();
   };
 
   return (
@@ -175,10 +166,7 @@ const SidebarRight = ({ project, onClose, onDeleteSuccess }) => {
             {project.updatedAt ? new Date(project.updatedAt).toLocaleDateString() : "DD-MM-YYYY"}
           </span>
 
-          <span className="text-[#6E6A6B] font-medium">MODIFIED BY</span>
-          <span className="flex items-center gap-2">
-            <User size={16} /> {currentUser?.name || project.editedBy || "User Name"}
-          </span>
+          {/* "Modified By" removed */}
         </div>
       </div>
 
