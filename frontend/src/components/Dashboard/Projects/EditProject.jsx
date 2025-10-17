@@ -132,7 +132,7 @@ const EditProject = () => {
         setFormData({
           name: project.name || "",
           location: project.location || "",
-          year: project.year || "",
+          year: project.year || "", year: project.year ? project.year.toString() : "",
           status: project.status || "",
           category: project.category || "",
           subCategory: project.subCategory || "",
@@ -206,16 +206,15 @@ const EditProject = () => {
   };
 
 
-  // 🌟 CORRECTED handleChange FUNCTION 🌟
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // 🚨 FIX: Explicitly handle the 'year' field to ensure its value (a number string) 
-    // is not subjected to other logic and is saved reliably.
     if (name === "year") {
+      // Only allow numeric input
+      const numericValue = value.replace(/\D/g, "");
       setFormData((prev) => ({
         ...prev,
-        [name]: value,
+        year: numericValue,
       }));
       return;
     }
@@ -230,13 +229,12 @@ const EditProject = () => {
       "subCategory",
     ];
 
-    // The tag logic is only necessary if you had used the old simple select, 
-    // but we'll include the main logic for other fields.
     setFormData((prev) => ({
       ...prev,
       [name]: upperCaseFields.includes(name) ? value.toUpperCase() : value,
     }));
   };
+
 
   const handleLeaderToggle = (leader) => {
     setFormData((prev) => {
@@ -555,12 +553,13 @@ const EditProject = () => {
                 className="border p-2 rounded w-full border-[#C9BEB8]"
                 required
               >
+                <option value="">SELECT STATUS *</option>  {/* Placeholder option */}
                 <option value="ON-SITE">ON-SITE</option>
                 <option value="DESIGN STAGE">DESIGN STAGE</option>
                 <option value="COMPLETED">COMPLETED</option>
                 <option value="UNBUILT">UNBUILT</option>
-
               </select>
+
 
 
               <input

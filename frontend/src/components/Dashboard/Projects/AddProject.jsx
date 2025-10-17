@@ -457,12 +457,13 @@ const AddProject = () => {
                 className="border p-2 rounded w-full border-[#C9BEB8]"
                 required
               >
+                <option value="">SELECT STATUS *</option>  {/* Placeholder option */}
                 <option value="ON-SITE">ON-SITE</option>
                 <option value="DESIGN STAGE">DESIGN STAGE</option>
                 <option value="COMPLETED">COMPLETED</option>
                 <option value="UNBUILT">UNBUILT</option>
-
               </select>
+
 
               <input
                 type="number"
