@@ -1,31 +1,33 @@
-import { createContext, useState, useContext } from "react";
+import React, { createContext, useContext, useState, useCallback } from "react";
 
 const FilterContext = createContext();
-
-// Custom hook for easy access to the context
-export const useFilters = () => {
-  return useContext(FilterContext);
-};
 
 export const FilterProvider = ({ children }) => {
   const [categoryContext, setCategoryContext] = useState(null);
   const [subCategoryContext, setSubCategoryContext] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  // Function to clear all filters
   const clearFilters = () => {
     setCategoryContext(null);
     setSubCategoryContext(null);
-  };
-
-  const value = {
-    categoryContext,
-    setCategoryContext,
-    subCategoryContext,
-    setSubCategoryContext,
-    clearFilters,
+    setSearchQuery("");
   };
 
   return (
-    <FilterContext.Provider value={value}>{children}</FilterContext.Provider>
+    <FilterContext.Provider
+      value={{
+        categoryContext,
+        setCategoryContext,
+        subCategoryContext,
+        setSubCategoryContext,
+        searchQuery,
+        setSearchQuery,
+        clearFilters,
+      }}
+    >
+      {children}
+    </FilterContext.Provider>
   );
 };
+
+export const useFilters = () => useContext(FilterContext);

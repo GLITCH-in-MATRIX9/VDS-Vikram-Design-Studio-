@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { Pencil, Trash2, User, X } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import projectApi from "../../services/projectApi"; // Import your API helper
+import projectApi from "../../services/projectApi";
+import { AuthContext } from "../../context/AuthContext"; // AuthContext import
 
 // Custom Confirmation Component for deletion
 const ConfirmDeletionToast = ({ closeToast, project, onDeleteConfirm }) => {
   const handleConfirm = () => {
     onDeleteConfirm();
-    closeToast(); // Close the toast after confirmation
+    closeToast();
   };
 
   return (
@@ -21,13 +22,13 @@ const ConfirmDeletionToast = ({ closeToast, project, onDeleteConfirm }) => {
       <div className="flex justify-end gap-2">
         <button
           onClick={closeToast}
-          className="px-3 py-1  border border-gray-300 rounded hover:bg-gray-100"
+          className="px-3 py-1 border border-gray-300 rounded hover:bg-gray-100"
         >
           Cancel
         </button>
         <button
           onClick={handleConfirm}
-          className="px-3 py-1  bg-red-600 text-white rounded hover:bg-red-700 transition"
+          className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700 transition"
         >
           Yes, Delete
         </button>
@@ -36,13 +37,14 @@ const ConfirmDeletionToast = ({ closeToast, project, onDeleteConfirm }) => {
   );
 };
 
-const SidebarRight = ({ project, onClose, onDeleteSuccess, currentUser }) => {
+const SidebarRight = ({ project, onClose, onDeleteSuccess }) => {
   const navigate = useNavigate();
   const [tags, setTags] = useState([]);
+  const { user: currentUser } = useContext(AuthContext); // get logged-in user
 
   if (!project) return null;
 
-  // Fetch all tags from backend (optional)
+  // Fetch all tags from backend
   useEffect(() => {
     const fetchTags = async () => {
       try {
@@ -65,8 +67,7 @@ const SidebarRight = ({ project, onClose, onDeleteSuccess, currentUser }) => {
     } catch (err) {
       console.error("Deletion failed:", err);
       toast.error(
-        err?.response?.data?.message ||
-          "Failed to delete project. Please check the server."
+        err?.response?.data?.message || "Failed to delete project. Please check the server."
       );
     }
   };
@@ -81,19 +82,23 @@ const SidebarRight = ({ project, onClose, onDeleteSuccess, currentUser }) => {
           onDeleteConfirm={executeDelete}
         />
       ),
-      {
-        position: "top-center",
-        autoClose: false,
-        closeOnClick: false,
-        draggable: false,
-      }
+      { position: "top-center", autoClose: false, closeOnClick: false, draggable: false }
     );
   };
 
   // Navigate to edit project page
-  const handleModify = () => {
-    navigate(`/admin/dashboard/projects/edit/${project._id}`);
-    onClose();
+  const handleModify = async () => {
+    try {
+      // Optional: record the user modifying the project before navigation
+      await projectApi.updateProject(project._id, { editedBy: currentUser?.name || "Unknown" });
+      navigate(`/admin/dashboard/projects/edit/${project._id}`);
+      onClose();
+    } catch (err) {
+      console.error("Update failed:", err);
+      toast.error(
+        err?.response?.data?.message || "Failed to update project. Please try again."
+      );
+    }
   };
 
   return (
@@ -101,10 +106,7 @@ const SidebarRight = ({ project, onClose, onDeleteSuccess, currentUser }) => {
       <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="flex justify-end p-4">
-        <button
-          onClick={onClose}
-          className="text-gray-600 hover:text-black transition"
-        >
+        <button onClick={onClose} className="text-gray-600 hover:text-black transition">
           <X size={22} />
         </button>
       </div>
@@ -123,52 +125,36 @@ const SidebarRight = ({ project, onClose, onDeleteSuccess, currentUser }) => {
         </h2>
 
         <div className="grid grid-cols-2 gap-y-4 text-xs">
-          <span className="text-[#6E6A6B] font-medium   ">LOCATION</span>
-          <span className=" text-[#474545] uppercase   ">
-            {project.location || "Location"}
-          </span>
+          <span className="text-[#6E6A6B] font-medium">LOCATION</span>
+          <span className="text-[#474545] uppercase">{project.location || "Location"}</span>
 
-          <span className="text-[#6E6A6B] font-medium   ">YEAR</span>
-          <span className=" text-[#474545] uppercase   ">
-            {project.year || "2000"}
-          </span>
+          <span className="text-[#6E6A6B] font-medium">YEAR</span>
+          <span className="text-[#474545] uppercase">{project.year || "2000"}</span>
 
-          <span className="text-[#6E6A6B] font-medium   ">STATUS</span>
-          <span className=" text-[#474545] uppercase   ">
-            {project.status || "Complete"}
-          </span>
+          <span className="text-[#6E6A6B] font-medium">STATUS</span>
+          <span className="text-[#474545] uppercase">{project.status || "Complete"}</span>
 
-          <span className="text-[#6E6A6B] font-medium   ">CATEGORY</span>
-          <span className=" text-[#474545] uppercase   ">
-            {project.category || "Category"}
-          </span>
+          <span className="text-[#6E6A6B] font-medium">CATEGORY</span>
+          <span className="text-[#474545] uppercase">{project.category || "Category"}</span>
 
-          <span className="text-[#6E6A6B] font-medium   ">SUB - CATEGORY</span>
-          <span className=" text-[#474545] uppercase   ">
-            {project.subCategory || "Sub - Category"}
-          </span>
+          <span className="text-[#6E6A6B] font-medium">SUB - CATEGORY</span>
+          <span className="text-[#474545] uppercase">{project.subCategory || "Sub - Category"}</span>
 
-          <span className="text-[#6E6A6B] font-medium   ">CLIENT</span>
-          <span className="break-words text-[#474545] uppercase   ">
-            {project.client || "XYZ"}
-          </span>
+          <span className="text-[#6E6A6B] font-medium">CLIENT</span>
+          <span className="break-words text-[#474545] uppercase">{project.client || "XYZ"}</span>
 
-          <span className="text-[#6E6A6B] font-medium   ">COLLABORATORS</span>
-          <span className="break-words text-[#474545] uppercase   ">
-            {project.collaborators || "XYZ"}
-          </span>
+          <span className="text-[#6E6A6B] font-medium">COLLABORATORS</span>
+          <span className="break-words text-[#474545] uppercase">{project.collaborators || "XYZ"}</span>
 
-          <span className="text-[#6E6A6B] font-medium   ">TEAM</span>
-          <span className="break-words text-[#474545] uppercase   ">
-            {project.projectTeam || "Team"}
-          </span>
+          <span className="text-[#6E6A6B] font-medium">TEAM</span>
+          <span className="break-words text-[#474545] uppercase">{project.projectTeam || "Team"}</span>
 
-          <span className="text-[#6E6A6B] font-medium   ">TAGS</span>
+          <span className="text-[#6E6A6B] font-medium">TAGS</span>
           <div className="flex flex-wrap gap-2">
             {(project.tags || []).map((tag, i) => (
               <span
                 key={i}
-                className="px-3 py-1  bg-[#B13024] rounded-md text-[#F8F7F8]"
+                className="px-3 py-1 bg-[#B13024] rounded-md text-[#F8F7F8]"
               >
                 {tag}
               </span>
@@ -179,29 +165,24 @@ const SidebarRight = ({ project, onClose, onDeleteSuccess, currentUser }) => {
         <hr className="border-gray-300" />
 
         <div className="grid grid-cols-2 gap-y-4 text-xs uppercase">
-          <span className="text-[#6E6A6B] font-medium ">DATE CREATED</span>
+          <span className="text-[#6E6A6B] font-medium">DATE CREATED</span>
           <span className="text-[#474545]">
-            {project.createdAt
-              ? new Date(project.createdAt).toLocaleDateString()
-              : "DD-MM-YYYY"}
+            {project.createdAt ? new Date(project.createdAt).toLocaleDateString() : "DD-MM-YYYY"}
           </span>
 
-          <span className="text-[#6E6A6B] font-medium   ">DATE MODIFIED</span>
-          <span>
-            {project.updatedAt
-              ? new Date(project.updatedAt).toLocaleDateString()
-              : "DD-MM-YYYY"}
+          <span className="text-[#6E6A6B] font-medium">DATE MODIFIED</span>
+          <span className="text-[#474545]">
+            {project.updatedAt ? new Date(project.updatedAt).toLocaleDateString() : "DD-MM-YYYY"}
           </span>
 
-          <span className="text-[#6E6A6B] font-medium   ">MODIFIED BY</span>
+          <span className="text-[#6E6A6B] font-medium">MODIFIED BY</span>
           <span className="flex items-center gap-2">
-            <User size={16} />{" "}
-            {currentUser?.name || project.editedBy || "User Name"}
+            <User size={16} /> {currentUser?.name || project.editedBy || "User Name"}
           </span>
         </div>
       </div>
 
-      <div className="px-6 py-4 flex gap-3 border-t border-gray-200 sticky bg-[#F9F8F7] bottom-0 ]">
+      <div className="px-6 py-4 flex gap-3 border-t border-gray-200 sticky bg-[#F9F8F7] bottom-0">
         <button
           onClick={handleModify}
           className="flex-1 flex items-center justify-center cursor-pointer font-medium gap-2 px-4 py-2 border border-[#6E6A6B] rounded-lg text-[#474545] text-xs uppercase hover:bg-[#E6E2E088] transition"

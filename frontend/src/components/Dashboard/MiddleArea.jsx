@@ -18,6 +18,7 @@ const COLOR_SURFACE_SUBTLE = "#F5F1EE";
 const COLOR_ACTIVE_STATUS = "#529F52";
 const COLOR_INACTIVE_STATUS = "#C94A4A";
 const COLOR_BORDER = "#C9BEB8";
+const COLOR_COMPLETED = "#28a745"; // green for completed
 
 const MiddleArea = ({ onProjectClick, filterState, onFilterChange }) => {
   const { searchTerm, selectedCategory, selectedSubCategory } = filterState;
@@ -35,6 +36,7 @@ const MiddleArea = ({ onProjectClick, filterState, onFilterChange }) => {
       const projectsWithStatus = data.map((p) => ({
         ...p,
         active: ["On-site", "Design stage"].includes(p.status),
+        completed: p.status === "Completed",
       }));
       setProjects(projectsWithStatus);
     } catch (err) {
@@ -223,8 +225,18 @@ const MiddleArea = ({ onProjectClick, filterState, onFilterChange }) => {
                 >
                   <TableCell>{index + 1}</TableCell>
                   <TableCell className="text-center">
-                    <span className="inline-block w-3 h-3 rounded-full" style={{ backgroundColor: project.active ? COLOR_ACTIVE_STATUS : COLOR_INACTIVE_STATUS }}></span>
+                    <span
+                      className="inline-block w-3 h-3 rounded-full"
+                      style={{
+                        backgroundColor: project.completed
+                          ? COLOR_COMPLETED
+                          : project.active
+                            ? COLOR_ACTIVE_STATUS
+                            : COLOR_INACTIVE_STATUS,
+                      }}
+                    ></span>
                   </TableCell>
+
                   <TableCell>
                     <img
                       src={project.previewImageUrl || "https://picsum.dev/300/200"}

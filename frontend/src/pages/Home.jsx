@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+// src/pages/Home.jsx
+import { useState, useEffect, useCallback } from "react";
 import {
   motion,
   useSpring,
@@ -7,6 +8,8 @@ import {
   useMotionValue,
 } from "framer-motion";
 import { useLenis, ReactLenis } from "lenis/react"; // Smooth scroll library
+import debounce from "lodash/debounce";
+
 import ProjectCard from "../components/ProjectCard";
 import projectApi from "../services/projectApi";
 import LoadingScreen from "../components/LoadingScreen";
@@ -24,8 +27,7 @@ const Home = () => {
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  const { categoryContext, subCategoryContext } = useFilters();
+  const { categoryContext, subCategoryContext, searchQuery } = useFilters();
 
   const scrollY = useMotionValue(0);
 
@@ -35,12 +37,9 @@ const Home = () => {
   });
 
   const scrollVelocity = useVelocity(scrollY);
-  const springConfig = {
-    stiffness: 100,
-    damping: 50,
-  };
+  const springConfig = { stiffness: 100, damping: 50 };
 
-  // Mapping scrollVelocity to z perspective
+  // Map scrollVelocity to z perspective
   const targetZ = useTransform(
     scrollVelocity,
     [-1500, 0, 1500],
@@ -49,13 +48,21 @@ const Home = () => {
   );
   const z = useSpring(targetZ, springConfig);
 
-  // Keep the origin of perspective change in the center of the screen dynamically
+  // Keep perspective origin in the center of the screen
   const perspectiveOrigin = useTransform(
     scrollY,
     (y) => `50% ${y + window.innerHeight / 2}px`
   );
 
-  // Fetch projects from API on component mount
+  // Debounced search handler
+  const handleSearchDebounced = useCallback(
+    debounce((value) => {
+      setSearchQuery(value);
+    }, 300),
+    []
+  );
+
+  // Fetch projects from API
   useEffect(() => {
     const fetchProjects = async () => {
       try {
@@ -74,27 +81,44 @@ const Home = () => {
     fetchProjects();
   }, []);
 
+  // Filter projects based on category, subcategory, and search
   useEffect(() => {
-    let result = projects;
+    let result = [...projects];
 
     if (categoryContext) {
-      result = result.filter((project) => project.category === categoryContext);
+      result = result.filter(
+        (project) =>
+          project.category.toLowerCase() === categoryContext.toLowerCase()
+      );
     }
 
     if (subCategoryContext) {
       result = result.filter(
-        (project) => project.subcategory === subCategoryContext
+        (project) =>
+          project.subCategory?.toLowerCase() === subCategoryContext.toLowerCase()
+      );
+    }
+
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(
+        (project) =>
+          project.name.toLowerCase().includes(query) ||
+          project.location.toLowerCase().includes(query) ||
+          project.client.toLowerCase().includes(query) ||
+          project.collaborators.toLowerCase().includes(query) ||
+          project.projectTeam.toLowerCase().includes(query) ||
+          project.projectLeaders.some((pl) => pl.toLowerCase().includes(query)) ||
+          project.tags.some((tag) => tag.toLowerCase().includes(query))
       );
     }
 
     setFilteredProjects(result);
-  }, [categoryContext, subCategoryContext, projects]);
+  }, [projects, categoryContext, subCategoryContext, searchQuery]);
 
-  if (loading) {
-    return <LoadingScreen />;
-  }
+  if (loading) return <LoadingScreen />;
 
-  if (error) {
+  if (error)
     return (
       <div className="min-h-screen bg-[#F2EFEE] flex items-center justify-center">
         <div className="text-center">
@@ -108,8 +132,7 @@ const Home = () => {
         </div>
       </div>
     );
-  }
-  // console.log(filteredProjects);
+
   return (
     <ReactLenis root options={lenisOptions}>
       <motion.div

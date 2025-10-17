@@ -6,7 +6,7 @@ export interface IProjectSection {
 }
 
 export interface IProject extends Document {
-  name: string; // Project Name (frontend field)
+  name: string; // Project Name
   location: string;
   year?: string;
   status: 'On-site' | 'Design stage' | 'Completed' | 'Unbuilt';

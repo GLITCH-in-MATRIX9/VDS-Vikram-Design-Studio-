@@ -7,18 +7,15 @@ import { FilterProvider } from "./context/filterContext";
 import React, { useState } from "react";
 import LoadingScreen from "./components/LoadingScreen";
 import SectionDivider from "./components/SectionDivider";
-
-// ✅ Import Toastify
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
     <AuthProvider>
-      <FilterProvider>
-        <BrowserRouter>
+      <BrowserRouter>
+        <FilterProvider>
           <AppContent />
-          {/* ✅ ToastContainer at root */}
           <ToastContainer
             position="top-right"
             autoClose={3000}
@@ -31,8 +28,8 @@ function App() {
             pauseOnHover
             theme="colored"
           />
-        </BrowserRouter>
-      </FilterProvider>
+        </FilterProvider>
+      </BrowserRouter>
     </AuthProvider>
   );
 }
