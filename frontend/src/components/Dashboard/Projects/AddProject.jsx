@@ -104,6 +104,7 @@ const AddProject = () => {
     tags: [],
     keyDate: new Date().toISOString().slice(0, 10),
     previewImageUrl: "",
+    sizeM2FT2: "",
   });
 
   const [sections, setSections] = useState([]);
@@ -339,7 +340,7 @@ const AddProject = () => {
                 </option>
               ))}
             </select>
-
+            
             <div className="grid grid-cols-2 gap-2">
               <select
                 name="category"
@@ -381,6 +382,15 @@ const AddProject = () => {
               className="border p-2 rounded w-full border-[#C9BEB8]"
               autoComplete="off"
               required
+            />
+            <input
+              type="text"
+              name="sizeM2FT2"
+              value={formData.sizeM2FT2}
+              onChange={handleChange}
+              placeholder="Size (M2/FT2)"
+              className="border p-2 rounded w-full border-[#C9BEB8]"
+              autoComplete="off"
             />
 
             <input

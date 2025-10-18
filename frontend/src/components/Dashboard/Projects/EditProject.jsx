@@ -109,6 +109,7 @@ const EditProject = () => {
     tags: [],
     keyDate: "",
     previewImageUrl: "",
+    sizeM2FT2: "",
   });
 
   const [nextNewSectionId, setNextNewSectionId] = useState(0);
@@ -132,8 +133,9 @@ const EditProject = () => {
         setFormData({
           name: project.name || "",
           location: project.location || "",
-          year: project.year || "", year: project.year ? project.year.toString() : "",
-          status: project.status?  project.status.toUpperCase() : "",
+          year: project.year ? project.year.toString() : "",
+
+          status: project.status ? project.status.toUpperCase() : "",
           category: project.category || "",
           subCategory: project.subCategory || "",
           client: project.client || "",
@@ -144,6 +146,7 @@ const EditProject = () => {
           // Ensure date format for input type="date"
           keyDate: project.keyDate ? new Date(project.keyDate).toISOString().slice(0, 10) : "",
           previewImageUrl: project.previewImageUrl || "",
+          sizeM2FT2: project.sizeM2FT2 || "",
         });
 
         setSelectedCategory(project.category || "");
@@ -227,6 +230,7 @@ const EditProject = () => {
       "location",
       "status",
       "subCategory",
+        
     ];
 
     setFormData((prev) => ({
@@ -485,6 +489,16 @@ const EditProject = () => {
               autoComplete="off"
               required
             />
+            <input
+              type="text"
+              name="sizeM2FT2"
+              value={formData.sizeM2FT2}
+              onChange={handleChange}
+              placeholder="Size (M2/FT2)"
+              className="border p-2 rounded w-full border-[#C9BEB8]"
+              autoComplete="off"
+            />
+
             <input
               type="text"
               name="collaborators"

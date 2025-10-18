@@ -29,27 +29,25 @@ const teamData = [
         As Design Lead, Namman continues to guide VDS into a new chapter: one that is quietly ambitious, design-driven, and uncompromising in vision.
       </>
     )
-  }
-  ,
+  },
   { name: "Ajit Deka", designation: "Office Assistant" },
   { name: "Ayush Biswakarma", designation: "Data Operator" },
   { name: "Biplob Rabha", designation: "Jr. Architect" },
+  { name: "Debashruti Giri", designation: "Architect" },
   { name: "Devid Barman", designation: "Admin Assistant" },
   { name: "Indrajit Choudhary", designation: "Accountant" },
   { name: "Kriti Ghiya", designation: "Jr. Interior Designer" },
   { name: "Luku Biswakarma", designation: "Site Supervisor" },
-  { name: "Suprit Das", designation: "Jr. Architect" },
   { name: "Paran Basumatary", designation: "Quantity Surveyor" },
   { name: "Prasanta Kalita", designation: "Senior Architect" },
   { name: "Rajnish Rabha", designation: "Visualiser" },
   { name: "Sandip Agarwal", designation: "Interior Designer" },
   { name: "Saurav Sharma", designation: "Jr. Site Supervisor" },
   { name: "Shibhu Biswakarma", designation: "Site Supervisor" },
-  { name: "Sunil Sharma", designation: "Civil Engineer" },
-  { name: "Tanisha Sengupta", designation: "Architect" },
+  { name: "Shubham Singh", designation: "Civil Engineer" },
+  { name: "Suprit Das", designation: "Jr. Architect" },
+  { name: "Tanushree Bandyopadhyay", designation: "Jr. Architect" },
   { name: "Vibek Poddar", designation: "Interior Designer" },
-  { name: "Vishal Bhattacharjee", designation: "Jr. Architect" },
-
 ];
 
 const TeamMembers = () => {
@@ -75,7 +73,7 @@ const TeamMembers = () => {
       </motion.h1>
 
       {/* Header Row */}
-      <div className="grid grid-cols-2 gap-6 font-sora font-medium text-sm text-[#474545] p-3 border-b border-[#C1C7CD] uppercase">
+      <div className="grid grid-cols-2 md:grid-cols-[0.7fr_1fr_0.7fr] gap-6 font-sora font-medium text-sm text-[#474545] py-3 border-b border-[#C1C7CD] uppercase">
         <span>Team Member</span>
         <span>Role</span>
       </div>
@@ -86,7 +84,7 @@ const TeamMembers = () => {
             {/* Row with name and role */}
             <motion.div
               layout
-              className="grid grid-cols-2 gap-6 text-sm p-3 items-start"
+              className="grid grid-cols-2 md:grid-cols-[0.7fr_1fr_0.7fr] gap-6 text-sm py-4 items-start"
             >
               <span>{name}</span>
               {index < 3 ? (
@@ -106,6 +104,10 @@ const TeamMembers = () => {
               ) : (
                 <span>{designation}</span>
               )}
+
+              {openIndices.has(index) && index < 3 && (
+                <div className="col-span-full border-b border-gray-600 "></div>
+              )}
             </motion.div>
 
             {/* Accordion for first 3 members */}
@@ -117,10 +119,10 @@ const TeamMembers = () => {
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ type: "spring", stiffness: 300, damping: 35 }}
-                  className="overflow-hidden col-span-2 pl-0 pr-0 pb-4 grid grid-cols-2 gap-4 text-sm text-[#5a5a5a]"
+                  className="overflow-hidden col-span-full grid grid-cols-2 md:grid-cols-[0.7fr_1fr_0.7fr] gap-4 text-sm text-[#5a5a5a] pl-0 pr-0 pb-12 pt-12"
                 >
                   {/* Left column: Image */}
-                  <div className="flex ">
+                  <div className="flex justify-center md:justify-start">
                     <img
                       src={img}
                       alt={name}

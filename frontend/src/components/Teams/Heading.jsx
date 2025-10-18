@@ -41,8 +41,8 @@ const Heading = () => {
         >
           Vikram Design Studio is led by a multidisciplinary team of architects,
           designers, visualizers, and technical experts working across diverse
-          project scales. With our roots in Chennai and a growing studio in
-          Kolkata, we function as a collaborative, meritocratic grounded in
+          project scales. With our roots in Guwahati and a growing studio in
+          Kolkata, we function as a collaborative, multi-office practice grounded in
           shared values and a design-first approach.
         </motion.p>
         <motion.p

@@ -1,42 +1,50 @@
-// ProjectImage.js
 import React, { useState, useEffect } from "react";
 
 const ProjectImage = ({ src, alt }) => {
-  const [orientation, setOrientation] = useState("loading");
+  const [dimensions, setDimensions] = useState({ width: 0, height: 450 });
 
   useEffect(() => {
     const img = new Image();
     img.src = src;
 
     img.onload = () => {
-      if (img.height > img.width) {
-        setOrientation("portrait");
-      } else {
-        setOrientation("landscape");
-      }
+      const height = 450;
+      const imgRatio = img.width / img.height;
+
+      // Define target ratios
+      const ratios = [
+        { name: "2:3", value: 2 / 3 },
+        { name: "4:3", value: 4 / 3 },
+        { name: "16:9", value: 16 / 9 },
+      ];
+
+      // Find closest ratio
+      const closest = ratios.reduce((prev, curr) => {
+        return Math.abs(curr.value - imgRatio) < Math.abs(prev.value - imgRatio)
+          ? curr
+          : prev;
+      });
+
+      const width = Math.round(closest.value * height);
+      setDimensions({ width, height });
     };
 
     img.onerror = () => {
       console.error("Image failed to load:", src);
-      setOrientation("landscape"); // Default to landscape on error
+      setDimensions({ width: Math.round((4 / 3) * 450), height: 450 });
     };
   }, [src]);
 
-  if (orientation === "loading") {
+  if (dimensions.width === 0) {
     return (
       <div className="w-full h-full bg-gray-200 animate-pulse rounded-lg"></div>
     );
   }
 
-  const isPortrait = orientation === "portrait";
-
   return (
     <div
-      className={`${
-        isPortrait
-          ? "aspect-[2/3] h-[calc(95vw/16*9)] sm:h-[225px] xl:h-[450px]"
-          : "aspect-video w-[95vw] sm:w-[400px] xl:w-[800px]"
-      } rounded-lg shadow-md overflow-hidden`}
+      style={{ width: `${dimensions.width}px`, height: `${dimensions.height}px` }}
+      className="rounded-lg shadow-md overflow-hidden"
     >
       <img
         src={src}

@@ -10,7 +10,6 @@ export interface IProject extends Document {
   location: string;
   year?: string;
   status: 'On-site' | 'Design stage' | 'Completed' | 'Unbuilt';
-
   category: string;
   subCategory?: string;
   client: string;
@@ -22,6 +21,7 @@ export interface IProject extends Document {
   previewImageUrl?: string; // stored path of uploaded preview
   previewImagePublicId?: string; // Cloudinary public id for deletion
   sections: IProjectSection[]; // content blocks serialized from editor
+  sizeM2FT2?: string; 
   createdAt: Date;
   updatedAt: Date;
 }
@@ -51,6 +51,7 @@ const ProjectSchema = new Schema<IProject>(
     previewImageUrl: { type: String },
     previewImagePublicId: { type: String },
     sections: { type: [ProjectSectionSchema], default: [] },
+    sizeM2FT2: { type: String }, 
   },
   { timestamps: true }
 );
