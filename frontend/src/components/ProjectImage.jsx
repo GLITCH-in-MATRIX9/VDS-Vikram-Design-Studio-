@@ -3,36 +3,40 @@ import React, { useState, useEffect } from "react";
 const ProjectImage = ({ src, alt }) => {
   const [dimensions, setDimensions] = useState({ width: 0, height: 450 });
 
-  useEffect(() => {
+  const updateDimensions = () => {
     const img = new Image();
     img.src = src;
 
     img.onload = () => {
-      const height = 450;
+      let height = window.innerWidth <= 640 ? 220 : 450;
       const imgRatio = img.width / img.height;
 
-      // Define target ratios
       const ratios = [
         { name: "2:3", value: 2 / 3 },
         { name: "4:3", value: 4 / 3 },
         { name: "16:9", value: 16 / 9 },
       ];
 
-      // Find closest ratio
-      const closest = ratios.reduce((prev, curr) => {
-        return Math.abs(curr.value - imgRatio) < Math.abs(prev.value - imgRatio)
+      const closest = ratios.reduce((prev, curr) =>
+        Math.abs(curr.value - imgRatio) < Math.abs(prev.value - imgRatio)
           ? curr
-          : prev;
-      });
+          : prev
+      );
 
       const width = Math.round(closest.value * height);
       setDimensions({ width, height });
     };
 
     img.onerror = () => {
-      console.error("Image failed to load:", src);
-      setDimensions({ width: Math.round((4 / 3) * 450), height: 450 });
+      const height = window.innerWidth <= 640 ? 200 : 450;
+      setDimensions({ width: Math.round((4 / 3) * height), height });
     };
+  };
+
+  useEffect(() => {
+    updateDimensions();
+    window.addEventListener("resize", updateDimensions); // responsive on resize
+    return () => window.removeEventListener("resize", updateDimensions);
   }, [src]);
 
   if (dimensions.width === 0) {
@@ -43,8 +47,13 @@ const ProjectImage = ({ src, alt }) => {
 
   return (
     <div
-      style={{ width: `${dimensions.width}px`, height: `${dimensions.height}px` }}
-      className="rounded-lg shadow-md overflow-hidden"
+      style={{
+        width: `${dimensions.width}px`,
+        height: `${dimensions.height}px`,
+        transition: "width 0.3s ease, height 0.3s ease", // smooth resize
+      }}
+      className="rounded-lg shadow-md overflow-hidden cursor-pointer"
+      onClick={() => console.log("Image clicked!")} // example click
     >
       <img
         src={src}
