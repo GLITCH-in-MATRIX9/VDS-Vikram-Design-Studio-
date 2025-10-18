@@ -153,7 +153,7 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
               </p>
               <p>{project?.year || "Year"}</p>
             </div>
-            <div className="mt-[46px] flex flex-col gap-6 text-[#474545] text-[10px] uppercase">
+            <div className="mt-[15px] flex flex-col gap-4 text-[#474545] text-[10px] uppercase">
               <div>
                 <div className="text-[#6E6A6B] mb-1">CLIENT</div>
                 <div>{project?.client || "Client Name"}</div>
