@@ -16,9 +16,8 @@ import filterIcon from "../assets/Icons/Vector.png";
 import hamburgerIcon from "../assets/navbar/HamburgerMenu.png";
 import closeIcon from "../assets/navbar/Close.png";
 
-import FilterSidebar from "./FilterSideBar";
+import FilterSidebar from "./FilterSidebar";
 
-// Filter options data
 const filterOptions = {
   Education: ["Schools","Training Institutions/Centres","Research Centres","Colleges & Universities"],
   Healthcare: ["Hospitals","Medical Colleges","Diagnostic Labs","Clinics"],
@@ -58,39 +57,39 @@ const Navbar = () => {
   const closeAllMenus = () => {
     setMenuOpen(false);
     handleFilterClose();
+    setMobileFilterOpen(false);
   };
 
   useEffect(() => {
     if (!isHome) {
       clearFilters();
       setFilterOpen(false);
+      setMobileFilterOpen(false);
     }
   }, [isHome, clearFilters]);
 
   // Debounced search
   const handleSearchDebounced = useCallback(
-    debounce((value) => {
-      setSearchQuery(value);
-    }, 300),
+    debounce((value) => setSearchQuery(value), 300),
     []
   );
 
   return (
     <>
       {/* Main Navbar */}
-      <nav className="w-full px-4 md:px-8 xl:px-20 bg-[#f2efee]  relative z-50">
+      <nav className="w-full px-4 md:px-8 xl:px-20 bg-[#f2efee] relative z-50">
         <div className="mx-auto py-4 flex justify-between items-center">
           {/* Left - Logo */}
           <div className="flex items-center space-x-3">
             <Link to="/" className="flex items-center gap-3" onClick={closeAllMenus}>
-              <img src={logo} alt="Vikram Design Studio Logo" className="h-8 md:h-12 w-auto" />
-              <span className="text-[#454545] leading-[1em] hidden md:block text-xs md:text-xl xl:text-2xl font-humanist">
+              <img src={logo} alt="Logo" className="h-8 md:h-12 w-auto" />
+              <span className="hidden md:block text-xs md:text-xl xl:text-2xl font-humanist text-[#454545] leading-[1em]">
                 Vikram Design Studio
               </span>
             </Link>
           </div>
 
-          {/* Center - Desktop menu */}
+          {/* Center - Desktop Menu */}
           <div className="hidden md:flex flex-grow justify-center">
             <ul className={`flex transition gap-8 text-sm font-medium text-gray-700 tracking-wider ${filterOpen && "opacity-0"}`}>
               <li><Link to="/about" onClick={closeAllMenus}>ABOUT</Link></li>
@@ -99,9 +98,9 @@ const Navbar = () => {
             </ul>
           </div>
 
-          {/* Right - Search / Filter / Hamburger */}
+          {/* Right - Icons */}
           <div className="flex items-center gap-4">
-            {/* Desktop Icons */}
+            {/* Desktop */}
             <div className={`hidden md:flex items-center gap-4 uppercase text-[#474545] ${!isHome && "invisible pointer-events-none"}`}>
               {!filterOpen ? (
                 <>
@@ -127,10 +126,10 @@ const Navbar = () => {
             </div>
 
             {/* Mobile Icons */}
-            <div className={`md:hidden flex items-center gap-4`}>
+            <div className="md:hidden flex items-center gap-4">
               <button onClick={() => setMobileFilterOpen((prev) => !prev)} className="relative">
                 <div className={`badge h-[6px] w-[6px] rounded-2xl transition bg-[#C94A4A] absolute top-[-2px] right-[-2px] opacity-0 ${ (categoryContext || subCategoryContext) && "opacity-100" }`}></div>
-                <img src={filterIcon} alt={"filter"} className={`h-3 object-contain ${!isHome && "invisible pointer-events-none"}`} />
+                <img src={filterIcon} alt="filter" className={`h-3 object-contain ${!isHome && "invisible pointer-events-none"}`} />
               </button>
               <button onClick={() => setMenuOpen(true)}>
                 <img src={hamburgerIcon} alt="menu" className="w-4 object-contain" />
@@ -140,7 +139,7 @@ const Navbar = () => {
         </div>
       </nav>
 
-      {/* Desktop Filter Categories */}
+      {/* Desktop Filters */}
       <AnimatePresence>
         {isHome && filterOpen && (
           <motion.div key="filters" initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} className="w-full bg-[#F2EFEE] border-b border-[#e0dcd7] overflow-hidden z-40">
@@ -191,7 +190,7 @@ const Navbar = () => {
       </AnimatePresence>
 
       {/* Mobile Sidebar */}
-      <FilterSidebar isOpen={mobileFilterOpen} />
+      <FilterSidebar isOpen={mobileFilterOpen} onClose={() => setMobileFilterOpen(false)} />
 
       {/* Mobile Sliding Menu */}
       <AnimatePresence>

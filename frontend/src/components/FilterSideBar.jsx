@@ -1,5 +1,5 @@
 import { AnimatePresence, motion } from "framer-motion";
-import { useState, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useFilters } from "../context/filterContext";
 import debounce from "lodash/debounce";
 
@@ -18,9 +18,10 @@ const filterOptions = {
   Retail: ["Showrooms","Shopping complex","Departmental stores","Multiplexes"],
 };
 
-const FilterSidebar = ({ isOpen }) => {
+const FilterSidebar = ({ isOpen, onClose }) => {
   const [selectedCategory, setSelectedCategory] = useState(null);
   const { categoryContext, setCategoryContext, subCategoryContext, setSubCategoryContext, searchQuery, setSearchQuery } = useFilters();
+  const sidebarRef = useRef(null);
 
   // Debounced search
   const handleSearchDebounced = useCallback(
@@ -29,6 +30,23 @@ const FilterSidebar = ({ isOpen }) => {
     }, 300),
     []
   );
+
+  // Close sidebar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        onClose?.();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener("mousedown", handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isOpen, onClose]);
 
   return (
     <AnimatePresence>
@@ -40,6 +58,7 @@ const FilterSidebar = ({ isOpen }) => {
           exit={{ x: "100%" }}
           transition={{ type: "tween", duration: 1, ease: [0.83, 0, 0.17, 1] }}
           className="fixed mt-[2px] right-0 h-[calc(100vh-80px)] w-[187px] bg-[#F2EFEE] z-[99] flex flex-col shadow-[-2px_0_2px_0_#3E3C3C0A,-4px_0_8px_-4px_#3E3C3C29]"
+          ref={sidebarRef} // attach ref to sidebar
         >
           {/* Search Input */}
           <div className="px-4 py-2">
