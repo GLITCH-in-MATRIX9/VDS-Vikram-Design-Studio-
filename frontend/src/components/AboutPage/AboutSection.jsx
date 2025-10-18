@@ -158,8 +158,8 @@ const AboutSection = ({ data }) => {
                     </div>
                   </>
                 ) : (
-                  <div className=" px-4 min-w-xs max-w-[400px] shrink-0 mb-6">
-                    <p className="text-[#6D6D6D] leading-[140%] md:leading-relaxed whitespace-pre-wrap text-xs ">
+                  <div className=" px-4 mb-6">
+                    <p className="text-[#6D6D6D] leading-[140%] w-2xs md:w-[400px] md:leading-relaxed whitespace-pre-wrap text-sm ">
                       {card.text}
                     </p>
                   </div>
