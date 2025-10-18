@@ -110,7 +110,7 @@ const AboutMetrics = () => {
               />
               <div>
                 <h3 className="font-sora font-semibold text-xl md:text-[28px] xl:text-[40px] leading-[1.1em] md:leading-[36px] xl:leading-[48px] tracking-[-0.01em] text-[#474545]">
-                  <CountUp end={25} />
+                  <CountUp end={21} />
                 </h3>
                 <p className="font-inter font-medium text-[8px] xl:text-[12px] leading-[100%] tracking-[0] uppercase text-[#6D6D6D]">
                   Years in the Industry
