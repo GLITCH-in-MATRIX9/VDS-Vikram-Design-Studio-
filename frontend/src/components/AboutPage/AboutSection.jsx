@@ -135,25 +135,35 @@ const AboutSection = ({ data }) => {
           {/* Horizontal Scroll component */}
           <div
             ref={scrollRef}
-            className="flex overflow-x-auto gap-4 sm:gap-6 py-4 scroll-smooth no-scrollbar"
+            className="flex overflow-x-auto gap-4 sm:gap-6 py-4 scroll-smooth no-scrollbar items-center"
           >
             {data.carousel_cards.map((card) => (
               <motion.div
                 key={card.id}
-                className="flex flex-col gap-4 w-[250px] xl:w-[400px] flex-shrink-0"
+                className="flex flex-col gap-4 flex-shrink-0"
                 variants={itemVariants}
               >
-                <img
-                  src={card.img_src}
-                  alt={`${card.project_name} image`}
-                  className="w-full h-[140px] xl:h-[225px] rounded-2xl object-cover object-center grid place-content-center bg-[#D1D1D1] text-xs"
-                  loading="lazy"
-                />
-                <div>
-                  <p className="text-[6px] md:text-[8px] leading-[1em] text-[#6D6D6D] uppercase mb-1">
-                    {card.project_name} - {card.project_location}
-                  </p>
-                </div>
+                {card.img_src ? (
+                  <>
+                    <img
+                      src={card.img_src}
+                      alt={`${card.project_name} image`}
+                      className="w-full h-[140px] xl:h-[225px] rounded-2xl object-cover object-center grid place-content-center bg-[#D1D1D1] text-xs"
+                      loading="lazy"
+                    />
+                    <div>
+                      <p className="text-[6px] md:text-[8px] leading-[1em] text-[#6D6D6D] uppercase mb-1 ">
+                        {card.project_name} - {card.project_location}
+                      </p>
+                    </div>
+                  </>
+                ) : (
+                  <div className=" px-4 mb-6">
+                    <p className="text-[#6D6D6D] leading-[140%] w-2xs md:w-[400px] md:leading-relaxed whitespace-pre-wrap text-sm ">
+                      {card.text}
+                    </p>
+                  </div>
+                )}
               </motion.div>
             ))}
           </div>

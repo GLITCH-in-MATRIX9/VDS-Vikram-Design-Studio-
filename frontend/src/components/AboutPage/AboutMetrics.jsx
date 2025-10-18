@@ -65,7 +65,7 @@ const AboutMetrics = () => {
               />
               <div>
                 <h3 className="font-sora font-semibold text-xl md:text-[28px] xl:text-[40px] leading-[1.1em] md:leading-[36px] xl:leading-[48px] tracking-[-0.01em] text-[#474545]">
-                  <CountUp end={200} />
+                  <CountUp end={60} />
                 </h3>
                 <p className="font-inter font-medium text-[8px] xl:text-[12px] leading-[100%] tracking-[0] uppercase text-[#6D6D6D]">
                   Number of Projects Completed
@@ -86,7 +86,7 @@ const AboutMetrics = () => {
               />
               <div>
                 <h3 className="font-sora font-semibold text-xl md:text-[28px] xl:text-[40px] leading-[1.1em] md:leading-[36px] xl:leading-[48px] tracking-[-0.01em] text-[#474545]">
-                  <CountUp end={20000} format />{" "}
+                  <CountUp end={100000} format />{" "}
                   <span className="text-[9px] md:text-xs xl:text-lg font-semibold">
                     sq.ft.
                   </span>
@@ -110,7 +110,7 @@ const AboutMetrics = () => {
               />
               <div>
                 <h3 className="font-sora font-semibold text-xl md:text-[28px] xl:text-[40px] leading-[1.1em] md:leading-[36px] xl:leading-[48px] tracking-[-0.01em] text-[#474545]">
-                  <CountUp end={25} />
+                  <CountUp end={21} />
                 </h3>
                 <p className="font-inter font-medium text-[8px] xl:text-[12px] leading-[100%] tracking-[0] uppercase text-[#6D6D6D]">
                   Years in the Industry

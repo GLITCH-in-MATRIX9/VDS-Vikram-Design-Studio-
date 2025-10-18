@@ -21,64 +21,55 @@
         "id": 1,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548866/Architecture-1-Upgradation_of_Batadrava_Than_at_Barduwa_Nagaon_Assam_fuvzqz.webp",
         "project_name": "Batadrava Than",
-        "project_location": "Barduwa, Assam",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Barduwa, Assam"
       },
       {
         "id": 2,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548866/Architecture-2-Upgradation_of_Batadrava_Than_at_Barduwa_Nagaon_Assam_v4nnzm.webp",
         "project_name": "Batadrava Than",
-        "project_location": "Barduwa, Assam",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Barduwa, Assam"
       },
       {
         "id": 3,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548866/Architecture-3-Jamugurihat_Auditorium_nod86d.webp",
         "project_name": "Jamugurihat Auditorium",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Sonitpur, Assam"
       },
       {
         "id": 4,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548868/Architecture-4-Shanti_Villa_gpt376.webp",
         "project_name": "Shanti Villa",
-        "project_location": "Dimapur, Nagaland",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Dimapur, Nagaland"
       },
       {
         "id": 5,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548870/Architecture-5-Margherita_Villa_ctzbnx.webp",
         "project_name": "Margherita Villa",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Guwahati, Assam"
       },
       {
         "id": 6,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548870/Architecture-6_Civil_Services_Officers_Institute_llx3yl.webp",
         "project_name": "Civil Services Officers' Institute",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Agartala, Tripura"
       },
       {
         "id": 7,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548873/Architecture-7-Bhupen_Hazarika_Museum_lgnqbh.webp",
         "project_name": "Bhupen Hazarika Museum",
-        "project_location": "Guwahati, Assam",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Guwahati, Assam"
       },
       {
         "id": 8,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548873/Architecture-8-Khagrabari_Indoor_Stadium_tx9p3x.webp",
         "project_name": "Khagrabari Indoor Stadium",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Udalguri, Assam"
       },
       {
         "id": 9,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548876/Architecture-9-Bhergaon_Sports_Complex_rzi3id.webp",
         "project_name": "Bhergaon Sports Complex",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Udalguri, Assam"
       }
     ]
   },
@@ -100,85 +91,73 @@
         "id": 1,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548876/01-The_CA_Studio_converted_compressed_msxnum.webp",
         "project_name": "The CA Studio",
-        "project_location": "Guwahati, Assam",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Guwahati, Assam"
       },
       {
         "id": 2,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548877/02-The_CA_Studio_converted_compressed_pozotk.webp",
         "project_name": "The CA Studio",
-        "project_location": "Guwahati, Assam",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Guwahati, Assam"
       },
       {
         "id": 3,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548879/03-Shanti_Villa_converted_compressed_n04npf.webp",
         "project_name": "Shanti Villa",
-        "project_location": "Dimapur, Nagaland",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Dimapur, Nagaland"
       },
       {
         "id": 4,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548880/04-Shanti_Villa_converted_compressed_tiyi2a.webp",
         "project_name": "Shanti Villa",
-        "project_location": "Dimapur, Nagaland",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Dimapur, Nagaland"
       },
       {
         "id": 5,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548881/05-Shanti_Villa_converted_compressed_cjjblm.webp",
         "project_name": "Shanti Villa",
-        "project_location": "Dimapur, Nagaland",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Dimapur, Nagaland"
       },
       {
         "id": 6,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548884/06-Shanti_Villa_converted_compressed_lyfidw.webp",
         "project_name": "Shanti Villa",
-        "project_location": "Dimapur, Nagaland",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Dimapur, Nagaland"
       },
       {
         "id": 7,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548885/07-Sethi_Penthouse_converted_compressed_momzty.webp",
         "project_name": "Sethi Penthouse",
-        "project_location": "Guwahati, Assam",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Guwahati, Assam"
       },
       {
         "id": 8,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548886/08-Iris_Boutique_Hotel_converted_compressed_yen7dp.webp",
         "project_name": "Iris Boutique Hotel",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Guwahati, Assam"
       },
       {
         "id": 9,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548887/09-Iris_Boutique_Hotel_converted_compressed_gih8de.webp",
         "project_name": "Iris Boutique Hotel",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Guwahati, Assam"
       },
       {
         "id": 10,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548888/10-TK_Engineering_Consortium_Corporate_Office_converted_compressed_arfhd3.webp",
         "project_name": "TK Engineering Consortium Corporate Office",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Itanagar, Arunachal Pradesh"
       },
       {
         "id": 11,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548890/11-Margherita_Villa_converted_compressed_cn47ji.webp",
         "project_name": "Margherita Villa",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Guwahati, Assam"
       },
       {
         "id": 12,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548892/12-Margherita_Villa_converted_compressed_c4gkcc.webp",
         "project_name": "Margherita Villa",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Guwahati, Assam"
       }
     ]
   },
@@ -200,50 +179,43 @@
         "id": 1,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548892/landscape_01-Bismillah_Khan_College_ubkfy0.webp",
         "project_name": "Bismillah Khan College",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Dumraon, Bihar"
       },
       {
         "id": 2,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548894/landscape_02-Bismillah_Khan_College_uefj4g.webp",
         "project_name": "Bismillah Khan College",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Dumraon, Bihar"
       },
       {
         "id": 3,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548899/landscape_03-Margherita_Villa_oertds.webp",
         "project_name": "Margherita Villa",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Guwahati, Assam"
       },
       {
         "id": 4,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548907/landscape_04-Margherita_Villa_yxnbqd.webp",
         "project_name": "Margherita Villa",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Guwahati, Assam"
       },
       {
         "id": 5,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548899/landscape_05-Margherita_Villa_xxdqkr.webp",
         "project_name": "Margherita Villa",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Guwahati, Assam"
       },
       {
         "id": 6,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548901/landscape_06-IAS_Officer_Residence_hcswyh.webp",
         "project_name": "IAS Officer Residence",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Agartala, Tripura"
       },
       {
         "id": 7,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548900/landscape_07-IAS_Officer_Residence_vo2cyh.webp",
         "project_name": "IAS Officer Residence",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Agartala, Tripura"
       }
     ]
   },
@@ -261,43 +233,37 @@
         "id": 1,
         "img_src": "https://picsum.photos/400/225?random=3",
         "project_name": "Project Name",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Location Name, City Name"
       },
       {
         "id": 2,
         "img_src": "https://picsum.photos/400/225?random=3",
         "project_name": "Project Name",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Location Name, City Name"
       },
       {
         "id": 3,
         "img_src": "https://picsum.photos/400/225?random=3",
         "project_name": "Project Name",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Location Name, City Name"
       },
       {
         "id": 4,
         "img_src": "https://picsum.photos/400/225?random=3",
         "project_name": "Project Name",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Location Name, City Name"
       },
       {
         "id": 5,
         "img_src": "https://picsum.photos/400/225?random=3",
         "project_name": "Project Name",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Location Name, City Name"
       },
       {
         "id": 6,
         "img_src": "https://picsum.photos/400/225?random=3",
         "project_name": "Project Name",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Location Name, City Name"
       }
     ]
   },
@@ -315,43 +281,37 @@
         "id": 1,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548904/planning_01-Dr._T_Ao_Sports_Complex_icf389.webp",
         "project_name": "Dr. T Ao Sports Complex",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Kaliabor, Assam"
       },
       {
         "id": 2,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548904/planning_02-Tamulpur_District_Sports_Complex_csp8ra.webp",
         "project_name": "Tamulpur District Sports Complex",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Tamulpur, Assam"
       },
       {
         "id": 3,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548907/planning_03-Khagrabari_Indoor_Stadium_Complex_mqskhx.webp",
         "project_name": "Khagrabari Indoor Stadium Complex",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Udalguri, Assam"
       },
       {
         "id": 4,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548907/planning_04-Hidipi_Sports_Complex_g4o5gp.webp",
         "project_name": "Hidipi Sports Complex",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Anglong, Assam"
       },
       {
         "id": 5,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548908/planning_05-Batadrava_Than_Complex_at_Barduwa_Nagaon_Assam_sq8q0n.webp",
         "project_name": "Batadrava Than Complex",
-        "project_location": "Barduwa, Assam",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Barduwa, Assam"
       },
       {
         "id": 6,
         "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548910/planning_06-Khatara_Satra_Complex_hfnjvc.webp",
         "project_name": "Khatara Satra Complex",
-        "project_location": "Location Name, City Name",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Kamargaon, Assam"
       }
     ]
   },
@@ -367,24 +327,34 @@
     "carousel_cards": [
       {
         "id": 1,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760551693/SPACE_ACE_LOGO_gk2q2v.webp",
+        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760797433/SPACE_ACE_LOGO_g5u2eu.png",
         "project_name": "Space Ace Architects ",
-        "project_location": "Our Guiding Collaborators",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "Our Guiding Collaborators"
       },
       {
         "id": 2,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760551693/STRUCTURE_LOGO_hg7ici.webp",
-        "project_name": "Swasti Engineers & Associates",
-        "project_location": "Structural Consultant",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "text": "Space Ace Architects, based in New Delhi, brings over three decades of expertise in complex public and institutional architecture—from airports and science cities to major medical and educational campuses across India."
       },
+
       {
         "id": 3,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760551694/MEPF_LOGO_myl6x3.webp",
+        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760797501/STRUCTURE_LOGO_cuox4z.png",
+        "project_name": "Swasti Engineers & Associates",
+        "project_location": "Structural Consultant"
+      },
+      {
+        "id": 4,
+        "text": "Swasti Engineers & Associates is recognized as a structural engineering consultancy based in Kolkata, dedicated to delivering safe, economical, and innovative design solutions. Expertise is applied in the design and detailing of residential, commercial, industrial, and specialized structures, with advanced software tools and relevant codes being utilized to ensure precision and reliability. Projects ranging from high-rise buildings to industrial facilities have been successfully handled, and trusted partnerships with developers, architects, and contractors have been established over time. A commitment to quality, innovation, and professionalism is upheld in every project undertaken. "
+      },
+      {
+        "id": 5,
+        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760797500/MEPF_LOGO_hbohop.png",
         "project_name": "Aayushi Consultancy & Services Pvt. Ltd.",
-        "project_location": "MEPF Consultant",
-        "text": "This text will wrap to the next line and is meant to be a caption for the image above"
+        "project_location": "MEPF Consultant"
+      },
+      {
+        "id": 6,
+        "text": "(Mechanical, Electrical, Plumbing & Fire-fighting)​ \n\nAayushi Consultancy & Services Pvt. Ltd. delivers comprehensive building services engineering, from energy-efficient HVAC systems to smart electrical, plumbing, and fire-safety solutions. Their focus on sustainability, occupant comfort, and code compliance perfectly complements our architectural vision.​In collaboration with VDS, they provide cohesive, high-performance services engineering that supports design integrity and operational excellence. "
       }
     ]
   }
