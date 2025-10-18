@@ -90,20 +90,22 @@ const AboutSection = ({ data }) => {
         </motion.h1>
 
         {/* Introductory paragraphs */}
-        <motion.div
-          className="font-inter leading-[1.4em] max-w-4xl space-y-4 sm:space-y-6 
+        {data.paragraphs && (
+          <motion.div
+            className="font-inter leading-[1.4em] max-w-4xl space-y-4 sm:space-y-6 
             text-xs md:text-sm xl:text-base text-[#474545]"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.1 }}
-        >
-          {data.paragraphs.map((para) => (
-            <motion.p key={para.id} variants={itemVariants}>
-              {para.text}
-            </motion.p>
-          ))}
-        </motion.div>
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.1 }}
+          >
+            {data.paragraphs.map((para) => (
+              <motion.p key={para.id} variants={itemVariants}>
+                {para.text}
+              </motion.p>
+            ))}
+          </motion.div>
+        )}
 
         {/* Horizontally scrollable cards */}
         <motion.div
@@ -140,7 +142,7 @@ const AboutSection = ({ data }) => {
             {data.carousel_cards.map((card) => (
               <motion.div
                 key={card.id}
-                className="flex flex-col gap-4 flex-shrink-0"
+                className="flex flex-col gap-4 flex-shrink-0 w-[400px]"
                 variants={itemVariants}
               >
                 {card.img_src ? (
@@ -158,7 +160,7 @@ const AboutSection = ({ data }) => {
                     </div>
                   </>
                 ) : (
-                  <div className=" px-4 mb-6">
+                  <div className=" mb-6">
                     <p className="text-[#6D6D6D] leading-[140%] w-2xs md:w-[400px] md:leading-relaxed whitespace-pre-wrap text-sm ">
                       {card.text}
                     </p>
