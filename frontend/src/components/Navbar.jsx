@@ -16,7 +16,7 @@ import filterIcon from "../assets/Icons/Vector.png";
 import hamburgerIcon from "../assets/navbar/HamburgerMenu.png";
 import closeIcon from "../assets/navbar/Close.png";
 
-import FilterSidebar from "./FilterSidebar";
+import FilterSidebar from "./FilterSideBar.jsx";
 
 const filterOptions = {
   Education: ["Schools","Training Institutions/Centres","Research Centres","Colleges & Universities"],
