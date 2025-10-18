@@ -142,7 +142,7 @@ const AboutSection = ({ data }) => {
             {data.carousel_cards.map((card) => (
               <motion.div
                 key={card.id}
-                className="flex flex-col gap-4 flex-shrink-0 w-[400px]"
+                className="flex flex-col gap-4 flex-shrink-0 "
                 variants={itemVariants}
               >
                 {card.img_src ? (
@@ -150,7 +150,7 @@ const AboutSection = ({ data }) => {
                     <img
                       src={card.img_src}
                       alt={`${card.project_name} image`}
-                      className="w-full h-[140px] xl:h-[225px] rounded-2xl object-cover object-center grid place-content-center bg-[#D1D1D1] text-xs"
+                      className="w-[250px] xl:w-[400px] h-[140px] xl:h-[225px] rounded-2xl object-cover object-center grid place-content-center bg-[#D1D1D1] text-xs"
                       loading="lazy"
                     />
                     <div>
