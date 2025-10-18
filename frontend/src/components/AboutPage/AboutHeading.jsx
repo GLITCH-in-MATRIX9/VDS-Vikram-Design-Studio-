@@ -120,8 +120,8 @@ const AboutHeading = () => {
         >
           <div className="w-full h-full object-cover rounded-xl">
             <img
-              src="https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057665/yqbxzbkijtuvtde5nilu.jpg"
-              alt="Description of the image"
+              src="https://res.cloudinary.com/dlrkoth8o/image/upload/v1760801609/ABOUT_IMAGE_a3c9h5.webp"
+              alt="About Hero image"
               className="w-full h-full object-cover rounded-md"
             />
           </div>
