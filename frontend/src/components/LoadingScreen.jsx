@@ -74,7 +74,7 @@ const WebsiteLoader = ({ onAnimationComplete }) => {
               style={{ maxHeight: "100vh" }}
               initial={{ opacity: 1 }}
               animate={fadeVideo ? { opacity: 0 } : { opacity: 1 }}
-              transition={{ duration: 1.2, ease: "easeInOut" }}
+              transition={{ duration: 1.5, ease: "easeInOut" }}
             />
 
             {/* Overlay container slides upward */}
