@@ -1,27 +1,39 @@
 import React, { useRef, useState, useEffect } from "react";
 import { FiMapPin } from "react-icons/fi";
-import { motion } from "framer-motion";
+import { motion, useMotionValue, animate } from "framer-motion";
 import ProjectSectionDisplay from "./ProjectSectionDisplay";
 import LeftArrowIcon from "../assets/Icons/LeftArrowIcon.svg";
 import RightArrowIcon from "../assets/Icons/RightArrowIcon.svg";
 import CloseIcon from "../assets/Icons/CloseIcon.svg";
 
+const useIsDesktop = () => {
+  const [isDesktop, setIsDesktop] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 1280px)");
+    const handleChange = (e) => setIsDesktop(e.matches);
+
+    handleChange(mediaQuery); // Initial check
+    mediaQuery.addEventListener("change", handleChange);
+
+    return () => mediaQuery.removeEventListener("change", handleChange);
+  }, []);
+
+  return isDesktop;
+};
+
 const HorizontalScrollComponent = ({ onClose, project }) => {
-  const [xOffset, setXOffset] = useState(0);
+  const x = useMotionValue(0);
   const containerRef = useRef(null);
   const contentRef = useRef(null);
   const [maxScroll, setMaxScroll] = useState(0);
   const scrollAmount = 960;
+  const isDesktop = useIsDesktop();
 
   const [transition, setTransition] = useState({
     duration: 1.4,
     ease: [0.76, 0, 0.24, 1],
   });
-
-  // Drag state
-  const isDragging = useRef(false);
-  const startX = useRef(0);
-  const scrollStart = useRef(0);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -44,50 +56,11 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
   }, [project]);
 
   const scrollLeft = () => {
-    setTransition({ duration: 1.4, ease: [0.76, 0, 0.24, 1] });
-    setXOffset((prev) => Math.min(prev + scrollAmount, 0));
+    animate(x, Math.min(x.get() + scrollAmount, 0), transition);
   };
 
   const scrollRight = () => {
-    setTransition({ duration: 1.4, ease: [0.76, 0, 0.24, 1] });
-    setXOffset((prev) => Math.max(prev - scrollAmount, maxScroll));
-  };
-
-  // Drag handlers
-  const onMouseDown = (e) => {
-    isDragging.current = true;
-    startX.current = e.clientX;
-    scrollStart.current = xOffset;
-    setTransition({ duration: 0 });
-  };
-
-  const onMouseMove = (e) => {
-    if (!isDragging.current) return;
-    const delta = e.clientX - startX.current;
-    setXOffset(Math.min(0, Math.max(maxScroll, scrollStart.current + delta)));
-  };
-
-  const onMouseUp = () => {
-    isDragging.current = false;
-    setTransition({ duration: 0.8, ease: [0.76, 0, 0.24, 1] });
-  };
-
-  const onTouchStart = (e) => {
-    isDragging.current = true;
-    startX.current = e.touches[0].clientX;
-    scrollStart.current = xOffset;
-    setTransition({ duration: 0 });
-  };
-
-  const onTouchMove = (e) => {
-    if (!isDragging.current) return;
-    const delta = e.touches[0].clientX - startX.current;
-    setXOffset(Math.min(0, Math.max(maxScroll, scrollStart.current + delta)));
-  };
-
-  const onTouchEnd = () => {
-    isDragging.current = false;
-    setTransition({ duration: 0.8, ease: [0.76, 0, 0.24, 1] });
+    animate(x, Math.max(x.get() - scrollAmount, maxScroll), transition);
   };
 
   return (
@@ -121,19 +94,19 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
       {/* Scrollable Area */}
       <div
         ref={containerRef}
-        className="flex overflow-x-hidden h-full cursor-grab"
-        onMouseDown={onMouseDown}
-        onMouseMove={onMouseMove}
-        onMouseLeave={onMouseUp}
-        onMouseUp={onMouseUp}
-        onTouchStart={onTouchStart}
-        onTouchMove={onTouchMove}
-        onTouchEnd={onTouchEnd}
+        className={`flex h-full ${
+          isDesktop
+            ? "overflow-x-hidden cursor-grab" // Custom drag on desktop
+            : "overflow-x-scroll hide-scrollbar" // Native scroll on mobile/tablet
+        }`}
       >
         <motion.div
           ref={contentRef}
-          animate={{ x: xOffset }}
-          transition={transition}
+          style={isDesktop ? { x } : {}}
+          drag={isDesktop ? "x" : false}
+          dragConstraints={isDesktop ? { left: maxScroll, right: 0 } : false}
+          dragElastic={0} // Prevents over-dragging
+          // Remove animate and transition props
           className="flex flex-nowrap h-full items-center"
         >
           {/* Desktop Project Info */}
