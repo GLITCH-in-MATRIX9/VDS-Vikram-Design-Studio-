@@ -6,6 +6,7 @@ import { AuthProvider } from "./context/authContext";
 import { FilterProvider } from "./context/filterContext";
 import { SearchProvider } from "./context/searchContext";
 import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import LoadingScreen from "./components/LoadingScreen";
 import SectionDivider from "./components/SectionDivider";
 import { ToastContainer } from "react-toastify";
@@ -54,19 +55,31 @@ function AppContent() {
 
   return (
     <>
-      {isLoading ? (
-        <LoadingScreen onAnimationComplete={handleLoadingComplete} />
-      ) : (
-        <>
-          {showNavbar && <Navbar />}
-          <SectionDivider />
-          <div className="min-h-[80vh] bg-[#f2efee]">
-            <Routes />
-          </div>
-          <SectionDivider />
-          {showFooter && <Footer />}
-        </>
-      )}
+      <AnimatePresence>
+        {isLoading ? (
+          // The key is essential for AnimatePresence
+          <LoadingScreen
+            key="loader"
+            onAnimationComplete={handleLoadingComplete}
+          />
+        ) : (
+          // This motion.div wraps your entire "page"
+          <motion.div
+            key="main-content"
+            initial={{ y: "100vh" }} // Start off-screen at the bottom
+            animate={{ y: "0vh" }} // Animate to its normal position (top of screen)
+            transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }} // This is the slide-up animation
+          >
+            {showNavbar && <Navbar />}
+            <SectionDivider />
+            <div className="min-h-[80vh] bg-[#f2efee]">
+              <Routes />
+            </div>
+            <SectionDivider />
+            {showFooter && <Footer />}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
 }
