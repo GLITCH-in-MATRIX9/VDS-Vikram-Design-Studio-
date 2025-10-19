@@ -36,7 +36,7 @@ const Heading = () => {
 
         {/* Paragraphs */}
         <motion.p
-          className="font-inter font-normal text-xs md:text-sm leading-[1.4em] tracking-[-0.01em]"
+          className="font-inter font-normal text-xs md:text-sm xl:text-base leading-[1.4em] tracking-[-0.01em]"
           variants={itemVariants}
         >
           Vikram Design Studio is led by a multidisciplinary team of architects,
@@ -46,7 +46,7 @@ const Heading = () => {
           shared values and a design-first approach.
         </motion.p>
         <motion.p
-          className="font-inter font-normal text-xs md:text-sm leading-[1.4em] tracking-[-0.01em]"
+          className="font-inter font-normal text-xs md:text-sm xl:text-base leading-[1.4em] tracking-[-0.01em]"
           variants={itemVariants}
         >
           While Guwahati remains our operational core, major design decisions
@@ -55,7 +55,7 @@ const Heading = () => {
           rooted while scaling outwardly.
         </motion.p>
         <motion.p
-          className="font-inter font-normal text-xs md:text-sm leading-[1.4em] tracking-[-0.01em]"
+          className="font-inter font-normal text-xs md:text-sm xl:text-base leading-[1.4em] tracking-[-0.01em]"
           variants={itemVariants}
         >
           Our studio values clarity, collaboration, and curiosity. We believe
