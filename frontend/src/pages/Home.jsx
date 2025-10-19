@@ -1,5 +1,5 @@
 // src/pages/Home.jsx
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import {
   motion,
   useSpring,
@@ -8,12 +8,12 @@ import {
   useMotionValue,
 } from "framer-motion";
 import { useLenis, ReactLenis } from "lenis/react"; // Smooth scroll library
-import debounce from "lodash/debounce";
 
 import ProjectCard from "../components/ProjectCard";
 import projectApi from "../services/projectApi";
 import LoadingScreen from "../components/LoadingScreen";
 import { useFilters } from "../context/filterContext";
+import { useSearch } from "../context/searchContext";
 
 const lenisOptions = {
   lerp: 0.1,
@@ -27,7 +27,8 @@ const Home = () => {
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { categoryContext, subCategoryContext, searchQuery } = useFilters();
+  const { categoryContext, subCategoryContext } = useFilters();
+  const { searchQuery } = useSearch();
 
   const scrollY = useMotionValue(0);
 
@@ -52,14 +53,6 @@ const Home = () => {
   const perspectiveOrigin = useTransform(
     scrollY,
     (y) => `50% ${y + window.innerHeight / 2}px`
-  );
-
-  // Debounced search handler
-  const handleSearchDebounced = useCallback(
-    debounce((value) => {
-      setSearchQuery(value);
-    }, 300),
-    []
   );
 
   // Fetch projects from API
@@ -95,7 +88,8 @@ const Home = () => {
     if (subCategoryContext) {
       result = result.filter(
         (project) =>
-          project.subCategory?.toLowerCase() === subCategoryContext.toLowerCase()
+          project.subCategory?.toLowerCase() ===
+          subCategoryContext.toLowerCase()
       );
     }
 
@@ -108,7 +102,9 @@ const Home = () => {
           project.client.toLowerCase().includes(query) ||
           project.collaborators.toLowerCase().includes(query) ||
           project.projectTeam.toLowerCase().includes(query) ||
-          project.projectLeaders.some((pl) => pl.toLowerCase().includes(query)) ||
+          project.projectLeaders.some((pl) =>
+            pl.toLowerCase().includes(query)
+          ) ||
           project.tags.some((tag) => tag.toLowerCase().includes(query))
       );
     }

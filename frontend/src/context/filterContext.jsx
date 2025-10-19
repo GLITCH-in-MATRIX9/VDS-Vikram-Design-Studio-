@@ -1,16 +1,14 @@
-import React, { createContext, useContext, useState, useCallback } from "react";
+import React, { createContext, useContext, useState } from "react";
 
 const FilterContext = createContext();
 
 export const FilterProvider = ({ children }) => {
   const [categoryContext, setCategoryContext] = useState(null);
   const [subCategoryContext, setSubCategoryContext] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
 
   const clearFilters = () => {
     setCategoryContext(null);
     setSubCategoryContext(null);
-    setSearchQuery("");
   };
 
   return (
@@ -20,8 +18,6 @@ export const FilterProvider = ({ children }) => {
         setCategoryContext,
         subCategoryContext,
         setSubCategoryContext,
-        searchQuery,
-        setSearchQuery,
         clearFilters,
       }}
     >

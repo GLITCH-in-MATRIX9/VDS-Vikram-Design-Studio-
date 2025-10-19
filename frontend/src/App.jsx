@@ -4,6 +4,7 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import { AuthProvider } from "./context/authContext";
 import { FilterProvider } from "./context/filterContext";
+import { SearchProvider } from "./context/searchContext";
 import React, { useState } from "react";
 import LoadingScreen from "./components/LoadingScreen";
 import SectionDivider from "./components/SectionDivider";
@@ -15,19 +16,21 @@ function App() {
     <AuthProvider>
       <BrowserRouter>
         <FilterProvider>
-          <AppContent />
-          <ToastContainer
-            position="top-right"
-            autoClose={3000}
-            hideProgressBar={false}
-            newestOnTop={true}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-            theme="colored"
-          />
+          <SearchProvider>
+            <AppContent />
+            <ToastContainer
+              position="top-right"
+              autoClose={3000}
+              hideProgressBar={false}
+              newestOnTop={true}
+              closeOnClick
+              rtl={false}
+              pauseOnFocusLoss
+              draggable
+              pauseOnHover
+              theme="colored"
+            />
+          </SearchProvider>
         </FilterProvider>
       </BrowserRouter>
     </AuthProvider>
