@@ -2,11 +2,17 @@ import React, { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
 
 const images = [
-  "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057665/yqbxzbkijtuvtde5nilu.jpg",
-  "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057651/xadw3lwnfahqwjxpakbf.jpg",
-  "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057650/c2l4o8vfowaghj1bfy4n.jpg",
-  "https://res.cloudinary.com/ddrsuvea0/image/upload/v1758057646/cqakxcxvhrabwwg5hylr.jpg",
+ "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760902331/07_dzixnq.jpg",
+ "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760902330/01_e5lq8r.jpg",
+ "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760902329/02_tztwzw.jpg",
+ "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760902328/03_wckaes.jpg",
+ "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760902328/04_tf7njj.jpg",
+ "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760902328/06_fkj3sf.jpg",
+ "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760902328/05_jxymi1.jpg"
 ];
+
+
+
 
 const MarqueeImages = () => {
   const [width, setWidth] = useState(0);
