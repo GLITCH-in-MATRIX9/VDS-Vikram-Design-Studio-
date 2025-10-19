@@ -3,6 +3,7 @@ import { Schema, model, Document } from 'mongoose';
 export interface IProjectSection {
   type: 'text' | 'image' | 'gif';
   content: string; // text content, image URL, or GIF URL
+  publicId?: string; // Cloudinary public id for images/GIFs
 }
 
 export interface IProject extends Document {
@@ -30,6 +31,7 @@ const ProjectSectionSchema = new Schema<IProjectSection>(
   {
     type: { type: String, enum: ['text', 'image', 'gif'], required: true },
     content: { type: String, required: true },
+    publicId: { type: String },
   },
   { _id: false }
 );

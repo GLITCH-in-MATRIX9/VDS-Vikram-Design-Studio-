@@ -31,52 +31,66 @@ export const createProject = async (req: Request, res: Response) => {
       tags,
       keyDate,
       sections,
-      sizeM2FT2, // optional
+      sizeM2FT2,
     } = req.body;
 
     const files = req.files as any;
+
+    // ------------------- ADDED: normalize projectLeaders and tags -------------------
+    const leaders =
+      typeof projectLeaders === "string"
+        ? JSON.parse(projectLeaders)
+        : Array.isArray(projectLeaders)
+        ? projectLeaders
+        : [];
+    const tagList =
+      typeof tags === "string"
+        ? JSON.parse(tags)
+        : Array.isArray(tags)
+        ? tags
+        : [];
+    // -------------------------------------------------------------------------------
+
+    // ------------------- ADDED: normalize project folder -------------------
+    const projectFolder = `VDS_FOLDER/${name.replace(/[^a-zA-Z0-9]/g, "_").toUpperCase()}`;
+    // ----------------------------------------------------------------------
+
     let previewImageUrl =
       files?.previewImage?.[0]?.url || req.body.previewImageUrl || "";
     let previewImagePublicId =
       files?.previewImage?.[0]?.publicId || req.body.previewImagePublicId || "";
 
+    // Upload preview if base64
     if (previewImageUrl && isBase64Image(previewImageUrl)) {
-      const result = await convertBase64ToCloudinary(
-        previewImageUrl,
-        `VDS_FOLDER/${name.replace(/[^a-zA-Z0-9]/g, "_")}`
-      );
+      const result = await convertBase64ToCloudinary(previewImageUrl, projectFolder);
       previewImageUrl = result.url;
       previewImagePublicId = result.publicId;
     }
 
     const parsedSections =
       typeof sections === "string" ? JSON.parse(sections) : sections || [];
-    const parsedProjectLeaders: string[] =
-      typeof projectLeaders === "string"
-        ? JSON.parse(projectLeaders)
-        : Array.isArray(projectLeaders)
-        ? projectLeaders
-        : [];
-    const parsedTags: string[] =
-      typeof tags === "string"
-        ? JSON.parse(tags)
-        : Array.isArray(tags)
-        ? tags
-        : [];
 
     const updatedSections = await Promise.all(
       parsedSections.map(async (sec: any, index: number) => {
         const sectionFile = files?.sections?.[index];
-        if (sectionFile)
-          return { type: sec.type || "image", content: sectionFile.url };
-        if (sec.content && isBase64Image(sec.content)) {
-          const result = await convertBase64ToCloudinary(
-            sec.content,
-            `VDS_FOLDER/${name.replace(/[^a-zA-Z0-9]/g, "_")}`
-          );
-          return { type: sec.type || "image", content: result.url };
+        if (sectionFile) {
+          return {
+            type: sec.type || "image",
+            content: sectionFile.url,
+            publicId: sectionFile.publicId || undefined,
+            order: index,
+          };
         }
-        return sec;
+        if (sec.content && isBase64Image(sec.content)) {
+          const result = await convertBase64ToCloudinary(sec.content, projectFolder);
+          return {
+            type: sec.type || "image",
+            content: result.url,
+            publicId: result.publicId,
+            order: index,
+          };
+        }
+        return { ...sec, publicId: sec.publicId || undefined };
       })
     );
 
@@ -89,14 +103,14 @@ export const createProject = async (req: Request, res: Response) => {
       subCategory,
       client,
       collaborators,
-      projectLeaders: parsedProjectLeaders,
+      projectLeaders: leaders,
       projectTeam,
-      tags: parsedTags,
+      tags: tagList,
       keyDate,
       sections: updatedSections,
       previewImageUrl,
       previewImagePublicId,
-      sizeM2FT2, // optional
+      sizeM2FT2,
     });
 
     await project.save();
@@ -134,11 +148,30 @@ export const updateProject = async (req: Request, res: Response) => {
     } = req.body as Record<string, any>;
 
     const files = req.files as any;
+
+    // ------------------- ADDED: normalize projectLeaders and tags -------------------
+    const leaders =
+      typeof projectLeaders === "string"
+        ? JSON.parse(projectLeaders)
+        : Array.isArray(projectLeaders)
+        ? projectLeaders
+        : [];
+    const tagList =
+      typeof tags === "string"
+        ? JSON.parse(tags)
+        : Array.isArray(tags)
+        ? tags
+        : [];
+    // -------------------------------------------------------------------------------
+
     let previewImageUrl =
       files?.previewImage?.[0]?.url || reqPreviewImageUrl || "";
     let previewImagePublicId =
       files?.previewImage?.[0]?.publicId || reqPreviewImagePublicId || "";
 
+    const updateData: any = {};
+
+    // Handle preview image if base64
     if (previewImageUrl && isBase64Image(previewImageUrl)) {
       const result = await convertBase64ToCloudinary(
         previewImageUrl,
@@ -147,42 +180,67 @@ export const updateProject = async (req: Request, res: Response) => {
       previewImageUrl = result.url;
       previewImagePublicId = result.publicId;
     }
-    if (sizeM2FT2 !== undefined) {
-      updateData.sizeM2FT2 = sizeM2FT2;
-    }
 
+    if (sizeM2FT2 !== undefined) updateData.sizeM2FT2 = sizeM2FT2;
+
+    // Parse sections
     const parsedSections =
       typeof sections === "string"
         ? JSON.parse(sections)
         : Array.isArray(sections)
         ? sections
         : [];
-    const parsedProjectLeaders: string[] =
-      typeof projectLeaders === "string"
-        ? JSON.parse(projectLeaders)
-        : Array.isArray(projectLeaders)
-        ? projectLeaders
-        : [];
-    const parsedTags: string[] =
-      typeof tags === "string"
-        ? JSON.parse(tags)
-        : Array.isArray(tags)
-        ? tags
-        : [];
 
     const updatedSections = await Promise.all(
       parsedSections.map(async (sec: any, index: number) => {
         const sectionFile = files?.sections?.[index];
-        if (sectionFile)
-          return { type: sec.type || "image", content: sectionFile.url };
+
+        // New uploaded file
+        if (sectionFile) {
+          return {
+            type: sec.type || "image",
+            content: sectionFile.url,
+            publicId: sectionFile.publicId || undefined,
+            order: index,
+          };
+        }
+
+        // Base64 content
         if (sec.content && isBase64Image(sec.content)) {
           const result = await convertBase64ToCloudinary(
             sec.content,
             `VDS_FOLDER/${name.replace(/[^a-zA-Z0-9]/g, "_")}`
           );
-          return { type: sec.type || "image", content: result.url };
+          return {
+            type: sec.type || "image",
+            content: result.url,
+            publicId: result.publicId,
+            order: index,
+          };
         }
-        return sec;
+
+        // Existing URL without publicId → extract from URL
+        if (
+          sec.content &&
+          !sec.publicId &&
+          sec.type !== "text" &&
+          sec.content.includes("res.cloudinary.com")
+        ) {
+          try {
+            const urlParts = sec.content.split("/");
+            const fileNameWithExt = urlParts[urlParts.length - 1];
+            const fileName = fileNameWithExt.split(".")[0]; 
+            const folderPath = urlParts.slice(7, urlParts.length - 1).join("/"); 
+            sec.publicId = `${folderPath}/${fileName}`;
+          } catch (err) {
+            console.warn(
+              `⚠️ Failed to extract publicId from URL: ${sec.content}`,
+              err
+            );
+          }
+        }
+
+        return { ...sec, publicId: sec.publicId || undefined };
       })
     );
 
@@ -190,6 +248,7 @@ export const updateProject = async (req: Request, res: Response) => {
     if (!existing)
       return res.status(404).json({ message: "Project not found" });
 
+    // Delete old preview if replaced
     if (
       previewImagePublicId &&
       existing.previewImagePublicId &&
@@ -198,11 +257,32 @@ export const updateProject = async (req: Request, res: Response) => {
       try {
         await cloudinary.uploader.destroy(existing.previewImagePublicId);
       } catch (e) {
-        console.warn("⚠️ Failed to delete old Cloudinary image:", e);
+        console.warn("⚠️ Failed to delete old Cloudinary preview image:", e);
       }
     }
 
-    const updateData: any = {
+    // Delete replaced section images
+    for (
+      let i = 0;
+      i < Math.max(existing.sections.length, updatedSections.length);
+      i++
+    ) {
+      const oldSec = existing.sections[i];
+      const newSec = updatedSections[i];
+      if (oldSec?.publicId && (!newSec || newSec.content !== oldSec.content)) {
+        try {
+          await cloudinary.uploader.destroy(oldSec.publicId);
+        } catch (e) {
+          console.warn(
+            `⚠️ Failed to delete old section image at index ${i}:`,
+            e
+          );
+        }
+      }
+    }
+
+    // Merge update data
+    Object.assign(updateData, {
       name,
       location,
       year,
@@ -215,21 +295,21 @@ export const updateProject = async (req: Request, res: Response) => {
       subCategory,
       client,
       collaborators,
-      projectLeaders: parsedProjectLeaders,
+      projectLeaders: leaders,
       projectTeam,
-      tags: parsedTags,
+      tags: tagList,
       keyDate,
       sections: updatedSections,
       previewImageUrl: previewImageUrl || existing.previewImageUrl,
       previewImagePublicId:
         previewImagePublicId || existing.previewImagePublicId,
-      sizeM2FT2,
-    };
+    });
 
     const updated = await Project.findByIdAndUpdate(req.params.id, updateData, {
       new: true,
       runValidators: true,
     });
+
     return res.status(200).json(updated);
   } catch (err: any) {
     console.error("❌ Error updating project:", err);
@@ -271,19 +351,25 @@ export const deleteProject = async (req: Request, res: Response) => {
     const project = await Project.findById(req.params.id);
     if (!project) return res.status(404).json({ message: "Project not found" });
 
-    if (project.previewImagePublicId) {
+    const folderPrefix = project.previewImagePublicId
+      ? project.previewImagePublicId.split("/").slice(0, -1).join("/")
+      : null;
+
+    if (folderPrefix) {
       try {
-        await cloudinary.uploader.destroy(project.previewImagePublicId);
-      } catch (e) {
+        await cloudinary.api.delete_resources_by_prefix(folderPrefix);
+        await cloudinary.api.delete_folder(folderPrefix);
+        console.log(`✅ Deleted Cloudinary folder and all images: ${folderPrefix}`);
+      } catch (err) {
         console.warn(
-          "⚠️ Failed to delete Cloudinary image during project delete:",
-          e
+          `⚠️ Failed to delete Cloudinary folder or its images: ${folderPrefix}`,
+          err
         );
       }
     }
 
     await Project.findByIdAndDelete(req.params.id);
-    return res.status(200).json({ message: "Project deleted successfully" });
+    return res.status(200).json({ message: "Project and its images deleted successfully" });
   } catch (err: any) {
     return res
       .status(500)

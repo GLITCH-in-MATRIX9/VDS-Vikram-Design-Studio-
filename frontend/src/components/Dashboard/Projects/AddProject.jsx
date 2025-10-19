@@ -2,11 +2,12 @@ import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { FaGripVertical, FaTrash } from "react-icons/fa";
 import { FiUpload } from "react-icons/fi";
+import { toast, ToastContainer } from "react-toastify"; // ✅ React Toastify
+import "react-toastify/dist/ReactToastify.css";
 import projectApi from "../../../services/projectApi";
 
 const MAX_TEXT_LENGTH = 700;
 
-// Hardcoded list for the new Project Leader dropdown
 const PROJECT_LEADERS_OPTIONS = [
   "VIKRAMM B SHROFF",
   "POOZA AGARWAL",
@@ -98,7 +99,6 @@ const AddProject = () => {
     subCategory: "",
     client: "",
     collaborators: "",
-    // 🚨 1. New field added, initialized as an array for multi-select
     projectLeaders: [],
     projectTeam: "",
     tags: [],
@@ -115,11 +115,9 @@ const AddProject = () => {
   const [tagInput, setTagInput] = useState("");
   const [savedTags, setSavedTags] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
-  // 🚨 State for the Project Leader dropdown
   const [showLeaderDropdown, setShowLeaderDropdown] = useState(false);
 
   useEffect(() => {
-    // Fetch previously saved tags from backend
     const fetchSavedTags = async () => {
       try {
         const projects = await projectApi.getProjects();
@@ -130,7 +128,6 @@ const AddProject = () => {
         setSavedTags(Array.from(tags));
       } catch (err) {
         console.error("Failed to fetch saved tags:", err);
-        // Fallback for demonstration if API fails:
         setSavedTags([
           "SUSTAINABLE",
           "GREEN_BUILDING",
@@ -157,18 +154,10 @@ const AddProject = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    // 🚨 FIX: Explicitly handle the 'year' field to ensure it is stored as intended
     if (name === "year") {
-      setFormData((prev) => ({
-        ...prev,
-        // Store the value as a number-string directly. 
-        // The empty string check is important to allow the user to clear the field.
-        [name]: value,
-      }));
-      return; // Exit early to skip the uppercase logic
+      setFormData((prev) => ({ ...prev, [name]: value }));
+      return;
     }
-
     const upperCaseFields = [
       "name",
       "client",
@@ -178,23 +167,18 @@ const AddProject = () => {
       "status",
       "subCategory",
     ];
-
-    // Apply uppercase logic for other string fields
     setFormData((prev) => ({
       ...prev,
       [name]: upperCaseFields.includes(name) ? value.toUpperCase() : value,
     }));
   };
 
-  // 🚨 New handler for Project Leader multi-select
   const handleLeaderToggle = (leader) => {
     setFormData((prev) => {
       const leaders = prev.projectLeaders;
       if (leaders.includes(leader)) {
-        // Remove leader if already selected
         return { ...prev, projectLeaders: leaders.filter((l) => l !== leader) };
       } else {
-        // Add leader
         return { ...prev, projectLeaders: [...leaders, leader] };
       }
     });
@@ -274,7 +258,6 @@ const AddProject = () => {
     e.preventDefault();
     const fd = new FormData();
     Object.keys(formData).forEach((key) => {
-      // Tags and ProjectLeaders are arrays, so they should be stringified
       if (key === "tags" || key === "projectLeaders")
         fd.append(key, JSON.stringify(formData[key]));
       else fd.append(key, formData[key]);
@@ -283,23 +266,24 @@ const AddProject = () => {
     if (previewFile) fd.append("previewImage", previewFile);
 
     try {
-      // NOTE: Placeholder for API call
+      toast.info("Submitting project...");
       const res = await projectApi.createProject(fd);
+      toast.success("Project created successfully!");
       console.log("Submitting Project Data:", {
         formData,
         sections,
         previewFile: previewFile?.name,
       });
-      alert("Project creation simulated successfully!");
-      // console.log(res.data);
     } catch (err) {
       console.error(err);
-      alert(err?.response?.data?.message || "Failed to create project");
+      toast.error(err?.response?.data?.message || "Failed to create project");
     }
   };
 
   return (
     <div className="flex-1 p-6 bg-[#F5F1EE]">
+      <ToastContainer position="top-right" autoClose={3000} />
+
       <nav className="text-sm font-medium mb-4 text-[#722F37]">
         <span>Projects</span> &gt; <span>Add Project</span>
       </nav>
@@ -309,7 +293,6 @@ const AddProject = () => {
         className="bg-white border rounded p-6 flex flex-col gap-6"
       >
         <div className="grid grid-cols-2 gap-6 items-start">
-          {/* Mandatory Fields */}
           <div className="flex flex-col gap-4">
             <h2 className="font-bold text-lg text-[#454545]">
               1. Mandatory Fields
@@ -340,7 +323,7 @@ const AddProject = () => {
                 </option>
               ))}
             </select>
-            
+
             <div className="grid grid-cols-2 gap-2">
               <select
                 name="category"
@@ -404,7 +387,6 @@ const AddProject = () => {
               required
             />
 
-            {/* 🚨 NEW PROJECT LEADER FIELD (Multi-select dropdown) 🚨 */}
             <div className="relative">
               <div
                 className="border p-2 rounded w-full border-[#C9BEB8] cursor-pointer bg-white"
@@ -420,15 +402,15 @@ const AddProject = () => {
                   {PROJECT_LEADERS_OPTIONS.map((leader) => (
                     <div
                       key={leader}
-                      // Use onMouseDown to prevent dropdown closing when clicking on an option
                       onMouseDown={(e) => {
                         e.preventDefault();
                         handleLeaderToggle(leader);
                       }}
-                      className={`p-2 cursor-pointer text-sm flex justify-between items-center ${formData.projectLeaders.includes(leader)
-                        ? "bg-[#F1E4DF] font-semibold"
-                        : "hover:bg-gray-100"
-                        }`}
+                      className={`p-2 cursor-pointer text-sm flex justify-between items-center ${
+                        formData.projectLeaders.includes(leader)
+                          ? "bg-[#F1E4DF] font-semibold"
+                          : "hover:bg-gray-100"
+                      }`}
                     >
                       {leader}
                       {formData.projectLeaders.includes(leader) && (
@@ -438,7 +420,6 @@ const AddProject = () => {
                   ))}
                 </div>
               )}
-              {/* Hidden input to ensure form validation if needed, though state is primary here */}
               <input
                 type="hidden"
                 name="projectLeaders"
@@ -446,7 +427,6 @@ const AddProject = () => {
                 required
               />
             </div>
-            {/* 🚨 END NEW PROJECT LEADER FIELD 🚨 */}
 
             <input
               type="text"
@@ -467,13 +447,12 @@ const AddProject = () => {
                 className="border p-2 rounded w-full border-[#C9BEB8]"
                 required
               >
-                <option value="">SELECT STATUS *</option>  {/* Placeholder option */}
+                <option value="">SELECT STATUS *</option>
                 <option value="ON-SITE">ON-SITE</option>
                 <option value="DESIGN STAGE">DESIGN STAGE</option>
                 <option value="COMPLETED">COMPLETED</option>
                 <option value="UNBUILT">UNBUILT</option>
               </select>
-
 
               <input
                 type="number"
@@ -487,7 +466,6 @@ const AddProject = () => {
             </div>
           </div>
 
-          {/* Preview Upload */}
           <div className="flex flex-col gap-2 items-center justify-center border p-4 rounded border-[#C9BEB8]">
             <p className="text-xs text-gray-400 mb-2 text-center">
               ⚠️ Files must not be greater than 900 KB.
@@ -516,13 +494,11 @@ const AddProject = () => {
           </div>
         </div>
 
-        {/* Tags Input and Dropdown */}
         <div>
           <h2 className="font-bold text-lg mb-2 text-[#454545]">
             2. Project Tags
           </h2>
           <div className="relative">
-            {/* Input for adding new tags */}
             <div className="flex border rounded border-[#C9BEB8] overflow-hidden">
               <input
                 type="text"
@@ -554,7 +530,6 @@ const AddProject = () => {
               </button>
             </div>
 
-            {/* Dropdown for suggested tags */}
             {showDropdown && tagInput.length > 0 && (
               <div className="absolute z-10 w-full bg-white border border-t-0 rounded-b shadow-lg max-h-60 overflow-y-auto">
                 {savedTags
@@ -563,133 +538,113 @@ const AddProject = () => {
                       tag.includes(tagInput.toUpperCase()) &&
                       !formData.tags.includes(tag)
                   )
-                  .sort()
-                  .slice(0, 10)
                   .map((tag) => (
                     <div
                       key={tag}
-                      onMouseDown={() => {
+                      onMouseDown={(e) => {
+                        e.preventDefault();
                         handleAddTag(tag);
-                        setTagInput("");
-                        setShowDropdown(false);
                       }}
-                      className="p-2 cursor-pointer hover:bg-gray-100 text-sm"
+                      className="p-2 cursor-pointer hover:bg-gray-100"
                     >
                       {tag}
                     </div>
                   ))}
               </div>
             )}
-
-            {/* Display selected tags */}
-            <div className="mt-2 flex flex-wrap gap-2">
-              {formData.tags.map((tag) => (
-                <span
-                  key={tag}
-                  className="flex items-center gap-1 bg-[#F1E4DF] text-[#722F37] text-xs font-medium px-3 py-1 rounded-full"
-                >
-                  {tag}
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveTag(tag)}
-                    className="ml-1 text-[#722F37] hover:text-[#5B252C]"
-                    aria-label={`Remove tag ${tag}`}
-                  >
-                    &times;
-                  </button>
-                </span>
-              ))}
-            </div>
+          </div>
+          <div className="mt-2 flex gap-2 flex-wrap">
+            {formData.tags.map((tag) => (
+              <div
+                key={tag}
+                className="bg-[#722F37] text-white px-2 py-1 rounded flex items-center gap-1 text-xs font-medium"
+              >
+                {tag}
+                <FaTrash
+                  className="cursor-pointer text-white"
+                  size={12}
+                  onClick={() => handleRemoveTag(tag)}
+                />
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Key Date */}
         <div>
-          <label
-            htmlFor="keyDate"
-            className="block text-sm font-medium text-[#454545] mb-1"
-          >
-            Key Date
-          </label>
-          <input
-            id="keyDate"
-            type="date"
-            name="keyDate"
-            value={formData.keyDate}
-            readOnly
-            className="border p-2 rounded w-full border-[#C9BEB8] bg-gray-100 cursor-not-allowed"
-          />
-        </div>
-
-        {/* Sections */}
-        <div className="mt-6">
-          <h2 className="font-bold text-lg mb-4 text-[#454545]">
-            3. Content Sections (Files must not be greater than 900kb)
+          <h2 className="font-bold text-lg mb-2 text-[#454545]">
+            3. Project Sections
           </h2>
+          <div className="flex gap-2 mb-2">
+            <button
+              type="button"
+              onClick={handleAddText}
+              className="px-4 py-2 bg-[#722F37] text-white rounded hover:bg-[#632932] text-sm font-medium"
+            >
+              Add Text
+            </button>
+            <label className="px-4 py-2 bg-[#722F37] text-white rounded cursor-pointer hover:bg-[#632932] text-sm font-medium">
+              Add Image
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => handleAddImage(e.target.files[0])}
+              />
+            </label>
+            <label className="px-4 py-2 bg-[#722F37] text-white rounded cursor-pointer hover:bg-[#632932] text-sm font-medium">
+              Add GIF
+              <input
+                type="file"
+                accept="image/gif"
+                className="hidden"
+                onChange={(e) => handleAddGif(e.target.files[0])}
+              />
+            </label>
+          </div>
+
           <DragDropContext onDragEnd={handleDragEnd}>
             <Droppable droppableId="sections">
               {(provided) => (
                 <div {...provided.droppableProps} ref={provided.innerRef}>
                   {sections.map((section, index) => (
                     <Draggable
-                      key={`section-${index}`}
+                      key={index}
                       draggableId={`section-${index}`}
                       index={index}
                     >
                       {(provided) => (
                         <div
-                          className="mb-4 border rounded p-4 border-[#C9BEB8] bg-white flex flex-col gap-2"
                           ref={provided.innerRef}
                           {...provided.draggableProps}
+                          className="border rounded p-2 mb-2"
                         >
-                          <div className="flex justify-between items-center">
-                            <h3 className="font-medium text-[#454545]">
-                              {section.type === "text"
-                                ? "Text Section"
-                                : `${section.type.charAt(0).toUpperCase() +
-                                section.type.slice(1)
-                                } Section`}
-                            </h3>
-                            <div className="flex gap-2 items-center">
-                              <button
-                                type="button"
-                                onClick={() => handleRemoveContent(index)}
-                                className="text-[#C94A4A] hover:text-red-700"
-                              >
-                                <FaTrash />
-                              </button>
-                              <span
-                                {...provided.dragHandleProps}
-                                className="cursor-move text-gray-400"
-                              >
-                                <FaGripVertical />
-                              </span>
-                            </div>
+                          <div className="flex justify-between items-center mb-2">
+                            <span {...provided.dragHandleProps}>
+                              <FaGripVertical />
+                            </span>
+                            <FaTrash
+                              className="cursor-pointer text-red-500"
+                              onClick={() => handleRemoveContent(index)}
+                            />
                           </div>
 
-                          {section.type === "text" ? (
-                            <>
-                              <textarea
-                                className="border p-2 rounded w-full border-[#C9BEB8] min-h-[100px]"
-                                value={section.content}
-                                placeholder="Enter text"
-                                onChange={(e) =>
-                                  handleContentChange(index, e.target.value)
-                                }
-                                maxLength={MAX_TEXT_LENGTH}
-                              />
-                              <div className="text-right text-xs text-gray-500">
-                                {section.content.length} / {MAX_TEXT_LENGTH}
-                              </div>
-                            </>
-                          ) : (
-                            <div className="flex justify-center w-full">
-                              <img
-                                src={section.content}
-                                alt={`${section.type} content`}
-                                className="max-h-40 rounded object-cover"
-                              />
-                            </div>
+                          {section.type === "text" && (
+                            <textarea
+                              value={section.content}
+                              onChange={(e) =>
+                                handleContentChange(index, e.target.value)
+                              }
+                              className="border p-2 rounded w-full"
+                              rows={3}
+                            />
+                          )}
+                          {(section.type === "image" ||
+                            section.type === "gif") && (
+                            <img
+                              src={section.content}
+                              alt={section.type}
+                              className="w-auto h-40 object-cover rounded"
+                            />
                           )}
                         </div>
                       )}
@@ -700,34 +655,6 @@ const AddProject = () => {
               )}
             </Droppable>
           </DragDropContext>
-
-          <div className="flex gap-2 mt-4 justify-start">
-            <button
-              type="button"
-              onClick={handleAddText}
-              className="px-4 py-2 text-sm rounded bg-[#454545] text-white hover:bg-[#666666]"
-            >
-              + Add Text
-            </button>
-            <label className="px-4 py-2 text-sm rounded bg-[#454545] text-white cursor-pointer hover:bg-[#666666]">
-              + Add Image
-              <input
-                type="file"
-                accept="image/*,.gif"
-                className="hidden"
-                onChange={(e) => handleAddImage(e.target.files[0])}
-              />
-            </label>
-            <label className="px-4 py-2 text-sm rounded bg-[#454545] text-white cursor-pointer hover:bg-[#666666]">
-              + Add GIF
-              <input
-                type="file"
-                accept=".gif"
-                className="hidden"
-                onChange={(e) => handleAddGif(e.target.files[0])}
-              />
-            </label>
-          </div>
         </div>
 
         <button
