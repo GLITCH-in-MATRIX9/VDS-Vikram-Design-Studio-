@@ -147,9 +147,6 @@ export const updateProject = async (req: Request, res: Response) => {
       previewImageUrl = result.url;
       previewImagePublicId = result.publicId;
     }
-    if (sizeM2FT2 !== undefined) {
-      updateData.sizeM2FT2 = sizeM2FT2;
-    }
 
     const parsedSections =
       typeof sections === "string"
