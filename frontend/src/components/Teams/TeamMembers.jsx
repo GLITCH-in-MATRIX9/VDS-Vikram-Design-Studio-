@@ -48,6 +48,8 @@ const teamData = [
   { name: "Suprit Das", designation: "Jr. Architect" },
   { name: "Tanushree Bandyopadhyay", designation: "Jr. Architect" },
   { name: "Vibek Poddar", designation: "Interior Designer" },
+  { name: "Sirajul Haque", designation: "Site Surveyor" },
+  { name: "Dhanjit Rabha", designation: "Office Assistant" },
 ];
 
 const TeamMembers = () => {

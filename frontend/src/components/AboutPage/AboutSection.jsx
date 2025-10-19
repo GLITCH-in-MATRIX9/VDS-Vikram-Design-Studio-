@@ -161,7 +161,7 @@ const AboutSection = ({ data }) => {
                   </>
                 ) : (
                   <div className=" mb-6">
-                    <p className="text-[#6D6D6D] leading-[140%] w-2xs md:w-[400px] md:leading-relaxed whitespace-pre-wrap text-sm ">
+                    <p className="text-[#6D6D6D] leading-[140%] w-2xs md:w-[400px] md:leading-relaxed whitespace-pre-wrap text-xs md:text-sm xl:text-base ">
                       {card.text}
                     </p>
                   </div>
