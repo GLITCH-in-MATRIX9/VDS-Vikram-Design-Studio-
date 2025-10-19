@@ -241,7 +241,7 @@ const Navbar = () => {
                 <img
                   src={hamburgerIcon}
                   alt="menu"
-                  className="w-4 object-contain"
+                  className="w-5 object-contain"
                 />
               </button>
             </div>
