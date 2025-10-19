@@ -1,93 +1,49 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Lottie from "lottie-react";
+import animationData from "../assets/Comp 1.json"; // Adjust this path if you place Comp 1.json elsewhere
 
 const WebsiteLoader = ({ onAnimationComplete }) => {
   const [showLoader, setShowLoader] = useState(true);
   const [overlayVisible, setOverlayVisible] = useState(false);
-  const [fadeVideo, setFadeVideo] = useState(false);
+  // const [fadeLottie, setFadeLottie] = useState(false);
   const finishedRef = useRef(false);
 
-  const [screenType, setScreenType] = useState("desktop");
+  // This function is triggered when the Lottie animation finishes
+  const handleLottieComplete = () => {
+    setOverlayVisible(true); // Start the overlay slide-up
 
-  // Detect screen type
-  useEffect(() => {
-    const updateScreenType = () => {
-      const width = window.innerWidth;
-      if (width < 425) setScreenType("mobile");
-      else if (width < 786) setScreenType("tablet");
-      else setScreenType("desktop");
-    };
-
-    updateScreenType();
-    window.addEventListener("resize", updateScreenType);
-    return () => window.removeEventListener("resize", updateScreenType);
-  }, []);
-
-  useEffect(() => {
-    const overlayTimer = setTimeout(() => {
-      setOverlayVisible(true);
-      setFadeVideo(true);
-    }, 4000);
-
-    const endTimer = setTimeout(() => {
+    // Set a timer to call onAnimationComplete *after* the overlay has finished sliding
+    setTimeout(() => {
       if (!finishedRef.current) {
         finishedRef.current = true;
-        setShowLoader(false);
-        if (typeof onAnimationComplete === "function") onAnimationComplete();
+        setShowLoader(false); // Trigger the fade-out of the whole component
+        if (typeof onAnimationComplete === "function") {
+          onAnimationComplete();
+        }
       }
-    }, 5000);
-
-    return () => {
-      clearTimeout(overlayTimer);
-      clearTimeout(endTimer);
-    };
-  }, [onAnimationComplete]);
-
-  const getVideoSrc = () => {
-    switch (screenType) {
-      case "mobile":
-        return "/WebsiteLoader-mobile.mp4";
-      case "tablet":
-        return "/WebsiteLoader-tablet.mp4";
-      default:
-        return "/WebsiteLoader.mp4";
-    }
+    }, 1700); // This duration should match the overlay's animation duration
   };
 
   return (
-    <AnimatePresence>
-      {showLoader && (
-        <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black overflow-hidden"
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.1 }}
-        >
-          {/* Video container */}
-          <div className="relative w-full h-full flex justify-center items-center">
-            <motion.video
-              src={getVideoSrc()}
-              autoPlay
-              muted
-              playsInline
-              className="object-contain w-full max-w-[1440px] h-auto"
-              style={{ maxHeight: "100vh" }}
-              initial={{ opacity: 1 }}
-              animate={fadeVideo ? { opacity: 0 } : { opacity: 1 }}
-              transition={{ duration: 1.5, ease: "easeInOut" }}
-            />
-
-            {/* Overlay container slides upward */}
-            <motion.div
-              className="absolute bottom-0 left-0 right-0 bg-[#f3efee]"
-              initial={{ height: "0%" }}
-              animate={overlayVisible ? { height: "100%" } : { height: "0%" }}
-              transition={{ duration: 1.7, ease: "easeInOut" }}
-            />
-          </div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black overflow-hidden"
+      initial={{ y: "0" }} // Start fully visible
+      exit={{ y: "-100vh" }} // On exit, slide up and fade
+      transition={{ duration: 1, ease: [0.76, 0, 0.24, 1] }}
+    >
+      <Lottie
+        animationData={animationData}
+        onComplete={handleLottieComplete}
+        loop={false}
+        style={{
+          width: "100%",
+          height: "100%",
+          maxWidth: "1440px",
+          maxHeight: "100vh",
+        }}
+      />
+    </motion.div>
   );
 };
 
