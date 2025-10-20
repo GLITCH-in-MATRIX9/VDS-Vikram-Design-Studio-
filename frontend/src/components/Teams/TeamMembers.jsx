@@ -8,14 +8,14 @@ const teamData = [
     designation: "Co-founder",
     img: "/vikramm.jpeg",
     description:
-      "Vikramm B Shroff brings over two decades of experience in interior design, construction management, and turnkey execution. Before founding Vikram Design Studio in 2006, he worked with one of Guwahati's leading architectural firms, where he developed a strong grounding in site coordination, technical detailing, and client relations. Vikramm leads the studio's execution arm and oversees its institutional and government projects, bringing pragmatism, precision, and problem-solving to every scale of work. His ability to translate complex design ambitions into buildable realities has made him a trusted name among collaborators and clients across Assam and the northeast. With a keen sense of responsibility and humility, he continues to shape VDS's growth from the ground up."
+      "Vikramm B Shroff brings over two decades of experience in interior design, construction management, and turnkey execution. Before founding Vikram Design Studio in 2006, he worked with one of Guwahati's leading architectural firms, where he developed a strong grounding in site coordination, technical detailing, and client relations. Vikramm leads the studio's execution arm and oversees its institutional and government projects, bringing pragmatism, precision, and problem-solving to every scale of work. His ability to translate complex design ambitions into buildable realities has made him a trusted name among collaborators and clients across Assam and the northeast. With a keen sense of responsibility and humility, he continues to shape VDS's growth from the ground up.",
   },
   {
     name: "Pooza Agarwal",
     designation: "Co-founder",
     img: "/pooja.jpeg",
     description:
-      "Pooza Agarwal co-founded Vikram Design Studio with a vision to create spaces that are not just functional, but emotionally resonant. Trained in interior design and deeply intuitive in her approach, she brings a refined design sensibility to every project—be it residential, hospitality, or institutional. Pooza's strength lies in her understanding of spatial flow, material balance, and understated elegance. Over the years, she has played a pivotal role in shaping VDS's design identity—grounded, context-aware, and people-centric. Her attention to detail and commitment to quality have made her a go-to for clients seeking warmth, clarity, and timeless design. She continues to mentor the studio's younger designers while quietly driving its creative ethos forward."
+      "Pooza Agarwal co-founded Vikram Design Studio with a vision to create spaces that are not just functional, but emotionally resonant. Trained in interior design and deeply intuitive in her approach, she brings a refined design sensibility to every project—be it residential, hospitality, or institutional. Pooza's strength lies in her understanding of spatial flow, material balance, and understated elegance. Over the years, she has played a pivotal role in shaping VDS's design identity—grounded, context-aware, and people-centric. Her attention to detail and commitment to quality have made her a go-to for clients seeking warmth, clarity, and timeless design. She continues to mentor the studio's younger designers while quietly driving its creative ethos forward.",
   },
   {
     name: "Namman Shroff",
@@ -23,12 +23,27 @@ const teamData = [
     img: "/namman.png",
     description: (
       <>
-        Namman Shroff is an architect, lighting designer, and visual artist, currently serving as the Partner and Design Lead at Vikram Design Studio. With a background in architecture and a specialization in lighting design, he brings a unique blend of spatial precision and sensorial storytelling to the studio’s evolving portfolio.<br /><br />
-        Associated with VDS since 2019 and formally taking on the leadership mantle in 2023, Namman has played a pivotal role in repositioning the firm—from a regionally respected practice to a design studio with national and global aspirations. His approach is rooted in clarity, restraint, and atmosphere—where light becomes a primary material and every space is crafted for both function and position.
-        His portfolio spans public institutions, government campuses, hospitality spaces, and high-end residences—each defined by its balance of boldness and feeling.<br /><br />
-        As Design Lead, Namman continues to guide VDS into a new chapter: one that is quietly ambitious, design-driven, and uncompromising in vision.
+        Namman Shroff is an architect, lighting designer, and visual artist,
+        currently serving as the Partner and Design Lead at Vikram Design
+        Studio. With a background in architecture and a specialization in
+        lighting design, he brings a unique blend of spatial precision and
+        sensorial storytelling to the studio’s evolving portfolio.
+        <br />
+        <br />
+        Associated with VDS since 2019 and formally taking on the leadership
+        mantle in 2023, Namman has played a pivotal role in repositioning the
+        firm—from a regionally respected practice to a design studio with
+        national and global aspirations. His approach is rooted in clarity,
+        restraint, and atmosphere—where light becomes a primary material and
+        every space is crafted for both function and position. His portfolio
+        spans public institutions, government campuses, hospitality spaces, and
+        high-end residences—each defined by its balance of boldness and feeling.
+        <br />
+        <br />
+        As Design Lead, Namman continues to guide VDS into a new chapter: one
+        that is quietly ambitious, design-driven, and uncompromising in vision.
       </>
-    )
+    ),
   },
   { name: "Ajit Deka", designation: "Office Assistant" },
   { name: "Ayush Biswakarma", designation: "Data Operator" },
@@ -75,7 +90,7 @@ const TeamMembers = () => {
       </motion.h1>
 
       {/* Header Row */}
-      <div className="grid grid-cols-2 md:grid-cols-[0.7fr_1fr_0.7fr] gap-6 font-sora font-medium text-sm text-[#474545] py-3 border-b border-[#C1C7CD] uppercase">
+      <div className="grid grid-cols-2 md:grid-cols-[0.7fr_1fr_0.7fr] gap-6 font-sora font-medium text-[8px] md:text-sm text-[#474545] py-3 border-b border-[#C1C7CD] uppercase">
         <span>Team Member</span>
         <span>Role</span>
       </div>
@@ -86,20 +101,24 @@ const TeamMembers = () => {
             {/* Row with name and role */}
             <motion.div
               layout
-              className="grid grid-cols-2 md:grid-cols-[0.7fr_1fr_0.7fr] gap-6 text-sm py-4 items-start"
+              className="grid grid-cols-2 md:grid-cols-[0.7fr_1fr_0.7fr] gap-6 text-[10px] md:text-sm py-4 items-start"
             >
               <span>{name}</span>
               {index < 3 ? (
-                <div className="flex items-center gap-2">
+                <div className="flex justify-between items-center w-[140px] md:w-[266px]">
                   <span>{designation}</span>
                   <button
                     onClick={() => toggleIndex(index)}
-                    className="focus:outline-none"
+                    className="focus:outline-none cursor-pointer"
                   >
                     {openIndices.has(index) ? (
-                      <Minus size={14} strokeWidth={1.5} />
+                      <Minus size={14} strokeWidth={1.5} className="" />
                     ) : (
-                      <Plus size={14} strokeWidth={1.5} />
+                      <Plus
+                        size={14}
+                        strokeWidth={1.5}
+                        className="cursor-pointer"
+                      />
                     )}
                   </button>
                 </div>
@@ -108,7 +127,7 @@ const TeamMembers = () => {
               )}
 
               {openIndices.has(index) && index < 3 && (
-                <div className="col-span-full border-b border-gray-600 "></div>
+                <div className="col-span-full border-b border-[#B0B0B0] "></div>
               )}
             </motion.div>
 
@@ -121,19 +140,19 @@ const TeamMembers = () => {
                   animate={{ opacity: 1, height: "auto" }}
                   exit={{ opacity: 0, height: 0 }}
                   transition={{ type: "spring", stiffness: 300, damping: 35 }}
-                  className="overflow-hidden col-span-full grid grid-cols-2 md:grid-cols-[0.7fr_1fr_0.7fr] gap-4 text-sm text-[#5a5a5a] pl-0 pr-0 pb-12 pt-12"
+                  className="overflow-hidden col-span-full grid grid-cols-[max-content_1fr] md:grid-cols-[0.7fr_1fr_0.7fr] gap-8 text-sm text-[#5a5a5a] px-0 py-8"
                 >
                   {/* Left column: Image */}
                   <div className="flex justify-center md:justify-start">
                     <img
                       src={img}
                       alt={name}
-                      className="w-[200px] h-[250px] object-cover rounded-sm opacity-100"
+                      className="w-[80px] h-[107px] md:w-[200px] md:h-[250px] object-cover rounded-sm opacity-100"
                     />
                   </div>
 
                   {/* Right column: Role + Paragraph */}
-                  <div className="flex flex-col justify-start gap-2">
+                  <div className="flex flex-col max-w-[200px] md:max-w-xl justify-start gap-2 text-[8px] md:text-xs xl:text-sm">
                     <p>{description}</p>
                   </div>
                 </motion.div>
