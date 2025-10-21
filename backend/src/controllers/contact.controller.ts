@@ -4,7 +4,7 @@ import { RecaptchaRequest } from '../middlewares/recaptcha.middleware';
 
 export const sendContactEmail = async (req: RecaptchaRequest, res: Response) => {
   try {
-    const { name, email, subject, message, recaptchaToken } = req.body;
+    const { firstName, lastName, company, mobileNumber, emailAddress, message, recaptchaToken } = req.body;
 
     // Check if reCAPTCHA was verified (middleware should handle this, but double-check)
     if (!req.recaptchaValid && process.env.NODE_ENV !== 'development') {
@@ -14,17 +14,17 @@ export const sendContactEmail = async (req: RecaptchaRequest, res: Response) => 
       });
     }
 
-    // Comprehensive validation
-    if (!name || !email || !subject || !message) {
+    // Comprehensive validation for frontend form fields
+    if (!firstName || !emailAddress || !message || !mobileNumber) {
       return res.status(400).json({ 
-        message: 'All fields are required: name, email, subject, message',
+        message: 'All required fields are missing: firstName, emailAddress, mobileNumber, message',
         success: false
       });
     }
 
     // Email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(emailAddress)) {
       return res.status(400).json({
         message: 'Please provide a valid email address',
         success: false
@@ -32,10 +32,15 @@ export const sendContactEmail = async (req: RecaptchaRequest, res: Response) => 
     }
 
     // Input sanitization
-    const sanitizedName = name.trim().substring(0, 100);
-    const sanitizedEmail = email.trim().toLowerCase();
-    const sanitizedSubject = subject.trim().substring(0, 200);
+    const sanitizedFirstName = firstName.trim().substring(0, 100);
+    const sanitizedLastName = lastName ? lastName.trim().substring(0, 100) : '';
+    const sanitizedCompany = company ? company.trim().substring(0, 100) : '';
+    const sanitizedMobileNumber = mobileNumber.trim().substring(0, 20);
+    const sanitizedEmail = emailAddress.trim().toLowerCase();
     const sanitizedMessage = message.trim().substring(0, 2000);
+    
+    // Create full name
+    const fullName = sanitizedLastName ? `${sanitizedFirstName} ${sanitizedLastName}` : sanitizedFirstName;
 
     if (sanitizedMessage.length < 10) {
       return res.status(400).json({
@@ -71,16 +76,22 @@ export const sendContactEmail = async (req: RecaptchaRequest, res: Response) => 
           <div class="content">
             <div class="field">
               <div class="label">Name:</div>
-              <div class="value">${sanitizedName}</div>
+              <div class="value">${fullName}</div>
             </div>
             <div class="field">
               <div class="label">Email:</div>
               <div class="value">${sanitizedEmail}</div>
             </div>
             <div class="field">
-              <div class="label">Subject:</div>
-              <div class="value">${sanitizedSubject}</div>
+              <div class="label">Mobile Number:</div>
+              <div class="value">${sanitizedMobileNumber}</div>
             </div>
+            ${sanitizedCompany ? `
+            <div class="field">
+              <div class="label">Company:</div>
+              <div class="value">${sanitizedCompany}</div>
+            </div>
+            ` : ''}
             <div class="field">
               <div class="label">Message:</div>
               <div class="value">${sanitizedMessage.replace(/\n/g, '<br>')}</div>
@@ -94,10 +105,10 @@ export const sendContactEmail = async (req: RecaptchaRequest, res: Response) => 
       </html>
     `;
 
-    // Send email to admin
+    // Send email to admin (info@vikramdesignstudio.com)
     await sendEmail({
-      to: process.env.EMAIL_FROM || 'admin@example.com', // Send to admin
-      subject: `Contact Form: ${sanitizedSubject}`,
+      to: 'info@vikramdesignstudio.com', // Send to admin
+      subject: `New Contact Form Submission from ${fullName}`,
       html: emailHtml,
     });
 
@@ -124,7 +135,7 @@ export const sendContactEmail = async (req: RecaptchaRequest, res: Response) => 
             <p>Vikram Design Studio</p>
           </div>
           <div class="content">
-            <p>Hi ${sanitizedName},</p>
+            <p>Hi ${fullName},</p>
             <p>Thank you for reaching out to us. We have received your message and will get back to you as soon as possible.</p>
             <p><strong>Your message:</strong></p>
             <div class="message-box">
