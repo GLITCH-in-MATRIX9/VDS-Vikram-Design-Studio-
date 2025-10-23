@@ -4,7 +4,8 @@ import {
   loginAdmin, 
   getProfile, 
   updateProfile, 
-  changePassword 
+  changePassword,
+  logoutAdmin
 } from '../controllers/auth.controller';
 import { protect } from '../middlewares/auth.middleware';
 import { validateAuth, validateRegister } from '../middlewares/validation.middleware';
@@ -20,5 +21,6 @@ router.post('/login', loginRateLimit, validateAuth, loginAdmin);
 router.get('/profile', protect, getProfile);
 router.put('/profile', protect, updateProfile);
 router.put('/change-password', protect, changePassword);
+router.post('/logout', protect, logoutAdmin);
 
 export default router;

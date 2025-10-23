@@ -7,6 +7,8 @@ import { config } from './config/env';
 import authRoutes from './routes/auth.routes';
 import projectRoutes from './routes/project.routes';
 import contactRoutes from './routes/contact.routes';
+import adminRoutes from './routes/admin.routes';
+import hiringRoutes from './routes/hiring.routes';
 import { errorHandler } from './middlewares/error.middleware';
 import { generalRateLimit } from './middlewares/rateLimit.middleware';
 import tagRoutes from "./routes/tag.routes";
@@ -76,6 +78,8 @@ app.get('/', (req: Request, res: Response) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 app.use('/api/contact', contactRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/hiring', hiringRoutes);
 app.use("/api/tags", tagRoutes);
 
 // Error & 404 handlers

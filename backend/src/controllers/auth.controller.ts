@@ -1,6 +1,7 @@
 import { Request, Response } from 'express';
 import jwt from 'jsonwebtoken';
 import { AdminUser } from '../models/AdminUser.model';
+import { ActivityLog } from '../models/ActivityLog.model';
 
 // Helper to generate a JWT for a user id
 const generateToken = (id: string): string => {
@@ -100,6 +101,15 @@ export const loginAdmin = async (req: Request, res: Response) => {
 
     // Update last login
     await AdminUser.findByIdAndUpdate(user._id, { lastLogin: new Date() });
+
+    // Log login activity
+    await ActivityLog.create({
+      userId: user._id,
+      action: 'LOGIN',
+      entityType: 'AUTH',
+      description: `User logged in: ${user.email}`,
+      metadata: { loginTime: new Date().toISOString() }
+    });
 
     // Generate token
   const token = generateToken(user.id);
@@ -230,6 +240,28 @@ export const changePassword = async (req: Request, res: Response) => {
   } catch (error: any) {
     res.status(500).json({
       message: "Failed to change password",
+      error: error.message,
+    });
+  }
+};
+
+export const logoutAdmin = async (req: Request, res: Response) => {
+  try {
+    // Log logout activity
+    await ActivityLog.create({
+      userId: req.user?._id,
+      action: 'LOGOUT',
+      entityType: 'AUTH',
+      description: `User logged out: ${req.user?.email}`,
+      metadata: { logoutTime: new Date().toISOString() }
+    });
+
+    res.status(200).json({
+      message: "Logout successful",
+    });
+  } catch (error: any) {
+    res.status(500).json({
+      message: "Failed to logout",
       error: error.message,
     });
   }
