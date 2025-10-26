@@ -1,31 +1,25 @@
-import { Request, Response } from "express";
+import { Response } from "express";
 import jwt from "jsonwebtoken";
 import { AdminUser, IAdminUser } from "../models/AdminUser.model";
 import { ActivityLog } from "../models/ActivityLog.model";
 
-/**
- * Extend Express Request to include authenticated user
- */
-export interface AuthRequest extends Request {
+export interface AuthRequest extends Express.Request {
   user?: IAdminUser;
+  body: any;
+  params: any;
+  query: any;
 }
 
-/**
- * Generate JWT for a given user ID
- */
 const generateToken = (userId: string): string => {
   const secret = process.env.JWT_SECRET;
-  if (!secret) throw new Error("JWT_SECRET is not configured");
+  if (!secret) throw new Error("JWT_SECRET not configured");
 
-  // 🔑 FIX TS2322 (Line 25/22): Assert string as valid JWT duration type
-  const expiresIn = (process.env.JWT_EXPIRES_IN ?? "7d") as string;
-
-  // 🔑 FIX TS2769: Pass options object correctly as the third argument
-  return jwt.sign({ id: userId }, secret, { expiresIn }); 
+  const expiresIn = (process.env.JWT_EXPIRES_IN ?? "7d") as string | number;
+  return jwt.sign({ id: userId }, secret, { expiresIn });
 };
 
 /**
- * Register the first admin (super_admin bootstrap)
+ * Register first admin
  */
 export const registerAdmin = async (req: AuthRequest, res: Response) => {
   try {
@@ -33,40 +27,22 @@ export const registerAdmin = async (req: AuthRequest, res: Response) => {
 
     const existingAdminCount = await AdminUser.countDocuments();
     if (existingAdminCount > 0)
-      return res.status(403).json({
-        message:
-          "Registration disabled. Contact a super_admin to create accounts.",
-      });
+      return res.status(403).json({ message: "Registration disabled." });
 
     const existingUser = await AdminUser.findOne({ email });
     if (existingUser)
-      return res
-        .status(400)
-        .json({ message: "Admin user with this email already exists" });
+      return res.status(400).json({ message: "Admin already exists" });
 
-    const user = await AdminUser.create({
-      email,
-      password,
-      name,
-      role: "super_admin",
-    });
-
+    const user = await AdminUser.create({ email, password, name, role: "super_admin" });
     const token = generateToken(user._id.toString());
 
     res.status(201).json({
-      message: "Admin user created successfully",
-      user: {
-        id: user._id.toString(),
-        email: user.email,
-        name: user.name,
-        role: user.role,
-      },
+      message: "Admin created successfully",
+      user: { id: user._id.toString(), email: user.email, name: user.name, role: user.role },
       token,
     });
   } catch (error: any) {
-    res
-      .status(500)
-      .json({ message: "Failed to create admin user", error: error.message });
+    res.status(500).json({ message: "Failed to create admin", error: error.message });
   }
 };
 
@@ -76,27 +52,19 @@ export const registerAdmin = async (req: AuthRequest, res: Response) => {
 export const loginAdmin = async (req: AuthRequest, res: Response) => {
   try {
     const { email, password } = req.body;
-    if (!email || !password)
-      return res
-        .status(400)
-        .json({ message: "Please provide email and password" });
+    if (!email || !password) return res.status(400).json({ message: "Provide email and password" });
 
     const user = await AdminUser.findOne({ email }).select("+password");
     if (!user || !user.isActive)
-      return res
-        .status(401)
-        .json({ message: "Invalid credentials or account deactivated" });
+      return res.status(401).json({ message: "Invalid credentials or deactivated account" });
 
-    const isPasswordValid = await user.comparePassword(password);
-    if (!isPasswordValid)
-      return res.status(401).json({ message: "Invalid credentials" });
+    const isValid = await user.comparePassword(password);
+    if (!isValid) return res.status(401).json({ message: "Invalid credentials" });
 
-    // 🔑 FIX TS18046 (Line 52): user is guaranteed to exist here
-    await AdminUser.findByIdAndUpdate(user._id!, { lastLogin: new Date() });
+    await AdminUser.findByIdAndUpdate(user._id, { lastLogin: new Date() });
 
     await ActivityLog.create({
-      // 🔑 FIX TS18046 (Line 57): user is guaranteed to exist here
-      userId: user._id!,
+      userId: user._id,
       action: "LOGIN",
       entityType: "AUTH",
       description: `User logged in: ${user.email}`,
@@ -104,15 +72,9 @@ export const loginAdmin = async (req: AuthRequest, res: Response) => {
     });
 
     const token = generateToken(user._id.toString());
-
     res.status(200).json({
       message: "Login successful",
-      user: {
-        id: user._id.toString(),
-        email: user.email,
-        name: user.name,
-        role: user.role,
-      },
+      user: { id: user._id.toString(), email: user.email, name: user.name, role: user.role },
       token,
     });
   } catch (error: any) {
@@ -121,15 +83,12 @@ export const loginAdmin = async (req: AuthRequest, res: Response) => {
 };
 
 /**
- * Get authenticated admin profile
+ * Get profile
  */
 export const getProfile = async (req: AuthRequest, res: Response) => {
-  if (!req.user)
-    return res.status(401).json({ message: "User not authenticated" });
-
+  if (!req.user) return res.status(401).json({ message: "Not authenticated" });
   try {
-    // 🔑 FIX TS18046 (Line 102): req.user is guaranteed to exist here
-    const user = await AdminUser.findById(req.user._id!).select("-password");
+    const user = await AdminUser.findById(req.user._id).select("-password");
     if (!user) return res.status(404).json({ message: "User not found" });
 
     res.status(200).json({
@@ -149,20 +108,17 @@ export const getProfile = async (req: AuthRequest, res: Response) => {
 };
 
 /**
- * Update authenticated admin profile
+ * Update profile
  */
 export const updateProfile = async (req: AuthRequest, res: Response) => {
-  if (!req.user)
-    return res.status(401).json({ message: "User not authenticated" });
-
+  if (!req.user) return res.status(401).json({ message: "Not authenticated" });
   try {
     const { name, email } = req.body;
     const updateData: Partial<IAdminUser> = {};
     if (name) updateData.name = name;
     if (email) updateData.email = email;
 
-    // 🔑 FIX TS18046 (Line 107): req.user is guaranteed to exist here
-    const user = await AdminUser.findByIdAndUpdate(req.user._id!, updateData, {
+    const user = await AdminUser.findByIdAndUpdate(req.user._id, updateData, {
       new: true,
       runValidators: true,
     }).select("-password");
@@ -171,77 +127,54 @@ export const updateProfile = async (req: AuthRequest, res: Response) => {
 
     res.status(200).json({
       message: "Profile updated successfully",
-      user: {
-        id: user._id.toString(),
-        email: user.email,
-        name: user.name,
-        role: user.role,
-      },
+      user: { id: user._id.toString(), email: user.email, name: user.name, role: user.role },
     });
   } catch (error: any) {
-    res
-      .status(500)
-      .json({ message: "Failed to update profile", error: error.message });
+    res.status(500).json({ message: "Failed to update profile", error: error.message });
   }
 };
 
 /**
- * Change authenticated admin password
+ * Change password
  */
 export const changePassword = async (req: AuthRequest, res: Response) => {
-  if (!req.user)
-    return res.status(401).json({ message: "User not authenticated" });
-
+  if (!req.user) return res.status(401).json({ message: "Not authenticated" });
   try {
     const { currentPassword, newPassword } = req.body;
     if (!currentPassword || !newPassword)
-      return res
-        .status(400)
-        .json({ message: "Provide current and new password" });
+      return res.status(400).json({ message: "Provide current and new password" });
     if (newPassword.length < 6)
-      return res
-        .status(400)
-        .json({ message: "New password must be at least 6 characters" });
+      return res.status(400).json({ message: "New password must be at least 6 chars" });
 
-    // 🔑 FIX TS18046 (Line 132): req.user is guaranteed to exist here
-    const user = await AdminUser.findById(req.user._id!).select("+password");
+    const user = await AdminUser.findById(req.user._id).select("+password");
     if (!user) return res.status(404).json({ message: "User not found" });
 
-    const isCurrentValid = await user.comparePassword(currentPassword);
-    if (!isCurrentValid)
-      return res.status(400).json({ message: "Current password is incorrect" });
+    const valid = await user.comparePassword(currentPassword);
+    if (!valid) return res.status(400).json({ message: "Current password incorrect" });
 
     user.password = newPassword;
-    // 🔑 FIX TS18046 (Line 169): user is guaranteed to exist here
     await user.save();
 
     const token = generateToken(user._id.toString());
-
     res.status(200).json({ message: "Password changed successfully", token });
   } catch (error: any) {
-    res
-      .status(500)
-      .json({ message: "Failed to change password", error: error.message });
+    res.status(500).json({ message: "Failed to change password", error: error.message });
   }
 };
 
 /**
- * Logout authenticated admin
+ * Logout
  */
 export const logoutAdmin = async (req: AuthRequest, res: Response) => {
-  if (!req.user)
-    return res.status(401).json({ message: "User not authenticated" });
-
+  if (!req.user) return res.status(401).json({ message: "Not authenticated" });
   try {
-    // 🔑 FIX TS18046 (Line 210): req.user is guaranteed to exist here
     await ActivityLog.create({
-      userId: req.user!._id,
+      userId: req.user._id,
       action: "LOGOUT",
       entityType: "AUTH",
       description: `User logged out: ${req.user.email}`,
       metadata: { logoutTime: new Date().toISOString() },
     });
-
     res.status(200).json({ message: "Logout successful" });
   } catch (error: any) {
     res.status(500).json({ message: "Failed to logout", error: error.message });

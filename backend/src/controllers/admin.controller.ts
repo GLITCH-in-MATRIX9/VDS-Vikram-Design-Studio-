@@ -4,12 +4,15 @@ import { AdminUser, IAdminUser } from "../models/AdminUser.model";
 import { ActivityLog } from "../models/ActivityLog.model";
 import { WebsiteContent } from "../models/WebsiteContent.model";
 import { JobApplication } from "../models/JobApplication.model";
-import { Types } from "mongoose";
 
-// NOTE: AuthRequest interface must be defined either in this file or imported from auth.controller.ts
-// We'll assume it's imported or defined in a shared file, but for this context, we will use the definition provided in the previous file:
-export interface AuthRequest extends Request {
+/**
+ * Extend Express Request to include authenticated user
+ */
+export interface AuthRequest extends Express.Request {
   user?: IAdminUser;
+  body: any;
+  params: any;
+  query: any;
 }
 
 /**
@@ -17,7 +20,6 @@ export interface AuthRequest extends Request {
  * Dashboard Statistics
  * ===========================
  */
-// 🔑 FIX: Changed req type from Express.Request to AuthRequest
 export const getDashboardStats = async (req: AuthRequest, res: Response) => {
   try {
     const totalProjects = await Project.countDocuments();
@@ -27,8 +29,7 @@ export const getDashboardStats = async (req: AuthRequest, res: Response) => {
     const categoriesCount = (await Project.distinct("category")).length;
 
     const applicantsTotal = await JobApplication.countDocuments();
-    // 🔑 FIX TS2339 (Line 72): req.query is available on AuthRequest
-    const newApplicants = await JobApplication.countDocuments({ 
+    const newApplicants = await JobApplication.countDocuments({
       appliedAt: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
     });
     const shortlisted = await JobApplication.countDocuments({
@@ -67,7 +68,6 @@ export const getDashboardStats = async (req: AuthRequest, res: Response) => {
  * User Management
  * ===========================
  */
-// 🔑 FIX: Changed req type from Express.Request to AuthRequest
 export const getAllUsers = async (req: AuthRequest, res: Response) => {
   try {
     const users = await AdminUser.find().select("-password").sort({ createdAt: -1 });
@@ -77,11 +77,9 @@ export const getAllUsers = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// 🔑 FIX: Changed req type from Express.Request to AuthRequest
 export const createUser = async (req: AuthRequest, res: Response) => {
   try {
-    // 🔑 FIX TS2339 (Line 85): req.body is available on AuthRequest
-    const { email, password, name, role } = req.body; 
+    const { email, password, name, role } = req.body;
 
     if (!password || password.length < 8) {
       return res.status(400).json({
@@ -94,7 +92,6 @@ export const createUser = async (req: AuthRequest, res: Response) => {
     if (existingUser)
       return res.status(400).json({ success: false, message: "User with this email already exists" });
 
-    // 🔑 FIX TS2749 (Line 85): Use IAdminUser['role'] or assert the role type
     const validRole: IAdminUser["role"] =
       role === "super_admin" || role === "hr_hiring" || role === "project_content_manager"
         ? role
@@ -102,7 +99,6 @@ export const createUser = async (req: AuthRequest, res: Response) => {
 
     const user = await AdminUser.create({ email, password, name, role: validRole });
 
-    // 🔑 FIX TS18046 (Line 152): req.user is guaranteed to exist by middleware
     await ActivityLog.create({
       userId: req.user!._id,
       action: "CREATE",
@@ -116,7 +112,7 @@ export const createUser = async (req: AuthRequest, res: Response) => {
       success: true,
       message: "User created successfully",
       data: {
-        id: user._id,
+        id: user._id.toString(),
         email: user.email,
         name: user.name,
         role: user.role,
@@ -125,18 +121,14 @@ export const createUser = async (req: AuthRequest, res: Response) => {
       },
     });
   } catch (error: any) {
-    console.error("Create User Error:", error);
     res.status(500).json({ success: false, message: "Failed to create user", error: error.message });
   }
 };
 
-// 🔑 FIX: Changed req type from Express.Request to AuthRequest
 export const updateUser = async (req: AuthRequest, res: Response) => {
   try {
-    // 🔑 FIX TS2339 (Line 121): req.params is available on AuthRequest
-    const { id } = req.params; 
-    // 🔑 FIX TS2339 (Line 122): req.body is available on AuthRequest
-    const { name, email, role, isActive } = req.body; 
+    const { id } = req.params;
+    const { name, email, role, isActive } = req.body;
 
     const user = await AdminUser.findByIdAndUpdate(
       id,
@@ -147,7 +139,7 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
     if (!user) return res.status(404).json({ success: false, message: "User not found" });
 
     await ActivityLog.create({
-      userId: req.user!._id, // req.user is guaranteed to exist
+      userId: req.user!._id,
       action: "UPDATE",
       entityType: "USER",
       entityId: user._id,
@@ -161,11 +153,9 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// 🔑 FIX: Changed req type from Express.Request to AuthRequest
 export const deleteUser = async (req: AuthRequest, res: Response) => {
   try {
-    // 🔑 FIX TS2339 (Line 149): req.params is available on AuthRequest
-    const { id } = req.params; 
+    const { id } = req.params;
 
     if (!req.user) return res.status(401).json({ success: false, message: "Unauthorized" });
     if (id === req.user._id.toString())
@@ -175,7 +165,7 @@ export const deleteUser = async (req: AuthRequest, res: Response) => {
     if (!user) return res.status(404).json({ success: false, message: "User not found" });
 
     await ActivityLog.create({
-      userId: req.user!._id, // req.user is guaranteed to exist
+      userId: req.user!._id,
       action: "DELETE",
       entityType: "USER",
       entityId: user._id,
@@ -194,11 +184,9 @@ export const deleteUser = async (req: AuthRequest, res: Response) => {
  * Website Content Management
  * ===========================
  */
-// 🔑 FIX: Changed req type from Express.Request to AuthRequest
 export const getWebsiteContent = async (req: AuthRequest, res: Response) => {
   try {
-    // 🔑 FIX TS2339 (Line 180): req.query is available on AuthRequest
-    const { page } = req.query; 
+    const { page } = req.query;
     const query = page ? { page: page as string } : {};
     const content = await WebsiteContent.find(query)
       .populate("lastModifiedBy", "name email")
@@ -210,13 +198,10 @@ export const getWebsiteContent = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// 🔑 FIX: Changed req type from Express.Request to AuthRequest
 export const updateWebsiteContent = async (req: AuthRequest, res: Response) => {
   try {
-    // 🔑 FIX TS2339 (Line 194): req.params is available on AuthRequest
-    const { id } = req.params; 
-    // 🔑 FIX TS2339 (Line 195): req.body is available on AuthRequest
-    const { content, title, contentType, isActive } = req.body; 
+    const { id } = req.params;
+    const { content, title, contentType, isActive } = req.body;
 
     const updatedContent = await WebsiteContent.findByIdAndUpdate(
       id,
@@ -253,11 +238,9 @@ export const updateWebsiteContent = async (req: AuthRequest, res: Response) => {
  * Activity Logs
  * ===========================
  */
-// 🔑 FIX: Changed req type from Express.Request to AuthRequest
 export const getActivityLogs = async (req: AuthRequest, res: Response) => {
   try {
-    // 🔑 FIX TS2339 (Line 234): req.query is available on AuthRequest
-    const { userId, limit = 50, page = 1 } = req.query; 
+    const { userId, limit = 50, page = 1 } = req.query;
     const query = userId ? { userId: userId as string } : {};
     const skip = (Number(page) - 1) * Number(limit);
 
