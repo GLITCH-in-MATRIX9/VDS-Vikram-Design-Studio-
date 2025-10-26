@@ -16,9 +16,11 @@ const generateToken = (userId: string): string => {
   const secret = process.env.JWT_SECRET;
   if (!secret) throw new Error("JWT_SECRET is not configured");
 
-  const expiresIn: string | number = process.env.JWT_EXPIRES_IN ?? "7d";
+  // JWT expiresIn can be a string or number, cast to any for TS 5+
+  const expiresIn: string = process.env.JWT_EXPIRES_IN ?? "7d";
 
-  const options: SignOptions = { expiresIn };
+  const options: SignOptions = { expiresIn } as unknown as SignOptions;
+
   return jwt.sign({ id: userId }, secret, options);
 };
 
