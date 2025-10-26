@@ -1,30 +1,16 @@
 import { Response } from "express";
 import { Project } from "../models/Project.model";
-import { AdminUser, IAdminUser } from "../models/AdminUser.model";
+import { AdminUser } from "../models/AdminUser.model";
 import { ActivityLog } from "../models/ActivityLog.model";
 import { WebsiteContent } from "../models/WebsiteContent.model";
-import { JobPosting } from "../models/JobPosting.model";
 import { JobApplication } from "../models/JobApplication.model";
-import { Types } from "mongoose";
-
-/**
- * Authenticated request interface
- */
-export interface AuthRequest {
-  user?: IAdminUser;
-  body: any;
-  params: any;
-  query: any;
-}
-
-// ... (getDashboardStats remains unchanged)
 
 /**
  * ===========================
  * Dashboard Statistics
  * ===========================
  */
-export const getDashboardStats = async (req: AuthRequest, res: Response) => {
+export const getDashboardStats = async (req: Express.Request, res: Response) => {
   try {
     const totalProjects = await Project.countDocuments();
     const liveProjects = await Project.countDocuments({
@@ -72,64 +58,39 @@ export const getDashboardStats = async (req: AuthRequest, res: Response) => {
  * User Management
  * ===========================
  */
-export const getAllUsers = async (req: AuthRequest, res: Response) => {
+export const getAllUsers = async (req: Express.Request, res: Response) => {
   try {
-    const users = await AdminUser.find()
-      .select("-password")
-      .sort({ createdAt: -1 });
+    const users = await AdminUser.find().select("-password").sort({ createdAt: -1 });
     res.status(200).json({ success: true, data: users });
   } catch (error: any) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Failed to fetch users",
-        error: error.message,
-      });
+    res.status(500).json({ success: false, message: "Failed to fetch users", error: error.message });
   }
 };
 
-export const createUser = async (req: AuthRequest, res: Response) => {
+export const createUser = async (req: Express.Request, res: Response) => {
   try {
-    // 🔑 CHANGE: 'password' is now expected from the frontend.
     const { email, password, name, role } = req.body;
 
-    // 🔑 NEW: Server-side validation for password presence and length.
-    if (!password || typeof password !== "string" || password.length < 8) {
+    if (!password || password.length < 8) {
       return res.status(400).json({
         success: false,
-        message:
-          "Initial password is required and must be at least 8 characters long.",
+        message: "Initial password is required and must be at least 8 characters long.",
       });
     }
 
     const existingUser = await AdminUser.findOne({ email });
     if (existingUser)
-      return res
-        .status(400)
-        .json({
-          success: false,
-          message: "User with this email already exists",
-        });
+      return res.status(400).json({ success: false, message: "User with this email already exists" });
 
-    const validRole: IAdminUser["role"] =
-      role === "super_admin" ||
-      role === "hr_hiring" ||
-      role === "project_content_manager"
+    const validRole: AdminUser["role"] =
+      role === "super_admin" || role === "hr_hiring" || role === "project_content_manager"
         ? role
         : "project_content_manager";
 
-    // 'password' is now guaranteed to be a string of length >= 8 and is passed to create.
-    // Your AdminUser model's pre-save hook must handle hashing it.
-    const user = await AdminUser.create({
-      email,
-      password,
-      name,
-      role: validRole,
-    });
+    const user = await AdminUser.create({ email, password, name, role: validRole });
 
     await ActivityLog.create({
-      userId: req.user!._id, // 🔑 FIXED: Used non-null assertion '!'
+      userId: req.user!._id,
       action: "CREATE",
       entityType: "USER",
       entityId: user._id,
@@ -150,19 +111,12 @@ export const createUser = async (req: AuthRequest, res: Response) => {
       },
     });
   } catch (error: any) {
-    // Log the error detail for debugging purposes
     console.error("Create User Error:", error);
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Failed to create user",
-        error: error.message,
-      });
+    res.status(500).json({ success: false, message: "Failed to create user", error: error.message });
   }
 };
 
-export const updateUser = async (req: AuthRequest, res: Response) => {
+export const updateUser = async (req: Express.Request, res: Response) => {
   try {
     const { id } = req.params;
     const { name, email, role, isActive } = req.body;
@@ -173,13 +127,10 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
       { new: true, runValidators: true }
     ).select("-password");
 
-    if (!user)
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+    if (!user) return res.status(404).json({ success: false, message: "User not found" });
 
     await ActivityLog.create({
-      userId: req.user!._id, // 🔑 FIXED: Used non-null assertion '!'
+      userId: req.user!._id,
       action: "UPDATE",
       entityType: "USER",
       entityId: user._id,
@@ -187,45 +138,25 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
       metadata: { changes: { name, email, role, isActive } },
     });
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "User updated successfully",
-        data: user,
-      });
+    res.status(200).json({ success: true, message: "User updated successfully", data: user });
   } catch (error: any) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Failed to update user",
-        error: error.message,
-      });
+    res.status(500).json({ success: false, message: "Failed to update user", error: error.message });
   }
 };
 
-export const deleteUser = async (req: AuthRequest, res: Response) => {
+export const deleteUser = async (req: Express.Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    if (!req.user)
-      return res.status(401).json({ success: false, message: "Unauthorized" });
-
-    // Prevent self-deletion
+    if (!req.user) return res.status(401).json({ success: false, message: "Unauthorized" });
     if (id === req.user._id.toString())
-      return res
-        .status(400)
-        .json({ success: false, message: "Cannot delete your own account" });
+      return res.status(400).json({ success: false, message: "Cannot delete your own account" });
 
     const user = await AdminUser.findByIdAndDelete(id);
-    if (!user)
-      return res
-        .status(404)
-        .json({ success: false, message: "User not found" });
+    if (!user) return res.status(404).json({ success: false, message: "User not found" });
 
     await ActivityLog.create({
-      userId: req.user!._id, // 🔑 FIXED: Used non-null assertion '!' (Original line 216)
+      userId: req.user!._id,
       action: "DELETE",
       entityType: "USER",
       entityId: user._id,
@@ -233,17 +164,9 @@ export const deleteUser = async (req: AuthRequest, res: Response) => {
       metadata: { deletedUser: user.email },
     });
 
-    res
-      .status(200)
-      .json({ success: true, message: "User deleted successfully" });
+    res.status(200).json({ success: true, message: "User deleted successfully" });
   } catch (error: any) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Failed to delete user",
-        error: error.message,
-      });
+    res.status(500).json({ success: false, message: "Failed to delete user", error: error.message });
   }
 };
 
@@ -252,7 +175,7 @@ export const deleteUser = async (req: AuthRequest, res: Response) => {
  * Website Content Management
  * ===========================
  */
-export const getWebsiteContent = async (req: AuthRequest, res: Response) => {
+export const getWebsiteContent = async (req: Express.Request, res: Response) => {
   try {
     const { page } = req.query;
     const query = page ? { page: page as string } : {};
@@ -262,17 +185,11 @@ export const getWebsiteContent = async (req: AuthRequest, res: Response) => {
 
     res.status(200).json({ success: true, data: content });
   } catch (error: any) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Failed to fetch website content",
-        error: error.message,
-      });
+    res.status(500).json({ success: false, message: "Failed to fetch website content", error: error.message });
   }
 };
 
-export const updateWebsiteContent = async (req: AuthRequest, res: Response) => {
+export const updateWebsiteContent = async (req: Express.Request, res: Response) => {
   try {
     const { id } = req.params;
     const { content, title, contentType, isActive } = req.body;
@@ -284,19 +201,16 @@ export const updateWebsiteContent = async (req: AuthRequest, res: Response) => {
         title,
         contentType,
         isActive,
-        lastModifiedBy: req.user!._id, // 🔑 FIXED: Used non-null assertion '!'
+        lastModifiedBy: req.user!._id,
         lastModifiedAt: new Date(),
       },
       { new: true, runValidators: true }
     ).populate("lastModifiedBy", "name email");
 
-    if (!updatedContent)
-      return res
-        .status(404)
-        .json({ success: false, message: "Content not found" });
+    if (!updatedContent) return res.status(404).json({ success: false, message: "Content not found" });
 
     await ActivityLog.create({
-      userId: req.user!._id, // 🔑 FIXED: Used non-null assertion '!'
+      userId: req.user!._id,
       action: "UPDATE",
       entityType: "CONTENT",
       entityId: updatedContent._id,
@@ -304,21 +218,9 @@ export const updateWebsiteContent = async (req: AuthRequest, res: Response) => {
       metadata: { page: updatedContent.page, section: updatedContent.section },
     });
 
-    res
-      .status(200)
-      .json({
-        success: true,
-        message: "Content updated successfully",
-        data: updatedContent,
-      });
+    res.status(200).json({ success: true, message: "Content updated successfully", data: updatedContent });
   } catch (error: any) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Failed to update content",
-        error: error.message,
-      });
+    res.status(500).json({ success: false, message: "Failed to update content", error: error.message });
   }
 };
 
@@ -327,7 +229,7 @@ export const updateWebsiteContent = async (req: AuthRequest, res: Response) => {
  * Activity Logs
  * ===========================
  */
-export const getActivityLogs = async (req: AuthRequest, res: Response) => {
+export const getActivityLogs = async (req: Express.Request, res: Response) => {
   try {
     const { userId, limit = 50, page = 1 } = req.query;
     const query = userId ? { userId: userId as string } : {};
@@ -354,12 +256,6 @@ export const getActivityLogs = async (req: AuthRequest, res: Response) => {
       },
     });
   } catch (error: any) {
-    res
-      .status(500)
-      .json({
-        success: false,
-        message: "Failed to fetch activity logs",
-        error: error.message,
-      });
+    res.status(500).json({ success: false, message: "Failed to fetch activity logs", error: error.message });
   }
 };

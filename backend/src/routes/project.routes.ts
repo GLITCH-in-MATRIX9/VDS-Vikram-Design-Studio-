@@ -13,7 +13,10 @@ import { validateBase64Content, cleanBase64Response } from "../middlewares/base6
 const router = Router();
 
 // Define the roles allowed to manage projects
-const PROJECT_MANAGEMENT_ROLES = ["project_content_manager", "super_admin"];
+const PROJECT_MANAGEMENT_ROLES: ("super_admin" | "hr_hiring" | "project_content_manager")[] = [
+  "project_content_manager",
+  "super_admin",
+];
 
 // Public routes
 router.get("/", cleanBase64Response, getProjects);
