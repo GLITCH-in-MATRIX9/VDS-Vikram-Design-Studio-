@@ -14,23 +14,16 @@ export interface AuthRequest extends Express.Request {
 
 const generateToken = (userId: string): string => {
   const secret = process.env.JWT_SECRET;
-  if (!secret) throw new Error("JWT_SECRET is not configured");
+  if (!secret) throw new Error("JWT_SECRET not configured");
 
-  // 1. Define the payload
-  const payload = { id: userId };
+  // TypeScript-safe expiresIn
+  const expiresIn: string | number = process.env.JWT_EXPIRES_IN || "7d";
 
-  // 2. Define the secret (it's already a string, which is a valid Secret type)
-  // const secret = process.env.JWT_SECRET; // defined above
-
-  // 3. Define the options object, applying the necessary type assertion
-  // This resolves the TS2322 error by confirming the type.
-  const options: jwt.SignOptions = {
-    expiresIn: (process.env.JWT_EXPIRES_IN ?? "7d") as string,
-  };
-
-  // 🔑 FINAL FIX (Line 24): Explicitly call jwt.sign with the three required arguments (Payload, Secret, Options)
-  return jwt.sign(payload, secret, options);
+  const options: SignOptions = { expiresIn };
+  return jwt.sign({ id: userId }, secret, options);
 };
+
+
 
 // Register first admin
 export const registerAdmin = async (req: AuthRequest, res: Response) => {
