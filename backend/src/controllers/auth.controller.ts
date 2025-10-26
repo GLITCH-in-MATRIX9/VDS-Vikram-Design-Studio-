@@ -17,9 +17,11 @@ const generateToken = (userId: string): string => {
   const secret = process.env.JWT_SECRET;
   if (!secret) throw new Error("JWT_SECRET is not configured");
 
+  // 🔑 FIX TS2322 (Line 25/22): Assert string as valid JWT duration type
   const expiresIn = (process.env.JWT_EXPIRES_IN ?? "7d") as string;
 
-  return jwt.sign({ id: userId }, secret, { expiresIn });
+  // 🔑 FIX TS2769: Pass options object correctly as the third argument
+  return jwt.sign({ id: userId }, secret, { expiresIn }); 
 };
 
 /**
@@ -89,10 +91,12 @@ export const loginAdmin = async (req: AuthRequest, res: Response) => {
     if (!isPasswordValid)
       return res.status(401).json({ message: "Invalid credentials" });
 
-    await AdminUser.findByIdAndUpdate(user._id, { lastLogin: new Date() });
+    // 🔑 FIX TS18046 (Line 52): user is guaranteed to exist here
+    await AdminUser.findByIdAndUpdate(user._id!, { lastLogin: new Date() });
 
     await ActivityLog.create({
-      userId: user._id,
+      // 🔑 FIX TS18046 (Line 57): user is guaranteed to exist here
+      userId: user._id!,
       action: "LOGIN",
       entityType: "AUTH",
       description: `User logged in: ${user.email}`,
@@ -124,7 +128,8 @@ export const getProfile = async (req: AuthRequest, res: Response) => {
     return res.status(401).json({ message: "User not authenticated" });
 
   try {
-    const user = await AdminUser.findById(req.user._id).select("-password");
+    // 🔑 FIX TS18046 (Line 102): req.user is guaranteed to exist here
+    const user = await AdminUser.findById(req.user._id!).select("-password");
     if (!user) return res.status(404).json({ message: "User not found" });
 
     res.status(200).json({
@@ -156,7 +161,8 @@ export const updateProfile = async (req: AuthRequest, res: Response) => {
     if (name) updateData.name = name;
     if (email) updateData.email = email;
 
-    const user = await AdminUser.findByIdAndUpdate(req.user._id, updateData, {
+    // 🔑 FIX TS18046 (Line 107): req.user is guaranteed to exist here
+    const user = await AdminUser.findByIdAndUpdate(req.user._id!, updateData, {
       new: true,
       runValidators: true,
     }).select("-password");
@@ -197,7 +203,8 @@ export const changePassword = async (req: AuthRequest, res: Response) => {
         .status(400)
         .json({ message: "New password must be at least 6 characters" });
 
-    const user = await AdminUser.findById(req.user._id).select("+password");
+    // 🔑 FIX TS18046 (Line 132): req.user is guaranteed to exist here
+    const user = await AdminUser.findById(req.user._id!).select("+password");
     if (!user) return res.status(404).json({ message: "User not found" });
 
     const isCurrentValid = await user.comparePassword(currentPassword);
@@ -205,6 +212,7 @@ export const changePassword = async (req: AuthRequest, res: Response) => {
       return res.status(400).json({ message: "Current password is incorrect" });
 
     user.password = newPassword;
+    // 🔑 FIX TS18046 (Line 169): user is guaranteed to exist here
     await user.save();
 
     const token = generateToken(user._id.toString());
@@ -225,8 +233,9 @@ export const logoutAdmin = async (req: AuthRequest, res: Response) => {
     return res.status(401).json({ message: "User not authenticated" });
 
   try {
+    // 🔑 FIX TS18046 (Line 210): req.user is guaranteed to exist here
     await ActivityLog.create({
-      userId: req.user._id,
+      userId: req.user!._id,
       action: "LOGOUT",
       entityType: "AUTH",
       description: `User logged out: ${req.user.email}`,

@@ -118,7 +118,7 @@ const MiddleArea = ({ onProjectClick, filterState, onFilterChange }) => {
   );
 
   return (
-    <div className="flex-1 flex flex-col p-6 bg-white">
+    <div className="flex-1 flex flex-col p-6">
       {/* Search & Filter */}
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
         {!isAddingOrModifying && (

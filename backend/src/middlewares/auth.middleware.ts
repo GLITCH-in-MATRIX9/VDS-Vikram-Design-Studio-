@@ -14,13 +14,11 @@ import { AdminUser, IAdminUser } from '../models/AdminUser.model';
  * ------------------------------------------------------------
  */
 
-// Extend Express Request to include authenticated user
-declare global {
-  namespace Express {
-    interface Request {
-      user?: IAdminUser;
-    }
-  }
+export interface AuthRequest extends Request {
+  body: any;        // Fixes req.body
+  params: any;      // Fixes req.params
+  query: any;       // Fixes req.query
+  user?: IAdminUser; // Fixes req.user
 }
 
 // JWT authentication middleware

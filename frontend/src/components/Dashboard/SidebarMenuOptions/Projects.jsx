@@ -32,7 +32,7 @@ const Projects = () => {
   };
 
   return (
-    <div className="flex w-full h-full overflow-hidden bg-gray-50 rounded-lg shadow-inner">
+    <div className="flex w-full h-full overflow-hidden">
       <div className={`flex-1 transition-all duration-300 relative ${selectedProject ? "md:w-3/4" : "w-full"}`}>
         <MiddleArea
           onProjectClick={handleOpenProject}
