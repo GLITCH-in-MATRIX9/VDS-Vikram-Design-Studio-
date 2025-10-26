@@ -1,5 +1,5 @@
 import { Response } from "express";
-import jwt, { SignOptions } from "jsonwebtoken";
+import jwt, { StringValue } from "jsonwebtoken";
 import { Types } from "mongoose";
 import { AdminUser, IAdminUser } from "../models/AdminUser.model";
 import { ActivityLog } from "../models/ActivityLog.model";
@@ -12,18 +12,14 @@ export interface AuthRequest extends Express.Request {
   query: any;
 }
 
+// JWT Token Generator
 const generateToken = (userId: string): string => {
   const secret = process.env.JWT_SECRET;
-  if (!secret) throw new Error("JWT_SECRET not configured");
+  if (!secret) throw new Error("JWT_SECRET is not configured");
 
-  // TypeScript-safe expiresIn
-  const expiresIn: string | number = process.env.JWT_EXPIRES_IN || "7d";
-
-  const options: SignOptions = { expiresIn };
-  return jwt.sign({ id: userId }, secret, options);
+  const expiresIn: StringValue = process.env.JWT_EXPIRES_IN ?? "7d";
+  return jwt.sign({ id: userId }, secret, { expiresIn });
 };
-
-
 
 // Register first admin
 export const registerAdmin = async (req: AuthRequest, res: Response) => {
@@ -36,9 +32,7 @@ export const registerAdmin = async (req: AuthRequest, res: Response) => {
 
     const existingUser = await AdminUser.findOne({ email });
     if (existingUser)
-      return res
-        .status(400)
-        .json({ message: "Admin user with this email exists" });
+      return res.status(400).json({ message: "Admin user with this email exists" });
 
     const user = await AdminUser.create({
       email,
@@ -60,9 +54,7 @@ export const registerAdmin = async (req: AuthRequest, res: Response) => {
       token,
     });
   } catch (error: any) {
-    res
-      .status(500)
-      .json({ message: "Failed to create admin user", error: error.message });
+    res.status(500).json({ message: "Failed to create admin user", error: error.message });
   }
 };
 
@@ -75,9 +67,7 @@ export const loginAdmin = async (req: AuthRequest, res: Response) => {
 
     const user = await AdminUser.findOne({ email }).select("+password");
     if (!user || !user.isActive)
-      return res
-        .status(401)
-        .json({ message: "Invalid credentials or deactivated" });
+      return res.status(401).json({ message: "Invalid credentials or deactivated" });
 
     const isPasswordValid = await user.comparePassword(password);
     if (!isPasswordValid)
@@ -112,8 +102,7 @@ export const loginAdmin = async (req: AuthRequest, res: Response) => {
 
 // Get profile
 export const getProfile = async (req: AuthRequest, res: Response) => {
-  if (!req.user)
-    return res.status(401).json({ message: "User not authenticated" });
+  if (!req.user) return res.status(401).json({ message: "User not authenticated" });
 
   try {
     const user = await AdminUser.findById(req.user._id).select("-password");
@@ -131,16 +120,13 @@ export const getProfile = async (req: AuthRequest, res: Response) => {
       },
     });
   } catch (error: any) {
-    res
-      .status(500)
-      .json({ message: "Failed to get profile", error: error.message });
+    res.status(500).json({ message: "Failed to get profile", error: error.message });
   }
 };
 
 // Update profile
 export const updateProfile = async (req: AuthRequest, res: Response) => {
-  if (!req.user)
-    return res.status(401).json({ message: "User not authenticated" });
+  if (!req.user) return res.status(401).json({ message: "User not authenticated" });
 
   try {
     const { name, email } = req.body;
@@ -165,27 +151,20 @@ export const updateProfile = async (req: AuthRequest, res: Response) => {
       },
     });
   } catch (error: any) {
-    res
-      .status(500)
-      .json({ message: "Failed to update profile", error: error.message });
+    res.status(500).json({ message: "Failed to update profile", error: error.message });
   }
 };
 
 // Change password
 export const changePassword = async (req: AuthRequest, res: Response) => {
-  if (!req.user)
-    return res.status(401).json({ message: "User not authenticated" });
+  if (!req.user) return res.status(401).json({ message: "User not authenticated" });
 
   try {
     const { currentPassword, newPassword } = req.body;
     if (!currentPassword || !newPassword)
-      return res
-        .status(400)
-        .json({ message: "Provide current and new password" });
+      return res.status(400).json({ message: "Provide current and new password" });
     if (newPassword.length < 6)
-      return res
-        .status(400)
-        .json({ message: "New password must be at least 6 characters" });
+      return res.status(400).json({ message: "New password must be at least 6 characters" });
 
     const user = await AdminUser.findById(req.user._id).select("+password");
     if (!user) return res.status(404).json({ message: "User not found" });
@@ -201,16 +180,13 @@ export const changePassword = async (req: AuthRequest, res: Response) => {
 
     res.status(200).json({ message: "Password changed successfully", token });
   } catch (error: any) {
-    res
-      .status(500)
-      .json({ message: "Failed to change password", error: error.message });
+    res.status(500).json({ message: "Failed to change password", error: error.message });
   }
 };
 
 // Logout
 export const logoutAdmin = async (req: AuthRequest, res: Response) => {
-  if (!req.user)
-    return res.status(401).json({ message: "User not authenticated" });
+  if (!req.user) return res.status(401).json({ message: "User not authenticated" });
 
   try {
     await ActivityLog.create({
