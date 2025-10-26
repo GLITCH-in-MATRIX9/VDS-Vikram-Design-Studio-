@@ -1,5 +1,5 @@
 import { Response } from "express";
-import jwt, { StringValue } from "jsonwebtoken";
+import jwt from "jsonwebtoken";
 import { Types } from "mongoose";
 import { AdminUser, IAdminUser } from "../models/AdminUser.model";
 import { ActivityLog } from "../models/ActivityLog.model";
@@ -17,10 +17,9 @@ const generateToken = (userId: string): string => {
   const secret = process.env.JWT_SECRET;
   if (!secret) throw new Error("JWT_SECRET is not configured");
 
-  const expiresIn: StringValue = process.env.JWT_EXPIRES_IN ?? "7d";
+  const expiresIn: string | number = process.env.JWT_EXPIRES_IN ?? "7d";
   return jwt.sign({ id: userId }, secret, { expiresIn });
 };
-
 // Register first admin
 export const registerAdmin = async (req: AuthRequest, res: Response) => {
   try {
