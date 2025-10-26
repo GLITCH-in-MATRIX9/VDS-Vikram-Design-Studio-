@@ -7,7 +7,11 @@ const router = Router();
 // Public route: fetch tags
 router.get("/", getTags);
 
-// Protected route: add tag
-router.post("/", protect, requireRole(["admin", "super_admin"]), addTag);
+router.post(
+  "/",
+  protect,
+  requireRole(["project_content_manager", "super_admin"]),
+  addTag
+);
 
 export default router;

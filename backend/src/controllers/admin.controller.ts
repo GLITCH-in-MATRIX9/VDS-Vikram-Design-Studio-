@@ -129,7 +129,7 @@ export const createUser = async (req: AuthRequest, res: Response) => {
     });
 
     await ActivityLog.create({
-      userId: req.user?._id,
+      userId: req.user!._id, // 🔑 FIXED: Used non-null assertion '!'
       action: "CREATE",
       entityType: "USER",
       entityId: user._id,
@@ -179,7 +179,7 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
         .json({ success: false, message: "User not found" });
 
     await ActivityLog.create({
-      userId: req.user?._id,
+      userId: req.user!._id, // 🔑 FIXED: Used non-null assertion '!'
       action: "UPDATE",
       entityType: "USER",
       entityId: user._id,
@@ -225,7 +225,7 @@ export const deleteUser = async (req: AuthRequest, res: Response) => {
         .json({ success: false, message: "User not found" });
 
     await ActivityLog.create({
-      userId: req.user._id,
+      userId: req.user!._id, // 🔑 FIXED: Used non-null assertion '!' (Original line 216)
       action: "DELETE",
       entityType: "USER",
       entityId: user._id,
@@ -284,7 +284,7 @@ export const updateWebsiteContent = async (req: AuthRequest, res: Response) => {
         title,
         contentType,
         isActive,
-        lastModifiedBy: req.user?._id,
+        lastModifiedBy: req.user!._id, // 🔑 FIXED: Used non-null assertion '!'
         lastModifiedAt: new Date(),
       },
       { new: true, runValidators: true }
@@ -296,7 +296,7 @@ export const updateWebsiteContent = async (req: AuthRequest, res: Response) => {
         .json({ success: false, message: "Content not found" });
 
     await ActivityLog.create({
-      userId: req.user?._id,
+      userId: req.user!._id, // 🔑 FIXED: Used non-null assertion '!'
       action: "UPDATE",
       entityType: "CONTENT",
       entityId: updatedContent._id,

@@ -19,7 +19,10 @@ const generateToken = (id: string): string => {
 
   const payload = { id };
   const options: jwt.SignOptions = {
-    expiresIn: process.env.JWT_EXPIRES_IN ?? '7d',
+    //FIX: Assert the environment variable string as a valid jwt.Secret
+    // This tells TypeScript you know process.env.JWT_EXPIRES_IN is either 
+    // undefined or a string/number that JWT supports (e.g., '7d').
+    expiresIn: (process.env.JWT_EXPIRES_IN ?? '7d') as string, 
   };
   return jwt.sign(payload, secret, options);
 };
