@@ -5,9 +5,6 @@ import { ActivityLog } from "../models/ActivityLog.model";
 import { WebsiteContent } from "../models/WebsiteContent.model";
 import { JobApplication } from "../models/JobApplication.model";
 
-/**
- * Extend Express Request to include authenticated user
- */
 export interface AuthRequest extends Express.Request {
   user?: IAdminUser;
   body: any;
@@ -15,33 +12,22 @@ export interface AuthRequest extends Express.Request {
   query: any;
 }
 
-/**
- * ===========================
- * Dashboard Statistics
- * ===========================
- */
+/** Dashboard Statistics */
 export const getDashboardStats = async (req: AuthRequest, res: Response) => {
   try {
     const totalProjects = await Project.countDocuments();
-    const liveProjects = await Project.countDocuments({
-      status: { $in: ["On-site", "Design stage"] },
-    });
+    const liveProjects = await Project.countDocuments({ status: { $in: ["On-site", "Design stage"] } });
     const categoriesCount = (await Project.distinct("category")).length;
-
     const applicantsTotal = await JobApplication.countDocuments();
     const newApplicants = await JobApplication.countDocuments({
       appliedAt: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },
     });
-    const shortlisted = await JobApplication.countDocuments({
-      status: "SHORTLISTED",
-    });
-
+    const shortlisted = await JobApplication.countDocuments({ status: "SHORTLISTED" });
     const recentActivity = await ActivityLog.find()
       .populate("userId", "name email")
       .sort({ createdAt: -1 })
       .limit(10)
       .select("action entityType description createdAt userId");
-
     res.status(200).json({
       success: true,
       data: {
@@ -63,11 +49,7 @@ export const getDashboardStats = async (req: AuthRequest, res: Response) => {
   }
 };
 
-/**
- * ===========================
- * User Management
- * ===========================
- */
+/** User Management */
 export const getAllUsers = async (req: AuthRequest, res: Response) => {
   try {
     const users = await AdminUser.find().select("-password").sort({ createdAt: -1 });
@@ -80,7 +62,6 @@ export const getAllUsers = async (req: AuthRequest, res: Response) => {
 export const createUser = async (req: AuthRequest, res: Response) => {
   try {
     const { email, password, name, role } = req.body;
-
     if (!password || password.length < 8) {
       return res.status(400).json({
         success: false,
@@ -96,18 +77,15 @@ export const createUser = async (req: AuthRequest, res: Response) => {
       role === "super_admin" || role === "hr_hiring" || role === "project_content_manager"
         ? role
         : "project_content_manager";
-
     const user = await AdminUser.create({ email, password, name, role: validRole });
-
     await ActivityLog.create({
-      userId: req.user!._id,
+      userId: (req.user as IAdminUser)._id,
       action: "CREATE",
       entityType: "USER",
       entityId: user._id,
       description: `Created new user: ${user.email}`,
       metadata: { userRole: user.role },
     });
-
     res.status(201).json({
       success: true,
       message: "User created successfully",
@@ -129,24 +107,20 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
     const { name, email, role, isActive } = req.body;
-
     const user = await AdminUser.findByIdAndUpdate(
       id,
       { name, email, role, isActive },
       { new: true, runValidators: true }
     ).select("-password");
-
     if (!user) return res.status(404).json({ success: false, message: "User not found" });
-
     await ActivityLog.create({
-      userId: req.user!._id,
+      userId: (req.user as IAdminUser)._id,
       action: "UPDATE",
       entityType: "USER",
       entityId: user._id,
       description: `Updated user: ${user.email}`,
       metadata: { changes: { name, email, role, isActive } },
     });
-
     res.status(200).json({ success: true, message: "User updated successfully", data: user });
   } catch (error: any) {
     res.status(500).json({ success: false, message: "Failed to update user", error: error.message });
@@ -156,34 +130,27 @@ export const updateUser = async (req: AuthRequest, res: Response) => {
 export const deleteUser = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
-
     if (!req.user) return res.status(401).json({ success: false, message: "Unauthorized" });
-    if (id === req.user._id.toString())
+    if (id === (req.user as IAdminUser)._id.toString())
       return res.status(400).json({ success: false, message: "Cannot delete your own account" });
 
     const user = await AdminUser.findByIdAndDelete(id);
     if (!user) return res.status(404).json({ success: false, message: "User not found" });
-
     await ActivityLog.create({
-      userId: req.user!._id,
+      userId: (req.user as IAdminUser)._id,
       action: "DELETE",
       entityType: "USER",
       entityId: user._id,
       description: `Deleted user: ${user.email}`,
       metadata: { deletedUser: user.email },
     });
-
     res.status(200).json({ success: true, message: "User deleted successfully" });
   } catch (error: any) {
     res.status(500).json({ success: false, message: "Failed to delete user", error: error.message });
   }
 };
 
-/**
- * ===========================
- * Website Content Management
- * ===========================
- */
+/** Website Content Management */
 export const getWebsiteContent = async (req: AuthRequest, res: Response) => {
   try {
     const { page } = req.query;
@@ -191,7 +158,6 @@ export const getWebsiteContent = async (req: AuthRequest, res: Response) => {
     const content = await WebsiteContent.find(query)
       .populate("lastModifiedBy", "name email")
       .sort({ page: 1, section: 1 });
-
     res.status(200).json({ success: true, data: content });
   } catch (error: any) {
     res.status(500).json({ success: false, message: "Failed to fetch website content", error: error.message });
@@ -202,7 +168,6 @@ export const updateWebsiteContent = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
     const { content, title, contentType, isActive } = req.body;
-
     const updatedContent = await WebsiteContent.findByIdAndUpdate(
       id,
       {
@@ -210,48 +175,38 @@ export const updateWebsiteContent = async (req: AuthRequest, res: Response) => {
         title,
         contentType,
         isActive,
-        lastModifiedBy: req.user!._id,
+        lastModifiedBy: (req.user as IAdminUser)._id,
         lastModifiedAt: new Date(),
       },
       { new: true, runValidators: true }
     ).populate("lastModifiedBy", "name email");
-
     if (!updatedContent) return res.status(404).json({ success: false, message: "Content not found" });
-
     await ActivityLog.create({
-      userId: req.user!._id,
+      userId: (req.user as IAdminUser)._id,
       action: "UPDATE",
       entityType: "CONTENT",
       entityId: updatedContent._id,
       description: `Updated website content: ${updatedContent.page} - ${updatedContent.section}`,
       metadata: { page: updatedContent.page, section: updatedContent.section },
     });
-
     res.status(200).json({ success: true, message: "Content updated successfully", data: updatedContent });
   } catch (error: any) {
     res.status(500).json({ success: false, message: "Failed to update content", error: error.message });
   }
 };
 
-/**
- * ===========================
- * Activity Logs
- * ===========================
- */
+/** Activity Logs */
 export const getActivityLogs = async (req: AuthRequest, res: Response) => {
   try {
     const { userId, limit = 50, page = 1 } = req.query;
     const query = userId ? { userId: userId as string } : {};
     const skip = (Number(page) - 1) * Number(limit);
-
     const activities = await ActivityLog.find(query)
       .populate("userId", "name email")
       .sort({ createdAt: -1 })
       .skip(skip)
       .limit(Number(limit));
-
     const total = await ActivityLog.countDocuments(query);
-
     res.status(200).json({
       success: true,
       data: {
