@@ -1,7 +1,9 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, Types } from 'mongoose'; // 🔑 ADDED Types
 import bcrypt from 'bcryptjs';
 
 export interface IAdminUser extends Document {
+  //Explicitly define _id as Types.ObjectId to satisfy TypeScript/Mongoose
+  _id: Types.ObjectId; 
   email: string;
   password: string;
   name?: string;
