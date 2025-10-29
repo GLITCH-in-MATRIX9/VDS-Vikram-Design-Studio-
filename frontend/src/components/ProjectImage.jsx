@@ -46,7 +46,7 @@ const ProjectImage = ({ src, alt }) => {
   return (
     <motion.div
       style={{ width: dimensions.width, height: dimensions.height }}
-      className="rounded-lg shadow-md overflow-hidden cursor-pointer"
+      className="rounded-lg shadow-md overflow-hidden"
       whileTap={{ scale: 0.97 }} // smooth click scale
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
