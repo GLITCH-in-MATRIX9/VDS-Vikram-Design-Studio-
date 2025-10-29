@@ -1,6 +1,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { FiMapPin } from "react-icons/fi";
 import { motion, useMotionValue, animate } from "framer-motion";
+import SectionDivider from "./SectionDivider";
 import ProjectSectionDisplay from "./ProjectSectionDisplay";
 import LeftArrowIcon from "../assets/Icons/LeftArrowIcon.svg";
 import RightArrowIcon from "../assets/Icons/RightArrowIcon.svg";
@@ -147,10 +148,10 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
           {/* Desktop Project Info */}
           <div className="hidden xl:flex w-[240px] flex-col ml-12 pr-3 text-right items-end flex-shrink-0">
             <div className="flex flex-col gap-1 text-xs sm:text-sm">
-              <div className="text-[#7E797A] font-medium uppercase">
+              <div className="text-[#6D6D6D] font-medium uppercase">
                 {project?.category || "RESIDENTIAL"}
               </div>
-              <h1 className="text-[#3E3C3C] font-sora font-semibold text-xl m-0">
+              <h1 className="text-[#373737] font-sora font-semibold text-xl m-0">
                 {project?.title || project?.name || "Project Name"}
               </h1>
             </div>
@@ -163,26 +164,27 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
             </div>
             <div className="mt-[15px] flex flex-col gap-4 text-[#474545] text-[10px] uppercase">
               <div>
-                <div className="text-[#6E6A6B] mb-1">CLIENT</div>
+                <div className="text-[#5D5D5D] mb-1">CLIENT</div>
                 <div>{project?.client || "Client Name"}</div>
               </div>
               <div>
-                <div className="text-[#6E6A6B] mb-1">PROJECT TEAM</div>
+                <div className="text-[#5D5D5D] mb-1">PROJECT TEAM</div>
                 <div>
-                  {project?.projectLeaders + " | "}
+                  {project?.projectLeaders +
+                    (project?.projectLeaders.length > 0 ? " | " : "")}
                   {project?.project_team || project?.projectTeam || "Team Name"}
                 </div>
               </div>
               <div>
-                <div className="text-[#6E6A6B] mb-1">COLLABORATORS</div>
+                <div className="text-[#5D5D5D] mb-1">COLLABORATORS</div>
                 <div>{project?.collaborators || "Collaborator Name"}</div>
               </div>
               <div>
-                <div className="text-[#6E6A6B] mb-1">STATUS</div>
+                <div className="text-[#5D5D5D] mb-1">STATUS</div>
                 <div>{project?.status || "Status"}</div>
               </div>
               <div>
-                <div className="text-[#6E6A6B] mb-1">SIZE (M2/FT2)</div>
+                <div className="text-[#5D5D5D] mb-1">SIZE (M2/FT2)</div>
                 <div>{project?.sizeM2FT2 || "Size"}</div>
               </div>
             </div>
@@ -191,29 +193,56 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
           {/* Project Sections */}
           <div className="flex-grow flex-shrink-0 flex items-center gap-6 md:gap-8 w-auto h-full">
             <ProjectSectionDisplay sections={project?.sections} />
+            {!isDesktop && (
+              <div className="flex w-[240px] flex-col pr-3 items-center leading-[1.4em] flex-shrink-0 text-[10px]">
+                <div className=" flex flex-col gap-6 text-[#474545] text-[10px] uppercase">
+                  <div>
+                    <div className="text-[#5D5D5D] mb-1">CLIENT</div>
+                    <div>{project?.client || "Client Name"}</div>
+                  </div>
+                  <div>
+                    <div className="text-[#5D5D5D] mb-1">PROJECT TEAM</div>
+                    <div>
+                      {project?.projectLeaders +
+                        (project?.projectLeaders.length > 0 ? " | " : "")}
+                      {project?.project_team ||
+                        project?.projectTeam ||
+                        "Team Name"}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="text-[#5D5D5D] mb-1">COLLABORATORS</div>
+                    <div>{project?.collaborators || "Collaborator Name"}</div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </motion.div>
       </div>
 
       {/* Tablet/Smaller Project Info */}
-      <div className="grid grid-cols-2 py-3 leading-[1.4] xl:hidden px-2">
-        <div>
-          <div className="text-[#7E797A] font-medium text-xs uppercase">
+      <div className="grid grid-cols-2 py-3 leading-[1.4] xl:hidden ">
+        <div className="px-2 mb-3">
+          <div className="text-[#6D6D6D] font-medium text-xs uppercase">
             {project?.category || "RESIDENTIAL"}
           </div>
-          <h1 className="text-[#3E3C3C] font-sora font-semibold text-xl m-0">
+          <h1 className="text-[#373737] font-sora font-semibold text-xl m-0">
             {project?.title || project?.name || "Project Name"}
           </h1>
         </div>
-        <div className="flex flex-col items-end gap-1 text-[#474545] text-xs text-right">
+        <div className="flex flex-col items-end gap-1 text-[#474545] text-xs text-right  px-2">
           <p className="flex items-center justify-end gap-1">
             <FiMapPin />
             <span>{project?.location || "Location"}</span>
           </p>
           <p>{project?.year || "Year"}</p>
         </div>
-        <div className="status text-[#474545] text-[10px] uppercase leading-normal mt-4">
-          <div className="text-[#6E6A6B]">STATUS</div>
+        <div className="col-span-2">
+          <SectionDivider />
+        </div>
+        <div className="status text-[#474545] text-[10px] uppercase leading-normal mt-2 px-2">
+          <div className="text-[#5D5D5D]">STATUS</div>
           <div>{project?.status || "Status"}</div>
         </div>
       </div>
