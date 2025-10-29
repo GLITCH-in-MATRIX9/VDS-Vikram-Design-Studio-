@@ -27,8 +27,8 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
   const containerRef = useRef(null);
   const contentRef = useRef(null);
   const [maxScroll, setMaxScroll] = useState(0);
-  const scrollAmount = 960;
   const isDesktop = useIsDesktop();
+  const scrollAmount = isDesktop ? 960 : 320;
 
   const [transition, setTransition] = useState({
     duration: 1.4,
@@ -56,11 +56,47 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
   }, [project]);
 
   const scrollLeft = () => {
-    animate(x, Math.min(x.get() + scrollAmount, 0), transition);
+    if (isDesktop) {
+      // Desktop: Animate the motion value
+      animate(x, Math.min(x.get() + scrollAmount, 0), transition);
+    } else {
+      // Mobile: Animate the container's native scrollLeft property
+      const container = containerRef.current;
+      if (!container) return;
+
+      const newScrollLeft = container.scrollLeft - scrollAmount;
+
+      // Use Framer's animate function to smoothly scroll
+      animate(container.scrollLeft, Math.max(newScrollLeft, 0), {
+        ...transition,
+        onUpdate: (latest) => {
+          container.scrollLeft = latest;
+        },
+      });
+    }
   };
 
   const scrollRight = () => {
-    animate(x, Math.max(x.get() - scrollAmount, maxScroll), transition);
+    if (isDesktop) {
+      // Desktop: Animate the motion value
+      animate(x, Math.max(x.get() - scrollAmount, maxScroll), transition);
+    } else {
+      // Mobile: Animate the container's native scrollLeft property
+      const container = containerRef.current;
+      if (!container) return;
+
+      const newScrollLeft = container.scrollLeft + scrollAmount;
+      // Calculate the native max scroll
+      const nativeMaxScroll = container.scrollWidth - container.clientWidth;
+
+      // Use Framer's animate function to smoothly scroll
+      animate(container.scrollLeft, Math.min(newScrollLeft, nativeMaxScroll), {
+        ...transition,
+        onUpdate: (latest) => {
+          container.scrollLeft = latest;
+        },
+      });
+    }
   };
 
   return (
@@ -79,14 +115,14 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
       {/* Scroll Buttons */}
       <button
         onClick={scrollLeft}
-        className="absolute z-10 left-2 top-1/2 transform -translate-y-1/2 bg-[#2B262433] w-8 h-8 rounded-full shadow-md hidden xl:flex items-center justify-center"
+        className={`absolute z-10 left-2 top-[110px] md:top-[225px] xl:top-1/2 -translate-y-1/2 bg-[#2B262433] w-8 h-8 cursor-pointer rounded-full shadow-md flex items-center justify-center`}
       >
         <img src={LeftArrowIcon} alt="Scroll Left" className="w-4" />
       </button>
 
       <button
         onClick={scrollRight}
-        className="absolute z-10 right-2 top-1/2 transform -translate-y-1/2 bg-[#2B262433] w-8 h-8 rounded-full shadow-md hidden xl:flex items-center justify-center"
+        className={`absolute z-10 right-2 top-[110px] md:top-[225px] xl:top-1/2 -translate-y-1/2 bg-[#2B262433] w-8 h-8 cursor-pointer rounded-full shadow-md flex items-center justify-center`}
       >
         <img src={RightArrowIcon} className="w-4" alt="Scroll Right" />
       </button>
@@ -106,7 +142,6 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
           drag={isDesktop ? "x" : false}
           dragConstraints={isDesktop ? { left: maxScroll, right: 0 } : false}
           dragElastic={0} // Prevents over-dragging
-          // Remove animate and transition props
           className="flex flex-nowrap h-full items-center"
         >
           {/* Desktop Project Info */}
@@ -150,7 +185,6 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
                 <div className="text-[#6E6A6B] mb-1">SIZE (M2/FT2)</div>
                 <div>{project?.sizeM2FT2 || "Size"}</div>
               </div>
-
             </div>
           </div>
 
