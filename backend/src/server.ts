@@ -24,7 +24,7 @@ const allowedOrigins = [
   'https://vikramdesignstudio.com',  // production domain
   'http://localhost:5173',           // local dev frontend
   process.env.CLIENT_ORIGIN || ''    // optional env override
-].filter(Boolean); // remove empty strings
+].filter(Boolean); 
 
 app.use(cors({
   origin: (origin, callback) => {
@@ -54,7 +54,7 @@ app.use(express.json({
 }));
 app.use(express.urlencoded({ 
   extended: true, 
-  limit: '30mb' // Updated to match file size limit
+  limit: '30mb' 
 }));
 
 app.use(generalRateLimit);

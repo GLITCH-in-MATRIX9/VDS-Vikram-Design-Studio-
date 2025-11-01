@@ -27,7 +27,7 @@ interface EmailOptions {
 export const sendEmail = async (options: EmailOptions) => {
   try {
     const info = await transporter.sendMail({
-       from: `"Vikram Design Studio" <${config.email.from}>`, // This can be your verified sender email
+       from: `"Vikram Design Studio" <${config.email.from}>`, 
       to: options.to,
       subject: options.subject,
       html: options.html,

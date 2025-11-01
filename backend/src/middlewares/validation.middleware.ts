@@ -14,6 +14,8 @@ export const validateProject = (
     collaborators,
     projectTeam,
     keyDate,
+    latitude,
+    longitude,
   } = req.body;
 
   const errors: string[] = [];
@@ -57,6 +59,21 @@ export const validateProject = (
     errors.push("Key date is required");
   }
 
+  // 🌍 Validate geographic coordinates (if provided)
+  if (latitude !== undefined && latitude !== null && latitude !== "") {
+    const lat = parseFloat(latitude);
+    if (isNaN(lat) || lat < -90 || lat > 90) {
+      errors.push("Latitude must be a number between -90 and 90");
+    }
+  }
+
+  if (longitude !== undefined && longitude !== null && longitude !== "") {
+    const lng = parseFloat(longitude);
+    if (isNaN(lng) || lng < -180 || lng > 180) {
+      errors.push("Longitude must be a number between -180 and 180");
+    }
+  }
+
   // Validate tags if provided
   if (req.body.tags) {
     try {
@@ -83,8 +100,8 @@ export const validateProject = (
         errors.push("Sections must be an array");
       } else {
         for (const section of sections) {
-          if (!section.type || !["text", "image"].includes(section.type)) {
-            errors.push("Each section must have a valid type (text or image)");
+          if (!section.type || !["text", "image", "gif"].includes(section.type)) {
+            errors.push("Each section must have a valid type (text, image, or gif)");
             break;
           }
           if (!section.content || section.content.trim().length === 0) {
@@ -108,67 +125,44 @@ export const validateProject = (
   next();
 };
 
-export const validateAuth = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { email, password } = req.body;
 
+export const validateAuth = (req: Request, res: Response, next: NextFunction) => {
+  const { email, password } = req.body;
   const errors: string[] = [];
 
-  if (!email || email.trim().length === 0) {
-    errors.push("Email is required");
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    errors.push("Email must be valid");
+  if (!email || !/\S+@\S+\.\S+/.test(email)) {
+    errors.push("Valid email is required.");
   }
 
-  if (!password || password.trim().length === 0) {
-    errors.push("Password is required");
-  } else if (password.length < 6) {
-    errors.push("Password must be at least 6 characters");
+  if (!password || password.length < 6) {
+    errors.push("Password must be at least 6 characters.");
   }
 
   if (errors.length > 0) {
-    return res.status(400).json({
-      message: "Validation failed",
-      errors,
-    });
+    return res.status(400).json({ message: "Validation failed", errors });
   }
 
   next();
 };
 
-export const validateRegister = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { email, password, name } = req.body;
-
+export const validateRegister = (req: Request, res: Response, next: NextFunction) => {
+  const { name, email, password } = req.body;
   const errors: string[] = [];
 
-  if (!email || email.trim().length === 0) {
-    errors.push("Email is required");
-  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    errors.push("Email must be valid");
+  if (!name || name.trim().length === 0) {
+    errors.push("Name is required.");
   }
 
-  if (!password || password.trim().length === 0) {
-    errors.push("Password is required");
-  } else if (password.length < 6) {
-    errors.push("Password must be at least 6 characters");
+  if (!email || !/\S+@\S+\.\S+/.test(email)) {
+    errors.push("Valid email is required.");
   }
 
-  if (name && name.trim().length === 0) {
-    errors.push("Name cannot be empty");
+  if (!password || password.length < 6) {
+    errors.push("Password must be at least 6 characters.");
   }
 
   if (errors.length > 0) {
-    return res.status(400).json({
-      message: "Validation failed",
-      errors,
-    });
+    return res.status(400).json({ message: "Validation failed", errors });
   }
 
   next();

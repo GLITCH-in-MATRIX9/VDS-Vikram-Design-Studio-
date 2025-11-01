@@ -14,6 +14,7 @@ const statusMap: Record<string, string> = {
   UNBUILT: "Unbuilt",
 };
 
+
 // ---------------- CREATE PROJECT ----------------
 export const createProject = async (req: Request, res: Response) => {
   try {
@@ -32,6 +33,8 @@ export const createProject = async (req: Request, res: Response) => {
       keyDate,
       sections,
       sizeM2FT2,
+      lat, 
+      lng, 
     } = req.body;
 
     const files = req.files as any;
@@ -52,7 +55,9 @@ export const createProject = async (req: Request, res: Response) => {
     // -------------------------------------------------------------------------------
 
     // ------------------- ADDED: normalize project folder -------------------
-    const projectFolder = `VDS_FOLDER/${name.replace(/[^a-zA-Z0-9]/g, "_").toUpperCase()}`;
+    const projectFolder = `VDS_FOLDER/${name
+      .replace(/[^a-zA-Z0-9]/g, "_")
+      .toUpperCase()}`;
     // ----------------------------------------------------------------------
 
     let previewImageUrl =
@@ -62,7 +67,10 @@ export const createProject = async (req: Request, res: Response) => {
 
     // Upload preview if base64
     if (previewImageUrl && isBase64Image(previewImageUrl)) {
-      const result = await convertBase64ToCloudinary(previewImageUrl, projectFolder);
+      const result = await convertBase64ToCloudinary(
+        previewImageUrl,
+        projectFolder
+      );
       previewImageUrl = result.url;
       previewImagePublicId = result.publicId;
     }
@@ -82,7 +90,10 @@ export const createProject = async (req: Request, res: Response) => {
           };
         }
         if (sec.content && isBase64Image(sec.content)) {
-          const result = await convertBase64ToCloudinary(sec.content, projectFolder);
+          const result = await convertBase64ToCloudinary(
+            sec.content,
+            projectFolder
+          );
           return {
             type: sec.type || "image",
             content: result.url,
@@ -111,6 +122,8 @@ export const createProject = async (req: Request, res: Response) => {
       previewImageUrl,
       previewImagePublicId,
       sizeM2FT2,
+      latitude: lat ? Number(lat) : undefined, 
+      longitude: lng ? Number(lng) : undefined,
     });
 
     await project.save();
@@ -145,6 +158,8 @@ export const updateProject = async (req: Request, res: Response) => {
       previewImageUrl: reqPreviewImageUrl,
       previewImagePublicId: reqPreviewImagePublicId,
       sizeM2FT2,
+      lat, 
+      lng, 
     } = req.body as Record<string, any>;
 
     const files = req.files as any;
@@ -219,7 +234,6 @@ export const updateProject = async (req: Request, res: Response) => {
           };
         }
 
-        // Existing URL without publicId → extract from URL
         if (
           sec.content &&
           !sec.publicId &&
@@ -229,8 +243,8 @@ export const updateProject = async (req: Request, res: Response) => {
           try {
             const urlParts = sec.content.split("/");
             const fileNameWithExt = urlParts[urlParts.length - 1];
-            const fileName = fileNameWithExt.split(".")[0]; 
-            const folderPath = urlParts.slice(7, urlParts.length - 1).join("/"); 
+            const fileName = fileNameWithExt.split(".")[0];
+            const folderPath = urlParts.slice(7, urlParts.length - 1).join("/");
             sec.publicId = `${folderPath}/${fileName}`;
           } catch (err) {
             console.warn(
@@ -303,6 +317,8 @@ export const updateProject = async (req: Request, res: Response) => {
       previewImageUrl: previewImageUrl || existing.previewImageUrl,
       previewImagePublicId:
         previewImagePublicId || existing.previewImagePublicId,
+      latitude: lat ? Number(lat) : existing.latitude || null, 
+      longitude: lng ? Number(lng) : existing.longitude || null,
     });
 
     const updated = await Project.findByIdAndUpdate(req.params.id, updateData, {
@@ -319,18 +335,28 @@ export const updateProject = async (req: Request, res: Response) => {
   }
 };
 
+
+
 // ---------------- GET ALL PROJECTS ----------------
-export const getProjects = async (_req: Request, res: Response) => {
+export const getProjects = async (req: Request, res: Response) => {
   try {
-    const projects = await Project.find().sort({ createdAt: -1 });
-    return res.status(200).json(projects);
-  } catch (err: any) {
-    console.error("❌ Error fetching projects:", err);
-    return res
-      .status(500)
-      .json({ message: "Failed to fetch projects", error: err.message });
+    const projects = await Project.find();
+
+    
+    const withCoords = projects.map((p, i) => ({
+      ...p.toObject(),
+      latitude: p.latitude || 28.6139 + i * 0.01,  // Delhi + offset
+      longitude: p.longitude || 77.2090 + i * 0.01,
+    }));
+
+    res.status(200).json(withCoords);
+  } catch (error) {
+    console.error("Error fetching projects:", error);
+    res.status(500).json({ message: "Error fetching projects" });
   }
 };
+
+
 
 // ---------------- GET PROJECT BY ID ----------------
 export const getProjectById = async (req: Request, res: Response) => {
@@ -344,6 +370,8 @@ export const getProjectById = async (req: Request, res: Response) => {
       .json({ message: "Failed to fetch project", error: err.message });
   }
 };
+
+
 
 // ---------------- DELETE PROJECT ----------------
 export const deleteProject = async (req: Request, res: Response) => {
@@ -359,7 +387,9 @@ export const deleteProject = async (req: Request, res: Response) => {
       try {
         await cloudinary.api.delete_resources_by_prefix(folderPrefix);
         await cloudinary.api.delete_folder(folderPrefix);
-        console.log(`✅ Deleted Cloudinary folder and all images: ${folderPrefix}`);
+        console.log(
+          `✅ Deleted Cloudinary folder and all images: ${folderPrefix}`
+        );
       } catch (err) {
         console.warn(
           `⚠️ Failed to delete Cloudinary folder or its images: ${folderPrefix}`,
@@ -369,10 +399,36 @@ export const deleteProject = async (req: Request, res: Response) => {
     }
 
     await Project.findByIdAndDelete(req.params.id);
-    return res.status(200).json({ message: "Project and its images deleted successfully" });
+    return res
+      .status(200)
+      .json({ message: "Project and its images deleted successfully" });
   } catch (err: any) {
     return res
       .status(500)
       .json({ message: "Failed to delete project", error: err.message });
+  }
+};
+
+
+// ---------------- GET MORE PROJECTS (for viewer/related section) ----------------
+export const getMoreProjects = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const { limit = 4, category } = req.query;
+
+    // Exclude current project, optionally filter by category
+    const filter: any = { _id: { $ne: id } };
+    if (category) filter.category = category;
+
+    const moreProjects = await Project.find(filter)
+      .sort({ createdAt: -1 })
+      .limit(Number(limit));
+
+    return res.status(200).json(moreProjects);
+  } catch (err: any) {
+    console.error("❌ Error fetching more projects:", err);
+    return res
+      .status(500)
+      .json({ message: "Failed to fetch more projects", error: err.message });
   }
 };

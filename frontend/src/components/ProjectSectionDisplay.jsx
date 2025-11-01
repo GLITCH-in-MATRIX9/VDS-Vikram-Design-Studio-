@@ -17,7 +17,7 @@ const ProjectSectionDisplay = ({ sections }) => {
                 className=" p-4 "
                 style={{ minWidth: "320px", maxWidth: "400px" }}
               >
-                <p className="text-gray-700 leading-[140%] md:leading-relaxed whitespace-pre-wrap text-sm ">
+                <p className="text-gray-700 leading-[140%] md:leading-relaxed whitespace-pre-wrap text-sm break-words">
                   {section.content}
                 </p>
               </div>

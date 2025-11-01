@@ -1,4 +1,3 @@
-// EditProject.jsx
 import React, { useState, useEffect } from "react";
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { FaGripVertical, FaTrash } from "react-icons/fa";
@@ -7,89 +6,14 @@ import { useParams, useNavigate } from "react-router-dom";
 import projectApi from "../../../services/projectApi";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-const MAX_TEXT_LENGTH = 700;
-
-const PROJECT_LEADERS_OPTIONS = [
-  "VIKRAMM B SHROFF",
-  "POOZA AGARWAL",
-  "NAMMAN SHROFF",
-];
-
-const filterOptions = {
-  EDUCATION: [
-    "SCHOOLS",
-    "TRAINING INSTITUTIONS/CENTRES",
-    "RESEARCH CENTRES",
-    "COLLEGES & UNIVERSITIES",
-  ],
-  HEALTHCARE: ["HOSPITALS", "MEDICAL COLLEGES", "DIAGNOSTIC LABS", "CLINICS"],
-  CIVIC: [
-    "AUDITORIUMS",
-    "TOWN HALLS",
-    "POLICE STATIONS",
-    "PUBLIC TOILETS & AMENITIES",
-  ],
-  WORKSPACE: ["GOVERNMENT OFFICES", "CORPORATE OFFICES", "RESEARCH CENTRES"],
-  SPORTS: ["STADIUMS", "SPORTS COMPLEX", "MULTIPURPOSE SPORTS HALLS"],
-  CULTURE: ["RELIGIOUS", "MEMORIALS", "CULTURAL COMPLEX", "MUSEUMS"],
-  RESIDENTIAL: [
-    "STAFF QUARTERS",
-    "PRIVATE VILLAS",
-    "PRIVATE APARTMENTS",
-    "HOUSING",
-    "HOSTELS",
-    "GUEST HOUSES",
-  ],
-  HOSPITALITY: ["HOTELS", "RESORTS", "RESTAURANTS", "TOURISM LODGES"],
-  RETAIL: [
-    "SHOWROOMS",
-    "SHOPPING COMPLEX",
-    "DEPARTMENTAL STORES",
-    "MULTIPLEXES",
-  ],
-};
-
-const TAG_OPTIONS = Object.keys(filterOptions);
-
-const STATES_AND_UTS = [
-  "ANDHRA PRADESH",
-  "ARUNACHAL PRADESH",
-  "ASSAM",
-  "BIHAR",
-  "CHHATTISGARH",
-  "GOA",
-  "GUJARAT",
-  "HARYANA",
-  "HIMACHAL PRADESH",
-  "JHARKHAND",
-  "KARNATAKA",
-  "KERALA",
-  "MADHYA PRADESH",
-  "MAHARASHTRA",
-  "MANIPUR",
-  "MEGHALAYA",
-  "MIZORAM",
-  "NAGALAND",
-  "ODISHA",
-  "PUNJAB",
-  "RAJASTHAN",
-  "SIKKIM",
-  "TAMIL NADU",
-  "TELANGANA",
-  "TRIPURA",
-  "UTTAR PRADESH",
-  "UTTARAKHAND",
-  "WEST BENGAL",
-  "ANDAMAN AND NICOBAR ISLANDS",
-  "CHANDIGARH",
-  "DADRA AND NAGAR HAVELI AND DAMAN AND DIU",
-  "DELHI",
-  "JAMMU AND KASHMIR",
-  "LADAKH",
-  "LAKSHADWEEP",
-  "PUDUCHERRY",
-];
+// ⭐️ IMPORTED CONSTANTS
+import {
+  MAX_TEXT_LENGTH,
+  PROJECT_LEADERS_OPTIONS,
+  filterOptions,
+  TAG_OPTIONS,
+  STATES_AND_UTS,
+} from "./constants"; 
 
 const EditProject = () => {
   const { id } = useParams();
@@ -110,6 +34,9 @@ const EditProject = () => {
     keyDate: "",
     previewImageUrl: "",
     sizeM2FT2: "",
+    // State keys match input names: 'lat' and 'lng'
+    lat: "", 
+    lng: "", 
   });
 
   const [nextNewSectionId, setNextNewSectionId] = useState(0);
@@ -119,7 +46,7 @@ const EditProject = () => {
   const [availableSubCategories, setAvailableSubCategories] = useState([]);
   const [showLeaderDropdown, setShowLeaderDropdown] = useState(false);
 
-  // 🚨 State for Tag Input to match AddProject.jsx
+  // State for Tag Input to match AddProject.jsx
   const [tagInput, setTagInput] = useState("");
   const [savedTags, setSavedTags] = useState([]);
   const [showDropdown, setShowDropdown] = useState(false);
@@ -147,6 +74,10 @@ const EditProject = () => {
           keyDate: project.keyDate ? new Date(project.keyDate).toISOString().slice(0, 10) : "",
           previewImageUrl: project.previewImageUrl || "",
           sizeM2FT2: project.sizeM2FT2 || "",
+          // ⭐️ READ FIX: Reads 'latitude' and 'longitude' from the backend payload 
+          // and maps them to the local state keys 'lat' and 'lng'.
+          lat: project.latitude !== undefined && project.latitude !== null ? String(project.latitude) : "", 
+          lng: project.longitude !== undefined && project.longitude !== null ? String(project.longitude) : "", 
         });
 
         setSelectedCategory(project.category || "");
@@ -221,6 +152,15 @@ const EditProject = () => {
       }));
       return;
     }
+    
+    // Handle lat and lng as numbers/strings, not uppercase
+    if (name === "lat" || name === "lng") {
+        setFormData((prev) => ({
+            ...prev,
+            [name]: value, // Keep value as is (allows decimals/negative signs)
+        }));
+        return;
+    }
 
     const upperCaseFields = [
       "name",
@@ -251,7 +191,7 @@ const EditProject = () => {
     });
   };
 
-  // 🚨 Updated to match AddProject's tag logic (input + dropdown)
+  // Updated to match AddProject's tag logic (input + dropdown)
   const handleAddTag = (tag = null) => {
     const newTag = (tag || tagInput).trim().toUpperCase();
     if (!newTag || formData.tags.includes(newTag)) return;
@@ -391,7 +331,21 @@ const EditProject = () => {
     const data = {
       ...formData,
       sections: cleanSections,
+      // WRITE FIX: Send 'lat' and 'lng' to the controller, which maps them to 'latitude'/'longitude'
+      lat: formData.lat !== "" ? parseFloat(formData.lat) : null,
+      lng: formData.lng !== "" ? parseFloat(formData.lng) : null,
     };
+    
+    // Optional basic validation for coordinates
+    if (data.lat !== null && (data.lat < -90 || data.lat > 90)) {
+        toast.error("Latitude must be between -90 and 90.");
+        return;
+    }
+    if (data.lng !== null && (data.lng < -180 || data.lng > 180)) {
+        toast.error("Longitude must be between -180 and 180.");
+        return;
+    }
+
 
     try {
       await projectApi.updateProject(id, data);
@@ -448,6 +402,35 @@ const EditProject = () => {
                 </option>
               ))}
             </select>
+            
+            {/* Latitude and Longitude Inputs */}
+            <div className="grid grid-cols-2 gap-2">
+                <input
+                    type="number"
+                    name="lat"
+                    value={formData.lat}
+                    onChange={handleChange}
+                    placeholder="Latitude (e.g., 23.82)"
+                    className="border p-2 rounded w-full border-[#C9BEB8]"
+                    step="any"
+                    min="-90"
+                    max="90"
+                    autoComplete="off"
+                />
+                <input
+                    type="number"
+                    name="lng"
+                    value={formData.lng}
+                    onChange={handleChange}
+                    placeholder="Longitude (e.g., 91.27)"
+                    className="border p-2 rounded w-full border-[#C9BEB8]"
+                    step="any"
+                    min="-180"
+                    max="180"
+                    autoComplete="off"
+                />
+            </div>
+            
             <div className="grid grid-cols-2 gap-2">
               <select
                 name="category"
@@ -567,7 +550,7 @@ const EditProject = () => {
                 className="border p-2 rounded w-full border-[#C9BEB8]"
                 required
               >
-                <option value="">SELECT STATUS *</option>  {/* Placeholder option */}
+                <option value="">SELECT STATUS *</option>  {/* Placeholder option */}
                 <option value="ON-SITE">ON-SITE</option>
                 <option value="DESIGN STAGE">DESIGN STAGE</option>
                 <option value="COMPLETED">COMPLETED</option>

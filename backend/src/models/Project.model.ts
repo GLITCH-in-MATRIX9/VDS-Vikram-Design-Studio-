@@ -7,22 +7,25 @@ export interface IProjectSection {
 }
 
 export interface IProject extends Document {
-  name: string; // Project Name
+  name: string;
   location: string;
+  latitude?: number; 
+  longitude?: number;
+  
   year?: string;
   status: 'On-site' | 'Design stage' | 'Completed' | 'Unbuilt';
   category: string;
   subCategory?: string;
   client: string;
   collaborators: string;
-  projectLeaders: string[]; 
+  projectLeaders: string[];
   projectTeam: string;
   tags: string[];
-  keyDate: string; // ISO date string from date input
-  previewImageUrl?: string; // stored path of uploaded preview
-  previewImagePublicId?: string; // Cloudinary public id for deletion
-  sections: IProjectSection[]; // content blocks serialized from editor
-  sizeM2FT2?: string; 
+  keyDate: string;
+  previewImageUrl?: string;
+  previewImagePublicId?: string;
+  sections: IProjectSection[];
+  sizeM2FT2?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -40,6 +43,8 @@ const ProjectSchema = new Schema<IProject>(
   {
     name: { type: String, required: true, trim: true },
     location: { type: String, required: true, trim: true },
+    latitude: { type: Number, index: true },
+    longitude: { type: Number, index: true },
     year: { type: String },
     status: { type: String, enum: ['On-site', 'Design stage', 'Completed', 'Unbuilt'], required: true },
     category: { type: String, required: true, trim: true },
@@ -53,11 +58,13 @@ const ProjectSchema = new Schema<IProject>(
     previewImageUrl: { type: String },
     previewImagePublicId: { type: String },
     sections: { type: [ProjectSectionSchema], default: [] },
-    sizeM2FT2: { type: String }, 
+    sizeM2FT2: { type: String },
   },
   { timestamps: true }
 );
 
 ProjectSchema.index({ createdAt: -1 });
+
+ProjectSchema.index({ latitude: 1, longitude: 1 }); 
 
 export const Project = model<IProject>('Project', ProjectSchema);
