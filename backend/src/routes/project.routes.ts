@@ -1,55 +1,59 @@
 import { Router } from "express";
 import {
-    createProject,
-    getProjects,
-    getProjectById,
-    updateProject,
-    deleteProject,
+  createProject,
+  getProjects,
+  getProjectById,
+  updateProject,
+  deleteProject,
+  getMoreProjects, 
 } from "../controllers/project.controller";
 import { upload } from "../middlewares/upload";
 import { protect, requireRole } from "../middlewares/auth.middleware";
-import { validateBase64Content, cleanBase64Response } from "../middlewares/base64Validator";
+import {
+  validateBase64Content,
+  cleanBase64Response,
+} from "../middlewares/base64Validator";
 
 const router = Router();
 
-// Define the roles allowed to manage projects
-const PROJECT_MANAGEMENT_ROLES: ("super_admin" | "hr_hiring" | "project_content_manager")[] = [
-  "project_content_manager",
-  "super_admin",
-];
+const PROJECT_MANAGEMENT_ROLES: (
+  | "super_admin"
+  | "hr_hiring"
+  | "project_content_manager"
+)[] = ["project_content_manager", "super_admin"];
 
-// Public routes
+// ---------------- PUBLIC ROUTES ----------------
 router.get("/", cleanBase64Response, getProjects);
 router.get("/:id", cleanBase64Response, getProjectById);
 
-// Protected routes
+// ✅ New “More Projects Viewer” route
+router.get("/:id/more", cleanBase64Response, getMoreProjects);
+
+// ---------------- PROTECTED ROUTES ----------------
 router.post(
-    "/",
-    protect,
-    // Replaced invalid 'admin' with valid 'project_content_manager'
-    requireRole(PROJECT_MANAGEMENT_ROLES),
-    validateBase64Content,
-    upload.fields([
-        { name: "previewImage", maxCount: 1 },
-        { name: "sections", maxCount: 10 },
-    ]),
-    createProject
+  "/",
+  protect,
+  requireRole(PROJECT_MANAGEMENT_ROLES),
+  validateBase64Content,
+  upload.fields([
+    { name: "previewImage", maxCount: 1 },
+    { name: "sections", maxCount: 10 },
+  ]),
+  createProject
 );
 
 router.put(
-    "/:id",
-    protect,
-    //  Replaced invalid 'admin' with valid 'project_content_manager'
-    requireRole(PROJECT_MANAGEMENT_ROLES),
-    validateBase64Content,
-    upload.fields([
-        { name: "previewImage", maxCount: 1 },
-        { name: "sections", maxCount: 10 },
-    ]),
-    updateProject
+  "/:id",
+  protect,
+  requireRole(PROJECT_MANAGEMENT_ROLES),
+  validateBase64Content,
+  upload.fields([
+    { name: "previewImage", maxCount: 1 },
+    { name: "sections", maxCount: 10 },
+  ]),
+  updateProject
 );
 
-//  Replaced invalid 'admin' with valid 'project_content_manager'
 router.delete("/:id", protect, requireRole(PROJECT_MANAGEMENT_ROLES), deleteProject);
 
 export default router;
