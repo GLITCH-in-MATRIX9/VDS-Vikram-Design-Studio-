@@ -7,6 +7,7 @@ const ProjectSections = ({
   handleAddText,
   handleAddImage,
   handleAddGif,
+  handleAddVideoLink,
   handleContentChange,
   handleRemoveContent,
   handleDragEnd,
@@ -37,11 +38,17 @@ const ProjectSections = ({
         <input
           type="file"
           accept="image/gif"
-          
           className="hidden"
           onChange={(e) => handleAddGif(e.target.files[0])}
         />
       </label>
+      <button
+        type="button"
+        onClick={handleAddVideoLink}
+        className="px-4 py-2 bg-[#722F37] text-white rounded hover:bg-[#632932] text-sm font-medium"
+      >
+        Add Video Link
+      </button>
     </div>
 
     <DragDropContext onDragEnd={handleDragEnd}>
@@ -78,6 +85,17 @@ const ProjectSections = ({
                         }
                         className="border p-2 rounded w-full"
                         rows={3}
+                      />
+                    )}
+                    {section.type === "video" && (
+                      <input
+                        type="text"
+                        className="border p-2 rounded w-full border-[#C9BEB8]"
+                        value={section.content}
+                        placeholder="Enter video URL (YouTube link)"
+                        onChange={(e) =>
+                          handleContentChange(index, e.target.value)
+                        }
                       />
                     )}
                     {(section.type === "image" || section.type === "gif") && (

@@ -3,10 +3,7 @@ import React, { useState, useEffect } from "react";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import projectApi from "../../../services/projectApi";
-import {
-  PROJECT_LEADERS_OPTIONS,
-  filterOptions,
-} from "./constants";
+import { PROJECT_LEADERS_OPTIONS, filterOptions } from "./constants";
 import MandatoryFields from "./components/MandatoryFields";
 import PreviewUploader from "./components/PreviewUploader";
 import ProjectTags from "./components/ProjectTags";
@@ -193,6 +190,9 @@ const AddProject = () => {
     reader.readAsDataURL(file);
   };
 
+  const handleAddVideoLink = () =>
+    setSections((prev) => [...prev, { type: "video", content: "" }]);
+
   const handleContentChange = (index, value) => {
     // Enforce a reasonable text length client-side (mirrors original)
     const MAX_TEXT_LENGTH = 700;
@@ -219,8 +219,15 @@ const AddProject = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.name || !formData.client || !formData.projectTeam || !formData.location) {
-      toast.error("Please fill required fields: Project Name, Client, Project Team, Location.");
+    if (
+      !formData.name ||
+      !formData.client ||
+      !formData.projectTeam ||
+      !formData.location
+    ) {
+      toast.error(
+        "Please fill required fields: Project Name, Client, Project Team, Location."
+      );
       return;
     }
 
@@ -244,7 +251,7 @@ const AddProject = () => {
     try {
       toast.info("Submitting project...");
       // ✅ use createProject (not addProject)
-      const res = await projectApi.createProject(fd); 
+      const res = await projectApi.createProject(fd);
       toast.success("Project created successfully!");
 
       // Reset form after successful creation
@@ -272,11 +279,11 @@ const AddProject = () => {
       }
     } catch (err) {
       console.error("Create project error:", err);
-      const message = err?.response?.data?.message || "Failed to create project";
+      const message =
+        err?.response?.data?.message || "Failed to create project";
       toast.error(message);
     }
   };
-
 
   return (
     <div className="flex-1 p-6 bg-[#F5F1EE]">
@@ -329,6 +336,7 @@ const AddProject = () => {
           handleAddText={handleAddText}
           handleAddImage={handleAddImage}
           handleAddGif={handleAddGif}
+          handleAddVideoLink={handleAddVideoLink}
           handleContentChange={handleContentChange}
           handleRemoveContent={handleRemoveContent}
           handleDragEnd={handleDragEnd}
