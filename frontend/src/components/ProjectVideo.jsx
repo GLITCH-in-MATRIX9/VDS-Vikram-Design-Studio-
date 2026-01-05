@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
+import { getYouTubeAPI } from "../utils/youtubeApi";
 
 // Extract YouTube video ID from URL
 const extractYouTubeVideoId = (url) => {
@@ -16,23 +17,22 @@ const extractYouTubeVideoId = (url) => {
 
     const match = parsed.pathname.match(/\/(embed|shorts)\/([^/?]+)/);
     if (match) return match[2];
-  } catch {
-    return null;
-  }
+  } catch {}
 
   return null;
 };
 
 const ProjectVideo = ({ src }) => {
-  const wrapperRef = useRef(null);
   const playerMountRef = useRef(null);
   const playerRef = useRef(null);
-  const observerRef = useRef(null);
+
+  const videoId = extractYouTubeVideoId(src);
+  const isYouTube = Boolean(videoId);
 
   const [dimensions, setDimensions] = useState({ width: 0, height: 450 });
-  const [isVisible, setIsVisible] = useState(false);
+  const [isPlayerReady, setIsPlayerReady] = useState(false);
 
-  // ----- Dimension logic (UNCHANGED) -----
+  // ----- Dimension logic (unchanged) -----
   const updateDimensions = () => {
     const height = window.innerWidth <= 640 ? 220 : 450;
     const width = Math.round((16 / 9) * height);
@@ -45,36 +45,16 @@ const ProjectVideo = ({ src }) => {
     return () => window.removeEventListener("resize", updateDimensions);
   }, []);
 
-  // ----- Intersection Observer (lazy-load trigger) -----
+  // ----- YouTube Player init (IMMEDIATE) -----
   useEffect(() => {
-    if (!wrapperRef.current) return;
+    if (!isYouTube || !videoId) return;
 
-    observerRef.current = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observerRef.current.disconnect(); // load only once
-        }
-      },
-      { threshold: 0.25 }
-    );
+    let cancelled = false;
 
-    observerRef.current.observe(wrapperRef.current);
+    getYouTubeAPI().then((YT) => {
+      if (cancelled || playerRef.current) return;
 
-    return () => observerRef.current?.disconnect();
-  }, []);
-
-  // ----- YouTube Player init (ONLY when visible) -----
-  useEffect(() => {
-    if (!isVisible) return;
-
-    const videoId = extractYouTubeVideoId(src);
-    if (!videoId) return;
-
-    const initPlayer = () => {
-      if (playerRef.current) return;
-
-      playerRef.current = new window.YT.Player(playerMountRef.current, {
+      playerRef.current = new YT.Player(playerMountRef.current, {
         videoId,
         width: "100%",
         height: "100%",
@@ -83,7 +63,7 @@ const ProjectVideo = ({ src }) => {
           mute: 1,
           controls: 0,
           loop: 1,
-          playlist: videoId, // REQUIRED for loop
+          playlist: videoId,
           modestbranding: 1,
           rel: 0,
           playsinline: 1,
@@ -92,28 +72,18 @@ const ProjectVideo = ({ src }) => {
           onReady: (e) => {
             e.target.mute();
             e.target.playVideo();
+            setIsPlayerReady(true);
           },
         },
       });
-    };
-
-    if (window.YT && window.YT.Player) {
-      initPlayer();
-    } else {
-      const prev = window.onYouTubeIframeAPIReady;
-      window.onYouTubeIframeAPIReady = () => {
-        prev?.();
-        initPlayer();
-      };
-    }
+    });
 
     return () => {
-      if (playerRef.current) {
-        playerRef.current.destroy();
-        playerRef.current = null;
-      }
+      cancelled = true;
+      playerRef.current?.destroy();
+      playerRef.current = null;
     };
-  }, [isVisible, src]);
+  }, [isYouTube, videoId]);
 
   // ----- Skeleton while sizing -----
   if (dimensions.width === 0) {
@@ -124,16 +94,27 @@ const ProjectVideo = ({ src }) => {
 
   return (
     <motion.div
-      ref={wrapperRef}
       style={{ width: dimensions.width, height: dimensions.height }}
       className="relative rounded-lg shadow-md overflow-hidden m-auto"
       whileTap={{ scale: 0.97 }}
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
     >
-      {/* Player mount (only filled after visible) */}
-      <div ref={playerMountRef} className="absolute inset-0 w-full h-full" />
+      {/* 🔹 Thumbnail while player loads */}
+      {isYouTube && !isPlayerReady && (
+        <img
+          src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover transition-opacity duration-300"
+          draggable={false}
+        />
+      )}
 
-      {/* Drag overlay */}
+      {/* 🔹 Player mount */}
+      {isYouTube && (
+        <div ref={playerMountRef} className="absolute inset-0 w-full h-full" />
+      )}
+
+      {/* 🔹 Drag overlay */}
       <div className="absolute inset-0 z-10 cursor-grab bg-transparent" />
     </motion.div>
   );
