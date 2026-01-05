@@ -41,12 +41,12 @@ const SidebarLeft = ({ user, onLogout }) => {
       path: "/admin/dashboard/website-content",
       roles: ["super_admin"],
     },
-    {
-      label: "Recent Activity",
-      icon: <FaHistory />,
-      path: "/admin/dashboard/activity",
-      roles: ["super_admin"],
-    },
+    // {
+    //   label: "Recent Activity",
+    //   icon: <FaHistory />,
+    //   path: "/admin/dashboard/activity",
+    //   roles: ["super_admin"],
+    // },
     {
       label: "Settings",
       icon: <FaCog />,
