@@ -100,8 +100,13 @@ export const validateProject = (
         errors.push("Sections must be an array");
       } else {
         for (const section of sections) {
-          if (!section.type || !["text", "image", "gif"].includes(section.type)) {
-            errors.push("Each section must have a valid type (text, image, or gif)");
+          if (
+            !section.type ||
+            !["text", "image", "gif", "video"].includes(section.type)
+          ) {
+            errors.push(
+              "Each section must have a valid type (text, image, video link, or gif)"
+            );
             break;
           }
           if (!section.content || section.content.trim().length === 0) {
@@ -125,8 +130,11 @@ export const validateProject = (
   next();
 };
 
-
-export const validateAuth = (req: Request, res: Response, next: NextFunction) => {
+export const validateAuth = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { email, password } = req.body;
   const errors: string[] = [];
 
@@ -145,7 +153,11 @@ export const validateAuth = (req: Request, res: Response, next: NextFunction) =>
   next();
 };
 
-export const validateRegister = (req: Request, res: Response, next: NextFunction) => {
+export const validateRegister = (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
   const { name, email, password } = req.body;
   const errors: string[] = [];
 
