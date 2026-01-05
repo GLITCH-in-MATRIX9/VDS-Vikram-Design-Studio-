@@ -27,8 +27,8 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
   const [maxScroll, setMaxScroll] = useState(0);
   const isDesktop = useIsDesktop();
   const scrollAmount = isDesktop ? 960 : 320;
-  
-  const [isMapHovered, setIsMapHovered] = useState(false); 
+
+  const [isMapHovered, setIsMapHovered] = useState(false);
 
   const [transition] = useState({
     duration: 1.4,
@@ -70,7 +70,8 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
   };
 
   const scrollRight = () => {
-    if (isDesktop) animate(x, Math.max(x.get() - scrollAmount, maxScroll), transition);
+    if (isDesktop)
+      animate(x, Math.max(x.get() - scrollAmount, maxScroll), transition);
     else {
       const container = containerRef.current;
       if (!container) return;
@@ -84,8 +85,8 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
       });
     }
   };
-  
-  const shouldDrag = isDesktop && !isMapHovered; 
+
+  const shouldDrag = isDesktop && !isMapHovered;
 
   return (
     <div className="relative w-full font-inter overflow-hidden">
@@ -103,13 +104,13 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
       {/* Scroll Buttons */}
       <button
         onClick={scrollLeft}
-        className="absolute z-10 left-2 top-[110px] md:top-[225px] xl:top-1/2 -translate-y-1/2 bg-[#2B262433] w-8 h-8 cursor-pointer rounded-full shadow-md flex items-center justify-center"
+        className="absolute z-20 left-2 top-[110px] md:top-[225px] xl:top-1/2 -translate-y-1/2 bg-[#2B262433] w-8 h-8 cursor-pointer rounded-full shadow-md flex items-center justify-center"
       >
         <img src={LeftArrowIcon} alt="Scroll Left" className="w-4" />
       </button>
       <button
         onClick={scrollRight}
-        className="absolute z-10 right-2 top-[110px] md:top-[225px] xl:top-1/2 -translate-y-1/2 bg-[#2B262433] w-8 h-8 cursor-pointer rounded-full shadow-md flex items-center justify-center"
+        className="absolute z-20 right-2 top-[110px] md:top-[225px] xl:top-1/2 -translate-y-1/2 bg-[#2B262433] w-8 h-8 cursor-pointer rounded-full shadow-md flex items-center justify-center"
       >
         <img src={RightArrowIcon} alt="Scroll Right" className="w-4" />
       </button>
@@ -118,15 +119,15 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
       <div
         ref={containerRef}
         className={`flex h-full ${
-          shouldDrag 
+          shouldDrag
             ? "overflow-x-hidden cursor-grab"
-            : "overflow-x-hidden cursor-default" 
-        } ${!isDesktop && "overflow-x-scroll hide-scrollbar"}`} 
+            : "overflow-x-hidden cursor-default"
+        } ${!isDesktop && "overflow-x-scroll hide-scrollbar"}`}
       >
         <motion.div
           ref={contentRef}
           style={isDesktop ? { x } : {}}
-          drag={shouldDrag ? "x" : false} 
+          drag={shouldDrag ? "x" : false}
           dragConstraints={shouldDrag ? { left: maxScroll, right: 0 } : false}
           dragElastic={0}
           className="flex flex-nowrap h-full items-center"
@@ -173,7 +174,6 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
                 <div className="text-[#5D5D5D] mb-1">SIZE (M²/FT²)</div>
                 <div>{project?.sizeM2FT2 || "Size"}</div>
               </div>
-              
             </div>
           </div>
 
@@ -181,7 +181,7 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
           <div className="flex-grow flex-shrink-0 flex items-center gap-6 md:gap-8 w-auto h-full">
             <ProjectSectionDisplay sections={project?.sections} />
           </div>
-          
+
           {/* Mobile/Tablet Info Panel (Scrollable Panel) */}
           {!isDesktop && (
             <div className="flex w-[240px] flex-col pr-3 items-center leading-[1.4em] flex-shrink-0 text-[10px]">
@@ -210,11 +210,11 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
           {/* End Mobile/Tablet Info Panel */}
 
           {/* ✅ Modular Map Component */}
-          <ProjectMap 
-              project={project} 
-              onMouseEnter={() => setIsMapHovered(true)}
-              onMouseLeave={() => setIsMapHovered(false)}
-              className="mr-12" 
+          <ProjectMap
+            project={project}
+            onMouseEnter={() => setIsMapHovered(true)}
+            onMouseLeave={() => setIsMapHovered(false)}
+            className="mr-12"
           />
         </motion.div>
       </div>
@@ -239,19 +239,18 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
         <div className="col-span-2">
           <SectionDivider />
         </div>
-        
+
         {/* 1. STATUS Block (Left Column) */}
         <div className="status text-[#474545] text-[10px] uppercase leading-normal mt-2 px-2 col-span-1">
-            <div className="text-[#5D5D5D]">STATUS</div>
-            <div>{project?.status || "Status"}</div>
+          <div className="text-[#5D5D5D]">STATUS</div>
+          <div>{project?.status || "Status"}</div>
         </div>
-        
+
         {/* 2. SIZE Block (Right Column) */}
         <div className="size text-[#474545] text-[10px] uppercase leading-normal mt-2 px-2 text-right col-span-1">
-            <div className="text-[#5D5D5D]">SIZE (M²/FT²)</div>
-            <div>{project?.sizeM2FT2 || "Size"}</div>
+          <div className="text-[#5D5D5D]">SIZE (M²/FT²)</div>
+          <div>{project?.sizeM2FT2 || "Size"}</div>
         </div>
-        
       </div>
 
       <style>{`
