@@ -36,8 +36,6 @@ const ContactContentUpdates = () => {
     google_maps_iframe_src: "",
   });
 
-  
-
   useEffect(() => {
     const fetchContacts = async () => {
       try {
@@ -54,8 +52,8 @@ const ContactContentUpdates = () => {
 
   const persistAll = async (updated) => {
     // include Authorization header from localStorage as a fallback if axios defaults aren't set
-  const token = localStorage.getItem("token");
-  const headers = token ? { Authorization: `Bearer ${token}` } : {};
+    const token = localStorage.getItem("token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
     const payload = {
       page: "CONTACT",
@@ -83,9 +81,14 @@ const ContactContentUpdates = () => {
       } catch (err) {
         console.error("Save failed:", err?.response || err);
         const status = err?.response?.status;
-        const serverMsg = err?.response?.data?.message || err?.response?.data?.error;
+        const serverMsg =
+          err?.response?.data?.message || err?.response?.data?.error;
         alert(
-          `Save failed${status ? ` (HTTP ${status})` : ""}${serverMsg ? `: ${serverMsg}` : ". Check console/network for details."}`
+          `Save failed${status ? ` (HTTP ${status})` : ""}${
+            serverMsg
+              ? `: ${serverMsg}`
+              : ". Check console/network for details."
+          }`
         );
       }
     } else {
@@ -98,9 +101,14 @@ const ContactContentUpdates = () => {
       } catch (err) {
         console.error("Save failed:", err?.response || err);
         const status = err?.response?.status;
-        const serverMsg = err?.response?.data?.message || err?.response?.data?.error;
+        const serverMsg =
+          err?.response?.data?.message || err?.response?.data?.error;
         alert(
-          `Save failed${status ? ` (HTTP ${status})` : ""}${serverMsg ? `: ${serverMsg}` : ". Check console/network for details."}`
+          `Save failed${status ? ` (HTTP ${status})` : ""}${
+            serverMsg
+              ? `: ${serverMsg}`
+              : ". Check console/network for details."
+          }`
         );
       }
     }
@@ -128,9 +136,12 @@ const ContactContentUpdates = () => {
     } catch (err) {
       console.error("Delete failed:", err?.response || err);
       const status = err?.response?.status;
-      const serverMsg = err?.response?.data?.message || err?.response?.data?.error;
+      const serverMsg =
+        err?.response?.data?.message || err?.response?.data?.error;
       alert(
-        `Save failed${status ? ` (HTTP ${status})` : ""}${serverMsg ? `: ${serverMsg}` : ". Check console/network for details."}`
+        `Save failed${status ? ` (HTTP ${status})` : ""}${
+          serverMsg ? `: ${serverMsg}` : ". Check console/network for details."
+        }`
       );
     }
   };

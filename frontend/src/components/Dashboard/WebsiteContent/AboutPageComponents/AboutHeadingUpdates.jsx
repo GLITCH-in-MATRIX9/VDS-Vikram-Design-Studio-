@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+// API base (Vite env or fallback)
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
 const AboutHeadingUpdates = () => {
   const [loading, setLoading] = useState(true);
 
@@ -14,17 +17,25 @@ const AboutHeadingUpdates = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get("/api/content/about");
+        const res = await axios.get(`${API_BASE}/content/about`);
+        const data = res.data;
 
-        const heroSection = res.data.find(
-          (s) => s.section === "hero"
-        );
+        // Support both response shapes:
+        // - Array of sections: [{ section: 'hero', content: {...} }, ...]
+        // - Object with hero field: { hero: { title, subtitle, image, paragraphs }, ... }
+        let heroContent = null;
 
-        if (heroSection?.content) {
-          setTitle(heroSection.content.title || "ABOUT");
-          setSubTitle(heroSection.content.subtitle || "");
-          setHeroImage(heroSection.content.image || null);
-          setParagraphs(heroSection.content.paragraphs || []);
+        if (Array.isArray(data)) {
+          heroContent = data.find((s) => s.section === "hero")?.content || null;
+        } else if (data && typeof data === "object" && data.hero) {
+          heroContent = data.hero;
+        }
+
+        if (heroContent) {
+          setTitle(heroContent.title || "ABOUT");
+          setSubTitle(heroContent.subtitle || "");
+          setHeroImage(heroContent.image || null);
+          setParagraphs(heroContent.paragraphs || []);
         }
       } catch (err) {
         console.error(err);
@@ -39,17 +50,12 @@ const AboutHeadingUpdates = () => {
   /* ---------------- HELPERS ---------------- */
 
   const addParagraph = () => {
-    setParagraphs((prev) => [
-      ...prev,
-      { id: Date.now(), text: "" },
-    ]);
+    setParagraphs((prev) => [...prev, { id: Date.now(), text: "" }]);
   };
 
   const updateParagraph = (id, value) => {
     setParagraphs((prev) =>
-      prev.map((p) =>
-        p.id === id ? { ...p, text: value } : p
-      )
+      prev.map((p) => (p.id === id ? { ...p, text: value } : p))
     );
   };
 
@@ -66,9 +72,10 @@ const AboutHeadingUpdates = () => {
 
   const handleSave = async () => {
     try {
-      await axios.post("/api/content", {
-        page: "ABOUT",
-        section: "hero",
+      const token = localStorage.getItem("token");
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+      const payload = {
         content: {
           title,
           subtitle: subTitle,
@@ -76,12 +83,18 @@ const AboutHeadingUpdates = () => {
           paragraphs,
         },
         lastModifiedBy: "admin1",
-      });
+      };
+
+      await axios.post(`${API_BASE}/content/about/hero`, payload, { headers });
 
       alert("About heading updated successfully!");
     } catch (err) {
-      console.error(err);
-      alert("Failed to update About heading");
+      console.error(err?.response || err);
+      const serverMsg =
+        err?.response?.data?.error ||
+        err?.response?.data?.message ||
+        err?.message;
+      alert(`Failed to update About heading: ${serverMsg}`);
     }
   };
 
@@ -105,9 +118,7 @@ const AboutHeadingUpdates = () => {
 
       {/* Title */}
       <div className="space-y-2">
-        <label className="font-semibold text-[#3E3C3C]">
-          Main Title
-        </label>
+        <label className="font-semibold text-[#3E3C3C]">Main Title</label>
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
@@ -117,9 +128,7 @@ const AboutHeadingUpdates = () => {
 
       {/* Subtitle */}
       <div className="space-y-2">
-        <label className="font-semibold text-[#3E3C3C]">
-          Subtitle Line
-        </label>
+        <label className="font-semibold text-[#3E3C3C]">Subtitle Line</label>
         <input
           value={subTitle}
           onChange={(e) => setSubTitle(e.target.value)}
@@ -129,9 +138,7 @@ const AboutHeadingUpdates = () => {
 
       {/* Hero Image */}
       <div className="space-y-2">
-        <label className="font-semibold text-[#3E3C3C]">
-          Hero Image
-        </label>
+        <label className="font-semibold text-[#3E3C3C]">Hero Image</label>
 
         {heroImage ? (
           <img
@@ -141,9 +148,7 @@ const AboutHeadingUpdates = () => {
           />
         ) : (
           <button
-            onClick={() =>
-              document.getElementById("heroImageInput").click()
-            }
+            onClick={() => document.getElementById("heroImageInput").click()}
             className="bg-gray-200 px-3 py-1 rounded"
           >
             + Add Hero Image
@@ -162,9 +167,7 @@ const AboutHeadingUpdates = () => {
       {/* Paragraphs */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="font-semibold text-[#3E3C3C]">
-            Story Paragraphs
-          </h3>
+          <h3 className="font-semibold text-[#3E3C3C]">Story Paragraphs</h3>
           <button
             onClick={addParagraph}
             className="bg-gray-200 px-3 py-1 rounded"
@@ -177,9 +180,7 @@ const AboutHeadingUpdates = () => {
           <div key={p.id} className="space-y-2">
             <textarea
               value={p.text}
-              onChange={(e) =>
-                updateParagraph(p.id, e.target.value)
-              }
+              onChange={(e) => updateParagraph(p.id, e.target.value)}
               className="border p-2 w-full bg-white"
               rows={4}
               placeholder={`Paragraph ${idx + 1}`}
