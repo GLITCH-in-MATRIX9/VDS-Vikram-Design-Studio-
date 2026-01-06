@@ -4,6 +4,7 @@ import {
   updateHero,
   updateMetrics,
   updateSections,
+  
 } from "../controllers/about.controller";
 
 const router = Router();
