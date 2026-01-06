@@ -17,7 +17,10 @@ const extractYouTubeVideoId = (url) => {
 
     const match = parsed.pathname.match(/\/(embed|shorts)\/([^/?]+)/);
     if (match) return match[2];
-  } catch {}
+  } catch {
+    // Ignore errors, return null
+    return null;
+  }
 
   return null;
 };
