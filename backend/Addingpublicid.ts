@@ -18,7 +18,7 @@ const cleanProjects = async () => {
     // Remove image/gif sections
     const originalCount = project.sections.length;
     project.sections = project.sections.filter(
-      (sec: IProjectSection) => sec.type === "text"
+      (sec: IProjectSection) => sec.type === "text" || sec.type === "video"
     );
     if (project.sections.length !== originalCount) updated = true;
 

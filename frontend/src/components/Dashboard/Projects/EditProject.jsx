@@ -13,7 +13,7 @@ import {
   filterOptions,
   TAG_OPTIONS,
   STATES_AND_UTS,
-} from "./constants"; 
+} from "./constants";
 
 const EditProject = () => {
   const { id } = useParams();
@@ -35,8 +35,8 @@ const EditProject = () => {
     previewImageUrl: "",
     sizeM2FT2: "",
     // State keys match input names: 'lat' and 'lng'
-    lat: "", 
-    lng: "", 
+    lat: "",
+    lng: "",
   });
 
   const [nextNewSectionId, setNextNewSectionId] = useState(0);
@@ -71,13 +71,21 @@ const EditProject = () => {
           projectTeam: project.projectTeam || "",
           tags: project.tags || [],
           // Ensure date format for input type="date"
-          keyDate: project.keyDate ? new Date(project.keyDate).toISOString().slice(0, 10) : "",
+          keyDate: project.keyDate
+            ? new Date(project.keyDate).toISOString().slice(0, 10)
+            : "",
           previewImageUrl: project.previewImageUrl || "",
           sizeM2FT2: project.sizeM2FT2 || "",
-          // ⭐️ READ FIX: Reads 'latitude' and 'longitude' from the backend payload 
+          // ⭐️ READ FIX: Reads 'latitude' and 'longitude' from the backend payload
           // and maps them to the local state keys 'lat' and 'lng'.
-          lat: project.latitude !== undefined && project.latitude !== null ? String(project.latitude) : "", 
-          lng: project.longitude !== undefined && project.longitude !== null ? String(project.longitude) : "", 
+          lat:
+            project.latitude !== undefined && project.latitude !== null
+              ? String(project.latitude)
+              : "",
+          lng:
+            project.longitude !== undefined && project.longitude !== null
+              ? String(project.longitude)
+              : "",
         });
 
         setSelectedCategory(project.category || "");
@@ -121,10 +129,8 @@ const EditProject = () => {
       }
     };
 
-
     fetchProject();
     fetchSavedTags();
-
   }, [id]);
 
   const handleCategoryChange = (e) => {
@@ -139,7 +145,6 @@ const EditProject = () => {
     setFormData((prev) => ({ ...prev, subCategory }));
   };
 
-
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -152,14 +157,14 @@ const EditProject = () => {
       }));
       return;
     }
-    
+
     // Handle lat and lng as numbers/strings, not uppercase
     if (name === "lat" || name === "lng") {
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value, // Keep value as is (allows decimals/negative signs)
-        }));
-        return;
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value, // Keep value as is (allows decimals/negative signs)
+      }));
+      return;
     }
 
     const upperCaseFields = [
@@ -170,7 +175,6 @@ const EditProject = () => {
       "location",
       "status",
       "subCategory",
-        
     ];
 
     setFormData((prev) => ({
@@ -178,7 +182,6 @@ const EditProject = () => {
       [name]: upperCaseFields.includes(name) ? value.toUpperCase() : value,
     }));
   };
-
 
   const handleLeaderToggle = (leader) => {
     setFormData((prev) => {
@@ -221,24 +224,35 @@ const EditProject = () => {
     setNextNewSectionId((prev) => prev + 1);
   };
 
+  const handleAddVideoLink = () => {
+    setSections((prev) => [
+      ...prev,
+      { type: "video", content: "", tempId: `new-${nextNewSectionId}` },
+    ]);
+    setNextNewSectionId((prev) => prev + 1);
+  };
+
   // Functionality for Media upload (kept from original EditProject)
   const uploadFileToBackend = async (file) => {
     if (!file) return null;
     try {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         const reader = new FileReader();
         reader.onloadend = () => resolve(reader.result);
         reader.readAsDataURL(file);
       });
     } catch (err) {
       console.error("File upload simulation failed:", err);
-      toast.error("File upload failed. Please check the file size (max 900KB).");
+      toast.error(
+        "File upload failed. Please check the file size (max 900KB)."
+      );
       return null;
     }
   };
 
   const handleAddMedia = async (file, type) => {
-    if (!file || file.size > 900 * 1024) { // 900KB limit
+    if (!file || file.size > 900 * 1024) {
+      // 900KB limit
       toast.error("File is too large! Max size is 900KB.");
       return;
     }
@@ -300,7 +314,8 @@ const EditProject = () => {
     const file = e.target.files[0];
     if (!file) return;
 
-    if (file.size > 900 * 1024) { // 900KB limit
+    if (file.size > 900 * 1024) {
+      // 900KB limit
       toast.error("Preview file is too large! Max size is 900KB.");
       return;
     }
@@ -335,17 +350,16 @@ const EditProject = () => {
       lat: formData.lat !== "" ? parseFloat(formData.lat) : null,
       lng: formData.lng !== "" ? parseFloat(formData.lng) : null,
     };
-    
+
     // Optional basic validation for coordinates
     if (data.lat !== null && (data.lat < -90 || data.lat > 90)) {
-        toast.error("Latitude must be between -90 and 90.");
-        return;
+      toast.error("Latitude must be between -90 and 90.");
+      return;
     }
     if (data.lng !== null && (data.lng < -180 || data.lng > 180)) {
-        toast.error("Longitude must be between -180 and 180.");
-        return;
+      toast.error("Longitude must be between -180 and 180.");
+      return;
     }
-
 
     try {
       await projectApi.updateProject(id, data);
@@ -402,35 +416,35 @@ const EditProject = () => {
                 </option>
               ))}
             </select>
-            
+
             {/* Latitude and Longitude Inputs */}
             <div className="grid grid-cols-2 gap-2">
-                <input
-                    type="number"
-                    name="lat"
-                    value={formData.lat}
-                    onChange={handleChange}
-                    placeholder="Latitude (e.g., 23.82)"
-                    className="border p-2 rounded w-full border-[#C9BEB8]"
-                    step="any"
-                    min="-90"
-                    max="90"
-                    autoComplete="off"
-                />
-                <input
-                    type="number"
-                    name="lng"
-                    value={formData.lng}
-                    onChange={handleChange}
-                    placeholder="Longitude (e.g., 91.27)"
-                    className="border p-2 rounded w-full border-[#C9BEB8]"
-                    step="any"
-                    min="-180"
-                    max="180"
-                    autoComplete="off"
-                />
+              <input
+                type="number"
+                name="lat"
+                value={formData.lat}
+                onChange={handleChange}
+                placeholder="Latitude (e.g., 23.82)"
+                className="border p-2 rounded w-full border-[#C9BEB8]"
+                step="any"
+                min="-90"
+                max="90"
+                autoComplete="off"
+              />
+              <input
+                type="number"
+                name="lng"
+                value={formData.lng}
+                onChange={handleChange}
+                placeholder="Longitude (e.g., 91.27)"
+                className="border p-2 rounded w-full border-[#C9BEB8]"
+                step="any"
+                min="-180"
+                max="180"
+                autoComplete="off"
+              />
             </div>
-            
+
             <div className="grid grid-cols-2 gap-2">
               <select
                 name="category"
@@ -460,7 +474,6 @@ const EditProject = () => {
                   </option>
                 ))}
               </select>
-
             </div>
             <input
               type="text"
@@ -511,10 +524,11 @@ const EditProject = () => {
                         e.preventDefault();
                         handleLeaderToggle(leader);
                       }}
-                      className={`p-2 cursor-pointer text-sm flex justify-between items-center ${formData.projectLeaders.includes(leader)
-                        ? "bg-[#F1E4DF] font-semibold"
-                        : "hover:bg-gray-100"
-                        }`}
+                      className={`p-2 cursor-pointer text-sm flex justify-between items-center ${
+                        formData.projectLeaders.includes(leader)
+                          ? "bg-[#F1E4DF] font-semibold"
+                          : "hover:bg-gray-100"
+                      }`}
                     >
                       {leader}
                       {formData.projectLeaders.includes(leader) && (
@@ -550,14 +564,13 @@ const EditProject = () => {
                 className="border p-2 rounded w-full border-[#C9BEB8]"
                 required
               >
-                <option value="">SELECT STATUS *</option>  {/* Placeholder option */}
+                <option value="">SELECT STATUS *</option>
+                {/* Placeholder option */}
                 <option value="ON-SITE">ON-SITE</option>
                 <option value="DESIGN STAGE">DESIGN STAGE</option>
                 <option value="COMPLETED">COMPLETED</option>
                 <option value="UNBUILT">UNBUILT</option>
               </select>
-
-
 
               <input
                 type="number"
@@ -616,7 +629,7 @@ const EditProject = () => {
                   setShowDropdown(true);
                 }}
                 onFocus={() => setShowDropdown(true)}
-                onBlur={(e) => {
+                onBlur={() => {
                   setTimeout(() => setShowDropdown(false), 200);
                 }}
                 placeholder="Add tags..."
@@ -722,11 +735,10 @@ const EditProject = () => {
                         >
                           <div className="flex justify-between items-center">
                             <h3 className="font-medium text-[#454545]">
-                              {section.type === "text"
-                                ? "Text Section"
-                                : `${section.type.charAt(0).toUpperCase() +
+                              {`${
+                                section.type.charAt(0).toUpperCase() +
                                 section.type.slice(1)
-                                } Section`}
+                              } Section`}
                             </h3>
                             <div className="flex gap-2 items-center">
                               <button
@@ -759,6 +771,16 @@ const EditProject = () => {
                                 {section.content.length} / {MAX_TEXT_LENGTH}
                               </div>
                             </>
+                          ) : section.type === "video" ? (
+                            <input
+                              type="text"
+                              className="border p-2 rounded w-full border-[#C9BEB8]"
+                              value={section.content}
+                              placeholder="Enter video URL (YouTube link)"
+                              onChange={(e) =>
+                                handleContentChange(index, e.target.value)
+                              }
+                            />
                           ) : (
                             <div className="flex justify-center w-full">
                               <img
@@ -805,6 +827,13 @@ const EditProject = () => {
                 onChange={handleAddGif}
               />
             </label>
+            <button
+              type="button"
+              onClick={handleAddVideoLink}
+              className="px-4 py-2 text-sm rounded bg-[#454545] text-white hover:bg-[#666666]"
+            >
+              + Add Video Link
+            </button>
           </div>
         </div>
 

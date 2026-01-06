@@ -41,12 +41,12 @@ const SidebarLeft = ({ user, onLogout }) => {
       path: "/admin/dashboard/website-content",
       roles: ["super_admin"],
     },
-    {
-      label: "Recent Activity",
-      icon: <FaHistory />,
-      path: "/admin/dashboard/activity",
-      roles: ["super_admin"],
-    },
+    // {
+    //   label: "Recent Activity",
+    //   icon: <FaHistory />,
+    //   path: "/admin/dashboard/activity",
+    //   roles: ["super_admin"],
+    // },
     {
       label: "Settings",
       icon: <FaCog />,
@@ -62,9 +62,11 @@ const SidebarLeft = ({ user, onLogout }) => {
     <div className="h-screen w-64 bg-[#D4CECA] flex flex-col justify-between py-6 px-4 text-[#333]">
       <div>
         {/* Logo */}
-        <div className="flex flex-col items-center mb-6">
-          <img src={logo} alt="Logo" className="h-24 mb-2" />
-        </div>
+        <Link to="/">
+          <div className="flex flex-col items-center mb-6">
+            <img src={logo} alt="Logo" className="h-24 mb-2" />
+          </div>
+        </Link>
         <hr className="border-gray-400 mb-6" />
 
         {/* Navigation */}

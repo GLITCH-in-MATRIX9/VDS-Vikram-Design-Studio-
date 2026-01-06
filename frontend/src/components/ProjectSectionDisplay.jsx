@@ -1,5 +1,6 @@
 import React from "react";
 import ProjectImage from "./ProjectImage";
+import ProjectVideo from "./ProjectVideo";
 
 const ProjectSectionDisplay = ({ sections }) => {
   if (!sections || sections.length === 0) return null;
@@ -21,6 +22,8 @@ const ProjectSectionDisplay = ({ sections }) => {
                   {section.content}
                 </p>
               </div>
+            ) : section.type === "video" ? (
+              <ProjectVideo src={section.content} />
             ) : section.type === "image" || section.type === "gif" ? (
               <ProjectImage
                 src={section.content}

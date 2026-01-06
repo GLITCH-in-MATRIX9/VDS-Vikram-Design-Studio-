@@ -1,7 +1,7 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document } from "mongoose";
 
 export interface IProjectSection {
-  type: 'text' | 'image' | 'gif';
+  type: "text" | "image" | "gif" | "video";
   content: string; // text content, image URL, or GIF URL
   publicId?: string; // Cloudinary public id for images/GIFs
 }
@@ -9,11 +9,11 @@ export interface IProjectSection {
 export interface IProject extends Document {
   name: string;
   location: string;
-  latitude?: number; 
+  latitude?: number;
   longitude?: number;
-  
+
   year?: string;
-  status: 'On-site' | 'Design stage' | 'Completed' | 'Unbuilt';
+  status: "On-site" | "Design stage" | "Completed" | "Unbuilt";
   category: string;
   subCategory?: string;
   client: string;
@@ -32,7 +32,11 @@ export interface IProject extends Document {
 
 const ProjectSectionSchema = new Schema<IProjectSection>(
   {
-    type: { type: String, enum: ['text', 'image', 'gif'], required: true },
+    type: {
+      type: String,
+      enum: ["text", "image", "gif", "video"],
+      required: true,
+    },
     content: { type: String, required: true },
     publicId: { type: String },
   },
@@ -46,7 +50,11 @@ const ProjectSchema = new Schema<IProject>(
     latitude: { type: Number, index: true },
     longitude: { type: Number, index: true },
     year: { type: String },
-    status: { type: String, enum: ['On-site', 'Design stage', 'Completed', 'Unbuilt'], required: true },
+    status: {
+      type: String,
+      enum: ["On-site", "Design stage", "Completed", "Unbuilt"],
+      required: true,
+    },
     category: { type: String, required: true, trim: true },
     subCategory: { type: String, trim: true },
     client: { type: String, required: true, trim: true },
@@ -65,6 +73,6 @@ const ProjectSchema = new Schema<IProject>(
 
 ProjectSchema.index({ createdAt: -1 });
 
-ProjectSchema.index({ latitude: 1, longitude: 1 }); 
+ProjectSchema.index({ latitude: 1, longitude: 1 });
 
-export const Project = model<IProject>('Project', ProjectSchema);
+export const Project = model<IProject>("Project", ProjectSchema);
