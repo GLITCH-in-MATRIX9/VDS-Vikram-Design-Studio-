@@ -2,10 +2,7 @@ import { Request, Response } from "express";
 import AboutPage from "../models/AboutPage.model";
 
 /* ---------- GET ABOUT PAGE ---------- */
-export const getAboutPage = async (
-  req: Request,
-  res: Response
-) => {
+export const getAboutPage = async (req: Request, res: Response) => {
   try {
     let about = await AboutPage.findOne({ page: "ABOUT" });
 
@@ -25,10 +22,7 @@ export const getAboutPage = async (
 };
 
 /* ---------- UPDATE HERO ---------- */
-export const updateHero = async (
-  req: Request,
-  res: Response
-) => {
+export const updateHero = async (req: Request, res: Response) => {
   try {
     const { content, lastModifiedBy } = req.body;
 
@@ -45,10 +39,7 @@ export const updateHero = async (
 };
 
 /* ---------- UPDATE METRICS ---------- */
-export const updateMetrics = async (
-  req: Request,
-  res: Response
-) => {
+export const updateMetrics = async (req: Request, res: Response) => {
   try {
     const { content, lastModifiedBy } = req.body;
 
@@ -65,10 +56,7 @@ export const updateMetrics = async (
 };
 
 /* ---------- UPDATE ALL SECTIONS ---------- */
-export const updateSections = async (
-  req: Request,
-  res: Response
-) => {
+export const updateSections = async (req: Request, res: Response) => {
   try {
     const { content, lastModifiedBy } = req.body;
 
