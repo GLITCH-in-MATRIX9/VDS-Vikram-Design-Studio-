@@ -18,7 +18,7 @@ const COLOR_SURFACE_SUBTLE = "#F5F1EE";
 const COLOR_ACTIVE_STATUS = "#529F52";
 const COLOR_INACTIVE_STATUS = "#C94A4A";
 const COLOR_BORDER = "#C9BEB8";
-const COLOR_COMPLETED = "#28a745"; // green for completed
+const COLOR_COMPLETED = "#28a745";
 
 const MiddleArea = ({ onProjectClick, filterState, onFilterChange }) => {
   const { searchTerm, selectedCategory, selectedSubCategory } = filterState;

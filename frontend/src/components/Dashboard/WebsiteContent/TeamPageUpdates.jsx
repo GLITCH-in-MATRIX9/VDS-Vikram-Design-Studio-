@@ -1,6 +1,13 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Pencil, Trash2, Plus, X, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  Pencil,
+  Trash2,
+  Plus,
+  X,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
 
 const TeamPageUpdates = () => {
   const [team, setTeam] = useState([
@@ -18,7 +25,6 @@ const TeamPageUpdates = () => {
     setExpandedId(expandedId === id ? null : id);
   };
 
-  // Add or update member
   const handleSave = () => {
     if (!newMember.name || !newMember.position) return;
 
@@ -34,14 +40,12 @@ const TeamPageUpdates = () => {
     setNewMember({ name: "", position: "" });
   };
 
-  // Edit member
   const handleEdit = (member) => {
     setEditingId(member.id);
     setNewMember({ name: member.name, position: member.position });
     setExpandedId(member.id);
   };
 
-  // Delete member
   const handleDelete = (id) => {
     setTeam((prev) => prev.filter((m) => m.id !== id));
     if (editingId === id) setEditingId(null);
@@ -49,88 +53,109 @@ const TeamPageUpdates = () => {
   };
 
   return (
-    <div className="p-6 bg-white text-[#454545] rounded-md">
-      <h2 className="text-2xl font-bold mb-6 text-center">Team Members</h2>
+    <div className="p-6 bg-[#f3efee] space-y-8">
+      {/* Title */}
+      <h2 className="text-2xl font-bold text-[#3E3C3C]">
+        Team Members
+      </h2>
 
       {/* Add / Edit Form */}
-      <div className="mb-6 flex flex-col sm:flex-row gap-4 items-center">
-        <input
-          type="text"
-          placeholder="Name"
-          value={newMember.name}
-          onChange={(e) =>
-            setNewMember((prev) => ({ ...prev, name: e.target.value }))
-          }
-          className="px-3 py-2 rounded border w-full sm:w-1/3"
-        />
-        <input
-          type="text"
-          placeholder="Position"
-          value={newMember.position}
-          onChange={(e) =>
-            setNewMember((prev) => ({ ...prev, position: e.target.value }))
-          }
-          className="px-3 py-2 rounded border w-full sm:w-1/3"
-        />
-        <button
-          onClick={handleSave}
-          className="flex items-center gap-2 px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-800 transition"
-        >
-          <Plus size={16} /> {editingId ? "Update" : "Add"}
-        </button>
-        {editingId && (
+      <div className="bg-white p-4 rounded border space-y-4">
+        <div className="flex flex-col sm:flex-row gap-4">
+          <input
+            type="text"
+            placeholder="Name"
+            value={newMember.name}
+            onChange={(e) =>
+              setNewMember((prev) => ({ ...prev, name: e.target.value }))
+            }
+            className="border p-2 text-sm w-full sm:w-1/3"
+          />
+          <input
+            type="text"
+            placeholder="Position"
+            value={newMember.position}
+            onChange={(e) =>
+              setNewMember((prev) => ({
+                ...prev,
+                position: e.target.value,
+              }))
+            }
+            className="border p-2 text-sm w-full sm:w-1/3"
+          />
+        </div>
+
+        <div className="flex gap-3">
           <button
-            onClick={() => {
-              setEditingId(null);
-              setNewMember({ name: "", position: "" });
-            }}
-            className="flex items-center gap-2 px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500 transition"
+            onClick={handleSave}
+            className="flex items-center gap-2 px-4 py-2 bg-black text-white rounded text-sm"
           >
-            <X size={16} /> Cancel
+            <Plus size={14} />
+            {editingId ? "Update" : "Add"}
           </button>
-        )}
+
+          {editingId && (
+            <button
+              onClick={() => {
+                setEditingId(null);
+                setNewMember({ name: "", position: "" });
+              }}
+              className="flex items-center gap-2 px-4 py-2 bg-gray-300 text-[#3E3C3C] rounded text-sm"
+            >
+              <X size={14} /> Cancel
+            </button>
+          )}
+        </div>
       </div>
 
       {/* Team List */}
-      <div className="space-y-2">
+      <div className="space-y-3">
         <AnimatePresence>
           {team.map((member) => (
             <motion.div
               key={member.id}
-              initial={{ opacity: 0, y: -10 }}
+              initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 10 }}
-              className="border rounded p-3 flex flex-col"
+              exit={{ opacity: 0, y: 6 }}
+              className="bg-white border rounded p-4"
             >
               <button
                 onClick={() => toggleExpand(member.id)}
                 className="flex justify-between items-center w-full text-left"
               >
-                <span className="font-medium">{member.name}</span>
-                {expandedId === member.id ? <ChevronUp /> : <ChevronDown />}
+                <span className="font-semibold text-[#3E3C3C] text-sm">
+                  {member.name}
+                </span>
+                {expandedId === member.id ? (
+                  <ChevronUp size={18} />
+                ) : (
+                  <ChevronDown size={18} />
+                )}
               </button>
 
               <AnimatePresence>
                 {expandedId === member.id && (
                   <motion.div
-                    key="details"
                     initial={{ opacity: 0, height: 0 }}
                     animate={{ opacity: 1, height: "auto" }}
                     exit={{ opacity: 0, height: 0 }}
                     transition={{ duration: 0.3 }}
-                    className="mt-2 space-y-2"
+                    className="mt-3 space-y-3"
                   >
-                    <p className="text-sm">Position: {member.position}</p>
-                    <div className="flex gap-2">
+                    <p className="text-sm text-[#6D6D6D]">
+                      Position: {member.position}
+                    </p>
+
+                    <div className="flex gap-3">
                       <button
                         onClick={() => handleEdit(member)}
-                        className="flex items-center gap-1 px-3 py-1 bg-gray-300 text-[#454545] rounded hover:bg-gray-400 transition"
+                        className="flex items-center gap-1 px-3 py-1 bg-gray-200 rounded text-sm"
                       >
                         <Pencil size={14} /> Edit
                       </button>
                       <button
                         onClick={() => handleDelete(member.id)}
-                        className="flex items-center gap-1 px-3 py-1 bg-gray-300 text-[#454545] rounded hover:bg-gray-400 transition"
+                        className="flex items-center gap-1 px-3 py-1 bg-gray-200 rounded text-sm"
                       >
                         <Trash2 size={14} /> Delete
                       </button>
@@ -143,16 +168,21 @@ const TeamPageUpdates = () => {
         </AnimatePresence>
       </div>
 
-      {/* Team Images Section */}
-      <div className="mt-6">
-        <h3 className="text-xl font-semibold mb-2">Team Images</h3>
-        <p className="text-sm text-gray-600">
+      {/* Team Images */}
+      <div className="bg-white p-4 rounded border space-y-2">
+        <h3 className="font-semibold text-[#3E3C3C]">
+          Team Images
+        </h3>
+        <p className="text-sm text-[#6D6D6D]">
           Upload images of the full team here.
         </p>
-        <input type="file" multiple className="mt-2" />
-        <div className="mt-2 space-y-2">
-          {/* Placeholder for uploaded images */}
-        </div>
+
+        <label className="inline-block">
+          <span className="bg-black text-white px-4 py-2 rounded text-sm cursor-pointer">
+            Choose Images
+          </span>
+          <input type="file" multiple className="hidden" />
+        </label>
       </div>
     </div>
   );

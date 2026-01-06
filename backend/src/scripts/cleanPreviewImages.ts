@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import cloudinary from "./src/config/cloudinary"; // adjust path if needed
-import { Project } from "./src/models/Project.model";
+import cloudinary from "../config/cloudinary"; // adjust path if needed
+import { Project } from "../models/Project.model";
 
 // MongoDB connection string
 const MONGO_URI = process.env.MONGO_URI || "mongodb://127.0.0.1:27017/your-db";

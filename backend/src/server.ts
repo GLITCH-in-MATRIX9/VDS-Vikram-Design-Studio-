@@ -4,11 +4,16 @@ import path from 'path';
 import fs from 'fs';
 import connectDB from './config/db';
 import { config } from './config/env';
+
+
 import authRoutes from './routes/auth.routes';
 import projectRoutes from './routes/project.routes';
 import contactRoutes from './routes/contact.routes';
 import adminRoutes from './routes/admin.routes';
 import hiringRoutes from './routes/hiring.routes';
+import aboutRoutes from './routes/about.routes';
+
+
 import { errorHandler } from './middlewares/error.middleware';
 import { generalRateLimit } from './middlewares/rateLimit.middleware';
 import tagRoutes from "./routes/tag.routes";
@@ -19,11 +24,11 @@ connectDB(config.mongoUri);
 const app: Express = express();
 const PORT = config.port;
 
-// ✅ CORS setup (supports multiple origins)
+
 const allowedOrigins = [
-  'https://vikramdesignstudio.com',  // production domain
-  'http://localhost:5173',           // local dev frontend
-  process.env.CLIENT_ORIGIN || ''    // optional env override
+  'https://vikramdesignstudio.com', 
+  'http://localhost:5173',          
+  process.env.CLIENT_ORIGIN || ''    
 ].filter(Boolean); 
 
 app.use(cors({
@@ -81,6 +86,7 @@ app.use('/api/contact', contactRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/hiring', hiringRoutes);
 app.use("/api/tags", tagRoutes);
+app.use("/api/content", aboutRoutes);
 
 // Error & 404 handlers
 app.use(errorHandler);

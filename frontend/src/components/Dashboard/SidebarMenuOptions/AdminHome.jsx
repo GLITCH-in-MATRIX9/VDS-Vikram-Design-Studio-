@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import { FaQuestionCircle, FaDownload } from "react-icons/fa";
 import projectApi from "../../../services/projectApi";
-import { AuthContext } from "../../../context/authContext"; // ⬅️ Use AuthContext
+import { AuthContext } from "../../../context/authContext"; 
 
 const textColor = "text-[#474545]";
 
 const AdminHome = () => {
-  const { user } = useContext(AuthContext); // ⬅️ Get user from context
+  const { user } = useContext(AuthContext); 
 
   const [showTooltip, setShowTooltip] = useState(false);
   const [stats, setStats] = useState({

@@ -1,7 +1,7 @@
-// removePreviewImages.ts
+// updateStatusToCompleted.ts
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import { Project } from "./src/models/Project.model";
+import { Project } from "../models/Project.model";
 
 dotenv.config();
 
@@ -18,15 +18,14 @@ const main = async () => {
 
     const result = await Project.updateMany(
       {},
-      { $unset: { previewImageUrl: "", previewImagePublicId: "" } }
+      { $set: { status: "Completed" } }
     );
 
-    console.log(`✅ Removed preview images from ${result.modifiedCount} projects`);
-
+    console.log(`✅ Updated ${result.modifiedCount} projects to Completed`);
     await mongoose.disconnect();
     console.log("✅ Disconnected from MongoDB");
   } catch (err) {
-    console.error("❌ Error removing preview images:", err);
+    console.error("❌ Error updating project statuses:", err);
     process.exit(1);
   }
 };
