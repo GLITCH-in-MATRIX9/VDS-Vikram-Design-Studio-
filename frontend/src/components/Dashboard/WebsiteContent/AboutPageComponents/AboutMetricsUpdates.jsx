@@ -1,8 +1,5 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-
-// API base (Vite env or fallback)
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+import aboutApi from "../../../../services/aboutapi";
 
 const MAX_METRICS = 3;
 
@@ -15,31 +12,22 @@ const AboutMetricsUpdates = () => {
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
-        const res = await axios.get(`${API_BASE}/content/about`);
-        const data = res.data;
+        const data = await aboutApi.getAboutPage();
 
-        // Backend may return either an object { metrics: [...] } or an array of
-        // sections [{ section: 'metrics', content: [...] }, ...]. Support both.
-        let metricsContent = null;
-
-        if (Array.isArray(data)) {
-          const metricsSection = data.find(
-            (section) => section.section === "metrics"
+        if (Array.isArray(data?.metrics)) {
+          setMetrics(
+            data.metrics.slice(0, MAX_METRICS).map((m) => ({
+              id: m.id ?? Date.now(),
+              value: String(m.value ?? ""),
+              label: m.label ?? "",
+              suffix: m.suffix ?? "",
+            }))
           );
-          metricsContent = metricsSection?.content || null;
-        } else if (data && Array.isArray(data.metrics)) {
-          metricsContent = data.metrics;
-        }
-
-        if (metricsContent) {
-          const formatted = metricsContent
-            .slice(0, MAX_METRICS)
-            .map((m) => ({ ...m, value: String(m.value ?? "") }));
-
-          setMetrics(formatted);
+        } else {
+          setMetrics([]);
         }
       } catch (err) {
-        console.error(err);
+        console.error("Failed to load metrics:", err);
       } finally {
         setLoading(false);
       }
@@ -64,9 +52,11 @@ const AboutMetricsUpdates = () => {
     ]);
   };
 
-  const updateMetric = (id, key, value) => {
+  const updateMetric = (id, field, value) => {
     setMetrics((prev) =>
-      prev.map((m) => (m.id === id ? { ...m, [key]: value } : m))
+      prev.map((m) =>
+        m.id === id ? { ...m, [field]: value } : m
+      )
     );
   };
 
@@ -79,27 +69,18 @@ const AboutMetricsUpdates = () => {
   const handleSave = async () => {
     try {
       const cleanedMetrics = metrics.map((m) => ({
-        ...m,
+        id: m.id,
         value: Number(m.value || 0),
+        label: m.label,
+        suffix: m.suffix,
       }));
 
-      const token = localStorage.getItem("token");
-      const headers = token ? { Authorization: `Bearer ${token}` } : {};
-
-      const payload = { content: cleanedMetrics, lastModifiedBy: "admin1" };
-
-      await axios.post(`${API_BASE}/content/about/metrics`, payload, {
-        headers,
-      });
+      await aboutApi.updateMetrics(cleanedMetrics, "admin1");
 
       alert("Metrics updated successfully!");
     } catch (err) {
-      console.error(err?.response || err);
-      const serverMsg =
-        err?.response?.data?.error ||
-        err?.response?.data?.message ||
-        err?.message;
-      alert(`Failed to update metrics: ${serverMsg}`);
+      console.error("Failed to update metrics:", err);
+      alert("Failed to update metrics");
     }
   };
 
@@ -108,95 +89,77 @@ const AboutMetricsUpdates = () => {
   if (loading) return <p>Loading...</p>;
 
   return (
-    <section className="bg-[#f2efee] p-6 space-y-8">
-      {/* Title */}
-      <h2 className="text-2xl font-bold text-[#3E3C3C]">
-        About Metrics Updates
-      </h2>
+    <section className="bg-[#f2efee] p-8 rounded-lg space-y-8">
+      {/* Header */}
+      <div className="space-y-2">
+        <h2 className="text-2xl font-bold text-[#3E3C3C]">
+          About Metrics Updates
+        </h2>
+        <p className="text-sm text-[#6D6D6D]">
+          Update the key numbers displayed on the About page. Maximum of three
+          metrics allowed.
+        </p>
+      </div>
 
-      {/* Instructions */}
-      <ul className="text-sm text-[#6D6D6D] list-disc pl-5 space-y-1">
-        <li>Edit the numbers and labels shown on the About page.</li>
-        <li>Maximum of three metrics are supported.</li>
-        <li>
-          Units like <code>sq.ft.</code> can be added as suffix.
-        </li>
-      </ul>
-
-      {/* Metric Cards */}
-      <div className="flex flex-wrap gap-4 md:gap-5 xl:gap-6">
+      {/* Metrics */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {metrics.map((metric) => (
           <div
             key={metric.id}
-            className="shadow-[0_16px_32px_#3E3C3C1A] flex-1 basis-full md:basis-0"
+            className="bg-white p-5 rounded-lg shadow-sm space-y-4"
           >
-            <div className="h-[180px] bg-[#F9F8F7] rounded-md shadow-[0_4px_2px_#3e3c3c0a] p-6 flex flex-col justify-between">
-              {/* Value */}
-              <div>
-                <label className="block text-sm font-semibold text-[#3E3C3C] mb-1">
-                  Value
-                </label>
-
-                <div className="flex items-end gap-2">
-                  <input
-                    type="number"
-                    value={metric.value}
-                    onChange={(e) =>
-                      updateMetric(metric.id, "value", e.target.value)
-                    }
-                    className="text-sm bg-transparent border-b border-[#ccc] w-24 focus:outline-none"
-                  />
-
-                  <input
-                    type="text"
-                    value={metric.suffix}
-                    onChange={(e) =>
-                      updateMetric(metric.id, "suffix", e.target.value)
-                    }
-                    placeholder="+ / sq.ft."
-                    className="text-sm bg-transparent border-b border-[#ccc] w-24 focus:outline-none"
-                  />
-                </div>
-              </div>
-
-              {/* Label */}
-              <div>
-                <label className="block text-sm font-semibold text-[#3E3C3C] mb-1">
-                  Label
-                </label>
-
-                <input
-                  type="text"
-                  value={metric.label}
-                  onChange={(e) =>
-                    updateMetric(metric.id, "label", e.target.value)
-                  }
-                  className="text-sm bg-transparent border-b border-[#ccc] w-full focus:outline-none"
-                  placeholder="Metric description"
-                />
-              </div>
-
-              {/* Remove */}
-              <button
-                onClick={() => removeMetric(metric.id)}
-                className="text-sm text-red-500 self-end"
-              >
-                Remove
-              </button>
+            {/* Value */}
+            <div className="space-y-1">
+              <label className="text-sm font-semibold text-[#3E3C3C]">
+                Value
+              </label>
+              <input
+                type="number"
+                value={metric.value}
+                onChange={(e) =>
+                  updateMetric(metric.id, "value", e.target.value)
+                }
+                className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#3E3C3C]"
+                placeholder="e.g. 120"
+              />
             </div>
+
+            {/* Label */}
+            <div className="space-y-1">
+              <label className="text-sm font-semibold text-[#3E3C3C]">
+                Label
+              </label>
+              <input
+                type="text"
+                value={metric.label}
+                onChange={(e) =>
+                  updateMetric(metric.id, "label", e.target.value)
+                }
+                className="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#3E3C3C]"
+                placeholder="e.g. Projects Completed"
+              />
+            </div>
+
+            {/* Remove */}
+            <button
+              onClick={() => removeMetric(metric.id)}
+              className="text-sm text-red-500 hover:text-red-600"
+            >
+              Remove Metric
+            </button>
           </div>
         ))}
       </div>
 
       {/* Actions */}
-      <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center gap-4">
         <button
           onClick={addMetric}
           disabled={metrics.length >= MAX_METRICS}
-          className={`px-4 py-2 rounded text-sm ${
+          className={`px-4 py-2 rounded-md text-sm font-medium transition ${
             metrics.length >= MAX_METRICS
               ? "bg-gray-300 text-gray-500 cursor-not-allowed"
-              : "bg-[#3E3C3C] text-white"
+              : "bg-white border border-[#3E3C3C] text-[#3E3C3C] hover:bg-[#3E3C3C] hover:text-white"
           }`}
         >
           + Add Metric
@@ -204,7 +167,7 @@ const AboutMetricsUpdates = () => {
 
         <button
           onClick={handleSave}
-          className="px-6 py-2 bg-black text-white rounded text-sm"
+          className="px-6 py-2 bg-[#3E3C3C] text-white rounded-md text-sm font-semibold hover:bg-black transition"
         >
           Save Metrics
         </button>

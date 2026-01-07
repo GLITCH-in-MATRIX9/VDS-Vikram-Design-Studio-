@@ -91,7 +91,7 @@ app.use("/api/contact", contactRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/hiring", hiringRoutes);
 app.use("/api/tags", tagRoutes);
-app.use("/api/content", aboutRoutes);
+app.use("/api/about", aboutRoutes);
 app.use("/api/content", contactContentRoutes);
 
 // Error & 404 handlers

@@ -1,44 +1,32 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-
-// API base (Vite env or fallback)
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+import aboutApi from "../../../../services/aboutapi";
 
 const AboutHeadingUpdates = () => {
   const [loading, setLoading] = useState(true);
 
   const [title, setTitle] = useState("ABOUT");
   const [subTitle, setSubTitle] = useState("");
-  const [heroImage, setHeroImage] = useState(null);
+  const [heroImage, setHeroImage] = useState(""); // can be URL or base64
   const [paragraphs, setParagraphs] = useState([]);
+  const [subTitleLine2, setSubTitleLine2] = useState("");
+
 
   /* ---------------- FETCH DATA ---------------- */
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`${API_BASE}/content/about`);
-        const data = res.data;
+        const data = await aboutApi.getAboutPage();
 
-        // Support both response shapes:
-        // - Array of sections: [{ section: 'hero', content: {...} }, ...]
-        // - Object with hero field: { hero: { title, subtitle, image, paragraphs }, ... }
-        let heroContent = null;
-
-        if (Array.isArray(data)) {
-          heroContent = data.find((s) => s.section === "hero")?.content || null;
-        } else if (data && typeof data === "object" && data.hero) {
-          heroContent = data.hero;
-        }
-
-        if (heroContent) {
-          setTitle(heroContent.title || "ABOUT");
-          setSubTitle(heroContent.subtitle || "");
-          setHeroImage(heroContent.image || null);
-          setParagraphs(heroContent.paragraphs || []);
+        if (data?.hero) {
+          setTitle(data.hero.title || "ABOUT");
+          setSubTitle(data.hero.subtitle || "");
+          setSubTitleLine2(data.hero.subtitleLine2 || "");
+          setHeroImage(data.hero.image || "");
+          setParagraphs(data.hero.paragraphs || []);
         }
       } catch (err) {
-        console.error(err);
+        console.error("Failed to load About page:", err);
       } finally {
         setLoading(false);
       }
@@ -63,38 +51,41 @@ const AboutHeadingUpdates = () => {
     setParagraphs((prev) => prev.filter((p) => p.id !== id));
   };
 
+  /* ✅ Convert image to base64 (REQUIRED) */
   const handleImageChange = (e) => {
     const file = e.target.files?.[0];
-    if (file) setHeroImage(URL.createObjectURL(file));
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setHeroImage(reader.result); // base64 string
+    };
+    reader.readAsDataURL(file);
   };
 
   /* ---------------- SAVE ---------------- */
 
   const handleSave = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const headers = token ? { Authorization: `Bearer ${token}` } : {};
-
-      const payload = {
-        content: {
+      await aboutApi.updateHero(
+        {
           title,
           subtitle: subTitle,
-          image: heroImage,
+          subtitleLine2: subTitleLine2,
+          image: heroImage, // base64 or cloudinary URL
           paragraphs,
         },
-        lastModifiedBy: "admin1",
-      };
-
-      await axios.post(`${API_BASE}/content/about/hero`, payload, { headers });
+        "admin1"
+      );
 
       alert("About heading updated successfully!");
     } catch (err) {
-      console.error(err?.response || err);
-      const serverMsg =
+      console.error(err);
+      const msg =
         err?.response?.data?.error ||
         err?.response?.data?.message ||
-        err?.message;
-      alert(`Failed to update About heading: ${serverMsg}`);
+        "Unknown error";
+      alert(`Failed to update About heading: ${msg}`);
     }
   };
 
@@ -108,7 +99,6 @@ const AboutHeadingUpdates = () => {
         About Heading Updates
       </h2>
 
-      {/* Instructions */}
       <ul className="text-sm text-[#6D6D6D] list-disc pl-5 space-y-1">
         <li>Edit the main heading and introductory content.</li>
         <li>Add, update, or remove story paragraphs.</li>
@@ -135,25 +125,54 @@ const AboutHeadingUpdates = () => {
           className="border p-2 w-full bg-white"
         />
       </div>
+      {/* Subtitle line 2 */}
+      <div className="space-y-2">
+        <label className="font-semibold text-[#3E3C3C]">
+          Subtitle Line (Second Line)
+        </label>
+        <input
+          value={subTitleLine2}
+          onChange={(e) => setSubTitleLine2(e.target.value)}
+          className="border p-2 w-full bg-white"
+          placeholder="Optional second line below subtitle"
+        />
+      </div>
+
 
       {/* Hero Image */}
-      <div className="space-y-2">
+
+      <div className="space-y-3">
         <label className="font-semibold text-[#3E3C3C]">Hero Image</label>
 
-        {heroImage ? (
+        {heroImage && (
           <img
             src={heroImage}
             alt="Hero"
             className="w-full max-w-md h-48 object-cover rounded"
           />
-        ) : (
-          <button
-            onClick={() => document.getElementById("heroImageInput").click()}
-            className="bg-gray-200 px-3 py-1 rounded"
-          >
-            + Add Hero Image
-          </button>
         )}
+
+        <div className="flex gap-3">
+          <button
+            type="button"
+            onClick={() =>
+              document.getElementById("heroImageInput").click()
+            }
+            className="bg-black text-white px-4 py-2 rounded text-sm"
+          >
+            {heroImage ? "Change Image" : "+ Add Hero Image"}
+          </button>
+
+          {heroImage && (
+            <button
+              type="button"
+              onClick={() => setHeroImage("")}
+              className="bg-gray-200 text-gray-700 px-4 py-2 rounded text-sm"
+            >
+              Remove Image
+            </button>
+          )}
+        </div>
 
         <input
           id="heroImageInput"
@@ -164,10 +183,13 @@ const AboutHeadingUpdates = () => {
         />
       </div>
 
+
       {/* Paragraphs */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="font-semibold text-[#3E3C3C]">Story Paragraphs</h3>
+          <h3 className="font-semibold text-[#3E3C3C]">
+            Story Paragraphs
+          </h3>
           <button
             onClick={addParagraph}
             className="bg-gray-200 px-3 py-1 rounded"
@@ -180,7 +202,9 @@ const AboutHeadingUpdates = () => {
           <div key={p.id} className="space-y-2">
             <textarea
               value={p.text}
-              onChange={(e) => updateParagraph(p.id, e.target.value)}
+              onChange={(e) =>
+                updateParagraph(p.id, e.target.value)
+              }
               className="border p-2 w-full bg-white"
               rows={4}
               placeholder={`Paragraph ${idx + 1}`}
@@ -196,7 +220,6 @@ const AboutHeadingUpdates = () => {
         ))}
       </div>
 
-      {/* Save */}
       <button
         onClick={handleSave}
         className="px-6 py-2 bg-black text-white rounded"

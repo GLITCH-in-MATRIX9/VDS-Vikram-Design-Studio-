@@ -1,355 +1,355 @@
-[
-  {
-    "id": 1,
-    "heading": "Architecture",
-    "paragraphs": [
-      {
-        "id": 1,
-        "text": "At VDS, architecture is an evolving dialogue—between people and place, ideas and constraints, light and material. Our work spans public institutions, cultural spaces, hospitality, and private residences—each shaped with a sensitivity to context and a commitment to design that endures."
-      },
-      {
-        "id": 2,
-        "text": "Working in the diverse and often complex ecosystem of the northeast, we engage with everything from high-end villas to government projects. Some require navigating bureaucracy, cost-conscious detailing, or low-maintenance material strategies. Others demand immersive environments, refined finishes, and bespoke spatial experiences. What binds them all is our belief in clarity over complexity, expression without excess, and a design language that is bold, sensitive, and lighting-centric."
-      },
-      {
-        "id": 3,
-        "text": "Over time, we’ve earned the trust of stakeholders and clients—not through spectacle, but through thoughtfulness. Whether it’s a cultural corridor or a compact office, we design spaces that perform with purpose and feel quietly powerful."
-      }
-    ],
-    "carousel_cards": [
-      {
-        "id": 1,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548866/Architecture-1-Upgradation_of_Batadrava_Than_at_Barduwa_Nagaon_Assam_fuvzqz.webp",
-        "project_name": "Batadrava Than",
-        "project_location": "Barduwa, Assam"
-      },
-      {
-        "id": 2,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548866/Architecture-2-Upgradation_of_Batadrava_Than_at_Barduwa_Nagaon_Assam_v4nnzm.webp",
-        "project_name": "Batadrava Than",
-        "project_location": "Barduwa, Assam"
-      },
-      {
-        "id": 3,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548866/Architecture-3-Jamugurihat_Auditorium_nod86d.webp",
-        "project_name": "Jamugurihat Auditorium",
-        "project_location": "Sonitpur, Assam"
-      },
-      {
-        "id": 4,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548868/Architecture-4-Shanti_Villa_gpt376.webp",
-        "project_name": "Shanti Villa",
-        "project_location": "Dimapur, Nagaland"
-      },
-      {
-        "id": 5,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548870/Architecture-5-Margherita_Villa_ctzbnx.webp",
-        "project_name": "Margherita Villa",
-        "project_location": "Guwahati, Assam"
-      },
-      {
-        "id": 6,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548870/Architecture-6_Civil_Services_Officers_Institute_llx3yl.webp",
-        "project_name": "Civil Services Officers' Institute",
-        "project_location": "Agartala, Tripura"
-      },
-      {
-        "id": 7,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548873/Architecture-7-Bhupen_Hazarika_Museum_lgnqbh.webp",
-        "project_name": "Bhupen Hazarika Museum",
-        "project_location": "Guwahati, Assam"
-      },
-      {
-        "id": 8,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548873/Architecture-8-Khagrabari_Indoor_Stadium_tx9p3x.webp",
-        "project_name": "Khagrabari Indoor Stadium",
-        "project_location": "Udalguri, Assam"
-      },
-      {
-        "id": 9,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548876/Architecture-9-Bhergaon_Sports_Complex_rzi3id.webp",
-        "project_name": "Bhergaon Sports Complex",
-        "project_location": "Udalguri, Assam"
-      }
-    ]
-  },
-  {
-    "id": 2,
-    "heading": "Interior",
-    "paragraphs": [
-      {
-        "id": 1,
-        "text": "Interior design at VDS is guided by precision, emotion, and experience. From refined villas and boutique hotels to institutional interiors, we approach every project with a deep understanding of how space feels from within. Our interiors are both functional and poetic—where circulation flows naturally, materiality is expressive, and lighting is treated as atmosphere, not afterthought."
-      },
-      {
-        "id": 2,
-        "text": "We work with carefully chosen palettes and long-lasting finishes, equally attentive to high-end detailing and practical durability. Whether we’re designing a compact government office or a luxury guest suite, we believe the inside of a space should reveal its essence. Every line, surface, and shadow contribute to a coherent, human-centric environment that’s built to be used, remembered, and returned to."
-      }
-    ],
-    "carousel_cards": [
-      {
-        "id": 1,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548876/01-The_CA_Studio_converted_compressed_msxnum.webp",
-        "project_name": "The CA Studio",
-        "project_location": "Guwahati, Assam"
-      },
-      {
-        "id": 2,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548877/02-The_CA_Studio_converted_compressed_pozotk.webp",
-        "project_name": "The CA Studio",
-        "project_location": "Guwahati, Assam"
-      },
-      {
-        "id": 3,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548879/03-Shanti_Villa_converted_compressed_n04npf.webp",
-        "project_name": "Shanti Villa",
-        "project_location": "Dimapur, Nagaland"
-      },
-      {
-        "id": 4,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548880/04-Shanti_Villa_converted_compressed_tiyi2a.webp",
-        "project_name": "Shanti Villa",
-        "project_location": "Dimapur, Nagaland"
-      },
-      {
-        "id": 5,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548881/05-Shanti_Villa_converted_compressed_cjjblm.webp",
-        "project_name": "Shanti Villa",
-        "project_location": "Dimapur, Nagaland"
-      },
-      {
-        "id": 6,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548884/06-Shanti_Villa_converted_compressed_lyfidw.webp",
-        "project_name": "Shanti Villa",
-        "project_location": "Dimapur, Nagaland"
-      },
-      {
-        "id": 7,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548885/07-Sethi_Penthouse_converted_compressed_momzty.webp",
-        "project_name": "Sethi Penthouse",
-        "project_location": "Guwahati, Assam"
-      },
-      {
-        "id": 8,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548886/08-Iris_Boutique_Hotel_converted_compressed_yen7dp.webp",
-        "project_name": "Iris Boutique Hotel",
-        "project_location": "Guwahati, Assam"
-      },
-      {
-        "id": 9,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548887/09-Iris_Boutique_Hotel_converted_compressed_gih8de.webp",
-        "project_name": "Iris Boutique Hotel",
-        "project_location": "Guwahati, Assam"
-      },
-      {
-        "id": 10,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548888/10-TK_Engineering_Consortium_Corporate_Office_converted_compressed_arfhd3.webp",
-        "project_name": "TK Engineering Consortium Corporate Office",
-        "project_location": "Itanagar, Arunachal Pradesh"
-      },
-      {
-        "id": 11,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548890/11-Margherita_Villa_converted_compressed_cn47ji.webp",
-        "project_name": "Margherita Villa",
-        "project_location": "Guwahati, Assam"
-      },
-      {
-        "id": 12,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548892/12-Margherita_Villa_converted_compressed_c4gkcc.webp",
-        "project_name": "Margherita Villa",
-        "project_location": "Guwahati, Assam"
-      }
-    ]
-  },
-  {
-    "id": 3,
-    "heading": "Landscape",
-    "paragraphs": [
-      {
-        "id": 1,
-        "text": "Landscape at VDS is not about decoration—it’s about connection. We design outdoor environments that reflect the climate, culture, and character of the site—whether it's a government campus, a heritage precinct, or a hospitality retreat. Our landscapes are ecologically grounded and experientially rich, crafted to grow and adapt with time."
-      },
-      {
-        "id": 2,
-        "text": "We think about how people move, gather, and pause—during the day and into the night. Lighting plays a quiet but powerful role here, guiding circulation, inviting stillness, and extending use beyond daylight hours. From native planting strategies to regionally sourced materials, we strive to create landscapes that require minimal intervention yet leave lasting impressions."
-      }
-    ],
-    "carousel_cards": [
-      {
-        "id": 1,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548892/landscape_01-Bismillah_Khan_College_ubkfy0.webp",
-        "project_name": "Bismillah Khan College",
-        "project_location": "Dumraon, Bihar"
-      },
-      {
-        "id": 2,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548894/landscape_02-Bismillah_Khan_College_uefj4g.webp",
-        "project_name": "Bismillah Khan College",
-        "project_location": "Dumraon, Bihar"
-      },
-      {
-        "id": 3,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548899/landscape_03-Margherita_Villa_oertds.webp",
-        "project_name": "Margherita Villa",
-        "project_location": "Guwahati, Assam"
-      },
-      {
-        "id": 4,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548907/landscape_04-Margherita_Villa_yxnbqd.webp",
-        "project_name": "Margherita Villa",
-        "project_location": "Guwahati, Assam"
-      },
-      {
-        "id": 5,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548899/landscape_05-Margherita_Villa_xxdqkr.webp",
-        "project_name": "Margherita Villa",
-        "project_location": "Guwahati, Assam"
-      },
-      {
-        "id": 6,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548901/landscape_06-IAS_Officer_Residence_hcswyh.webp",
-        "project_name": "IAS Officer Residence",
-        "project_location": "Agartala, Tripura"
-      },
-      {
-        "id": 7,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548900/landscape_07-IAS_Officer_Residence_vo2cyh.webp",
-        "project_name": "IAS Officer Residence",
-        "project_location": "Agartala, Tripura"
-      }
-    ]
-  },
-  {
-    "id": 4,
-    "heading": "Engineering",
-    "paragraphs": [
-      {
-        "id": 1,
-        "text": "Good design cannot exist without good engineering—and at VDS, both go hand in hand. We collaborate with structural, civil, and services engineers from early design stages to ensure ambition meets precision. Lighting integration is planned alongside structure and services—ensuring that fixtures, conduits, and light quality align with the architecture. From challenging sites to technical constraints, our engineering partners help us translate spatial ideas into systems that work seamlessly and sustainably."
-      }
-    ],
-    "carousel_cards": [
-      {
-        "id": 1,
-        "img_src": "https://picsum.photos/400/225?random=3",
-        "project_name": "Project Name",
-        "project_location": "Location Name, City Name"
-      },
-      {
-        "id": 2,
-        "img_src": "https://picsum.photos/400/225?random=3",
-        "project_name": "Project Name",
-        "project_location": "Location Name, City Name"
-      },
-      {
-        "id": 3,
-        "img_src": "https://picsum.photos/400/225?random=3",
-        "project_name": "Project Name",
-        "project_location": "Location Name, City Name"
-      },
-      {
-        "id": 4,
-        "img_src": "https://picsum.photos/400/225?random=3",
-        "project_name": "Project Name",
-        "project_location": "Location Name, City Name"
-      },
-      {
-        "id": 5,
-        "img_src": "https://picsum.photos/400/225?random=3",
-        "project_name": "Project Name",
-        "project_location": "Location Name, City Name"
-      },
-      {
-        "id": 6,
-        "img_src": "https://picsum.photos/400/225?random=3",
-        "project_name": "Project Name",
-        "project_location": "Location Name, City Name"
-      }
-    ]
-  },
-  {
-    "id": 5,
-    "heading": "Planning",
-    "paragraphs": [
-      {
-        "id": 1,
-        "text": "Planning is where vision meets structure. At VDS, we approach planning as a framework for experience—one that considers culture, ecology, infrastructure, and people. Lighting, often overlooked at this scale, becomes a subtle tool for shaping how spaces are used at different times of day. Be it a campus, cultural precinct, or district plan, we design places that evolve over time—physically and atmospherically—while staying rooted in intent. Planning is not just about what goes where, but how people feel as they move through it."
-      }
-    ],
-    "carousel_cards": [
-      {
-        "id": 1,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548904/planning_01-Dr._T_Ao_Sports_Complex_icf389.webp",
-        "project_name": "Dr. T Ao Sports Complex",
-        "project_location": "Kaliabor, Assam"
-      },
-      {
-        "id": 2,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548904/planning_02-Tamulpur_District_Sports_Complex_csp8ra.webp",
-        "project_name": "Tamulpur District Sports Complex",
-        "project_location": "Tamulpur, Assam"
-      },
-      {
-        "id": 3,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548907/planning_03-Khagrabari_Indoor_Stadium_Complex_mqskhx.webp",
-        "project_name": "Khagrabari Indoor Stadium Complex",
-        "project_location": "Udalguri, Assam"
-      },
-      {
-        "id": 4,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548907/planning_04-Hidipi_Sports_Complex_g4o5gp.webp",
-        "project_name": "Hidipi Sports Complex",
-        "project_location": "Anglong, Assam"
-      },
-      {
-        "id": 5,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548908/planning_05-Batadrava_Than_Complex_at_Barduwa_Nagaon_Assam_sq8q0n.webp",
-        "project_name": "Batadrava Than Complex",
-        "project_location": "Barduwa, Assam"
-      },
-      {
-        "id": 6,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548910/planning_06-Khatara_Satra_Complex_hfnjvc.webp",
-        "project_name": "Khatara Satra Complex",
-        "project_location": "Kamargaon, Assam"
-      }
-    ]
-  },
-  {
-    "id": 6,
-    "heading": "Our Collaborators",
-    "carousel_cards": [
-      {
-        "id": 1,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760797433/SPACE_ACE_LOGO_g5u2eu.png",
-        "project_name": "Space Ace Architects ",
-        "project_location": "Our Guiding Collaborators"
-      },
-      {
-        "id": 2,
-        "text": "Space Ace Architects, New Delhi—led by Vinit Khanna and Samir Rastogi, both SPA Delhi ’91—bring 30+ years of expertise in public architecture. Collaborating with Vikram Design Studio on eastern projects, they enhance every stage from concept to execution."
-      },
+  [
+    {
+      "id": 1,
+      "heading": "Architecture",
+      "paragraphs": [
+        {
+          "id": 1,
+          "text": "At VDS, architecture is an evolving dialogue—between people and place, ideas and constraints, light and material. Our work spans public institutions, cultural spaces, hospitality, and private residences—each shaped with a sensitivity to context and a commitment to design that endures."
+        },
+        {
+          "id": 2,
+          "text": "Working in the diverse and often complex ecosystem of the northeast, we engage with everything from high-end villas to government projects. Some require navigating bureaucracy, cost-conscious detailing, or low-maintenance material strategies. Others demand immersive environments, refined finishes, and bespoke spatial experiences. What binds them all is our belief in clarity over complexity, expression without excess, and a design language that is bold, sensitive, and lighting-centric."
+        },
+        {
+          "id": 3,
+          "text": "Over time, we’ve earned the trust of stakeholders and clients—not through spectacle, but through thoughtfulness. Whether it’s a cultural corridor or a compact office, we design spaces that perform with purpose and feel quietly powerful."
+        }
+      ],
+      "carousel_cards": [
+        {
+          "id": 1,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548866/Architecture-1-Upgradation_of_Batadrava_Than_at_Barduwa_Nagaon_Assam_fuvzqz.webp",
+          "project_name": "Batadrava Than",
+          "project_location": "Barduwa, Assam"
+        },
+        {
+          "id": 2,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548866/Architecture-2-Upgradation_of_Batadrava_Than_at_Barduwa_Nagaon_Assam_v4nnzm.webp",
+          "project_name": "Batadrava Than",
+          "project_location": "Barduwa, Assam"
+        },
+        {
+          "id": 3,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548866/Architecture-3-Jamugurihat_Auditorium_nod86d.webp",
+          "project_name": "Jamugurihat Auditorium",
+          "project_location": "Sonitpur, Assam"
+        },
+        {
+          "id": 4,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548868/Architecture-4-Shanti_Villa_gpt376.webp",
+          "project_name": "Shanti Villa",
+          "project_location": "Dimapur, Nagaland"
+        },
+        {
+          "id": 5,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548870/Architecture-5-Margherita_Villa_ctzbnx.webp",
+          "project_name": "Margherita Villa",
+          "project_location": "Guwahati, Assam"
+        },
+        {
+          "id": 6,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548870/Architecture-6_Civil_Services_Officers_Institute_llx3yl.webp",
+          "project_name": "Civil Services Officers' Institute",
+          "project_location": "Agartala, Tripura"
+        },
+        {
+          "id": 7,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548873/Architecture-7-Bhupen_Hazarika_Museum_lgnqbh.webp",
+          "project_name": "Bhupen Hazarika Museum",
+          "project_location": "Guwahati, Assam"
+        },
+        {
+          "id": 8,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548873/Architecture-8-Khagrabari_Indoor_Stadium_tx9p3x.webp",
+          "project_name": "Khagrabari Indoor Stadium",
+          "project_location": "Udalguri, Assam"
+        },
+        {
+          "id": 9,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548876/Architecture-9-Bhergaon_Sports_Complex_rzi3id.webp",
+          "project_name": "Bhergaon Sports Complex",
+          "project_location": "Udalguri, Assam"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "heading": "Interior",
+      "paragraphs": [
+        {
+          "id": 1,
+          "text": "Interior design at VDS is guided by precision, emotion, and experience. From refined villas and boutique hotels to institutional interiors, we approach every project with a deep understanding of how space feels from within. Our interiors are both functional and poetic—where circulation flows naturally, materiality is expressive, and lighting is treated as atmosphere, not afterthought."
+        },
+        {
+          "id": 2,
+          "text": "We work with carefully chosen palettes and long-lasting finishes, equally attentive to high-end detailing and practical durability. Whether we’re designing a compact government office or a luxury guest suite, we believe the inside of a space should reveal its essence. Every line, surface, and shadow contribute to a coherent, human-centric environment that’s built to be used, remembered, and returned to."
+        }
+      ],
+      "carousel_cards": [
+        {
+          "id": 1,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548876/01-The_CA_Studio_converted_compressed_msxnum.webp",
+          "project_name": "The CA Studio",
+          "project_location": "Guwahati, Assam"
+        },
+        {
+          "id": 2,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548877/02-The_CA_Studio_converted_compressed_pozotk.webp",
+          "project_name": "The CA Studio",
+          "project_location": "Guwahati, Assam"
+        },
+        {
+          "id": 3,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548879/03-Shanti_Villa_converted_compressed_n04npf.webp",
+          "project_name": "Shanti Villa",
+          "project_location": "Dimapur, Nagaland"
+        },
+        {
+          "id": 4,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548880/04-Shanti_Villa_converted_compressed_tiyi2a.webp",
+          "project_name": "Shanti Villa",
+          "project_location": "Dimapur, Nagaland"
+        },
+        {
+          "id": 5,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548881/05-Shanti_Villa_converted_compressed_cjjblm.webp",
+          "project_name": "Shanti Villa",
+          "project_location": "Dimapur, Nagaland"
+        },
+        {
+          "id": 6,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548884/06-Shanti_Villa_converted_compressed_lyfidw.webp",
+          "project_name": "Shanti Villa",
+          "project_location": "Dimapur, Nagaland"
+        },
+        {
+          "id": 7,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548885/07-Sethi_Penthouse_converted_compressed_momzty.webp",
+          "project_name": "Sethi Penthouse",
+          "project_location": "Guwahati, Assam"
+        },
+        {
+          "id": 8,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548886/08-Iris_Boutique_Hotel_converted_compressed_yen7dp.webp",
+          "project_name": "Iris Boutique Hotel",
+          "project_location": "Guwahati, Assam"
+        },
+        {
+          "id": 9,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548887/09-Iris_Boutique_Hotel_converted_compressed_gih8de.webp",
+          "project_name": "Iris Boutique Hotel",
+          "project_location": "Guwahati, Assam"
+        },
+        {
+          "id": 10,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548888/10-TK_Engineering_Consortium_Corporate_Office_converted_compressed_arfhd3.webp",
+          "project_name": "TK Engineering Consortium Corporate Office",
+          "project_location": "Itanagar, Arunachal Pradesh"
+        },
+        {
+          "id": 11,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548890/11-Margherita_Villa_converted_compressed_cn47ji.webp",
+          "project_name": "Margherita Villa",
+          "project_location": "Guwahati, Assam"
+        },
+        {
+          "id": 12,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548892/12-Margherita_Villa_converted_compressed_c4gkcc.webp",
+          "project_name": "Margherita Villa",
+          "project_location": "Guwahati, Assam"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "heading": "Landscape",
+      "paragraphs": [
+        {
+          "id": 1,
+          "text": "Landscape at VDS is not about decoration—it’s about connection. We design outdoor environments that reflect the climate, culture, and character of the site—whether it's a government campus, a heritage precinct, or a hospitality retreat. Our landscapes are ecologically grounded and experientially rich, crafted to grow and adapt with time."
+        },
+        {
+          "id": 2,
+          "text": "We think about how people move, gather, and pause—during the day and into the night. Lighting plays a quiet but powerful role here, guiding circulation, inviting stillness, and extending use beyond daylight hours. From native planting strategies to regionally sourced materials, we strive to create landscapes that require minimal intervention yet leave lasting impressions."
+        }
+      ],
+      "carousel_cards": [
+        {
+          "id": 1,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548892/landscape_01-Bismillah_Khan_College_ubkfy0.webp",
+          "project_name": "Bismillah Khan College",
+          "project_location": "Dumraon, Bihar"
+        },
+        {
+          "id": 2,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548894/landscape_02-Bismillah_Khan_College_uefj4g.webp",
+          "project_name": "Bismillah Khan College",
+          "project_location": "Dumraon, Bihar"
+        },
+        {
+          "id": 3,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548899/landscape_03-Margherita_Villa_oertds.webp",
+          "project_name": "Margherita Villa",
+          "project_location": "Guwahati, Assam"
+        },
+        {
+          "id": 4,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548907/landscape_04-Margherita_Villa_yxnbqd.webp",
+          "project_name": "Margherita Villa",
+          "project_location": "Guwahati, Assam"
+        },
+        {
+          "id": 5,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548899/landscape_05-Margherita_Villa_xxdqkr.webp",
+          "project_name": "Margherita Villa",
+          "project_location": "Guwahati, Assam"
+        },
+        {
+          "id": 6,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548901/landscape_06-IAS_Officer_Residence_hcswyh.webp",
+          "project_name": "IAS Officer Residence",
+          "project_location": "Agartala, Tripura"
+        },
+        {
+          "id": 7,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548900/landscape_07-IAS_Officer_Residence_vo2cyh.webp",
+          "project_name": "IAS Officer Residence",
+          "project_location": "Agartala, Tripura"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "heading": "Engineering",
+      "paragraphs": [
+        {
+          "id": 1,
+          "text": "Good design cannot exist without good engineering—and at VDS, both go hand in hand. We collaborate with structural, civil, and services engineers from early design stages to ensure ambition meets precision. Lighting integration is planned alongside structure and services—ensuring that fixtures, conduits, and light quality align with the architecture. From challenging sites to technical constraints, our engineering partners help us translate spatial ideas into systems that work seamlessly and sustainably."
+        }
+      ],
+      "carousel_cards": [
+        {
+          "id": 1,
+          "img_src": "https://picsum.photos/400/225?random=3",
+          "project_name": "Project Name",
+          "project_location": "Location Name, City Name"
+        },
+        {
+          "id": 2,
+          "img_src": "https://picsum.photos/400/225?random=3",
+          "project_name": "Project Name",
+          "project_location": "Location Name, City Name"
+        },
+        {
+          "id": 3,
+          "img_src": "https://picsum.photos/400/225?random=3",
+          "project_name": "Project Name",
+          "project_location": "Location Name, City Name"
+        },
+        {
+          "id": 4,
+          "img_src": "https://picsum.photos/400/225?random=3",
+          "project_name": "Project Name",
+          "project_location": "Location Name, City Name"
+        },
+        {
+          "id": 5,
+          "img_src": "https://picsum.photos/400/225?random=3",
+          "project_name": "Project Name",
+          "project_location": "Location Name, City Name"
+        },
+        {
+          "id": 6,
+          "img_src": "https://picsum.photos/400/225?random=3",
+          "project_name": "Project Name",
+          "project_location": "Location Name, City Name"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "heading": "Planning",
+      "paragraphs": [
+        {
+          "id": 1,
+          "text": "Planning is where vision meets structure. At VDS, we approach planning as a framework for experience—one that considers culture, ecology, infrastructure, and people. Lighting, often overlooked at this scale, becomes a subtle tool for shaping how spaces are used at different times of day. Be it a campus, cultural precinct, or district plan, we design places that evolve over time—physically and atmospherically—while staying rooted in intent. Planning is not just about what goes where, but how people feel as they move through it."
+        }
+      ],
+      "carousel_cards": [
+        {
+          "id": 1,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548904/planning_01-Dr._T_Ao_Sports_Complex_icf389.webp",
+          "project_name": "Dr. T Ao Sports Complex",
+          "project_location": "Kaliabor, Assam"
+        },
+        {
+          "id": 2,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548904/planning_02-Tamulpur_District_Sports_Complex_csp8ra.webp",
+          "project_name": "Tamulpur District Sports Complex",
+          "project_location": "Tamulpur, Assam"
+        },
+        {
+          "id": 3,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548907/planning_03-Khagrabari_Indoor_Stadium_Complex_mqskhx.webp",
+          "project_name": "Khagrabari Indoor Stadium Complex",
+          "project_location": "Udalguri, Assam"
+        },
+        {
+          "id": 4,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548907/planning_04-Hidipi_Sports_Complex_g4o5gp.webp",
+          "project_name": "Hidipi Sports Complex",
+          "project_location": "Anglong, Assam"
+        },
+        {
+          "id": 5,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548908/planning_05-Batadrava_Than_Complex_at_Barduwa_Nagaon_Assam_sq8q0n.webp",
+          "project_name": "Batadrava Than Complex",
+          "project_location": "Barduwa, Assam"
+        },
+        {
+          "id": 6,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760548910/planning_06-Khatara_Satra_Complex_hfnjvc.webp",
+          "project_name": "Khatara Satra Complex",
+          "project_location": "Kamargaon, Assam"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "heading": "Our Collaborators",
+      "carousel_cards": [
+        {
+          "id": 1,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760797433/SPACE_ACE_LOGO_g5u2eu.png",
+          "project_name": "Space Ace Architects ",
+          "project_location": "Our Guiding Collaborators"
+        },
+        {
+          "id": 2,
+          "text": "Space Ace Architects, New Delhi—led by Vinit Khanna and Samir Rastogi, both SPA Delhi ’91—bring 30+ years of expertise in public architecture. Collaborating with Vikram Design Studio on eastern projects, they enhance every stage from concept to execution."
+        },
 
-      {
-        "id": 3,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760797501/STRUCTURE_LOGO_cuox4z.png",
-        "project_name": "Swasti Engineers & Associates",
-        "project_location": "Structural Consultant"
-      },
-      {
-        "id": 4,
-        "text": "Swasti Engineers & Associates, Kolkata, offers innovative and reliable structural design for residential, commercial, and industrial projects. Partnering with Vikram Design Studio, they integrate architecture and structure seamlessly from concept to execution, ensuring safety, economy, and precision in every project."
-      },
-      {
-        "id": 5,
-        "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760797500/MEPF_LOGO_hbohop.png",
-        "project_name": "Aayushi Consultancy & Services Pvt. Ltd.",
-        "project_location": "MEPF Consultant"
-      },
-      {
-        "id": 6,
-        "text": "Aayushi Consultancy & Services Pvt. Ltd. provides sustainable HVAC, electrical, plumbing, and fire-safety solutions. Collaborating with Vikram Design Studio, they deliver integrated, high-performance building services that enhance comfort, efficiency, and design integrity while ensuring code compliance and operational excellence.. "
-      }
-    ]
-  }
-]
+        {
+          "id": 3,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760797501/STRUCTURE_LOGO_cuox4z.png",
+          "project_name": "Swasti Engineers & Associates",
+          "project_location": "Structural Consultant"
+        },
+        {
+          "id": 4,
+          "text": "Swasti Engineers & Associates, Kolkata, offers innovative and reliable structural design for residential, commercial, and industrial projects. Partnering with Vikram Design Studio, they integrate architecture and structure seamlessly from concept to execution, ensuring safety, economy, and precision in every project."
+        },
+        {
+          "id": 5,
+          "img_src": "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760797500/MEPF_LOGO_hbohop.png",
+          "project_name": "Aayushi Consultancy & Services Pvt. Ltd.",
+          "project_location": "MEPF Consultant"
+        },
+        {
+          "id": 6,
+          "text": "Aayushi Consultancy & Services Pvt. Ltd. provides sustainable HVAC, electrical, plumbing, and fire-safety solutions. Collaborating with Vikram Design Studio, they deliver integrated, high-performance building services that enhance comfort, efficiency, and design integrity while ensuring code compliance and operational excellence.. "
+        }
+      ]
+    }
+  ]

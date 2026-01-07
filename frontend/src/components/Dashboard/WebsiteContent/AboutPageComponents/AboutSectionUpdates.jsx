@@ -1,61 +1,24 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
-
-// API base (Vite env or fallback)
-const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
-
-/*
-Expected normalized shape of `sections`:
-
-sections = {
-  architecture: {
-    heading: "",
-    paragraphs: [],
-    carousel_cards: []
-  },
-  interior: {...}
-}
-*/
+import aboutApi from "../../../../services/aboutapi";
 
 const AboutSectionUpdates = () => {
   const [loading, setLoading] = useState(true);
   const [sections, setSections] = useState({});
+  const [imagePreviews, setImagePreviews] = useState({});
 
-  /* ---------------- FETCH & NORMALIZE ---------------- */
+
+  /* ---------------- FETCH ---------------- */
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`${API_BASE}/content/about`);
-        const data = res.data;
+        const data = await aboutApi.getAboutPage();
 
-        const normalized = {};
-
-        // Case 1: backend returns ARRAY
-        if (Array.isArray(data)) {
-          data.forEach((item) => {
-            if (item.section && item.content) {
-              normalized[item.section] = {
-                heading: item.content.heading || "",
-                paragraphs: item.content.paragraphs || [],
-                carousel_cards: item.content.carousel_cards || [],
-              };
-            }
-          });
+        if (data?.sections && typeof data.sections === "object") {
+          setSections(data.sections);
+        } else {
+          setSections({});
         }
-
-        // Case 2: backend returns OBJECT
-        else if (typeof data === "object" && data !== null) {
-          Object.keys(data).forEach((key) => {
-            normalized[key] = {
-              heading: data[key]?.heading || "",
-              paragraphs: data[key]?.paragraphs || [],
-              carousel_cards: data[key]?.carousel_cards || [],
-            };
-          });
-        }
-
-        setSections(normalized);
       } catch (err) {
         console.error("Failed to load About sections", err);
       } finally {
@@ -66,7 +29,7 @@ const AboutSectionUpdates = () => {
     fetchData();
   }, []);
 
-  /* ---------------- SECTION HELPERS ---------------- */
+  /* ---------------- HELPERS ---------------- */
 
   const addSection = () => {
     const key = `section_${Date.now()}`;
@@ -83,10 +46,7 @@ const AboutSectionUpdates = () => {
   const updateSection = (key, field, value) => {
     setSections((prev) => ({
       ...prev,
-      [key]: {
-        ...prev[key],
-        [field]: value,
-      },
+      [key]: { ...prev[key], [field]: value },
     }));
   };
 
@@ -111,7 +71,7 @@ const AboutSectionUpdates = () => {
     updateSection(
       key,
       "paragraphs",
-      (sections[key]?.paragraphs || []).map((p) =>
+      sections[key].paragraphs.map((p) =>
         p.id === id ? { ...p, text } : p
       )
     );
@@ -124,8 +84,7 @@ const AboutSectionUpdates = () => {
       ...(sections[key]?.carousel_cards || []),
       {
         id: Date.now(),
-        type: "image",
-        image: null,
+        img_src: "",
         preview: "",
         project_name: "",
         project_location: "",
@@ -138,7 +97,6 @@ const AboutSectionUpdates = () => {
       ...(sections[key]?.carousel_cards || []),
       {
         id: Date.now(),
-        type: "text",
         text: "",
       },
     ]);
@@ -148,7 +106,7 @@ const AboutSectionUpdates = () => {
     updateSection(
       key,
       "carousel_cards",
-      (sections[key]?.carousel_cards || []).map((c) =>
+      sections[key].carousel_cards.map((c) =>
         c.id === cardId ? { ...c, [field]: value } : c
       )
     );
@@ -158,42 +116,40 @@ const AboutSectionUpdates = () => {
     updateSection(
       key,
       "carousel_cards",
-      (sections[key]?.carousel_cards || []).filter((c) => c.id !== cardId)
+      sections[key].carousel_cards.filter((c) => c.id !== cardId)
     );
   };
 
-  /* ---------------- IMAGE PICKER ---------------- */
+  /* ---------------- IMAGE PICKER (BASE64) ---------------- */
 
   const handleImageSelect = (key, cardId, file) => {
     if (!file) return;
 
-    const preview = URL.createObjectURL(file);
+    // 1️⃣ Preview (UI only)
+    const previewUrl = URL.createObjectURL(file);
+    setImagePreviews((prev) => ({
+      ...prev,
+      [`${key}_${cardId}`]: previewUrl,
+    }));
 
-    updateCard(key, cardId, "image", file);
-    updateCard(key, cardId, "preview", preview);
+    // 2️⃣ Base64 (backend upload)
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      updateCard(key, cardId, "img_src", reader.result);
+    };
+    reader.readAsDataURL(file);
   };
+
 
   /* ---------------- SAVE ---------------- */
 
   const handleSave = async () => {
     try {
-      const token = localStorage.getItem("token");
-      const headers = token ? { Authorization: `Bearer ${token}` } : {};
-
-      const payload = { content: sections, lastModifiedBy: "admin1" };
-
-      await axios.post(`${API_BASE}/content/about/sections`, payload, {
-        headers,
-      });
-
+      await aboutApi.updateSections(sections, "admin1");
       alert("About sections saved successfully!");
     } catch (err) {
-      console.error(err?.response || err);
-      const serverMsg =
-        err?.response?.data?.error ||
-        err?.response?.data?.message ||
-        err?.message;
-      alert(`Failed to save sections: ${serverMsg}`);
+      console.error(err);
+      alert("Failed to save sections");
     }
   };
 
@@ -209,7 +165,7 @@ const AboutSectionUpdates = () => {
 
       <button
         onClick={addSection}
-        className="bg-black text-white px-4 py-2 rounded text-sm pr-2"
+        className="bg-black text-white px-4 py-2 rounded text-sm"
       >
         + Add New Section
       </button>
@@ -218,7 +174,7 @@ const AboutSectionUpdates = () => {
         const section = sections[key];
 
         return (
-          <div key={key} className="bg-white border rounded p-6 space-y-6 ">
+          <div key={key} className="bg-white border rounded p-6 space-y-6">
             <div className="flex justify-between items-center">
               <h3 className="font-semibold">Section {idx + 1}</h3>
               <button
@@ -232,7 +188,9 @@ const AboutSectionUpdates = () => {
             {/* Heading */}
             <input
               value={section.heading}
-              onChange={(e) => updateSection(key, "heading", e.target.value)}
+              onChange={(e) =>
+                updateSection(key, "heading", e.target.value)
+              }
               placeholder="Section heading"
               className="border p-2 w-full text-sm"
             />
@@ -246,11 +204,13 @@ const AboutSectionUpdates = () => {
                 + Add Paragraph
               </button>
 
-              {(section.paragraphs || []).map((p) => (
+              {section.paragraphs.map((p) => (
                 <textarea
                   key={p.id}
                   value={p.text}
-                  onChange={(e) => updateParagraph(key, p.id, e.target.value)}
+                  onChange={(e) =>
+                    updateParagraph(key, p.id, e.target.value)
+                  }
                   rows={3}
                   className="border p-2 w-full text-sm"
                 />
@@ -274,17 +234,23 @@ const AboutSectionUpdates = () => {
                 </button>
               </div>
 
-              {(section.carousel_cards || []).map((card) => (
-                <div key={card.id} className="border rounded p-4 space-y-3">
-                  {card.type === "image" ? (
+              {section.carousel_cards.map((card) => (
+                <div
+                  key={card.id}
+                  className="border rounded p-4 space-y-3"
+                >
+                  {"img_src" in card ? (
                     <>
-                      {card.preview && (
+                      {(imagePreviews[`${key}_${card.id}`] || card.img_src) && (
                         <img
-                          src={card.preview}
-                          alt=""
+                          src={
+                            imagePreviews[`${key}_${card.id}`] || card.img_src
+                          }
+                          alt={card.project_name || ""}
                           className="h-32 rounded object-cover"
                         />
                       )}
+
 
                       <label className="inline-block">
                         <span className="bg-black text-white px-3 py-1 rounded text-sm cursor-pointer">
@@ -295,7 +261,11 @@ const AboutSectionUpdates = () => {
                           accept="image/*"
                           className="hidden"
                           onChange={(e) =>
-                            handleImageSelect(key, card.id, e.target.files[0])
+                            handleImageSelect(
+                              key,
+                              card.id,
+                              e.target.files[0]
+                            )
                           }
                         />
                       </label>

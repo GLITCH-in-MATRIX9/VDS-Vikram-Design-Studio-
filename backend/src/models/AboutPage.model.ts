@@ -1,61 +1,6 @@
-import mongoose, { Schema, Document } from "mongoose";
+import mongoose from "mongoose";
 
-/* ---------- TYPES ---------- */
-
-export interface Paragraph {
-  id: number;
-  text: string;
-}
-
-export interface Metric {
-  id: number;
-  value: number;
-  label: string;
-  suffix?: string;
-}
-
-export interface ImageCard {
-  id: number;
-  type: "image";
-  image: string; // later: Cloudinary URL
-  project_name?: string;
-  project_location?: string;
-}
-
-export interface TextCard {
-  id: number;
-  type: "text";
-  text: string;
-}
-
-export type CarouselCard = ImageCard | TextCard;
-
-export interface AboutSection {
-  heading: string;
-  paragraphs: Paragraph[];
-  carousel_cards: CarouselCard[];
-}
-
-export interface AboutPageDocument extends Document {
-  page: "ABOUT";
-
-  hero: {
-    title: string;
-    subtitle: string;
-    image: string;
-    paragraphs: Paragraph[];
-  };
-
-  metrics: Metric[];
-
-  sections: Map<string, AboutSection>;
-
-  lastModifiedBy?: string;
-}
-
-/* ---------- SCHEMAS ---------- */
-
-const ParagraphSchema = new Schema<Paragraph>(
+const ParagraphSchema = new mongoose.Schema(
   {
     id: Number,
     text: String,
@@ -63,29 +8,18 @@ const ParagraphSchema = new Schema<Paragraph>(
   { _id: false }
 );
 
-const MetricSchema = new Schema<Metric>(
+const CarouselCardSchema = new mongoose.Schema(
   {
     id: Number,
-    value: Number,
-    label: String,
-    suffix: String,
-  },
-  { _id: false }
-);
-
-const CarouselCardSchema = new Schema(
-  {
-    id: Number,
-    type: { type: String, enum: ["image", "text"] },
-    image: String,
-    text: String,
+    img_src: String, // Cloudinary URL
+    text: String, // text-only card
     project_name: String,
     project_location: String,
   },
   { _id: false }
 );
 
-const AboutSectionSchema = new Schema<AboutSection>(
+const SectionSchema = new mongoose.Schema(
   {
     heading: String,
     paragraphs: [ParagraphSchema],
@@ -94,22 +28,35 @@ const AboutSectionSchema = new Schema<AboutSection>(
   { _id: false }
 );
 
-const AboutPageSchema = new Schema<AboutPageDocument>(
+const AboutPageSchema = new mongoose.Schema(
   {
-    page: { type: String, default: "ABOUT" },
+    page: {
+      type: String,
+      enum: ["ABOUT"],
+      default: "ABOUT",
+      unique: true,
+    },
 
     hero: {
       title: String,
-      subtitle: String,
+      subtitle: String, // line 1
+      subtitleLine2: String, // line 2
       image: String,
       paragraphs: [ParagraphSchema],
     },
 
-    metrics: [MetricSchema],
+    metrics: [
+      {
+        id: Number,
+        value: Number,
+        label: String,
+        suffix: String,
+      },
+    ],
 
     sections: {
       type: Map,
-      of: AboutSectionSchema,
+      of: SectionSchema,
       default: {},
     },
 
@@ -118,7 +65,4 @@ const AboutPageSchema = new Schema<AboutPageDocument>(
   { timestamps: true }
 );
 
-export default mongoose.model<AboutPageDocument>(
-  "AboutPage",
-  AboutPageSchema
-);
+export default mongoose.model("AboutPage", AboutPageSchema);
