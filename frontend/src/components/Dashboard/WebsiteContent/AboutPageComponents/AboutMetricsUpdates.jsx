@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+// API base (Vite env or fallback)
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+
 const MAX_METRICS = 3;
 
 const AboutMetricsUpdates = () => {
@@ -12,19 +15,26 @@ const AboutMetricsUpdates = () => {
   useEffect(() => {
     const fetchMetrics = async () => {
       try {
-        const res = await axios.get("/api/content/about");
+        const res = await axios.get(`${API_BASE}/content/about`);
+        const data = res.data;
 
-        const metricsSection = res.data.find(
-          (section) => section.section === "metrics"
-        );
+        // Backend may return either an object { metrics: [...] } or an array of
+        // sections [{ section: 'metrics', content: [...] }, ...]. Support both.
+        let metricsContent = null;
 
-        if (metricsSection?.content) {
-          const formatted = metricsSection.content
+        if (Array.isArray(data)) {
+          const metricsSection = data.find(
+            (section) => section.section === "metrics"
+          );
+          metricsContent = metricsSection?.content || null;
+        } else if (data && Array.isArray(data.metrics)) {
+          metricsContent = data.metrics;
+        }
+
+        if (metricsContent) {
+          const formatted = metricsContent
             .slice(0, MAX_METRICS)
-            .map((m) => ({
-              ...m,
-              value: String(m.value ?? ""),
-            }));
+            .map((m) => ({ ...m, value: String(m.value ?? "") }));
 
           setMetrics(formatted);
         }
@@ -56,9 +66,7 @@ const AboutMetricsUpdates = () => {
 
   const updateMetric = (id, key, value) => {
     setMetrics((prev) =>
-      prev.map((m) =>
-        m.id === id ? { ...m, [key]: value } : m
-      )
+      prev.map((m) => (m.id === id ? { ...m, [key]: value } : m))
     );
   };
 
@@ -75,17 +83,23 @@ const AboutMetricsUpdates = () => {
         value: Number(m.value || 0),
       }));
 
-      await axios.post("/api/content", {
-        page: "ABOUT",
-        section: "metrics",
-        content: cleanedMetrics,
-        lastModifiedBy: "admin1",
+      const token = localStorage.getItem("token");
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+      const payload = { content: cleanedMetrics, lastModifiedBy: "admin1" };
+
+      await axios.post(`${API_BASE}/content/about/metrics`, payload, {
+        headers,
       });
 
       alert("Metrics updated successfully!");
     } catch (err) {
-      console.error(err);
-      alert("Failed to update metrics");
+      console.error(err?.response || err);
+      const serverMsg =
+        err?.response?.data?.error ||
+        err?.response?.data?.message ||
+        err?.message;
+      alert(`Failed to update metrics: ${serverMsg}`);
     }
   };
 
@@ -104,7 +118,9 @@ const AboutMetricsUpdates = () => {
       <ul className="text-sm text-[#6D6D6D] list-disc pl-5 space-y-1">
         <li>Edit the numbers and labels shown on the About page.</li>
         <li>Maximum of three metrics are supported.</li>
-        <li>Units like <code>sq.ft.</code> can be added as suffix.</li>
+        <li>
+          Units like <code>sq.ft.</code> can be added as suffix.
+        </li>
       </ul>
 
       {/* Metric Cards */}

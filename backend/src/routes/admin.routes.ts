@@ -6,11 +6,14 @@ import {
   updateUser,
   deleteUser,
   getActivityLogs,
+} from "../controllers/admin.controller";
+
+import {
   getAboutPage,
   updateHero,
   updateMetrics,
   updateSections,
-} from "../controllers/admin.controller";
+} from "../controllers/about.controller";
 
 import { protect, requireRole } from "../middlewares/auth.middleware";
 

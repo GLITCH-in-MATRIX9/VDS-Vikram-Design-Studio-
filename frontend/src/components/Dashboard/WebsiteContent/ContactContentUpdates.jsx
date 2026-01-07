@@ -1,5 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Pencil, Trash2, Plus, X } from "lucide-react";
+import axios from "axios";
+
+// API base (Vite env or fallback)
+const API_BASE = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 
 const initialContacts = [
   {
@@ -32,19 +36,81 @@ const ContactContentUpdates = () => {
     google_maps_iframe_src: "",
   });
 
-  const handleSave = () => {
+  useEffect(() => {
+    const fetchContacts = async () => {
+      try {
+        const res = await axios.get(`${API_BASE}/content/contact`);
+        const data = res.data;
+        if (data && Array.isArray(data.contacts)) setContacts(data.contacts);
+      } catch (err) {
+        console.error("Failed to load contact content", err);
+      }
+    };
+
+    fetchContacts();
+  }, []);
+
+  const persistAll = async (updated) => {
+    // include Authorization header from localStorage as a fallback if axios defaults aren't set
+    const token = localStorage.getItem("token");
+    const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+    const payload = {
+      page: "CONTACT",
+      content: updated,
+      lastModifiedBy: "admin",
+    };
+
+    console.debug("Persisting contact content:", payload);
+
+    await axios.post(`${API_BASE}/content`, payload, { headers });
+  };
+
+  const handleSave = async () => {
     if (!newContact.city || !newContact.address) return;
 
     if (editingId) {
-      setContacts((prev) =>
-        prev.map((c) =>
-          c.id === editingId ? { ...c, ...newContact } : c
-        )
+      const updated = contacts.map((c) =>
+        c.id === editingId ? { ...c, ...newContact } : c
       );
+      setContacts(updated);
       setEditingId(null);
+      try {
+        await persistAll(updated);
+        alert("Contact updated");
+      } catch (err) {
+        console.error("Save failed:", err?.response || err);
+        const status = err?.response?.status;
+        const serverMsg =
+          err?.response?.data?.message || err?.response?.data?.error;
+        alert(
+          `Save failed${status ? ` (HTTP ${status})` : ""}${
+            serverMsg
+              ? `: ${serverMsg}`
+              : ". Check console/network for details."
+          }`
+        );
+      }
     } else {
       const id = Math.max(0, ...contacts.map((c) => c.id)) + 1;
-      setContacts([...contacts, { id, ...newContact }]);
+      const updated = [...contacts, { id, ...newContact }];
+      setContacts(updated);
+      try {
+        await persistAll(updated);
+        alert("Contact added");
+      } catch (err) {
+        console.error("Save failed:", err?.response || err);
+        const status = err?.response?.status;
+        const serverMsg =
+          err?.response?.data?.message || err?.response?.data?.error;
+        alert(
+          `Save failed${status ? ` (HTTP ${status})` : ""}${
+            serverMsg
+              ? `: ${serverMsg}`
+              : ". Check console/network for details."
+          }`
+        );
+      }
     }
 
     setNewContact({
@@ -60,9 +126,24 @@ const ContactContentUpdates = () => {
     setNewContact({ ...contact });
   };
 
-  const handleDelete = (id) => {
-    setContacts((prev) => prev.filter((c) => c.id !== id));
+  const handleDelete = async (id) => {
+    const updated = contacts.filter((c) => c.id !== id);
+    setContacts(updated);
     if (editingId === id) setEditingId(null);
+    try {
+      await persistAll(updated);
+      alert("Contact removed");
+    } catch (err) {
+      console.error("Delete failed:", err?.response || err);
+      const status = err?.response?.status;
+      const serverMsg =
+        err?.response?.data?.message || err?.response?.data?.error;
+      alert(
+        `Save failed${status ? ` (HTTP ${status})` : ""}${
+          serverMsg ? `: ${serverMsg}` : ". Check console/network for details."
+        }`
+      );
+    }
   };
 
   const handlePhoneChange = (index, value) => {
@@ -115,9 +196,7 @@ const ContactContentUpdates = () => {
               <input
                 type="text"
                 value={num}
-                onChange={(e) =>
-                  handlePhoneChange(idx, e.target.value)
-                }
+                onChange={(e) => handlePhoneChange(idx, e.target.value)}
                 className="flex-1 border p-2 text-sm"
               />
               <button
@@ -189,14 +268,9 @@ const ContactContentUpdates = () => {
       {/* Existing Contacts */}
       <div className="space-y-4">
         {contacts.map((c) => (
-          <div
-            key={c.id}
-            className="bg-white border rounded p-4 space-y-3"
-          >
+          <div key={c.id} className="bg-white border rounded p-4 space-y-3">
             <div className="flex justify-between items-center">
-              <h3 className="font-semibold text-[#3E3C3C]">
-                {c.city}
-              </h3>
+              <h3 className="font-semibold text-[#3E3C3C]">{c.city}</h3>
               <div className="flex gap-2">
                 <button
                   onClick={() => handleEdit(c)}
@@ -214,23 +288,17 @@ const ContactContentUpdates = () => {
             </div>
 
             <div className="text-sm text-[#6D6D6D] space-y-1">
-              <p className="font-medium text-[#3E3C3C]">
-                Phone Numbers
-              </p>
+              <p className="font-medium text-[#3E3C3C]">Phone Numbers</p>
               <ul className="list-disc list-inside">
                 {c.phone_numbers.map((num, i) => (
                   <li key={i}>{num}</li>
                 ))}
               </ul>
 
-              <p className="font-medium text-[#3E3C3C] mt-2">
-                Address
-              </p>
+              <p className="font-medium text-[#3E3C3C] mt-2">Address</p>
               <p>{c.address}</p>
 
-              <p className="font-medium text-[#3E3C3C] mt-2">
-                Google Maps
-              </p>
+              <p className="font-medium text-[#3E3C3C] mt-2">Google Maps</p>
               <iframe
                 src={c.google_maps_iframe_src}
                 width="100%"
