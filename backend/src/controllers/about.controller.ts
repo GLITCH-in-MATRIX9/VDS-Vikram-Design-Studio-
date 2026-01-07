@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import AboutPage from "../models/AboutPage.model";
-import cloudinary from "../config/cloudinary";
 import {
   isBase64Image,
   convertBase64ToCloudinary,
@@ -41,7 +40,7 @@ export const getAboutPage = async (_: Request, res: Response) => {
       metrics: about.metrics || [],
       sections: about.sections || {},
     });
-  } catch (err) {
+  } catch {
     res.status(500).json({ error: "Failed to fetch About page" });
   }
 };
@@ -51,7 +50,7 @@ export const updateHero = async (req: Request, res: Response) => {
   try {
     const { content, lastModifiedBy } = req.body;
 
-    const updatedHero = {
+    const hero = {
       title: content.title,
       subtitle: content.subtitle,
       subtitleLine2: content.subtitleLine2 || "",
@@ -59,23 +58,23 @@ export const updateHero = async (req: Request, res: Response) => {
       paragraphs: content.paragraphs || [],
     };
 
-    if (content?.image && isBase64Image(content.image)) {
+    if (hero.image && isBase64Image(hero.image)) {
       const result = await convertBase64ToCloudinary(
-        content.image,
+        hero.image,
         "VDS_FOLDER/ABOUT/HERO"
       );
-      updatedHero.image = result.url;
+      hero.image = result.url;
     }
 
     const about = await AboutPage.findOneAndUpdate(
       { page: "ABOUT" },
-      { hero: updatedHero, lastModifiedBy },
+      { hero, lastModifiedBy },
       { new: true, upsert: true }
     );
 
     res.json(about?.hero);
   } catch (err) {
-    console.error("❌ Failed to update hero:", err);
+    console.error("❌ Hero update failed:", err);
     res.status(500).json({ error: "Failed to update hero" });
   }
 };
@@ -93,12 +92,12 @@ export const updateMetrics = async (req: Request, res: Response) => {
 
     res.json(about?.metrics);
   } catch (err) {
-    console.error("❌ Failed to update metrics:", err);
+    console.error("❌ Metrics update failed:", err);
     res.status(500).json({ error: "Failed to update metrics" });
   }
 };
 
-/* ---------- UPDATE SECTIONS (WITH CLOUDINARY) ---------- */
+/* ---------- UPDATE SECTIONS (FIXED) ---------- */
 export const updateSections = async (req: Request, res: Response) => {
   try {
     const { content, lastModifiedBy } = req.body;
@@ -108,17 +107,26 @@ export const updateSections = async (req: Request, res: Response) => {
       AboutSection
     >;
 
-    for (const [sectionKey, section] of Object.entries(normalized)) {
+    for (const section of Object.values(normalized)) {
       if (!Array.isArray(section.carousel_cards)) continue;
 
+      // 📁 Folder = section heading (architecture, landscape, etc.)
+      const folderName = section.heading
+        .toLowerCase()
+        .replace(/\s+/g, "_")
+        .replace(/[^a-z0-9_]/g, "");
+
+      const folder = `VDS_FOLDER/ABOUT/SECTIONS/${folderName}`;
+
       for (const card of section.carousel_cards) {
+        // ✅ Upload ONLY base64 images
         if (card.img_src && isBase64Image(card.img_src)) {
-          const folder = `VDS_FOLDER/ABOUT/SECTIONS/${sectionKey
-            .replace(/[^a-zA-Z0-9]/g, "_")
-            .toUpperCase()}`;
+          const result = await convertBase64ToCloudinary(
+            card.img_src,
+            folder
+          );
 
-          const result = await convertBase64ToCloudinary(card.img_src, folder);
-
+          // 🔁 Replace base64 with URL (prevents re-upload)
           card.img_src = result.url;
         }
       }
@@ -132,26 +140,7 @@ export const updateSections = async (req: Request, res: Response) => {
 
     res.json(about?.sections);
   } catch (err) {
-    console.error("❌ Failed to update sections:", err);
+    console.error("❌ Sections update failed:", err);
     res.status(500).json({ error: "Failed to update sections" });
   }
 };
-
-//only for testing purpose not to be used in production
-// export const clearAboutSections = async (_: Request, res: Response) => {
-//   try {
-//     const about = await AboutPage.findOneAndUpdate(
-//       { page: "ABOUT" },
-//       { sections: {} },
-//       { new: true }
-//     );
-
-//     res.json({
-//       message: "About sections cleared successfully",
-//       sections: about?.sections,
-//     });
-//   } catch (err) {
-//     console.error("❌ Failed to clear sections:", err);
-//     res.status(500).json({ error: "Failed to clear sections" });
-//   }
-// };
