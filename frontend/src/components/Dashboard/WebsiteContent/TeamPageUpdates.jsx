@@ -46,9 +46,18 @@ const TeamPageUpdates = () => {
   const [editingId, setEditingId] = useState(null);
   const [expandedId, setExpandedId] = useState(null);
   const [formErrors, setFormErrors] = useState({});
-  const [headingStatus, setHeadingStatus] = useState({ message: "", error: "" });
-  const [membersStatus, setMembersStatus] = useState({ message: "", error: "" });
-  const [marqueeStatus, setMarqueeStatus] = useState({ message: "", error: "" });
+  const [headingStatus, setHeadingStatus] = useState({
+    message: "",
+    error: "",
+  });
+  const [membersStatus, setMembersStatus] = useState({
+    message: "",
+    error: "",
+  });
+  const [marqueeStatus, setMarqueeStatus] = useState({
+    message: "",
+    error: "",
+  });
 
   const toggleExpand = (id) => {
     setExpandedId(expandedId === id ? null : id);
@@ -57,10 +66,10 @@ const TeamPageUpdates = () => {
   const handleSave = () => {
     // clear old errors
     setFormErrors({});
-  // clear section statuses
-  setHeadingStatus({ message: "", error: "" });
-  setMembersStatus({ message: "", error: "" });
-  setMarqueeStatus({ message: "", error: "" });
+    // clear section statuses
+    setHeadingStatus({ message: "", error: "" });
+    setMembersStatus({ message: "", error: "" });
+    setMarqueeStatus({ message: "", error: "" });
 
     const errors = {};
     if (!newMember.name || !newMember.name.trim())
@@ -391,8 +400,16 @@ const TeamPageUpdates = () => {
               Save Members
             </button>
             <div className="pt-2">
-              {membersStatus.message && <div className="text-sm text-green-600">{membersStatus.message}</div>}
-              {membersStatus.error && <div className="text-sm text-red-600">{membersStatus.error}</div>}
+              {membersStatus.message && (
+                <div className="text-sm text-green-600">
+                  {membersStatus.message}
+                </div>
+              )}
+              {membersStatus.error && (
+                <div className="text-sm text-red-600">
+                  {membersStatus.error}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -656,8 +673,16 @@ const TeamPageUpdates = () => {
               Save Heading
             </button>
             <div className="pt-2">
-              {headingStatus.message && <div className="text-sm text-green-600">{headingStatus.message}</div>}
-              {headingStatus.error && <div className="text-sm text-red-600">{headingStatus.error}</div>}
+              {headingStatus.message && (
+                <div className="text-sm text-green-600">
+                  {headingStatus.message}
+                </div>
+              )}
+              {headingStatus.error && (
+                <div className="text-sm text-red-600">
+                  {headingStatus.error}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -710,8 +735,14 @@ const TeamPageUpdates = () => {
           </button>
         </div>
         <div className="pt-2">
-          {marqueeStatus.message && <div className="text-sm text-green-600">{marqueeStatus.message}</div>}
-          {marqueeStatus.error && <div className="text-sm text-red-600">{marqueeStatus.error}</div>}
+          {marqueeStatus.message && (
+            <div className="text-sm text-green-600">
+              {marqueeStatus.message}
+            </div>
+          )}
+          {marqueeStatus.error && (
+            <div className="text-sm text-red-600">{marqueeStatus.error}</div>
+          )}
         </div>
       </div>
     </div>
