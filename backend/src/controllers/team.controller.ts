@@ -4,6 +4,7 @@ import {
   isBase64Image,
   convertBase64ToCloudinary,
 } from "../utils/imageProcessor";
+import { config } from "../config/env";
 
 export const getTeamPage = async (req: Request, res: Response) => {
   try {
@@ -40,9 +41,10 @@ export const updateHeading = async (req: Request, res: Response) => {
     const { content, lastModifiedBy } = req.body;
 
     if (content?.image && isBase64Image(content.image)) {
+      const folderBase = config.cloudinary.folderName || "VDS_FOLDER";
       const result = await convertBase64ToCloudinary(
         content.image,
-        "VDS/TEAM/HEADING"
+        `${folderBase}/TEAM/HEADING`
       );
       content.image = result.url;
     }
@@ -69,9 +71,10 @@ export const updateMembers = async (req: Request, res: Response) => {
 
     for (const member of content) {
       if (member.photo && isBase64Image(member.photo)) {
+        const folderBase = config.cloudinary.folderName || "VDS_FOLDER";
         const result = await convertBase64ToCloudinary(
           member.photo,
-          "VDS/TEAM/MEMBERS"
+          `${folderBase}/TEAM/MEMBERS`
         );
         member.photo = result.url;
       }
@@ -101,9 +104,10 @@ export const updateMarquee = async (req: Request, res: Response) => {
 
     for (const img of content) {
       if (img.img_src && isBase64Image(img.img_src)) {
+        const folderBase = config.cloudinary.folderName || "VDS_FOLDER";
         const result = await convertBase64ToCloudinary(
           img.img_src,
-          "VDS/TEAM/MARQUEE"
+          `${folderBase}/TEAM/MARQUEE`
         );
         img.img_src = result.url;
       }
