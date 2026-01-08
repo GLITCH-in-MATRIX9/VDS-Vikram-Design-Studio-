@@ -602,7 +602,7 @@ const TeamPageUpdates = () => {
       {/* Team Images */}
       {/* Heading */}
       <div className="bg-white p-4 rounded border space-y-3">
-        <h3 className="font-semibold text-[#3E3C3C]">Team Heading</h3>
+        <h3 className="font-semibold text-[#3E3C3C]">Team Page Hero Section</h3>
 
         <input
           value={heading.title}
@@ -670,7 +670,7 @@ const TeamPageUpdates = () => {
               onClick={saveHeading}
               className="px-4 py-2 bg-[#3E3C3C] text-white rounded text-sm"
             >
-              Save Heading
+              Save Content
             </button>
             <div className="pt-2">
               {headingStatus.message && (
@@ -688,7 +688,7 @@ const TeamPageUpdates = () => {
         </div>
       </div>
       <div className="bg-white p-4 rounded border space-y-2">
-        <h3 className="font-semibold text-[#3E3C3C]">Team Images</h3>
+        <h3 className="font-semibold text-[#3E3C3C]">Marquee Images</h3>
         <p className="text-sm text-[#6D6D6D]">
           Upload images of the full team here.
         </p>
