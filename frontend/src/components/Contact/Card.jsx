@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { motion } from "framer-motion";
 
 const cardVariants = {
@@ -14,6 +14,7 @@ const cardVariants = {
 };
 
 const Card = ({ data }) => {
+  const [iframeLoaded, setIframeLoaded] = useState(false);
   return (
     <motion.article
       className="max-w-[1920px] flex justify-between flex-col md:flex-row gap-4 md:gap-8 px-3 md:px-6 xl:px-12 py-4 md:py-8 xl:py-12 border-[0.5px] border-[#BEBBBC] text-[#3E3C3C] md:border-1 rounded-lg md:rounded-2xl"
@@ -54,11 +55,21 @@ const Card = ({ data }) => {
         </div>
       </div>
       {/* Right side: Embedded Google Map so you can find us easily! */}
-      <iframe
-        className="md:max-w-[345px] xl:max-w-[420px] grayscale border-0 w-[100%] h-[162px] md:h-[250px] xl:h-[304px] rounded-lg med:rounded-2xl"
-        src={data.google_maps_iframe_src}
-        loading="lazy"
-      ></iframe>
+      <div className="relative md:max-w-[345px] xl:max-w-[420px] w-[100%] h-[162px] md:h-[250px] xl:h-[304px] rounded-lg med:rounded-2xl overflow-hidden">
+        {/* skeleton behind the iframe until it loads */}
+        {!iframeLoaded && (
+          <div className="absolute inset-0 bg-gray-300 rounded animate-pulse" />
+        )}
+        <iframe
+          title={`map-${data.city}`}
+          className={`absolute grayscale inset-0 w-full h-full border-0 ${
+            iframeLoaded ? "relative z-10" : "relative z-20 opacity-0"
+          }`}
+          src={data.google_maps_iframe_src}
+          loading="lazy"
+          onLoad={() => setIframeLoaded(true)}
+        ></iframe>
+      </div>
     </motion.article>
   );
 };
