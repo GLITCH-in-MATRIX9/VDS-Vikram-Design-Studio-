@@ -1,29 +1,55 @@
 import React, { useRef, useEffect, useState } from "react";
 import { motion } from "framer-motion";
-
-const images = [
- "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760902331/07_dzixnq.jpg",
- "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760902330/01_e5lq8r.jpg",
- "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760902329/02_tztwzw.jpg",
- "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760902328/03_wckaes.jpg",
- "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760902328/04_tf7njj.jpg",
- "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760902328/06_fkj3sf.jpg",
- "https://res.cloudinary.com/dlrkoth8o/image/upload/v1760902328/05_jxymi1.jpg"
-];
-
-
-
+import teamApi from "../../services/teamapi";
 
 const MarqueeImages = () => {
   const [width, setWidth] = useState(0);
+  const [images, setImages] = useState([]);
   const marqueeRef = useRef(null);
+  const [isReady, setIsReady] = useState(false);
+
+  // Measure width after images render and on resize
+  useEffect(() => {
+    let rafId = 0;
+    const measure = () => {
+      if (marqueeRef.current) {
+        const singleSetWidth = marqueeRef.current.scrollWidth / 2;
+        setWidth(singleSetWidth);
+        setIsReady(singleSetWidth > 0);
+      }
+    };
+
+    // Measure after next paint to ensure images have loaded
+    rafId = requestAnimationFrame(() => setTimeout(measure, 50));
+
+    const onResize = () => {
+      // small debounce
+      setTimeout(measure, 100);
+    };
+    window.addEventListener("resize", onResize);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [images]);
 
   useEffect(() => {
-    if (marqueeRef.current) {
-      const singleSetWidth = marqueeRef.current.scrollWidth / 2;
-      setWidth(singleSetWidth);
-    }
-  }, [marqueeRef]);
+    const load = async () => {
+      try {
+        const data = await teamApi.getTeamPage();
+        setImages((data.marquee_images || []).map((m) => m.img_src));
+      } catch (err) {
+        console.error("Failed to load marquee images:", err);
+      }
+    };
+    load();
+  }, []);
+
+  // compute duration proportional to width for consistent speed
+  const baseDuration = 20; // fallback
+  const duration =
+    width > 0 ? Math.max(12, Math.round(width / 100)) : baseDuration;
 
   const marqueeVariants = {
     animate: {
@@ -31,7 +57,7 @@ const MarqueeImages = () => {
       transition: {
         x: {
           repeat: Infinity,
-          duration: 20,
+          duration,
           ease: "linear",
         },
       },
@@ -44,7 +70,7 @@ const MarqueeImages = () => {
       transition: {
         x: {
           repeat: Infinity,
-          duration: 20,
+          duration,
           ease: "linear",
         },
       },
@@ -76,7 +102,7 @@ const MarqueeImages = () => {
           ref={marqueeRef}
           className="inline-flex gap-6"
           variants={marqueeVariants}
-          animate="animate"
+          animate={isReady ? "animate" : undefined}
         >
           {allImages.map((src, idx) => (
             <img
@@ -100,7 +126,7 @@ const MarqueeImages = () => {
         <motion.div
           className="inline-flex gap-6"
           variants={reverseMarqueeVariants}
-          animate="animate"
+          animate={isReady ? "animate" : undefined}
         >
           {allImages.map((src, idx) => (
             <img
