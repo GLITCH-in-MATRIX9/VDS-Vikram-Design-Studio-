@@ -1,6 +1,7 @@
 # VDS Backend Implementation Documentation
 
 ## 📋 Table of Contents
+
 1. [Overview](#overview)
 2. [Architecture](#architecture)
 3. [Database Models](#database-models)
@@ -30,6 +31,7 @@ This backend system provides a complete REST API for the Vikram Design Studio (V
 ## 🏗️ Architecture
 
 ### Technology Stack
+
 - **Runtime**: Node.js with TypeScript
 - **Framework**: Express.js
 - **Database**: MongoDB with Mongoose ODM
@@ -39,6 +41,7 @@ This backend system provides a complete REST API for the Vikram Design Studio (V
 - **Validation**: Custom middleware
 
 ### Design Patterns
+
 - **MVC Architecture**: Controllers, Models, Routes separation
 - **Middleware Pattern**: Authentication, validation, error handling
 - **Repository Pattern**: Mongoose models for data access
@@ -52,26 +55,26 @@ This backend system provides a complete REST API for the Vikram Design Studio (V
 
 ```typescript
 interface IProject {
-  name: string;                    // Project name (required)
-  location: string;                // Project location (required)
-  year?: string;                   // Project year (optional)
-  status: 'Ongoing' | 'Completed' | 'On Hold';  // Project status (required)
-  category: string;                // Project category (required)
-  subCategory?: string;            // Project subcategory (optional)
-  client: string;                  // Client name (required)
-  collaborators: string;           // Collaborators (required)
-  projectTeam: string;             // Project team (required)
-  tags: string[];                  // Project tags (array)
-  keyDate: string;                 // Key project date (required)
-  previewImageUrl?: string;        // Preview image URL (optional)
-  sections: IProjectSection[];     // Content blocks (array)
-  createdAt: Date;                 // Creation timestamp
-  updatedAt: Date;                 // Update timestamp
+  name: string; // Project name (required)
+  location: string; // Project location (required)
+  year?: string; // Project year (optional)
+  status: "Ongoing" | "Completed" | "On Hold"; // Project status (required)
+  category: string; // Project category (required)
+  subCategory?: string; // Project subcategory (optional)
+  client: string; // Client name (required)
+  collaborators: string; // Collaborators (required)
+  projectTeam: string; // Project team (required)
+  tags: string[]; // Project tags (array)
+  keyDate: string; // Key project date (required)
+  previewImageUrl?: string; // Preview image URL (optional)
+  sections: IProjectSection[]; // Content blocks (array)
+  createdAt: Date; // Creation timestamp
+  updatedAt: Date; // Update timestamp
 }
 
 interface IProjectSection {
-  type: 'text' | 'image';          // Content type
-  content: string;                 // Content (text or image URL)
+  type: "text" | "image"; // Content type
+  content: string; // Content (text or image URL)
 }
 ```
 
@@ -79,14 +82,14 @@ interface IProjectSection {
 
 ```typescript
 interface IAdminUser {
-  email: string;                   // Admin email (required, unique)
-  password: string;                // Hashed password (required)
-  name?: string;                   // Admin name (optional)
-  role: 'admin' | 'super_admin';   // User role (default: admin)
-  isActive: boolean;               // Account status (default: true)
-  lastLogin?: Date;                // Last login timestamp
-  createdAt: Date;                 // Creation timestamp
-  updatedAt: Date;                 // Update timestamp
+  email: string; // Admin email (required, unique)
+  password: string; // Hashed password (required)
+  name?: string; // Admin name (optional)
+  role: "admin" | "super_admin"; // User role (default: admin)
+  isActive: boolean; // Account status (default: true)
+  lastLogin?: Date; // Last login timestamp
+  createdAt: Date; // Creation timestamp
+  updatedAt: Date; // Update timestamp
 }
 ```
 
@@ -97,23 +100,27 @@ interface IAdminUser {
 ### Public Routes (No Authentication Required)
 
 #### Projects
+
 - **GET** `/api/projects` - Get all projects
 - **GET** `/api/projects/search` - Search projects with filters
 - **GET** `/api/projects/:id` - Get specific project by ID
 
 #### Authentication
+
 - **POST** `/api/auth/register` - Register new admin user
 - **POST** `/api/auth/login` - Admin login
 
 ### Protected Routes (Authentication Required)
 
 #### Projects (Admin Only)
+
 - **POST** `/api/projects` - Create new project
 - **PUT** `/api/projects/:id` - Update existing project
 - **DELETE** `/api/projects/:id` - Delete project
 - **PATCH** `/api/projects/:id/status` - Toggle project status
 
 #### User Management (Admin Only)
+
 - **GET** `/api/auth/profile` - Get current user profile
 - **PUT** `/api/auth/profile` - Update user profile
 - **PUT** `/api/auth/change-password` - Change user password
@@ -123,18 +130,21 @@ interface IAdminUser {
 ## 🔐 Authentication & Authorization
 
 ### JWT Implementation
+
 - **Token Generation**: Upon successful login/registration
 - **Token Validation**: Middleware checks on protected routes
 - **Token Expiry**: Configurable (default: 7 days)
 - **Role-Based Access**: Admin and Super Admin roles
 
 ### Security Features
+
 - **Password Hashing**: bcryptjs with salt rounds (12)
 - **Input Validation**: Email format, password strength
 - **Account Status**: Active/inactive user management
 - **Last Login Tracking**: User activity monitoring
 
 ### Authentication Flow
+
 1. User provides email/password
 2. Server validates credentials
 3. JWT token generated and returned
@@ -146,6 +156,7 @@ interface IAdminUser {
 ## 📁 File Upload System
 
 ### Multer Configuration
+
 - **Storage**: Local disk storage
 - **Destination**: `uploads/previews/` directory
 - **File Naming**: Timestamp + random number + extension
@@ -153,12 +164,14 @@ interface IAdminUser {
 - **Size Limit**: 5MB maximum
 
 ### Upload Process
+
 1. Client sends multipart/form-data with `preview` field
 2. Multer processes and saves file
 3. File path stored in database
 4. Static serving at `/uploads/previews/filename`
 
 ### Supported File Types
+
 - JPEG (.jpg, .jpeg)
 - PNG (.png)
 - GIF (.gif)
@@ -169,6 +182,7 @@ interface IAdminUser {
 ## ✅ Validation & Error Handling
 
 ### Input Validation
+
 - **Project Fields**: Required field validation
 - **Email Format**: Regex validation for email addresses
 - **Password Strength**: Minimum 6 characters
@@ -176,12 +190,14 @@ interface IAdminUser {
 - **JSON Fields**: Tags and sections array validation
 
 ### Error Handling
+
 - **Global Error Handler**: Centralized error processing
 - **MongoDB Errors**: Duplicate key, validation errors
 - **JWT Errors**: Token expiration, invalid tokens
 - **File Upload Errors**: Size limits, file type restrictions
 
 ### Error Response Format
+
 ```json
 {
   "message": "Error description",
@@ -194,6 +210,7 @@ interface IAdminUser {
 ## ⚙️ Environment Configuration
 
 ### Required Environment Variables
+
 ```env
 # Server Configuration
 PORT=5002
@@ -210,7 +227,27 @@ JWT_EXPIRES_IN=7d
 UPLOAD_DIR=uploads
 ```
 
+### Cloudinary / Image Upload Settings
+
+- CLOUDINARY_CLOUD_NAME, CLOUDINARY_API_KEY, CLOUDINARY_API_SECRET: required for server-side Cloudinary uploads.
+- CLOUDINARY_FOLDER_NAME: (optional) default folder name used for uploads.
+- CLOUDINARY_UPLOAD_TIMEOUT: optional, milliseconds to wait for Cloudinary upload before timing out (default: 120000 i.e. 2 minutes).
+- Maximum image size: 5MB. Images larger than 5MB will be rejected by the server to protect memory and upload reliability.
+
+Example usage in `.env`:
+
+```env
+# Cloudinary
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-api-key
+CLOUDINARY_API_SECRET=your-api-secret
+CLOUDINARY_FOLDER_NAME=VDS/TEAM
+# Optional: upload timeout in ms (defaults to 120000)
+CLOUDINARY_UPLOAD_TIMEOUT=120000
+```
+
 ### Environment Validation
+
 - Server validates required variables on startup
 - Graceful shutdown if critical variables missing
 - Development vs production configurations
@@ -256,40 +293,41 @@ backend/
 ```javascript
 const handleSubmit = async (e) => {
   e.preventDefault();
-  
+
   const formData = new FormData();
-  
+
   // Required fields
-  formData.append('name', formData.name);
-  formData.append('location', formData.location);
-  formData.append('status', formData.status);
-  formData.append('category', formData.category);
-  formData.append('client', formData.client);
-  formData.append('projectTeam', formData.projectTeam);
-  formData.append('collaborators', formData.collaborators);
-  formData.append('keyDate', formData.keyDate);
-  
+  formData.append("name", formData.name);
+  formData.append("location", formData.location);
+  formData.append("status", formData.status);
+  formData.append("category", formData.category);
+  formData.append("client", formData.client);
+  formData.append("projectTeam", formData.projectTeam);
+  formData.append("collaborators", formData.collaborators);
+  formData.append("keyDate", formData.keyDate);
+
   // Optional fields
-  if (formData.subCategory) formData.append('subCategory', formData.subCategory);
-  if (formData.year) formData.append('year', formData.year);
-  
+  if (formData.subCategory)
+    formData.append("subCategory", formData.subCategory);
+  if (formData.year) formData.append("year", formData.year);
+
   // Arrays as JSON strings
-  formData.append('tags', JSON.stringify(formData.tags));
-  formData.append('sections', JSON.stringify(convertBlocksToSections(blocks)));
-  
+  formData.append("tags", JSON.stringify(formData.tags));
+  formData.append("sections", JSON.stringify(convertBlocksToSections(blocks)));
+
   // Preview image
   if (formData.preview) {
-    formData.append('preview', formData.preview);
+    formData.append("preview", formData.preview);
   }
-  
-  const response = await fetch('http://localhost:5002/api/projects', {
-    method: 'POST',
+
+  const response = await fetch("http://localhost:5002/api/projects", {
+    method: "POST",
     headers: {
-      'Authorization': `Bearer ${token}` // Admin token required
+      Authorization: `Bearer ${token}`, // Admin token required
     },
-    body: formData
+    body: formData,
   });
-  
+
   const result = await response.json();
   // Handle response
 };
@@ -299,19 +337,21 @@ const handleSubmit = async (e) => {
 
 ```javascript
 const fetchProjects = async () => {
-  const response = await fetch('http://localhost:5002/api/projects');
+  const response = await fetch("http://localhost:5002/api/projects");
   const projects = await response.json();
   // Update state with projects
 };
 
 const searchProjects = async (query, filters) => {
   const params = new URLSearchParams();
-  if (query) params.append('q', query);
-  if (filters.category) params.append('category', filters.category);
-  if (filters.status) params.append('status', filters.status);
-  if (filters.year) params.append('year', filters.year);
-  
-  const response = await fetch(`http://localhost:5002/api/projects/search?${params}`);
+  if (query) params.append("q", query);
+  if (filters.category) params.append("category", filters.category);
+  if (filters.status) params.append("status", filters.status);
+  if (filters.year) params.append("year", filters.year);
+
+  const response = await fetch(
+    `http://localhost:5002/api/projects/search?${params}`
+  );
   const projects = await response.json();
   // Update state with filtered projects
 };
@@ -321,31 +361,32 @@ const searchProjects = async (query, filters) => {
 
 ```javascript
 const login = async (email, password) => {
-  const response = await fetch('http://localhost:5002/api/auth/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password })
+  const response = await fetch("http://localhost:5002/api/auth/login", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email, password }),
   });
-  
+
   const { user, token } = await response.json();
-  
+
   // Store token in localStorage or state management
-  localStorage.setItem('adminToken', token);
-  localStorage.setItem('adminUser', JSON.stringify(user));
-  
+  localStorage.setItem("adminToken", token);
+  localStorage.setItem("adminUser", JSON.stringify(user));
+
   return { user, token };
 };
 
 // Include token in protected requests
 const headers = {
-  'Authorization': `Bearer ${localStorage.getItem('adminToken')}`,
-  'Content-Type': 'application/json'
+  Authorization: `Bearer ${localStorage.getItem("adminToken")}`,
+  "Content-Type": "application/json",
 };
 ```
 
 ### 4. Field Mapping Considerations
 
 **Frontend → Backend Field Mapping:**
+
 - `title` → `name`
 - `project_team` → `projectTeam`
 - `description` → Use `sections` array with text blocks
@@ -359,7 +400,7 @@ const projectResponse = {
   ...project.toObject(),
   title: project.name,
   project_team: project.projectTeam,
-  description: project.sections.find(s => s.type === 'text')?.content || ''
+  description: project.sections.find((s) => s.type === "text")?.content || "",
 };
 ```
 
@@ -368,6 +409,7 @@ const projectResponse = {
 ## 🚀 Getting Started
 
 ### 1. Environment Setup
+
 ```bash
 cd backend
 cp .env.example .env
@@ -375,16 +417,19 @@ cp .env.example .env
 ```
 
 ### 2. Install Dependencies
+
 ```bash
 npm install
 ```
 
 ### 3. Run Development Server
+
 ```bash
 npm run dev
 ```
 
 ### 4. Create First Admin User
+
 ```bash
 curl -X POST http://localhost:5002/api/auth/register \
   -H "Content-Type: application/json" \
@@ -396,6 +441,7 @@ curl -X POST http://localhost:5002/api/auth/register \
 ## 📊 API Response Examples
 
 ### Successful Project Creation
+
 ```json
 {
   "_id": "64f8a1b2c3d4e5f6a7b8c9d0",
@@ -423,6 +469,7 @@ curl -X POST http://localhost:5002/api/auth/register \
 ```
 
 ### Authentication Response
+
 ```json
 {
   "message": "Login successful",
@@ -441,12 +488,14 @@ curl -X POST http://localhost:5002/api/auth/register \
 ## 🔧 Development Notes
 
 ### Current Limitations
+
 1. **Content Block Images**: Currently expects external URLs for block images
 2. **File Cleanup**: No automatic cleanup of orphaned uploaded files
 3. **Rate Limiting**: No rate limiting implemented
 4. **Logging**: Basic console logging only
 
 ### Future Enhancements
+
 1. **Image Processing**: Resize/optimize uploaded images
 2. **Cloud Storage**: AWS S3 or Cloudinary integration
 3. **Email Notifications**: Project status change notifications
@@ -459,6 +508,7 @@ curl -X POST http://localhost:5002/api/auth/register \
 ## 🐛 Troubleshooting
 
 ### Common Issues
+
 1. **MongoDB Connection**: Check MONGO_URI format and network access
 2. **File Uploads**: Ensure uploads directory has write permissions
 3. **CORS Errors**: Verify CLIENT_ORIGIN matches frontend URL
@@ -466,6 +516,7 @@ curl -X POST http://localhost:5002/api/auth/register \
 5. **Port Conflicts**: Change PORT if 5002 is already in use
 
 ### Debug Mode
+
 ```bash
 # Enable debug logging
 DEBUG=* npm run dev
@@ -474,4 +525,3 @@ DEBUG=* npm run dev
 ---
 
 This documentation covers the complete backend implementation. The system is production-ready with proper authentication, validation, and error handling. All endpoints are tested and follow RESTful conventions.
-
