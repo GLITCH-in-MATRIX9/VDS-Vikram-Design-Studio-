@@ -4,7 +4,7 @@ import { LuSend } from "react-icons/lu";
 import ReCAPTCHA from "react-google-recaptcha";
 
 // ✅ Load Google reCAPTCHA site key securely from .env
-const SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY; 
+const SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -36,10 +36,10 @@ const Form = () => {
   React.useEffect(() => {
     setIsFilled(
       formData.firstName &&
-        formData.mobileNumber &&
-        formData.emailAddress &&
-        formData.message &&
-        formData.recaptchaToken
+      formData.mobileNumber &&
+      formData.emailAddress &&
+      formData.message &&
+      formData.recaptchaToken
     );
   }, [formData]);
 
@@ -56,7 +56,7 @@ const Form = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const API_ENDPOINT = "/api/contact"; // <-- your backend endpoint
+    const API_ENDPOINT = `${import.meta.env.VITE_API_URL}/api/contact`;
 
     try {
       const response = await fetch(API_ENDPOINT, {
@@ -193,9 +193,8 @@ const Form = () => {
           <button
             type="submit"
             disabled={!isFilled}
-            className={`flex items-center gap-1 justify-center ${
-              isFilled ? "bg-[#474545]" : "bg-[#7E797A] cursor-not-allowed"
-            } font-medium rounded-lg px-4 py-2 uppercase text-white text-xs md:text-sm xl:text-base`}
+            className={`flex items-center gap-1 justify-center ${isFilled ? "bg-[#474545]" : "bg-[#7E797A] cursor-not-allowed"
+              } font-medium rounded-lg px-4 py-2 uppercase text-white text-xs md:text-sm xl:text-base`}
           >
             Send Message
             <LuSend />
