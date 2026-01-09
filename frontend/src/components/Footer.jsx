@@ -58,7 +58,7 @@ const Footer = () => {
 
         {/* Right section: Copyright notice, visible only on large screens */}
         <div className="text-gray-500 text-xs hidden xl:block">
-          Vikram Design Studio © 2025. All rights reserved.
+          Vikram Design Studio © 2026. All rights reserved.
         </div>
       </div>
     </footer>

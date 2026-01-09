@@ -396,7 +396,7 @@ const Navbar = () => {
                   </a>
                 </div>
                 <p className="uppercase text-[8px] text-[#5D5D5D]">
-                  Vikram Design Studio @ 2025. All rights reserved.
+                  Vikram Design Studio @ 2026. All rights reserved.
                 </p>
               </div>
             </div>
