@@ -1,5 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
+/* ---------------- TYPES ---------------- */
+
 export interface IContactEntry {
   id: number;
   city: string;
@@ -9,29 +11,95 @@ export interface IContactEntry {
 }
 
 export interface IContactPage extends Document {
-  page: string;
+  page: "CONTACT";
   contacts: IContactEntry[];
   lastModifiedBy?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-const ContactEntrySchema: Schema = new Schema(
+/* ---------------- CONTACT ENTRY ---------------- */
+
+const ContactEntrySchema = new Schema<IContactEntry>(
   {
-    id: Number,
-    city: String,
-    phone_numbers: [String],
-    address: String,
-    google_maps_iframe_src: String,
+    id: {
+      type: Number,
+      required: true,
+      min: 1,
+    },
+
+    city: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 100,
+    },
+
+    phone_numbers: {
+      type: [String],
+      required: true,
+      validate: {
+        validator: (arr: string[]) =>
+          Array.isArray(arr) &&
+          arr.length > 0 &&
+          arr.every((num) => typeof num === "string" && num.trim().length > 0),
+        message: "At least one valid phone number is required",
+      },
+    },
+
+    address: {
+      type: String,
+      required: true,
+      trim: true,
+      maxlength: 500,
+    },
+
+    google_maps_iframe_src: {
+      type: String,
+      trim: true,
+      maxlength: 2000,
+    },
   },
-  { _id: false }
+  {
+    _id: false, 
+  }
 );
 
-const ContactPageSchema: Schema = new Schema(
+/* ---------------- CONTACT PAGE ---------------- */
+
+const ContactPageSchema = new Schema<IContactPage>(
   {
-    page: { type: String, default: "CONTACT" },
-    contacts: { type: [ContactEntrySchema], default: [] },
-    lastModifiedBy: String,
+    page: {
+      type: String,
+      default: "CONTACT",
+      immutable: true, 
+      index: true,
+    },
+
+    contacts: {
+      type: [ContactEntrySchema],
+      default: [],
+    },
+
+    lastModifiedBy: {
+      type: String,
+      trim: true,
+      maxlength: 100,
+    },
   },
-  { timestamps: true }
+  {
+    timestamps: true, 
+    versionKey: false,
+  }
 );
 
-export default mongoose.model<IContactPage>("ContactPage", ContactPageSchema);
+/* ---------------- SINGLETON SAFETY ---------------- */
+// Ensure only ONE ContactPage document exists
+ContactPageSchema.index({ page: 1 }, { unique: true });
+
+/* ---------------- EXPORT ---------------- */
+
+export default mongoose.model<IContactPage>(
+  "ContactPage",
+  ContactPageSchema
+);

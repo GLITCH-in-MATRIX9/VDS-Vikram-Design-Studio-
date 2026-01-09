@@ -1,181 +1,95 @@
-import { Request, Response } from 'express';
-import { sendEmail } from '../utils/emailService';
-import { RecaptchaRequest } from '../middlewares/recaptcha.middleware';
+import { Response } from "express";
+import { sendEmail } from "../services/email.service";
+import { RecaptchaRequest } from "../middlewares/recaptcha.middleware";
+import { config } from "../config/env";
 
-export const sendContactEmail = async (req: RecaptchaRequest, res: Response) => {
+export const sendContactEmail = async (
+  req: RecaptchaRequest,
+  res: Response
+) => {
   try {
-    const { firstName, lastName, company, mobileNumber, emailAddress, message, recaptchaToken } = req.body;
+    const {
+      firstName,
+      lastName,
+      company,
+      mobileNumber,
+      emailAddress,
+      message,
+    } = req.body;
 
-    // Check if reCAPTCHA was verified (middleware should handle this, but double-check)
-    if (!req.recaptchaValid && process.env.NODE_ENV !== 'development') {
+    if (!req.recaptchaValid && process.env.NODE_ENV !== "development") {
       return res.status(400).json({
-        message: 'reCAPTCHA verification is required',
-        success: false
+        success: false,
+        message: "reCAPTCHA verification required",
       });
     }
 
-    // Comprehensive validation for frontend form fields
-    if (!firstName || !emailAddress || !message || !mobileNumber) {
-      return res.status(400).json({ 
-        message: 'All required fields are missing: firstName, emailAddress, mobileNumber, message',
-        success: false
+    if (!firstName || !emailAddress || !mobileNumber || !message) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing required fields",
       });
     }
 
-    // Email format validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(emailAddress)) {
       return res.status(400).json({
-        message: 'Please provide a valid email address',
-        success: false
+        success: false,
+        message: "Invalid email address",
       });
     }
 
-    // Input sanitization
-    const sanitizedFirstName = firstName.trim().substring(0, 100);
-    const sanitizedLastName = lastName ? lastName.trim().substring(0, 100) : '';
-    const sanitizedCompany = company ? company.trim().substring(0, 100) : '';
-    const sanitizedMobileNumber = mobileNumber.trim().substring(0, 20);
     const sanitizedEmail = emailAddress.trim().toLowerCase();
-    const sanitizedMessage = message.trim().substring(0, 2000);
-    
-    // Create full name
-    const fullName = sanitizedLastName ? `${sanitizedFirstName} ${sanitizedLastName}` : sanitizedFirstName;
+    const fullName = `${firstName.trim()} ${lastName?.trim() || ""}`.trim();
 
-    if (sanitizedMessage.length < 10) {
-      return res.status(400).json({
-        message: 'Message must be at least 10 characters long',
-        success: false
-      });
-    }
+    /* -------- ADMIN EMAIL -------- */
 
-    // Create a professional HTML email template for contact form
-    const emailHtml = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="UTF-8">
-        <title>New Contact Form Submission - VDS</title>
-        <style>
-          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background-color: #2c3e50; color: white; padding: 30px 20px; text-align: center; border-radius: 8px 8px 0 0; }
-          .content { padding: 30px; background-color: #fff; border: 1px solid #e0e0e0; border-radius: 0 0 8px 8px; }
-          .field { margin-bottom: 20px; padding: 15px; background-color: #f8f9fa; border-radius: 5px; }
-          .label { font-weight: 600; color: #2c3e50; font-size: 14px; text-transform: uppercase; letter-spacing: 0.5px; }
-          .value { margin-top: 8px; font-size: 16px; }
-          .timestamp { color: #666; font-size: 12px; text-align: right; margin-top: 20px; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h2>New Contact Form Submission</h2>
-            <p>Vikram Design Studio</p>
-          </div>
-          <div class="content">
-            <div class="field">
-              <div class="label">Name:</div>
-              <div class="value">${fullName}</div>
-            </div>
-            <div class="field">
-              <div class="label">Email:</div>
-              <div class="value">${sanitizedEmail}</div>
-            </div>
-            <div class="field">
-              <div class="label">Mobile Number:</div>
-              <div class="value">${sanitizedMobileNumber}</div>
-            </div>
-            ${sanitizedCompany ? `
-            <div class="field">
-              <div class="label">Company:</div>
-              <div class="value">${sanitizedCompany}</div>
-            </div>
-            ` : ''}
-            <div class="field">
-              <div class="label">Message:</div>
-              <div class="value">${sanitizedMessage.replace(/\n/g, '<br>')}</div>
-            </div>
-            <div class="timestamp">
-              Received: ${new Date().toLocaleString()}
-            </div>
-          </div>
-        </div>
-      </body>
-      </html>
+    const adminEmailHtml = `
+      <h2>📩 New Contact Form Submission</h2>
+      <p><strong>Name:</strong> ${fullName}</p>
+      <p><strong>Email:</strong> <a href="mailto:${sanitizedEmail}">${sanitizedEmail}</a></p>
+      <p><strong>Mobile:</strong> ${mobileNumber}</p>
+      ${company ? `<p><strong>Company:</strong> ${company}</p>` : ""}
+      <hr />
+      <p>${message.replace(/\n/g, "<br>")}</p>
+      <small>Received on ${new Date().toLocaleString()}</small>
     `;
 
-    // Send email to admin (info@vikramdesignstudio.com)
     await sendEmail({
-      to: 'info@vikramdesignstudio.com', // Send to admin
-      subject: `New Contact Form Submission from ${fullName}`,
-      html: emailHtml,
+      to: config.email.admin,
+      subject: `📩 New Contact – ${fullName}`,
+      html: adminEmailHtml,
+      replyTo: sanitizedEmail,
     });
 
-    // Send confirmation email to user
+
+    await new Promise(resolve => setTimeout(resolve, 1500));
+
+    /* -------- USER CONFIRMATION -------- */
+
     const confirmationHtml = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="UTF-8">
-        <title>Thank You for Contacting VDS</title>
-        <style>
-          body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
-          .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-          .header { background-color: #2c3e50; color: white; padding: 30px 20px; text-align: center; border-radius: 8px 8px 0 0; }
-          .content { padding: 30px; background-color: #fff; border: 1px solid #e0e0e0; border-radius: 0 0 8px 8px; }
-          .message-box { background-color: #f8f9fa; padding: 20px; border-left: 4px solid #2c3e50; margin: 20px 0; border-radius: 0 5px 5px 0; }
-          .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #666; }
-        </style>
-      </head>
-      <body>
-        <div class="container">
-          <div class="header">
-            <h2>Thank You for Contacting Us!</h2>
-            <p>Vikram Design Studio</p>
-          </div>
-          <div class="content">
-            <p>Hi ${fullName},</p>
-            <p>Thank you for reaching out to us. We have received your message and will get back to you as soon as possible.</p>
-            <p><strong>Your message:</strong></p>
-            <div class="message-box">
-              ${sanitizedMessage.replace(/\n/g, '<br>')}
-            </div>
-            <p>We typically respond within 24-48 hours during business days.</p>
-            <div class="footer">
-              <p>Best regards,<br><strong>The VDS Team</strong></p>
-              <p style="font-size: 12px; margin-top: 15px;">
-                This is an automated response. Please do not reply to this email.
-              </p>
-            </div>
-          </div>
-        </div>
-      </body>
-      </html>
+      <p>Hi ${fullName},</p>
+      <p>Thank you for contacting <strong>Vikram Design Studio</strong>.</p>
+      <p>We have received your message and will get back to you shortly.</p>
+      <blockquote>${message.replace(/\n/g, "<br>")}</blockquote>
+      <p>Warm regards,<br/>VDS Team</p>
     `;
 
     await sendEmail({
       to: sanitizedEmail,
-      subject: 'Thank you for contacting VDS - We\'ll be in touch soon!',
+      subject: "Thank you for contacting Vikram Design Studio",
       html: confirmationHtml,
     });
 
-    res.json({ 
-      message: 'Contact form submitted successfully. We will get back to you soon!',
+    return res.json({
       success: true,
-      timestamp: new Date().toISOString()
+      message: "Contact form submitted successfully",
     });
-
-  } catch (error: any) {
-    console.error('Contact email error:', error);
-    
-    // Don't expose internal error details in production
-    const isProduction = process.env.NODE_ENV === 'production';
-    
-    res.status(500).json({ 
-      message: 'Failed to send contact email. Please try again later.',
+  } catch (err: any) {
+    console.error("❌ Contact email error:", err);
+    return res.status(500).json({
       success: false,
-      ...(isProduction ? {} : { error: error.message })
+      message: "Something went wrong",
     });
   }
 };
