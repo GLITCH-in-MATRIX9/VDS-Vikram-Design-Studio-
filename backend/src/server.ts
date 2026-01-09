@@ -12,6 +12,7 @@ import adminRoutes from "./routes/admin.routes";
 import hiringRoutes from "./routes/hiring.routes";
 import aboutRoutes from "./routes/about.routes";
 import contactContentRoutes from "./routes/contactContent.routes";
+import teamRoutes from "./routes/team.routes";
 
 import { errorHandler } from "./middlewares/error.middleware";
 import { generalRateLimit } from "./middlewares/rateLimit.middleware";
@@ -66,7 +67,6 @@ app.use(
     limit: "30mb",
   })
 );
-
 app.use(generalRateLimit);
 
 // Upload directory
@@ -93,6 +93,7 @@ app.use("/api/hiring", hiringRoutes);
 app.use("/api/tags", tagRoutes);
 app.use("/api/about", aboutRoutes);
 app.use("/api/content", contactContentRoutes);
+app.use("/api/content", teamRoutes);
 
 // Error & 404 handlers
 app.use(errorHandler);

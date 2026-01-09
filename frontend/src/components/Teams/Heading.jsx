@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import teamApi from "../../services/teamapi";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -17,6 +18,25 @@ const itemVariants = {
 };
 
 const Heading = () => {
+  const [heading, setHeading] = useState({
+    title: "",
+    subtitle: "",
+    paragraphs: [],
+    image: "",
+  });
+
+  useEffect(() => {
+    const load = async () => {
+      try {
+        const data = await teamApi.getTeamPage();
+        setHeading(data.heading || { paragraphs: [] });
+      } catch (err) {
+        console.error("Failed to load heading:", err);
+      }
+    };
+    load();
+  }, []);
+
   return (
     <motion.div
       className="grid grid-cols-1 xl:grid-cols-3 gap-20 text-[#474545] px-4 md:px-8 xl:px-20 py-8 md:py-12 xl:py-20"
@@ -31,49 +51,29 @@ const Heading = () => {
           className="font-sora text-[#3E3C3C] font-semibold text-[40px] md:text-[56px] xl:text-[72px] leading-[48px] md:leading-[64px] xl:leading-[80px] tracking-[-0.01em] uppercase"
           variants={itemVariants}
         >
-          TEAM
+          {heading.title || ""}
         </motion.h1>
 
-        {/* Paragraphs */}
-        <motion.p
-          className="font-inter font-normal text-xs md:text-sm xl:text-base leading-[1.4em] tracking-[-0.01em]"
-          variants={itemVariants}
-        >
-          Vikram Design Studio is led by a multidisciplinary team of architects,
-          designers, visualizers, and technical experts working across diverse
-          project scales. With our roots in Guwahati and a growing studio in
-          Kolkata, we function as a collaborative, multi-office practice grounded in
-          shared values and a design-first approach.
-        </motion.p>
-        <motion.p
-          className="font-inter font-normal text-xs md:text-sm xl:text-base leading-[1.4em] tracking-[-0.01em]"
-          variants={itemVariants}
-        >
-          While Guwahati remains our operational core, major design decisions
-          are currently driven from our Kolkata studio, which will expand into a
-          larger space next year. This dual presence helps us stay regionally
-          rooted while scaling outwardly.
-        </motion.p>
-        <motion.p
-          className="font-inter font-normal text-xs md:text-sm xl:text-base leading-[1.4em] tracking-[-0.01em]"
-          variants={itemVariants}
-        >
-          Our studio values clarity, collaboration, and curiosity. We believe
-          good design emerges from open dialogue, contextual awareness, and care
-          for detail. Every member of our team contributes to a collective
-          pursuit of quality—across architecture, interiors, landscape, and
-          beyond.
-        </motion.p>
+        {/* Paragraphs from backend */}
+        {Array.isArray(heading.paragraphs) &&
+          heading.paragraphs.map((p, idx) => (
+            <motion.p
+              key={p.id || idx}
+              className="font-inter font-normal text-xs md:text-sm xl:text-base leading-[1.4em] tracking-[-0.01em]"
+              variants={itemVariants}
+            >
+              {p.text}
+            </motion.p>
+          ))}
       </div>
 
-      {/* Right Content */}
+      {/* Right Content: subtitle */}
       <div className="flex items-end justify-end text-right">
         <motion.p
           className="font-sora font-semibold text-[20px] leading-[28px] tracking-[0] text-[#7E797A]"
           variants={itemVariants}
         >
-          As we grow across geographies, we remain committed to designing with
-          humility, precision, and purpose.
+          {heading.subtitle || ""}
         </motion.p>
       </div>
     </motion.div>
