@@ -32,7 +32,7 @@ const Form = () => {
 
   const [isFilled, setIsFilled] = React.useState(false);
 
-  // ✅ Enable submit only when required fields + captcha are filled
+  // Enable submit only when required fields + captcha are filled
   React.useEffect(() => {
     setIsFilled(
       formData.firstName &&
@@ -48,7 +48,7 @@ const Form = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  // ✅ Captures the token returned by Google reCAPTCHA
+  // Captures the token returned by Google reCAPTCHA
   const handleRecaptchaChange = (token) => {
     setFormData((prev) => ({ ...prev, recaptchaToken: token }));
   };
@@ -56,7 +56,7 @@ const Form = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const API_ENDPOINT = `${import.meta.env.VITE_API_URL}/api/contact`;
+    const API_ENDPOINT = `${import.meta.env.VITE_API_URL}/contact`;
 
     try {
       const response = await fetch(API_ENDPOINT, {
