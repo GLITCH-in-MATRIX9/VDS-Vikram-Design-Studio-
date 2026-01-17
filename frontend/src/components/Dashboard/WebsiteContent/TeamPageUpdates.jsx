@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import { motion, AnimatePresence } from "framer-motion";
 import { Pencil, Trash2, Plus, X, ChevronDown, ChevronUp } from "lucide-react";
+import { FaGripVertical } from "react-icons/fa";
 
 const TeamPageUpdates = () => {
   const [team, setTeam] = useState([
@@ -62,8 +64,7 @@ const TeamPageUpdates = () => {
   const [headingSaving, setHeadingSaving] = useState(false);
   const [membersSaving, setMembersSaving] = useState(false);
   const [marqueeSaving, setMarqueeSaving] = useState(false);
-  const [draggingId, setDraggingId] = useState(null);
-  const [dragOverId, setDragOverId] = useState(null);
+  // DnD handled by @hello-pangea/dnd; no manual drag state required
 
   const toggleExpand = (id) => {
     setExpandedId(expandedId === id ? null : id);
@@ -149,11 +150,12 @@ const TeamPageUpdates = () => {
     setHeadingSaving(false);
   };
 
-  const saveMembers = async () => {
+  const saveMembers = async (membersParam) => {
     setMembersSaving(true);
+    const payload = membersParam || team;
     try {
       const teamApi = (await import("../../../services/teamapi")).default;
-      await teamApi.updateMembers(team, "admin1");
+      await teamApi.updateMembers(payload, "admin1");
       setMembersStatus({ message: "Members saved", error: "" });
     } catch (err) {
       console.error(err);
@@ -330,46 +332,21 @@ const TeamPageUpdates = () => {
   };
 
   /* ---------------- DRAG & DROP HELPERS ---------------- */
-  const handleDragStart = (e, id) => {
-    e.dataTransfer.effectAllowed = "move";
-    e.dataTransfer.setData("text/plain", String(id));
-    setDraggingId(id);
-  };
+  // Reorder team using hello-pangea/dnd DragDropContext onDragEnd
+  const handleDragEnd = (result) => {
+    const { source, destination } = result;
+    if (!destination) return; // dropped outside
+    if (source.index === destination.index) return;
 
-  const handleDragOver = (e, id) => {
-    e.preventDefault(); // allow drop
-    if (dragOverId !== id) setDragOverId(id);
-  };
-
-  const handleDrop = (e, targetId) => {
-    e.preventDefault();
-    const draggedId = Number(e.dataTransfer.getData("text/plain"));
-    if (!draggedId) {
-      setDraggingId(null);
-      setDragOverId(null);
-      return;
-    }
-
-    if (draggedId === targetId) {
-      setDraggingId(null);
-      setDragOverId(null);
-      return;
-    }
-
+    // compute new order synchronously so we can save it immediately
     setTeam((prev) => {
-      const copy = [...prev];
-      const fromIndex = copy.findIndex((x) => x.id === draggedId);
-      const toIndex = copy.findIndex((x) => x.id === targetId);
-      if (fromIndex === -1 || toIndex === -1) return prev;
-
-      const [moved] = copy.splice(fromIndex, 1);
-      // insert before target index
-      copy.splice(toIndex, 0, moved);
+      const copy = Array.from(prev);
+      const [removed] = copy.splice(source.index, 1);
+      copy.splice(destination.index, 0, removed);
+      // trigger autosave
+      saveMembers(copy);
       return copy;
     });
-
-    setDraggingId(null);
-    setDragOverId(null);
   };
 
   return (
@@ -569,212 +546,244 @@ const TeamPageUpdates = () => {
                 "Save Members"
               )}
             </button>
-            <div className="pt-2">
-              {membersStatus.message && (
-                <div className="text-sm text-green-600">
-                  {membersStatus.message}
-                </div>
-              )}
-              {membersStatus.error && (
-                <div className="text-sm text-red-600">
-                  {membersStatus.error}
-                </div>
-              )}
+            <div className="pt-2 min-h-[1.25rem]">
+              <div aria-live="polite">
+                {membersStatus.message ? (
+                  <div className="text-sm text-green-600">
+                    {membersStatus.message}
+                  </div>
+                ) : membersStatus.error ? (
+                  <div className="text-sm text-red-600">
+                    {membersStatus.error}
+                  </div>
+                ) : (
+                  <div className="text-sm invisible">&nbsp;</div>
+                )}
+              </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* Team List */}
+      {/* Team List (DnD via @hello-pangea/dnd) */}
       <div className="space-y-3">
-        <AnimatePresence>
-          {team.map((member) => (
-            <motion.div
-              key={member.id}
-              initial={{ opacity: 0, y: -6 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 6 }}
-              className={`bg-white border rounded p-4 ${
-                dragOverId === member.id
-                  ? "ring-2 ring-offset-2 ring-blue-300"
-                  : ""
-              } ${draggingId === member.id ? "opacity-60" : ""}`}
-              draggable
-              onDragStart={(e) => handleDragStart(e, member.id)}
-              onDragOver={(e) => handleDragOver(e, member.id)}
-              onDrop={(e) => handleDrop(e, member.id)}
-            >
-              <button
-                onClick={() => toggleExpand(member.id)}
-                className="flex justify-between items-center w-full text-left"
-              >
-                <div className="flex items-center gap-4">
-                  <span className="font-semibold text-[#3E3C3C] text-sm">
-                    {member.name}
-                  </span>
-                  <span className="text-sm text-[#6D6D6D]">
-                    {member.position}
-                  </span>
-                </div>
-                {expandedId === member.id ? (
-                  <ChevronUp size={18} />
-                ) : (
-                  <ChevronDown size={18} />
-                )}
-              </button>
-
-              <AnimatePresence>
-                {expandedId === member.id && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: "auto" }}
-                    exit={{ opacity: 0, height: 0 }}
-                    transition={{ duration: 0.3 }}
-                    className="mt-3 space-y-3"
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Droppable droppableId="team-sections">
+            {(provided) => (
+              <div {...provided.droppableProps} ref={provided.innerRef}>
+                {team.map((member, index) => (
+                  <Draggable
+                    key={member.id}
+                    draggableId={String(member.id)}
+                    index={index}
                   >
-                    {/* show position only in header; description and photo only when featured */}
-                    <div>
-                      <div className="mt-2">
-                        <label className="block text-sm text-[#6D6D6D]">
-                          Description
-                        </label>
-                        {member.featured ? (
-                          <textarea
-                            value={member.description || ""}
-                            onChange={(e) =>
-                              setTeam((prev) =>
-                                prev.map((m) =>
-                                  m.id === member.id
-                                    ? { ...m, description: e.target.value }
-                                    : m
-                                )
-                              )
-                            }
-                            className="border p-2 w-full text-sm h-28 mt-1"
-                          />
-                        ) : (
-                          <p className="text-sm text-[#6D6D6D] mt-1">
-                            Not featured
-                          </p>
-                        )}
-                      </div>
-
-                      {member.featured && (
-                        <div className="mt-2 flex items-start gap-4">
-                          <label
-                            className={`inline-block ${
-                              imagePreviews[`member_${member.id}`] ||
-                              member.photo
-                                ? "opacity-40 pointer-events-none"
-                                : ""
-                            }`}
-                          >
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        className={`bg-white border rounded p-4 ${
+                          snapshot.isDragging ? "opacity-60" : ""
+                        }`}
+                      >
+                        <div className="flex justify-between items-center w-full">
+                          <div className="flex items-center gap-4">
                             <span
-                              className={`bg-gray-200 px-3 py-1 rounded text-sm ${
-                                imagePreviews[`member_${member.id}`] ||
-                                member.photo
-                                  ? "cursor-not-allowed"
-                                  : "cursor-pointer"
-                              }`}
+                              {...provided.dragHandleProps}
+                              className="cursor-grab p-1 text-gray-600"
+                              title="Drag to reorder"
+                              aria-label="Drag handle"
                             >
-                              Change Photo
+                              <FaGripVertical />
                             </span>
-                            <input
-                              type="file"
-                              accept="image/*"
-                              className="hidden"
-                              onChange={(e) =>
-                                handleMemberPhoto(
-                                  member.id,
-                                  e.target.files?.[0]
-                                )
-                              }
-                              disabled={
-                                !!(
-                                  imagePreviews[`member_${member.id}`] ||
-                                  member.photo
-                                )
-                              }
-                            />
-                          </label>
-
-                          {imagePreviews[`member_${member.id}`] ||
-                          member.photo ? (
-                            <div className="relative">
-                              <img
-                                src={
-                                  imagePreviews[`member_${member.id}`] ||
-                                  member.photo
-                                }
-                                alt="member"
-                                className="h-28 w-28 object-cover rounded mt-2"
-                              />
-                              <button
-                                onClick={() => {
-                                  // remove member image
-                                  setTeam((prev) =>
-                                    prev.map((m) =>
-                                      m.id === member.id
-                                        ? { ...m, photo: "" }
-                                        : m
-                                    )
-                                  );
-                                  setImagePreviews((p) => {
-                                    const copy = { ...p };
-                                    delete copy[`member_${member.id}`];
-                                    return copy;
-                                  });
-                                }}
-                                className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow"
-                                title="Remove image"
-                              >
-                                <X size={14} />
-                              </button>
+                            <div>
+                              <span className="font-semibold text-[#3E3C3C] text-sm">
+                                {member.name}
+                              </span>
+                              <div className="text-sm text-[#6D6D6D]">
+                                {member.position}
+                              </div>
                             </div>
-                          ) : null}
-
-                          <div className="mt-2">
-                            <label className="inline-flex items-center gap-2 text-sm">
-                              <input
-                                type="checkbox"
-                                checked={!!member.featured}
-                                onChange={(e) =>
-                                  setTeam((prev) =>
-                                    prev.map((m) =>
-                                      m.id === member.id
-                                        ? { ...m, featured: e.target.checked }
-                                        : m
-                                    )
-                                  )
-                                }
-                              />
-                              <span>Featured</span>
-                            </label>
                           </div>
+                          <button
+                            onClick={() => toggleExpand(member.id)}
+                            className="ml-2"
+                          >
+                            {expandedId === member.id ? (
+                              <ChevronUp size={18} />
+                            ) : (
+                              <ChevronDown size={18} />
+                            )}
+                          </button>
                         </div>
-                      )}
-                    </div>
 
-                    <div className="flex gap-3">
-                      <button
-                        onClick={() => handleEdit(member)}
-                        className="flex items-center gap-1 px-3 py-1 bg-gray-200 rounded text-sm"
-                      >
-                        <Pencil size={14} /> Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(member.id)}
-                        className="flex items-center gap-1 px-3 py-1 bg-gray-200 rounded text-sm"
-                      >
-                        <Trash2 size={14} /> Delete
-                      </button>
-                    </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
-            </motion.div>
-          ))}
-        </AnimatePresence>
+                        <AnimatePresence>
+                          {expandedId === member.id && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.3 }}
+                              className="mt-3 space-y-3"
+                            >
+                              <div>
+                                <div className="mt-2">
+                                  <label className="block text-sm text-[#6D6D6D]">
+                                    Description
+                                  </label>
+                                  {member.featured ? (
+                                    <textarea
+                                      value={member.description || ""}
+                                      onChange={(e) =>
+                                        setTeam((prev) =>
+                                          prev.map((m) =>
+                                            m.id === member.id
+                                              ? {
+                                                  ...m,
+                                                  description: e.target.value,
+                                                }
+                                              : m
+                                          )
+                                        )
+                                      }
+                                      className="border p-2 w-full text-sm h-28 mt-1"
+                                    />
+                                  ) : (
+                                    <p className="text-sm text-[#6D6D6D] mt-1">
+                                      Not featured
+                                    </p>
+                                  )}
+                                </div>
+
+                                {member.featured && (
+                                  <div className="mt-2 flex items-start gap-4">
+                                    <label
+                                      className={`inline-block ${
+                                        imagePreviews[`member_${member.id}`] ||
+                                        member.photo
+                                          ? "opacity-40 pointer-events-none"
+                                          : ""
+                                      }`}
+                                    >
+                                      <span
+                                        className={`bg-gray-200 px-3 py-1 rounded text-sm ${
+                                          imagePreviews[
+                                            `member_${member.id}`
+                                          ] || member.photo
+                                            ? "cursor-not-allowed"
+                                            : "cursor-pointer"
+                                        }`}
+                                      >
+                                        Change Photo
+                                      </span>
+                                      <input
+                                        type="file"
+                                        accept="image/*"
+                                        className="hidden"
+                                        onChange={(e) =>
+                                          handleMemberPhoto(
+                                            member.id,
+                                            e.target.files?.[0]
+                                          )
+                                        }
+                                        disabled={
+                                          !!(
+                                            imagePreviews[
+                                              `member_${member.id}`
+                                            ] || member.photo
+                                          )
+                                        }
+                                      />
+                                    </label>
+
+                                    {imagePreviews[`member_${member.id}`] ||
+                                    member.photo ? (
+                                      <div className="relative">
+                                        <img
+                                          src={
+                                            imagePreviews[
+                                              `member_${member.id}`
+                                            ] || member.photo
+                                          }
+                                          alt="member"
+                                          className="h-28 w-28 object-cover rounded mt-2"
+                                        />
+                                        <button
+                                          onClick={() => {
+                                            setTeam((prev) =>
+                                              prev.map((m) =>
+                                                m.id === member.id
+                                                  ? { ...m, photo: "" }
+                                                  : m
+                                              )
+                                            );
+                                            setImagePreviews((p) => {
+                                              const copy = { ...p };
+                                              delete copy[
+                                                `member_${member.id}`
+                                              ];
+                                              return copy;
+                                            });
+                                          }}
+                                          className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow"
+                                          title="Remove image"
+                                        >
+                                          <X size={14} />
+                                        </button>
+                                      </div>
+                                    ) : null}
+
+                                    <div className="mt-2">
+                                      <label className="inline-flex items-center gap-2 text-sm">
+                                        <input
+                                          type="checkbox"
+                                          checked={!!member.featured}
+                                          onChange={(e) =>
+                                            setTeam((prev) =>
+                                              prev.map((m) =>
+                                                m.id === member.id
+                                                  ? {
+                                                      ...m,
+                                                      featured:
+                                                        e.target.checked,
+                                                    }
+                                                  : m
+                                              )
+                                            )
+                                          }
+                                        />
+                                        <span>Featured</span>
+                                      </label>
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+
+                              <div className="flex gap-3">
+                                <button
+                                  onClick={() => handleEdit(member)}
+                                  className="flex items-center gap-1 px-3 py-1 bg-gray-200 rounded text-sm"
+                                >
+                                  <Pencil size={14} /> Edit
+                                </button>
+                                <button
+                                  onClick={() => handleDelete(member.id)}
+                                  className="flex items-center gap-1 px-3 py-1 bg-gray-200 rounded text-sm"
+                                >
+                                  <Trash2 size={14} /> Delete
+                                </button>
+                              </div>
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
       </div>
 
       {/* Team Images */}
@@ -875,17 +884,20 @@ const TeamPageUpdates = () => {
                 "Save Content"
               )}
             </button>
-            <div className="pt-2">
-              {headingStatus.message && (
-                <div className="text-sm text-green-600">
-                  {headingStatus.message}
-                </div>
-              )}
-              {headingStatus.error && (
-                <div className="text-sm text-red-600">
-                  {headingStatus.error}
-                </div>
-              )}
+            <div className="pt-2 min-h-[1.25rem]">
+              <div aria-live="polite">
+                {headingStatus.message ? (
+                  <div className="text-sm text-green-600">
+                    {headingStatus.message}
+                  </div>
+                ) : headingStatus.error ? (
+                  <div className="text-sm text-red-600">
+                    {headingStatus.error}
+                  </div>
+                ) : (
+                  <div className="text-sm invisible">&nbsp;</div>
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -962,15 +974,18 @@ const TeamPageUpdates = () => {
             )}
           </button>
         </div>
-        <div className="pt-2">
-          {marqueeStatus.message && (
-            <div className="text-sm text-green-600">
-              {marqueeStatus.message}
-            </div>
-          )}
-          {marqueeStatus.error && (
-            <div className="text-sm text-red-600">{marqueeStatus.error}</div>
-          )}
+        <div className="pt-2 min-h-[1.25rem]">
+          <div aria-live="polite">
+            {marqueeStatus.message ? (
+              <div className="text-sm text-green-600">
+                {marqueeStatus.message}
+              </div>
+            ) : marqueeStatus.error ? (
+              <div className="text-sm text-red-600">{marqueeStatus.error}</div>
+            ) : (
+              <div className="text-sm invisible">&nbsp;</div>
+            )}
+          </div>
         </div>
       </div>
     </div>
