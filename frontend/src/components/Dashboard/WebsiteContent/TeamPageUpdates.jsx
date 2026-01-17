@@ -58,6 +58,10 @@ const TeamPageUpdates = () => {
     message: "",
     error: "",
   });
+  // loading flags for save actions
+  const [headingSaving, setHeadingSaving] = useState(false);
+  const [membersSaving, setMembersSaving] = useState(false);
+  const [marqueeSaving, setMarqueeSaving] = useState(false);
   const [draggingId, setDraggingId] = useState(null);
   const [dragOverId, setDragOverId] = useState(null);
 
@@ -133,6 +137,7 @@ const TeamPageUpdates = () => {
 
   /* ---------------- SAVE ACTIONS (API) ---------------- */
   const saveHeading = async () => {
+    setHeadingSaving(true);
     try {
       const teamApi = (await import("../../../services/teamapi")).default;
       await teamApi.updateHeading(heading, "admin1");
@@ -141,9 +146,11 @@ const TeamPageUpdates = () => {
       console.error(err);
       setHeadingStatus({ message: "", error: "Failed to save heading" });
     }
+    setHeadingSaving(false);
   };
 
   const saveMembers = async () => {
+    setMembersSaving(true);
     try {
       const teamApi = (await import("../../../services/teamapi")).default;
       await teamApi.updateMembers(team, "admin1");
@@ -152,9 +159,11 @@ const TeamPageUpdates = () => {
       console.error(err);
       setMembersStatus({ message: "", error: "Failed to save members" });
     }
+    setMembersSaving(false);
   };
 
   const saveMarquee = async () => {
+    setMarqueeSaving(true);
     try {
       const teamApi = (await import("../../../services/teamapi")).default;
       await teamApi.updateMarquee(marquee, "admin1");
@@ -163,6 +172,7 @@ const TeamPageUpdates = () => {
       console.error(err);
       setMarqueeStatus({ message: "", error: "Failed to save marquee images" });
     }
+    setMarqueeSaving(false);
   };
 
   /* Auto-clear status messages after 3s */
@@ -530,9 +540,34 @@ const TeamPageUpdates = () => {
           <div className="pt-3">
             <button
               onClick={saveMembers}
-              className="px-4 py-2 bg-black text-white rounded text-sm"
+              disabled={membersSaving}
+              className={`px-4 py-2 bg-black text-white rounded text-sm ${
+                membersSaving ? "opacity-60 cursor-not-allowed" : ""
+              }`}
             >
-              Save Members
+              {membersSaving ? (
+                <span className="flex items-center gap-2">
+                  <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24">
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                      fill="none"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                  Saving...
+                </span>
+              ) : (
+                "Save Members"
+              )}
             </button>
             <div className="pt-2">
               {membersStatus.message && (
@@ -811,9 +846,34 @@ const TeamPageUpdates = () => {
           <div className="pt-3">
             <button
               onClick={saveHeading}
-              className="px-4 py-2 bg-[#3E3C3C] text-white rounded text-sm"
+              disabled={headingSaving}
+              className={`px-4 py-2 bg-[#3E3C3C] text-white rounded text-sm ${
+                headingSaving ? "opacity-60 cursor-not-allowed" : ""
+              }`}
             >
-              Save Content
+              {headingSaving ? (
+                <span className="flex items-center gap-2">
+                  <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24">
+                    <circle
+                      className="opacity-25"
+                      cx="12"
+                      cy="12"
+                      r="10"
+                      stroke="currentColor"
+                      strokeWidth="4"
+                      fill="none"
+                    ></circle>
+                    <path
+                      className="opacity-75"
+                      fill="currentColor"
+                      d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                    ></path>
+                  </svg>
+                  Saving...
+                </span>
+              ) : (
+                "Save Content"
+              )}
             </button>
             <div className="pt-2">
               {headingStatus.message && (
@@ -872,9 +932,34 @@ const TeamPageUpdates = () => {
         <div className="flex gap-3 pt-3">
           <button
             onClick={saveMarquee}
-            className="px-4 py-2 bg-gray-700 text-white rounded text-sm"
+            disabled={marqueeSaving}
+            className={`px-4 py-2 bg-gray-700 text-white rounded text-sm ${
+              marqueeSaving ? "opacity-60 cursor-not-allowed" : ""
+            }`}
           >
-            Save Marquee
+            {marqueeSaving ? (
+              <span className="flex items-center gap-2">
+                <svg className="w-4 h-4 animate-spin" viewBox="0 0 24 24">
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                    fill="none"
+                  ></circle>
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                  ></path>
+                </svg>
+                Saving...
+              </span>
+            ) : (
+              "Save Marquee"
+            )}
           </button>
         </div>
         <div className="pt-2">
