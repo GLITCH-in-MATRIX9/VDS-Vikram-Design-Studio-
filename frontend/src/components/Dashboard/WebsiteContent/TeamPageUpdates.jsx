@@ -239,6 +239,9 @@ const TeamPageUpdates = () => {
     setMarquee((prev) => [...prev, ...converted]);
   };
 
+  // ref to the add/edit form container so we can scroll to it when editing
+  const formRef = React.useRef(null);
+
   const handleEdit = (member) => {
     setEditingId(member.id);
     setNewMember({
@@ -249,6 +252,65 @@ const TeamPageUpdates = () => {
       photo: member.photo || "",
     });
     setExpandedId(member.id);
+
+    // give React a tick to update expanded state/layout, then scroll the nearest scrollable container to top
+    setTimeout(() => {
+      try {
+        const isScrollable = (el) => {
+          if (!el) return false;
+          const style = getComputedStyle(el);
+          const overflowY = style.overflowY;
+          const canScroll = el.scrollHeight > el.clientHeight;
+          return (
+            canScroll &&
+            (overflowY === "auto" ||
+              overflowY === "scroll" ||
+              overflowY === "overlay")
+          );
+        };
+
+        // walk up from the formRef to find a scrollable ancestor
+        let node = formRef.current;
+        let scroller = null;
+        while (node && node !== document.body) {
+          if (isScrollable(node)) {
+            scroller = node;
+            break;
+          }
+          node = node.parentElement;
+        }
+
+        // fallback to document.scrollingElement or window
+        if (!scroller)
+          scroller =
+            document.scrollingElement ||
+            document.documentElement ||
+            document.body;
+
+        if (scroller && typeof scroller.scrollTo === "function") {
+          scroller.scrollTo({ top: 0, behavior: "smooth" });
+        } else if (
+          typeof window !== "undefined" &&
+          typeof window.scrollTo === "function"
+        ) {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      } catch {
+        // fallback to window scroll if anything unexpected occurs
+        if (
+          typeof window !== "undefined" &&
+          typeof window.scrollTo === "function"
+        ) {
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }
+      }
+
+      // focus the name input inside the form for quicker edit
+      const nameInput = formRef.current?.querySelector(
+        'input[placeholder="Name"]'
+      );
+      if (nameInput) nameInput.focus();
+    }, 60);
   };
 
   const handleDelete = (id) => {
@@ -306,7 +368,7 @@ const TeamPageUpdates = () => {
       <h2 className="text-2xl font-bold text-[#3E3C3C]">Team Members</h2>
 
       {/* Add / Edit Form */}
-      <div className="bg-white p-4 rounded border space-y-4">
+      <div ref={formRef} className="bg-white p-4 rounded border space-y-4">
         {/* Name and Position on same line */}
         <div className="flex flex-col gap-4">
           <div className="flex gap-4 w-full">
