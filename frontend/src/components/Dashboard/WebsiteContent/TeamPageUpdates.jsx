@@ -58,6 +58,8 @@ const TeamPageUpdates = () => {
     message: "",
     error: "",
   });
+  const [draggingId, setDraggingId] = useState(null);
+  const [dragOverId, setDragOverId] = useState(null);
 
   const toggleExpand = (id) => {
     setExpandedId(expandedId === id ? null : id);
@@ -163,6 +165,34 @@ const TeamPageUpdates = () => {
     }
   };
 
+  /* Auto-clear status messages after 3s */
+  useEffect(() => {
+    if (!headingStatus.message && !headingStatus.error) return undefined;
+    const t = setTimeout(
+      () => setHeadingStatus({ message: "", error: "" }),
+      3000
+    );
+    return () => clearTimeout(t);
+  }, [headingStatus]);
+
+  useEffect(() => {
+    if (!membersStatus.message && !membersStatus.error) return undefined;
+    const t = setTimeout(
+      () => setMembersStatus({ message: "", error: "" }),
+      3000
+    );
+    return () => clearTimeout(t);
+  }, [membersStatus]);
+
+  useEffect(() => {
+    if (!marqueeStatus.message && !marqueeStatus.error) return undefined;
+    const t = setTimeout(
+      () => setMarqueeStatus({ message: "", error: "" }),
+      3000
+    );
+    return () => clearTimeout(t);
+  }, [marqueeStatus]);
+
   /* ---------------- IMAGE HELPERS ---------------- */
   const fileToBase64 = (file) =>
     new Promise((resolve, reject) => {
@@ -225,6 +255,49 @@ const TeamPageUpdates = () => {
     setTeam((prev) => prev.filter((m) => m.id !== id));
     if (editingId === id) setEditingId(null);
     if (expandedId === id) setExpandedId(null);
+  };
+
+  /* ---------------- DRAG & DROP HELPERS ---------------- */
+  const handleDragStart = (e, id) => {
+    e.dataTransfer.effectAllowed = "move";
+    e.dataTransfer.setData("text/plain", String(id));
+    setDraggingId(id);
+  };
+
+  const handleDragOver = (e, id) => {
+    e.preventDefault(); // allow drop
+    if (dragOverId !== id) setDragOverId(id);
+  };
+
+  const handleDrop = (e, targetId) => {
+    e.preventDefault();
+    const draggedId = Number(e.dataTransfer.getData("text/plain"));
+    if (!draggedId) {
+      setDraggingId(null);
+      setDragOverId(null);
+      return;
+    }
+
+    if (draggedId === targetId) {
+      setDraggingId(null);
+      setDragOverId(null);
+      return;
+    }
+
+    setTeam((prev) => {
+      const copy = [...prev];
+      const fromIndex = copy.findIndex((x) => x.id === draggedId);
+      const toIndex = copy.findIndex((x) => x.id === targetId);
+      if (fromIndex === -1 || toIndex === -1) return prev;
+
+      const [moved] = copy.splice(fromIndex, 1);
+      // insert before target index
+      copy.splice(toIndex, 0, moved);
+      return copy;
+    });
+
+    setDraggingId(null);
+    setDragOverId(null);
   };
 
   return (
@@ -424,7 +497,15 @@ const TeamPageUpdates = () => {
               initial={{ opacity: 0, y: -6 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: 6 }}
-              className="bg-white border rounded p-4"
+              className={`bg-white border rounded p-4 ${
+                dragOverId === member.id
+                  ? "ring-2 ring-offset-2 ring-blue-300"
+                  : ""
+              } ${draggingId === member.id ? "opacity-60" : ""}`}
+              draggable
+              onDragStart={(e) => handleDragStart(e, member.id)}
+              onDragOver={(e) => handleDragOver(e, member.id)}
+              onDrop={(e) => handleDrop(e, member.id)}
             >
               <button
                 onClick={() => toggleExpand(member.id)}
