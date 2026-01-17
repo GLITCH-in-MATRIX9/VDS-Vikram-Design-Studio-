@@ -5,12 +5,7 @@ import { Pencil, Trash2, Plus, X, ChevronDown, ChevronUp } from "lucide-react";
 import { FaGripVertical } from "react-icons/fa";
 
 const TeamPageUpdates = () => {
-  const [team, setTeam] = useState([
-    { id: 1, name: "Anjali Sharma", position: "CEO" },
-    { id: 2, name: "Rohit Verma", position: "CTO" },
-    { id: 3, name: "Priya Singh", position: "Lead Designer" },
-    { id: 4, name: "Amit Kumar", position: "Frontend Developer" },
-  ]);
+  const [team, setTeam] = useState([]);
 
   const [heading, setHeading] = useState({
     title: "",
