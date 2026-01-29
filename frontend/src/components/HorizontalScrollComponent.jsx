@@ -118,11 +118,10 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
       {/* Scrollable Area */}
       <div
         ref={containerRef}
-        className={`flex h-full ${
-          shouldDrag
+        className={`flex h-full ${shouldDrag
             ? "overflow-x-hidden cursor-grab"
             : "overflow-x-hidden cursor-default"
-        } ${!isDesktop && "overflow-x-scroll hide-scrollbar"}`}
+          } ${!isDesktop && "overflow-x-scroll hide-scrollbar"}`}
       >
         <motion.div
           ref={contentRef}
@@ -214,8 +213,19 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
             project={project}
             onMouseEnter={() => setIsMapHovered(true)}
             onMouseLeave={() => setIsMapHovered(false)}
+            onProjectSelect={(id) => {
+              const el = document.getElementById(`project-${id}`);
+              if (el) {
+                el.scrollIntoView({
+                  behavior: "smooth",
+                  block: "center",
+                });
+                onClose(); // optional – close the viewer
+              }
+            }}
             className="mr-12"
           />
+
         </motion.div>
       </div>
 

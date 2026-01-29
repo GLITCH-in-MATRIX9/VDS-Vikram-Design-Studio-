@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker, Tooltip } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 // Assuming projectApi is located in ../../../services/projectApi.js
-import projectApi from "../services/projectApi"; 
+import projectApi from "../services/projectApi";
 
 // Re-add standard Leaflet marker icon definition for OTHER markers
 delete L.Icon.Default.prototype._getIconUrl;
@@ -13,7 +13,7 @@ L.Icon.Default.mergeOptions({
     shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
 });
 
-const ProjectMap = ({ project, onMouseEnter, onMouseLeave, className }) => {
+const ProjectMap = ({ project, onProjectSelect, onMouseEnter, onMouseLeave, className }) => {
     // Current project coordinates (used for centering the map)
     const lat = project?.latitude || 23.82811088679897;
     const lng = project?.longitude || 91.27649743144973;
@@ -31,7 +31,7 @@ const ProjectMap = ({ project, onMouseEnter, onMouseLeave, className }) => {
 
         return new L.Icon({
             iconUrl: 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgContent),
-            iconSize: [38, 38],   
+            iconSize: [38, 38],
             iconAnchor: [19, 38],
             tooltipAnchor: [18, -28],
         });
@@ -42,8 +42,8 @@ const ProjectMap = ({ project, onMouseEnter, onMouseLeave, className }) => {
         const fetchAllProjects = async () => {
             try {
                 // Assuming projectApi.getProjects() returns an array of projects
-                const projects = await projectApi.getProjects(); 
-                
+                const projects = await projectApi.getProjects();
+
                 // Filter and set valid projects
                 const validProjects = projects.filter(p => p.latitude && p.longitude);
                 setAllProjects(validProjects);
@@ -66,31 +66,36 @@ const ProjectMap = ({ project, onMouseEnter, onMouseLeave, className }) => {
                 center={[lat, lng]}
                 zoom={13}
                 scrollWheelZoom={true}
-                className="h-full w-full grayscale" 
+                className="h-full w-full grayscale"
             >
                 <TileLayer
                     attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
-                
+
                 {/* ⭐️ RENDER MARKERS FOR ALL PROJECTS */}
                 {allProjects.map((p) => {
                     // Assuming your project objects have a unique identifier like _id
-                    const isCurrentProject = p._id === project?._id; 
-                    
+                    const isCurrentProject = p._id === project?._id;
+
                     // Determine which icon and tooltip behavior to use
                     const markerIcon = isCurrentProject ? customIcon : new L.Icon.Default();
                     const permanentTooltip = isCurrentProject;
-                    
+
                     return (
-                        <Marker 
-                            key={p._id || p.name} 
-                            position={[p.latitude, p.longitude]} 
+                        <Marker
+                            key={p._id || p.name}
+                            position={[p.latitude, p.longitude]}
                             icon={markerIcon}
-                        > 
-                            <Tooltip 
-                                permanent={permanentTooltip} 
-                                direction="right" 
+                            eventHandlers={{
+                                click: () => {
+                                    onProjectSelect?.(p._id);   // 👈 tell parent which project was clicked
+                                },
+                            }}
+                        >
+                            <Tooltip
+                                permanent={permanentTooltip}
+                                direction="right"
                                 offset={[10, 0]}
                             >
                                 <div className="flex flex-col text-xs p-1">
