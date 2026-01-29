@@ -82,6 +82,16 @@ const projectApi = {
     );
     return response.data;
   },
+
+  reorderProjects: async (orderedIds) => {
+  const response = await axios.post(
+    `${API_BASE}/reorder`,
+    { orderedIds },
+    { withCredentials: true }
+  );
+  return response.data;
+},
+
 };
 
 export default projectApi;

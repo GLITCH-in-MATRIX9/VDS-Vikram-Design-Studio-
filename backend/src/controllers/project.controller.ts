@@ -14,7 +14,6 @@ const statusMap: Record<string, string> = {
   UNBUILT: "Unbuilt",
 };
 
-
 // ---------------- CREATE PROJECT ----------------
 export const createProject = async (req: Request, res: Response) => {
   try {
@@ -33,8 +32,8 @@ export const createProject = async (req: Request, res: Response) => {
       keyDate,
       sections,
       sizeM2FT2,
-      lat, 
-      lng, 
+      lat,
+      lng,
     } = req.body;
 
     const files = req.files as any;
@@ -44,14 +43,14 @@ export const createProject = async (req: Request, res: Response) => {
       typeof projectLeaders === "string"
         ? JSON.parse(projectLeaders)
         : Array.isArray(projectLeaders)
-        ? projectLeaders
-        : [];
+          ? projectLeaders
+          : [];
     const tagList =
       typeof tags === "string"
         ? JSON.parse(tags)
         : Array.isArray(tags)
-        ? tags
-        : [];
+          ? tags
+          : [];
     // -------------------------------------------------------------------------------
 
     // ------------------- ADDED: normalize project folder -------------------
@@ -69,7 +68,7 @@ export const createProject = async (req: Request, res: Response) => {
     if (previewImageUrl && isBase64Image(previewImageUrl)) {
       const result = await convertBase64ToCloudinary(
         previewImageUrl,
-        projectFolder
+        projectFolder,
       );
       previewImageUrl = result.url;
       previewImagePublicId = result.publicId;
@@ -92,7 +91,7 @@ export const createProject = async (req: Request, res: Response) => {
         if (sec.content && isBase64Image(sec.content)) {
           const result = await convertBase64ToCloudinary(
             sec.content,
-            projectFolder
+            projectFolder,
           );
           return {
             type: sec.type || "image",
@@ -102,8 +101,10 @@ export const createProject = async (req: Request, res: Response) => {
           };
         }
         return { ...sec, publicId: sec.publicId || undefined };
-      })
+      }),
     );
+
+    const count = await Project.countDocuments();
 
     const project = new Project({
       name,
@@ -122,7 +123,8 @@ export const createProject = async (req: Request, res: Response) => {
       previewImageUrl,
       previewImagePublicId,
       sizeM2FT2,
-      latitude: lat ? Number(lat) : undefined, 
+      order: count + 1,
+      latitude: lat ? Number(lat) : undefined,
       longitude: lng ? Number(lng) : undefined,
     });
 
@@ -158,8 +160,8 @@ export const updateProject = async (req: Request, res: Response) => {
       previewImageUrl: reqPreviewImageUrl,
       previewImagePublicId: reqPreviewImagePublicId,
       sizeM2FT2,
-      lat, 
-      lng, 
+      lat,
+      lng,
     } = req.body as Record<string, any>;
 
     const files = req.files as any;
@@ -169,14 +171,14 @@ export const updateProject = async (req: Request, res: Response) => {
       typeof projectLeaders === "string"
         ? JSON.parse(projectLeaders)
         : Array.isArray(projectLeaders)
-        ? projectLeaders
-        : [];
+          ? projectLeaders
+          : [];
     const tagList =
       typeof tags === "string"
         ? JSON.parse(tags)
         : Array.isArray(tags)
-        ? tags
-        : [];
+          ? tags
+          : [];
     // -------------------------------------------------------------------------------
 
     let previewImageUrl =
@@ -190,7 +192,7 @@ export const updateProject = async (req: Request, res: Response) => {
     if (previewImageUrl && isBase64Image(previewImageUrl)) {
       const result = await convertBase64ToCloudinary(
         previewImageUrl,
-        `VDS_FOLDER/${name.replace(/[^a-zA-Z0-9]/g, "_")}`
+        `VDS_FOLDER/${name.replace(/[^a-zA-Z0-9]/g, "_")}`,
       );
       previewImageUrl = result.url;
       previewImagePublicId = result.publicId;
@@ -203,8 +205,8 @@ export const updateProject = async (req: Request, res: Response) => {
       typeof sections === "string"
         ? JSON.parse(sections)
         : Array.isArray(sections)
-        ? sections
-        : [];
+          ? sections
+          : [];
 
     const updatedSections = await Promise.all(
       parsedSections.map(async (sec: any, index: number) => {
@@ -224,7 +226,7 @@ export const updateProject = async (req: Request, res: Response) => {
         if (sec.content && isBase64Image(sec.content)) {
           const result = await convertBase64ToCloudinary(
             sec.content,
-            `VDS_FOLDER/${name.replace(/[^a-zA-Z0-9]/g, "_")}`
+            `VDS_FOLDER/${name.replace(/[^a-zA-Z0-9]/g, "_")}`,
           );
           return {
             type: sec.type || "image",
@@ -249,13 +251,13 @@ export const updateProject = async (req: Request, res: Response) => {
           } catch (err) {
             console.warn(
               `⚠️ Failed to extract publicId from URL: ${sec.content}`,
-              err
+              err,
             );
           }
         }
 
         return { ...sec, publicId: sec.publicId || undefined };
-      })
+      }),
     );
 
     const existing = await Project.findById(req.params.id);
@@ -289,7 +291,7 @@ export const updateProject = async (req: Request, res: Response) => {
         } catch (e) {
           console.warn(
             `⚠️ Failed to delete old section image at index ${i}:`,
-            e
+            e,
           );
         }
       }
@@ -317,7 +319,7 @@ export const updateProject = async (req: Request, res: Response) => {
       previewImageUrl: previewImageUrl || existing.previewImageUrl,
       previewImagePublicId:
         previewImagePublicId || existing.previewImagePublicId,
-      latitude: lat ? Number(lat) : existing.latitude || null, 
+      latitude: lat ? Number(lat) : existing.latitude || null,
       longitude: lng ? Number(lng) : existing.longitude || null,
     });
 
@@ -335,18 +337,34 @@ export const updateProject = async (req: Request, res: Response) => {
   }
 };
 
-
-
 // ---------------- GET ALL PROJECTS ----------------
 export const getProjects = async (req: Request, res: Response) => {
   try {
-    const projects = await Project.find();
+    const projects = await Project.find().sort({ createdAt: 1 });
 
-    
-    const withCoords = projects.map((p, i) => ({
+    let needsUpdate = false;
+
+    projects.forEach((p, i) => {
+      if (typeof (p as any).order !== "number") {
+        (p as any).order = i + 1;
+        needsUpdate = true;
+      }
+    });
+
+    if (needsUpdate) {
+      await Promise.all(
+        projects.map((p) =>
+          p.save({ validateBeforeSave: false })
+        )
+      );
+    }
+
+    const ordered = await Project.find().sort({ order: 1 });
+
+    const withCoords = ordered.map((p, i) => ({
       ...p.toObject(),
-      latitude: p.latitude || 28.6139 + i * 0.01,  // Delhi + offset
-      longitude: p.longitude || 77.2090 + i * 0.01,
+      latitude: p.latitude || 28.6139 + i * 0.01,
+      longitude: p.longitude || 77.209 + i * 0.01,
     }));
 
     res.status(200).json(withCoords);
@@ -355,7 +373,6 @@ export const getProjects = async (req: Request, res: Response) => {
     res.status(500).json({ message: "Error fetching projects" });
   }
 };
-
 
 
 // ---------------- GET PROJECT BY ID ----------------
@@ -370,8 +387,6 @@ export const getProjectById = async (req: Request, res: Response) => {
       .json({ message: "Failed to fetch project", error: err.message });
   }
 };
-
-
 
 // ---------------- DELETE PROJECT ----------------
 export const deleteProject = async (req: Request, res: Response) => {
@@ -388,12 +403,12 @@ export const deleteProject = async (req: Request, res: Response) => {
         await cloudinary.api.delete_resources_by_prefix(folderPrefix);
         await cloudinary.api.delete_folder(folderPrefix);
         console.log(
-          `✅ Deleted Cloudinary folder and all images: ${folderPrefix}`
+          `✅ Deleted Cloudinary folder and all images: ${folderPrefix}`,
         );
       } catch (err) {
         console.warn(
           `⚠️ Failed to delete Cloudinary folder or its images: ${folderPrefix}`,
-          err
+          err,
         );
       }
     }
@@ -409,7 +424,6 @@ export const deleteProject = async (req: Request, res: Response) => {
   }
 };
 
-
 // ---------------- GET MORE PROJECTS (for viewer/related section) ----------------
 export const getMoreProjects = async (req: Request, res: Response) => {
   try {
@@ -421,7 +435,7 @@ export const getMoreProjects = async (req: Request, res: Response) => {
     if (category) filter.category = category;
 
     const moreProjects = await Project.find(filter)
-      .sort({ createdAt: -1 })
+      .sort({ order: 1 })
       .limit(Number(limit));
 
     return res.status(200).json(moreProjects);
@@ -430,5 +444,26 @@ export const getMoreProjects = async (req: Request, res: Response) => {
     return res
       .status(500)
       .json({ message: "Failed to fetch more projects", error: err.message });
+  }
+};
+
+// ---------------- REORDER PROJECTS ----------------
+export const reorderProjects = async (req: Request, res: Response) => {
+  try {
+    const { orderedIds } = req.body; // ["id1", "id2", "id3", ...]
+
+    const bulk = orderedIds.map((id: string, index: number) => ({
+      updateOne: {
+        filter: { _id: id },
+        update: { order: index + 1 },
+      },
+    }));
+
+    await Project.bulkWrite(bulk);
+
+    res.json({ success: true });
+  } catch (err: any) {
+    console.error("❌ Error reordering projects:", err);
+    res.status(500).json({ message: "Failed to reorder projects" });
   }
 };

@@ -26,6 +26,7 @@ export interface IProject extends Document {
   previewImagePublicId?: string;
   sections: IProjectSection[];
   sizeM2FT2?: string;
+  order: number; 
   createdAt: Date;
   updatedAt: Date;
 }
@@ -67,6 +68,12 @@ const ProjectSchema = new Schema<IProject>(
     previewImagePublicId: { type: String },
     sections: { type: [ProjectSectionSchema], default: [] },
     sizeM2FT2: { type: String },
+
+    order: {
+      type: Number,
+      required: true,
+      index: true,
+    },
   },
   { timestamps: true }
 );

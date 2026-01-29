@@ -5,7 +5,8 @@ import {
   getProjectById,
   updateProject,
   deleteProject,
-  getMoreProjects, 
+  getMoreProjects,
+  reorderProjects,
 } from "../controllers/project.controller";
 import { upload } from "../middlewares/upload";
 import { protect, requireRole } from "../middlewares/auth.middleware";
@@ -25,8 +26,6 @@ const PROJECT_MANAGEMENT_ROLES: (
 // ---------------- PUBLIC ROUTES ----------------
 router.get("/", cleanBase64Response, getProjects);
 router.get("/:id", cleanBase64Response, getProjectById);
-
-// ✅ New “More Projects Viewer” route
 router.get("/:id/more", cleanBase64Response, getMoreProjects);
 
 // ---------------- PROTECTED ROUTES ----------------
@@ -42,6 +41,14 @@ router.post(
   createProject
 );
 
+// 🔁 Reorder
+router.post(
+  "/reorder",
+  protect,
+  requireRole(PROJECT_MANAGEMENT_ROLES),
+  reorderProjects
+);
+
 router.put(
   "/:id",
   protect,
@@ -54,6 +61,11 @@ router.put(
   updateProject
 );
 
-router.delete("/:id", protect, requireRole(PROJECT_MANAGEMENT_ROLES), deleteProject);
+router.delete(
+  "/:id",
+  protect,
+  requireRole(PROJECT_MANAGEMENT_ROLES),
+  deleteProject
+);
 
 export default router;

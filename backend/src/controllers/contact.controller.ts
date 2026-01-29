@@ -1,10 +1,9 @@
-import { Response } from "express";
+import { Request, Response } from "express";
 import { sendEmail } from "../services/email.service";
-import { RecaptchaRequest } from "../middlewares/recaptcha.middleware";
 import { config } from "../config/env";
 
 export const sendContactEmail = async (
-  req: RecaptchaRequest,
+  req: Request,
   res: Response
 ) => {
   try {
@@ -16,13 +15,6 @@ export const sendContactEmail = async (
       emailAddress,
       message,
     } = req.body;
-
-    if (!req.recaptchaValid && process.env.NODE_ENV !== "development") {
-      return res.status(400).json({
-        success: false,
-        message: "reCAPTCHA verification required",
-      });
-    }
 
     if (!firstName || !emailAddress || !mobileNumber || !message) {
       return res.status(400).json({
@@ -61,7 +53,6 @@ export const sendContactEmail = async (
       html: adminEmailHtml,
       replyTo: sanitizedEmail,
     });
-
 
     await new Promise(resolve => setTimeout(resolve, 1500));
 
