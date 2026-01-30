@@ -34,11 +34,13 @@ const ProjectVideo = ({ src }) => {
 
   const [dimensions, setDimensions] = useState({ width: 0, height: 450 });
   const [isPlayerReady, setIsPlayerReady] = useState(false);
+  const [aspectRatio, setAspectRatio] = useState(16 / 9); // width / height
 
   // ----- Dimension logic (unchanged) -----
   const updateDimensions = () => {
     const height = window.innerWidth <= 640 ? 220 : 450;
-    const width = Math.round((16 / 9) * height);
+    // width is derived from the detected aspect ratio; keep height fixed
+    const width = Math.round(aspectRatio * height);
     setDimensions({ width, height });
   };
 
@@ -46,7 +48,73 @@ const ProjectVideo = ({ src }) => {
     updateDimensions();
     window.addEventListener("resize", updateDimensions);
     return () => window.removeEventListener("resize", updateDimensions);
-  }, []);
+  }, [aspectRatio]);
+
+  // ----- Aspect ratio detection -----
+  useEffect(() => {
+    if (!src) return;
+
+    let cancelled = false;
+
+    // For YouTube: treat /shorts/ as vertical (9:16), otherwise default to 16:9
+    if (isYouTube && videoId) {
+      try {
+        const parsed = new URL(src);
+        if (parsed.pathname.includes("/shorts/")) {
+          if (!cancelled) setAspectRatio(9 / 16);
+        } else {
+          if (!cancelled) setAspectRatio(16 / 9);
+        }
+      } catch {
+        if (!cancelled) setAspectRatio(16 / 9);
+      }
+
+      return () => {
+        cancelled = true;
+      };
+    }
+
+    // For direct video files (mp4/webm etc.) load metadata to detect natural aspect ratio
+    const vid = document.createElement("video");
+    vid.preload = "metadata";
+    vid.src = src;
+
+    const handleLoaded = () => {
+      if (cancelled) return;
+      const w = vid.videoWidth || 16;
+      const h = vid.videoHeight || 9;
+      if (w > 0 && h > 0) setAspectRatio(w / h);
+      else setAspectRatio(16 / 9);
+    };
+
+    const handleError = () => {
+      if (cancelled) return;
+      setAspectRatio(16 / 9);
+    };
+
+    vid.addEventListener("loadedmetadata", handleLoaded);
+    vid.addEventListener("error", handleError);
+
+    // If the src is a blob URL or same-origin this will trigger; otherwise fallback
+    // to 16:9 after a short timeout to avoid waiting forever.
+    const fallbackTimer = setTimeout(() => {
+      if (!cancelled && (isNaN(vid.videoWidth) || vid.videoWidth === 0)) {
+        setAspectRatio(16 / 9);
+      }
+    }, 1200);
+
+    return () => {
+      cancelled = true;
+      vid.removeEventListener("loadedmetadata", handleLoaded);
+      vid.removeEventListener("error", handleError);
+      clearTimeout(fallbackTimer);
+      try {
+        vid.src = "";
+      } catch {
+        // ignore cleanup errors
+      }
+    };
+  }, [src, isYouTube, videoId]);
 
   // ----- YouTube Player init (IMMEDIATE) -----
   useEffect(() => {
