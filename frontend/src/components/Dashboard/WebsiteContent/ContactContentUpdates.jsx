@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Pencil, Trash2, Plus, X } from "lucide-react";
 import axios from "axios";
 
@@ -31,6 +31,7 @@ const initialContacts = [
 const ContactContentUpdates = () => {
   const [contacts, setContacts] = useState(initialContacts);
   const [editingId, setEditingId] = useState(null);
+  const topRef = useRef(null);
   const [newContact, setNewContact] = useState({
     city: "",
     phone_numbers: [""],
@@ -135,6 +136,7 @@ const ContactContentUpdates = () => {
         ? contact.email_addresses
         : [""],
     });
+    topRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
   const handleDelete = async (id) => {
@@ -198,7 +200,7 @@ const ContactContentUpdates = () => {
   };
 
   return (
-    <div className="p-6 bg-[#f3efee] space-y-8">
+    <div ref={topRef} className="p-6 bg-[#f3efee] space-y-8">
       {/* Title */}
       <h2 className="text-2xl font-bold text-[#3E3C3C]">
         Contact Page Updates
