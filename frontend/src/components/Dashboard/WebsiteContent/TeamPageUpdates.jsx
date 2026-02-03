@@ -4,8 +4,34 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Pencil, Trash2, Plus, X, ChevronDown, ChevronUp } from "lucide-react";
 import { FaGripVertical } from "react-icons/fa";
 
+const sortMembersAlphabetically = (members = []) =>
+  [...members].sort((a, b) =>
+    (a?.name || "").localeCompare(b?.name || "", undefined, {
+      sensitivity: "base",
+    })
+  );
+
+const isSameOrder = (a = [], b = []) =>
+  a.length === b.length &&
+  a.every((item, index) => {
+    const leftId = item?.id ?? item?.name;
+    const rightId = b[index]?.id ?? b[index]?.name;
+    return leftId === rightId;
+  });
+
+const sanitizeMembers = (members) =>
+  (Array.isArray(members) ? members : []).map((m) => ({
+    id: m?.id,
+    name: m?.name || "",
+    position: m?.position || "",
+    description: m?.description || "",
+    featured: !!m?.featured,
+    photo: m?.photo || "",
+  }));
+
 const TeamPageUpdates = () => {
   const [team, setTeam] = useState([]);
+  const [orderMode, setOrderMode] = useState("alpha");
 
   const [heading, setHeading] = useState({
     title: "",
@@ -23,7 +49,15 @@ const TeamPageUpdates = () => {
         ).default.getTeamPage();
         if (data) {
           setHeading(data.heading || { title: "", subtitle: "", image: "" });
-          setTeam(data.members || []);
+          const members = data.members || [];
+          const sorted = sortMembersAlphabetically(members);
+          if (isSameOrder(members, sorted)) {
+            setTeam(sorted);
+            setOrderMode("alpha");
+          } else {
+            setTeam(members);
+            setOrderMode("custom");
+          }
           setMarquee(data.marquee_images || []);
         }
       } catch (err) {
@@ -90,13 +124,23 @@ const TeamPageUpdates = () => {
     }
 
     if (editingId) {
-      setTeam((prev) =>
-        prev.map((m) => (m.id === editingId ? { ...m, ...newMember } : m))
-      );
+      setTeam((prev) => {
+        const updated = prev.map((m) =>
+          m.id === editingId ? { ...m, ...newMember } : m
+        );
+        return orderMode === "alpha"
+          ? sortMembersAlphabetically(updated)
+          : updated;
+      });
       setEditingId(null);
     } else {
       const id = Math.max(0, ...team.map((m) => m.id)) + 1;
-      setTeam([...team, { id, ...newMember }]);
+      const updated = [...team, { id, ...newMember }];
+      setTeam(
+        orderMode === "alpha"
+          ? sortMembersAlphabetically(updated)
+          : updated
+      );
     }
     setNewMember({
       name: "",
@@ -147,7 +191,8 @@ const TeamPageUpdates = () => {
 
   const saveMembers = async (membersParam) => {
     setMembersSaving(true);
-    const payload = membersParam || team;
+    const sourceMembers = Array.isArray(membersParam) ? membersParam : team;
+    const payload = sanitizeMembers(sourceMembers);
     try {
       const teamApi = (await import("../../../services/teamapi")).default;
       await teamApi.updateMembers(payload, "admin1");
@@ -333,6 +378,8 @@ const TeamPageUpdates = () => {
     if (!destination) return; // dropped outside
     if (source.index === destination.index) return;
 
+    setOrderMode("custom");
+
     // compute new order synchronously so we can save it immediately
     setTeam((prev) => {
       const copy = Array.from(prev);
@@ -342,6 +389,11 @@ const TeamPageUpdates = () => {
       saveMembers(copy);
       return copy;
     });
+  };
+
+  const resetOrderToAlphabetical = () => {
+    setTeam((prev) => sortMembersAlphabetically(prev));
+    setOrderMode("alpha");
   };
 
   return (
@@ -509,7 +561,7 @@ const TeamPageUpdates = () => {
             )}
           </div>
           {/* Save members for this section */}
-          <div className="pt-3">
+          <div className="pt-3 flex flex-wrap gap-3">
             <button
               onClick={saveMembers}
               disabled={membersSaving}
@@ -540,6 +592,12 @@ const TeamPageUpdates = () => {
               ) : (
                 "Save Members"
               )}
+            </button>
+            <button
+              onClick={resetOrderToAlphabetical}
+              className="px-4 py-2 bg-gray-200 text-[#3E3C3C] rounded text-sm"
+            >
+              Reset Order (A–Z)
             </button>
             <div className="pt-2 min-h-[1.25rem]">
               <div aria-live="polite">
