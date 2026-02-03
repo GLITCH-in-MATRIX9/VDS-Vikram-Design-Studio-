@@ -10,6 +10,7 @@ const initialContacts = [
     id: 1,
     city: "Guwahati",
     phone_numbers: ["+91 70990 50180", "+91 97060 77180"],
+    email_addresses: ["info@vikramdesignstudio.com"],
     address:
       "Aastha Plaza, B2, 2nd Floor, Bora Service, opp. to SB Deorah College, Guwahati, Assam 781007",
     google_maps_iframe_src:
@@ -19,6 +20,7 @@ const initialContacts = [
     id: 2,
     city: "Kolkata",
     phone_numbers: ["+91 70990 50180", "+91 97060 77180"],
+    email_addresses: ["info@vikramdesignstudio.com"],
     address:
       "12th Floor, Unit 12W2, Mani Casadona, Action Area I, IIF, Newtown, Kolkata, West Bengal 700156",
     google_maps_iframe_src:
@@ -32,6 +34,7 @@ const ContactContentUpdates = () => {
   const [newContact, setNewContact] = useState({
     city: "",
     phone_numbers: [""],
+    email_addresses: [""],
     address: "",
     google_maps_iframe_src: "",
   });
@@ -123,7 +126,15 @@ const ContactContentUpdates = () => {
 
   const handleEdit = (contact) => {
     setEditingId(contact.id);
-    setNewContact({ ...contact });
+    setNewContact({
+      ...contact,
+      phone_numbers: Array.isArray(contact.phone_numbers)
+        ? contact.phone_numbers
+        : [""],
+      email_addresses: Array.isArray(contact.email_addresses)
+        ? contact.email_addresses
+        : [""],
+    });
   };
 
   const handleDelete = async (id) => {
@@ -152,6 +163,12 @@ const ContactContentUpdates = () => {
     setNewContact((prev) => ({ ...prev, phone_numbers: updated }));
   };
 
+  const handleEmailChange = (index, value) => {
+    const updated = [...newContact.email_addresses];
+    updated[index] = value;
+    setNewContact((prev) => ({ ...prev, email_addresses: updated }));
+  };
+
   const addPhoneNumber = () => {
     setNewContact((prev) => ({
       ...prev,
@@ -159,10 +176,24 @@ const ContactContentUpdates = () => {
     }));
   };
 
+  const addEmailAddress = () => {
+    setNewContact((prev) => ({
+      ...prev,
+      email_addresses: [...prev.email_addresses, ""],
+    }));
+  };
+
   const removePhoneNumber = (index) => {
     setNewContact((prev) => ({
       ...prev,
       phone_numbers: prev.phone_numbers.filter((_, i) => i !== index),
+    }));
+  };
+
+  const removeEmailAddress = (index) => {
+    setNewContact((prev) => ({
+      ...prev,
+      email_addresses: prev.email_addresses.filter((_, i) => i !== index),
     }));
   };
 
@@ -216,6 +247,37 @@ const ContactContentUpdates = () => {
           </button>
         </div>
 
+        {/* Email Addresses */}
+        <div className="space-y-2">
+          <label className="font-semibold text-[#3E3C3C] text-sm">
+            Email Addresses
+          </label>
+
+          {(newContact.email_addresses || [""]).map((email, idx) => (
+            <div key={idx} className="flex gap-2">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => handleEmailChange(idx, e.target.value)}
+                className="flex-1 border p-2 text-sm"
+              />
+              <button
+                onClick={() => removeEmailAddress(idx)}
+                className="px-3 py-2 bg-gray-200 rounded text-sm"
+              >
+                <X size={14} />
+              </button>
+            </div>
+          ))}
+
+          <button
+            onClick={addEmailAddress}
+            className="flex items-center gap-2 px-3 py-2 bg-gray-200 rounded text-sm"
+          >
+            <Plus size={14} /> Add Email
+          </button>
+        </div>
+
         <textarea
           placeholder="Address"
           value={newContact.address}
@@ -253,6 +315,7 @@ const ContactContentUpdates = () => {
                 setNewContact({
                   city: "",
                   phone_numbers: [""],
+                  email_addresses: [""],
                   address: "",
                   google_maps_iframe_src: "",
                 });
@@ -294,6 +357,20 @@ const ContactContentUpdates = () => {
                   <li key={i}>{num}</li>
                 ))}
               </ul>
+
+              {Array.isArray(c.email_addresses) &&
+                c.email_addresses.length > 0 && (
+                  <>
+                    <p className="font-medium text-[#3E3C3C] mt-2">
+                      Email Addresses
+                    </p>
+                    <ul className="list-disc list-inside">
+                      {c.email_addresses.map((email, i) => (
+                        <li key={i}>{email}</li>
+                      ))}
+                    </ul>
+                  </>
+                )}
 
               <p className="font-medium text-[#3E3C3C] mt-2">Address</p>
               <p>{c.address}</p>
