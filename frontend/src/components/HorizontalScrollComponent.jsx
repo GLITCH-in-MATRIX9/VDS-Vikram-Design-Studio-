@@ -118,10 +118,11 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
       {/* Scrollable Area */}
       <div
         ref={containerRef}
-        className={`flex h-full ${shouldDrag
+        className={`flex h-full ${
+          shouldDrag
             ? "overflow-x-hidden cursor-grab"
             : "overflow-x-hidden cursor-default"
-          } ${!isDesktop && "overflow-x-scroll hide-scrollbar"}`}
+        } ${!isDesktop && "overflow-x-scroll hide-scrollbar"}`}
       >
         <motion.div
           ref={contentRef}
@@ -225,21 +226,20 @@ const HorizontalScrollComponent = ({ onClose, project }) => {
             }}
             className="mr-12"
           />
-
         </motion.div>
       </div>
 
       {/* Mobile / Tablet Info (Fixed Footer Summary) */}
       <div className="grid grid-cols-2 py-3 leading-[1.4] xl:hidden">
         <div className="px-2 mb-3 col-span-1">
-          <div className="text-[#6D6D6D] font-medium text-xs uppercase">
+          <div className="text-[#6D6D6D] font-medium text-[11px] uppercase">
             {project?.category || "RESIDENTIAL"}
           </div>
-          <h1 className="text-[#373737] font-sora font-semibold text-xl m-0">
+          <h1 className="text-[#373737] font-sora font-semibold text-[15px] m-0">
             {project?.title || project?.name || "Project Name"}
           </h1>
         </div>
-        <div className="flex flex-col items-end gap-1 text-[#474545] text-xs text-right px-2 col-span-1">
+        <div className="flex flex-col items-end gap-1 text-[#474545] text-[11px] text-right px-2 col-span-1">
           <p className="flex items-center justify-end gap-1">
             <FiMapPin />
             <span>{project?.location || "Location"}</span>

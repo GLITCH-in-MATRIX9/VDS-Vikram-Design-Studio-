@@ -4,8 +4,34 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Pencil, Trash2, Plus, X, ChevronDown, ChevronUp } from "lucide-react";
 import { FaGripVertical } from "react-icons/fa";
 
+const sortMembersAlphabetically = (members = []) =>
+  [...members].sort((a, b) =>
+    (a?.name || "").localeCompare(b?.name || "", undefined, {
+      sensitivity: "base",
+    })
+  );
+
+const isSameOrder = (a = [], b = []) =>
+  a.length === b.length &&
+  a.every((item, index) => {
+    const leftId = item?.id ?? item?.name;
+    const rightId = b[index]?.id ?? b[index]?.name;
+    return leftId === rightId;
+  });
+
+const sanitizeMembers = (members) =>
+  (Array.isArray(members) ? members : []).map((m) => ({
+    id: m?.id,
+    name: m?.name || "",
+    position: m?.position || "",
+    description: m?.description || "",
+    featured: !!m?.featured,
+    photo: m?.photo || "",
+  }));
+
 const TeamPageUpdates = () => {
   const [team, setTeam] = useState([]);
+  const [orderMode, setOrderMode] = useState("alpha");
 
   const [heading, setHeading] = useState({
     title: "",
@@ -23,7 +49,15 @@ const TeamPageUpdates = () => {
         ).default.getTeamPage();
         if (data) {
           setHeading(data.heading || { title: "", subtitle: "", image: "" });
-          setTeam(data.members || []);
+          const members = data.members || [];
+          const sorted = sortMembersAlphabetically(members);
+          if (isSameOrder(members, sorted)) {
+            setTeam(sorted);
+            setOrderMode("alpha");
+          } else {
+            setTeam(members);
+            setOrderMode("custom");
+          }
           setMarquee(data.marquee_images || []);
         }
       } catch (err) {
@@ -90,13 +124,21 @@ const TeamPageUpdates = () => {
     }
 
     if (editingId) {
-      setTeam((prev) =>
-        prev.map((m) => (m.id === editingId ? { ...m, ...newMember } : m))
-      );
+      setTeam((prev) => {
+        const updated = prev.map((m) =>
+          m.id === editingId ? { ...m, ...newMember } : m
+        );
+        return orderMode === "alpha"
+          ? sortMembersAlphabetically(updated)
+          : updated;
+      });
       setEditingId(null);
     } else {
       const id = Math.max(0, ...team.map((m) => m.id)) + 1;
-      setTeam([...team, { id, ...newMember }]);
+      const updated = [...team, { id, ...newMember }];
+      setTeam(
+        orderMode === "alpha" ? sortMembersAlphabetically(updated) : updated
+      );
     }
     setNewMember({
       name: "",
@@ -147,7 +189,8 @@ const TeamPageUpdates = () => {
 
   const saveMembers = async (membersParam) => {
     setMembersSaving(true);
-    const payload = membersParam || team;
+    const sourceMembers = Array.isArray(membersParam) ? membersParam : team;
+    const payload = sanitizeMembers(sourceMembers);
     try {
       const teamApi = (await import("../../../services/teamapi")).default;
       await teamApi.updateMembers(payload, "admin1");
@@ -332,16 +375,35 @@ const TeamPageUpdates = () => {
     const { source, destination } = result;
     if (!destination) return; // dropped outside
     if (source.index === destination.index) return;
+    if (source.droppableId !== destination.droppableId) return;
 
-    // compute new order synchronously so we can save it immediately
+    setOrderMode("custom");
+
     setTeam((prev) => {
-      const copy = Array.from(prev);
+      const featured = prev.filter((m) => !!m.featured);
+      const regular = prev.filter((m) => !m.featured);
+
+      if (source.droppableId === "featured") {
+        const copy = Array.from(featured);
+        const [removed] = copy.splice(source.index, 1);
+        copy.splice(destination.index, 0, removed);
+        const updated = [...copy, ...regular];
+        saveMembers(updated);
+        return updated;
+      }
+
+      const copy = Array.from(regular);
       const [removed] = copy.splice(source.index, 1);
       copy.splice(destination.index, 0, removed);
-      // trigger autosave
-      saveMembers(copy);
-      return copy;
+      const updated = [...featured, ...copy];
+      saveMembers(updated);
+      return updated;
     });
+  };
+
+  const resetOrderToAlphabetical = () => {
+    setTeam((prev) => sortMembersAlphabetically(prev));
+    setOrderMode("alpha");
   };
 
   return (
@@ -509,7 +571,7 @@ const TeamPageUpdates = () => {
             )}
           </div>
           {/* Save members for this section */}
-          <div className="pt-3">
+          <div className="pt-3 flex flex-wrap gap-3">
             <button
               onClick={saveMembers}
               disabled={membersSaving}
@@ -541,6 +603,12 @@ const TeamPageUpdates = () => {
                 "Save Members"
               )}
             </button>
+            <button
+              onClick={resetOrderToAlphabetical}
+              className="px-4 py-2 bg-gray-200 text-[#3E3C3C] rounded text-sm"
+            >
+              Reset Order (A–Z)
+            </button>
             <div className="pt-2 min-h-[1.25rem]">
               <div aria-live="polite">
                 {membersStatus.message ? (
@@ -561,223 +629,448 @@ const TeamPageUpdates = () => {
       </div>
 
       {/* Team List (DnD via @hello-pangea/dnd) */}
-      <div className="space-y-3">
+      <div className="space-y-6">
         <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="team-sections">
-            {(provided) => (
-              <div {...provided.droppableProps} ref={provided.innerRef}>
-                {team.map((member, index) => (
-                  <Draggable
-                    key={member.id}
-                    draggableId={String(member.id)}
-                    index={index}
-                  >
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        className={`bg-white border rounded p-4 ${
-                          snapshot.isDragging ? "opacity-60" : ""
-                        }`}
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-[#3E3C3C]">
+              Featured Members
+            </h3>
+            <Droppable droppableId="featured">
+              {(provided) => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {team
+                    .filter((member) => !!member.featured)
+                    .map((member, index) => (
+                      <Draggable
+                        key={member.id}
+                        draggableId={String(member.id)}
+                        index={index}
                       >
-                        <div className="flex justify-between items-center w-full">
-                          <div className="flex items-center gap-4">
-                            <span
-                              {...provided.dragHandleProps}
-                              className="cursor-grab p-1 text-gray-600"
-                              title="Drag to reorder"
-                              aria-label="Drag handle"
-                            >
-                              <FaGripVertical />
-                            </span>
-                            <div>
-                              <span className="font-semibold text-[#3E3C3C] text-sm">
-                                {member.name}
-                              </span>
-                              <div className="text-sm text-[#6D6D6D]">
-                                {member.position}
-                              </div>
-                            </div>
-                          </div>
-                          <button
-                            onClick={() => toggleExpand(member.id)}
-                            className="ml-2"
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            className={`bg-white border rounded p-4 ${
+                              snapshot.isDragging ? "opacity-60" : ""
+                            }`}
                           >
-                            {expandedId === member.id ? (
-                              <ChevronUp size={18} />
-                            ) : (
-                              <ChevronDown size={18} />
-                            )}
-                          </button>
-                        </div>
-
-                        <AnimatePresence>
-                          {expandedId === member.id && (
-                            <motion.div
-                              initial={{ opacity: 0, height: 0 }}
-                              animate={{ opacity: 1, height: "auto" }}
-                              exit={{ opacity: 0, height: 0 }}
-                              transition={{ duration: 0.3 }}
-                              className="mt-3 space-y-3"
-                            >
-                              <div>
-                                <div className="mt-2">
-                                  <label className="block text-sm text-[#6D6D6D]">
-                                    Description
-                                  </label>
-                                  {member.featured ? (
-                                    <textarea
-                                      value={member.description || ""}
-                                      onChange={(e) =>
-                                        setTeam((prev) =>
-                                          prev.map((m) =>
-                                            m.id === member.id
-                                              ? {
-                                                  ...m,
-                                                  description: e.target.value,
-                                                }
-                                              : m
-                                          )
-                                        )
-                                      }
-                                      className="border p-2 w-full text-sm h-28 mt-1"
-                                    />
-                                  ) : (
-                                    <p className="text-sm text-[#6D6D6D] mt-1">
-                                      Not featured
-                                    </p>
-                                  )}
+                            <div className="flex justify-between items-center w-full">
+                              <div className="flex items-center gap-4">
+                                <span
+                                  {...provided.dragHandleProps}
+                                  className="cursor-grab p-1 text-gray-600"
+                                  title="Drag to reorder"
+                                  aria-label="Drag handle"
+                                >
+                                  <FaGripVertical />
+                                </span>
+                                <div>
+                                  <span className="font-semibold text-[#3E3C3C] text-sm">
+                                    {member.name}
+                                  </span>
+                                  <div className="text-sm text-[#6D6D6D]">
+                                    {member.position}
+                                  </div>
                                 </div>
+                              </div>
+                              <button
+                                onClick={() => toggleExpand(member.id)}
+                                className="ml-2"
+                              >
+                                {expandedId === member.id ? (
+                                  <ChevronUp size={18} />
+                                ) : (
+                                  <ChevronDown size={18} />
+                                )}
+                              </button>
+                            </div>
 
-                                {member.featured && (
-                                  <div className="mt-2 flex items-start gap-4">
-                                    <label
-                                      className={`inline-block ${
-                                        imagePreviews[`member_${member.id}`] ||
-                                        member.photo
-                                          ? "opacity-40 pointer-events-none"
-                                          : ""
-                                      }`}
-                                    >
-                                      <span
-                                        className={`bg-gray-200 px-3 py-1 rounded text-sm ${
+                            <AnimatePresence>
+                              {expandedId === member.id && (
+                                <motion.div
+                                  initial={{ opacity: 0, height: 0 }}
+                                  animate={{ opacity: 1, height: "auto" }}
+                                  exit={{ opacity: 0, height: 0 }}
+                                  transition={{ duration: 0.3 }}
+                                  className="mt-3 space-y-3"
+                                >
+                                  <div>
+                                    <div className="mt-2">
+                                      <label className="block text-sm text-[#6D6D6D]">
+                                        Description
+                                      </label>
+                                      <textarea
+                                        value={member.description || ""}
+                                        onChange={(e) =>
+                                          setTeam((prev) =>
+                                            prev.map((m) =>
+                                              m.id === member.id
+                                                ? {
+                                                    ...m,
+                                                    description: e.target.value,
+                                                  }
+                                                : m
+                                            )
+                                          )
+                                        }
+                                        className="border p-2 w-full text-sm h-28 mt-1"
+                                      />
+                                    </div>
+
+                                    <div className="mt-2 flex items-start gap-4">
+                                      <label
+                                        className={`inline-block ${
                                           imagePreviews[
                                             `member_${member.id}`
                                           ] || member.photo
-                                            ? "cursor-not-allowed"
-                                            : "cursor-pointer"
+                                            ? "opacity-40 pointer-events-none"
+                                            : ""
                                         }`}
                                       >
-                                        Change Photo
-                                      </span>
-                                      <input
-                                        type="file"
-                                        accept="image/*"
-                                        className="hidden"
-                                        onChange={(e) =>
-                                          handleMemberPhoto(
-                                            member.id,
-                                            e.target.files?.[0]
-                                          )
-                                        }
-                                        disabled={
-                                          !!(
+                                        <span
+                                          className={`bg-gray-200 px-3 py-1 rounded text-sm ${
                                             imagePreviews[
                                               `member_${member.id}`
                                             ] || member.photo
-                                          )
-                                        }
-                                      />
-                                    </label>
-
-                                    {imagePreviews[`member_${member.id}`] ||
-                                    member.photo ? (
-                                      <div className="relative">
-                                        <img
-                                          src={
-                                            imagePreviews[
-                                              `member_${member.id}`
-                                            ] || member.photo
-                                          }
-                                          alt="member"
-                                          className="h-28 w-28 object-cover rounded mt-2"
-                                        />
-                                        <button
-                                          onClick={() => {
-                                            setTeam((prev) =>
-                                              prev.map((m) =>
-                                                m.id === member.id
-                                                  ? { ...m, photo: "" }
-                                                  : m
-                                              )
-                                            );
-                                            setImagePreviews((p) => {
-                                              const copy = { ...p };
-                                              delete copy[
-                                                `member_${member.id}`
-                                              ];
-                                              return copy;
-                                            });
-                                          }}
-                                          className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow"
-                                          title="Remove image"
+                                              ? "cursor-not-allowed"
+                                              : "cursor-pointer"
+                                          }`}
                                         >
-                                          <X size={14} />
-                                        </button>
-                                      </div>
-                                    ) : null}
-
-                                    <div className="mt-2">
-                                      <label className="inline-flex items-center gap-2 text-sm">
+                                          Change Photo
+                                        </span>
                                         <input
-                                          type="checkbox"
-                                          checked={!!member.featured}
+                                          type="file"
+                                          accept="image/*"
+                                          className="hidden"
+                                          onChange={(e) =>
+                                            handleMemberPhoto(
+                                              member.id,
+                                              e.target.files?.[0]
+                                            )
+                                          }
+                                          disabled={
+                                            !!(
+                                              imagePreviews[
+                                                `member_${member.id}`
+                                              ] || member.photo
+                                            )
+                                          }
+                                        />
+                                      </label>
+
+                                      {imagePreviews[`member_${member.id}`] ||
+                                      member.photo ? (
+                                        <div className="relative">
+                                          <img
+                                            src={
+                                              imagePreviews[
+                                                `member_${member.id}`
+                                              ] || member.photo
+                                            }
+                                            alt="member"
+                                            className="h-28 w-28 object-cover rounded mt-2"
+                                          />
+                                          <button
+                                            onClick={() => {
+                                              setTeam((prev) =>
+                                                prev.map((m) =>
+                                                  m.id === member.id
+                                                    ? { ...m, photo: "" }
+                                                    : m
+                                                )
+                                              );
+                                              setImagePreviews((p) => {
+                                                const copy = { ...p };
+                                                delete copy[
+                                                  `member_${member.id}`
+                                                ];
+                                                return copy;
+                                              });
+                                            }}
+                                            className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow"
+                                            title="Remove image"
+                                          >
+                                            <X size={14} />
+                                          </button>
+                                        </div>
+                                      ) : null}
+
+                                      <div className="mt-2">
+                                        <label className="inline-flex items-center gap-2 text-sm">
+                                          <input
+                                            type="checkbox"
+                                            checked={!!member.featured}
+                                            onChange={(e) =>
+                                              setTeam((prev) =>
+                                                prev.map((m) =>
+                                                  m.id === member.id
+                                                    ? {
+                                                        ...m,
+                                                        featured:
+                                                          e.target.checked,
+                                                      }
+                                                    : m
+                                                )
+                                              )
+                                            }
+                                          />
+                                          <span>Featured</span>
+                                        </label>
+                                      </div>
+                                    </div>
+                                  </div>
+
+                                  <div className="flex gap-3">
+                                    <button
+                                      onClick={() => handleEdit(member)}
+                                      className="flex items-center gap-1 px-3 py-1 bg-gray-200 rounded text-sm"
+                                    >
+                                      <Pencil size={14} /> Edit
+                                    </button>
+                                    <button
+                                      onClick={() => handleDelete(member.id)}
+                                      className="flex items-center gap-1 px-3 py-1 bg-gray-200 rounded text-sm"
+                                    >
+                                      <Trash2 size={14} /> Delete
+                                    </button>
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </div>
+
+          <div className="space-y-3">
+            <h3 className="text-sm font-semibold text-[#3E3C3C]">
+              Other Members
+            </h3>
+            <Droppable droppableId="regular">
+              {(provided) => (
+                <div {...provided.droppableProps} ref={provided.innerRef}>
+                  {team
+                    .filter((member) => !member.featured)
+                    .map((member, index) => (
+                      <Draggable
+                        key={member.id}
+                        draggableId={String(member.id)}
+                        index={index}
+                      >
+                        {(provided, snapshot) => (
+                          <div
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            className={`bg-white border rounded p-4 ${
+                              snapshot.isDragging ? "opacity-60" : ""
+                            }`}
+                          >
+                            <div className="flex justify-between items-center w-full">
+                              <div className="flex items-center gap-4">
+                                <span
+                                  {...provided.dragHandleProps}
+                                  className="cursor-grab p-1 text-gray-600"
+                                  title="Drag to reorder"
+                                  aria-label="Drag handle"
+                                >
+                                  <FaGripVertical />
+                                </span>
+                                <div>
+                                  <span className="font-semibold text-[#3E3C3C] text-sm">
+                                    {member.name}
+                                  </span>
+                                  <div className="text-sm text-[#6D6D6D]">
+                                    {member.position}
+                                  </div>
+                                </div>
+                              </div>
+                              <button
+                                onClick={() => toggleExpand(member.id)}
+                                className="ml-2"
+                              >
+                                {expandedId === member.id ? (
+                                  <ChevronUp size={18} />
+                                ) : (
+                                  <ChevronDown size={18} />
+                                )}
+                              </button>
+                            </div>
+
+                            <AnimatePresence>
+                              {expandedId === member.id && (
+                                <motion.div
+                                  initial={{ opacity: 0, height: 0 }}
+                                  animate={{ opacity: 1, height: "auto" }}
+                                  exit={{ opacity: 0, height: 0 }}
+                                  transition={{ duration: 0.3 }}
+                                  className="mt-3 space-y-3"
+                                >
+                                  <div>
+                                    <div className="mt-2">
+                                      <label className="block text-sm text-[#6D6D6D]">
+                                        Description
+                                      </label>
+                                      {member.featured ? (
+                                        <textarea
+                                          value={member.description || ""}
                                           onChange={(e) =>
                                             setTeam((prev) =>
                                               prev.map((m) =>
                                                 m.id === member.id
                                                   ? {
                                                       ...m,
-                                                      featured:
-                                                        e.target.checked,
+                                                      description:
+                                                        e.target.value,
                                                     }
                                                   : m
                                               )
                                             )
                                           }
+                                          className="border p-2 w-full text-sm h-28 mt-1"
                                         />
-                                        <span>Featured</span>
-                                      </label>
+                                      ) : (
+                                        <p className="text-sm text-[#6D6D6D] mt-1">
+                                          Not featured
+                                        </p>
+                                      )}
                                     </div>
-                                  </div>
-                                )}
-                              </div>
 
-                              <div className="flex gap-3">
-                                <button
-                                  onClick={() => handleEdit(member)}
-                                  className="flex items-center gap-1 px-3 py-1 bg-gray-200 rounded text-sm"
-                                >
-                                  <Pencil size={14} /> Edit
-                                </button>
-                                <button
-                                  onClick={() => handleDelete(member.id)}
-                                  className="flex items-center gap-1 px-3 py-1 bg-gray-200 rounded text-sm"
-                                >
-                                  <Trash2 size={14} /> Delete
-                                </button>
-                              </div>
-                            </motion.div>
-                          )}
-                        </AnimatePresence>
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
+                                    {member.featured && (
+                                      <div className="mt-2 flex items-start gap-4">
+                                        <label
+                                          className={`inline-block ${
+                                            imagePreviews[
+                                              `member_${member.id}`
+                                            ] || member.photo
+                                              ? "opacity-40 pointer-events-none"
+                                              : ""
+                                          }`}
+                                        >
+                                          <span
+                                            className={`bg-gray-200 px-3 py-1 rounded text-sm ${
+                                              imagePreviews[
+                                                `member_${member.id}`
+                                              ] || member.photo
+                                                ? "cursor-not-allowed"
+                                                : "cursor-pointer"
+                                            }`}
+                                          >
+                                            Change Photo
+                                          </span>
+                                          <input
+                                            type="file"
+                                            accept="image/*"
+                                            className="hidden"
+                                            onChange={(e) =>
+                                              handleMemberPhoto(
+                                                member.id,
+                                                e.target.files?.[0]
+                                              )
+                                            }
+                                            disabled={
+                                              !!(
+                                                imagePreviews[
+                                                  `member_${member.id}`
+                                                ] || member.photo
+                                              )
+                                            }
+                                          />
+                                        </label>
+
+                                        {imagePreviews[`member_${member.id}`] ||
+                                        member.photo ? (
+                                          <div className="relative">
+                                            <img
+                                              src={
+                                                imagePreviews[
+                                                  `member_${member.id}`
+                                                ] || member.photo
+                                              }
+                                              alt="member"
+                                              className="h-28 w-28 object-cover rounded mt-2"
+                                            />
+                                            <button
+                                              onClick={() => {
+                                                setTeam((prev) =>
+                                                  prev.map((m) =>
+                                                    m.id === member.id
+                                                      ? { ...m, photo: "" }
+                                                      : m
+                                                  )
+                                                );
+                                                setImagePreviews((p) => {
+                                                  const copy = { ...p };
+                                                  delete copy[
+                                                    `member_${member.id}`
+                                                  ];
+                                                  return copy;
+                                                });
+                                              }}
+                                              className="absolute -top-2 -right-2 bg-white rounded-full p-1 shadow"
+                                              title="Remove image"
+                                            >
+                                              <X size={14} />
+                                            </button>
+                                          </div>
+                                        ) : null}
+
+                                        <div className="mt-2">
+                                          <label className="inline-flex items-center gap-2 text-sm">
+                                            <input
+                                              type="checkbox"
+                                              checked={!!member.featured}
+                                              onChange={(e) =>
+                                                setTeam((prev) =>
+                                                  prev.map((m) =>
+                                                    m.id === member.id
+                                                      ? {
+                                                          ...m,
+                                                          featured:
+                                                            e.target.checked,
+                                                        }
+                                                      : m
+                                                  )
+                                                )
+                                              }
+                                            />
+                                            <span>Featured</span>
+                                          </label>
+                                        </div>
+                                      </div>
+                                    )}
+                                  </div>
+
+                                  <div className="flex gap-3">
+                                    <button
+                                      onClick={() => handleEdit(member)}
+                                      className="flex items-center gap-1 px-3 py-1 bg-gray-200 rounded text-sm"
+                                    >
+                                      <Pencil size={14} /> Edit
+                                    </button>
+                                    <button
+                                      onClick={() => handleDelete(member.id)}
+                                      className="flex items-center gap-1 px-3 py-1 bg-gray-200 rounded text-sm"
+                                    >
+                                      <Trash2 size={14} /> Delete
+                                    </button>
+                                  </div>
+                                </motion.div>
+                              )}
+                            </AnimatePresence>
+                          </div>
+                        )}
+                      </Draggable>
+                    ))}
+                  {provided.placeholder}
+                </div>
+              )}
+            </Droppable>
+          </div>
         </DragDropContext>
       </div>
 

@@ -64,7 +64,7 @@ const TeamMembers = () => {
               <React.Fragment key={key}>
                 <motion.div
                   layout
-                  className="grid grid-cols-2 md:grid-cols-[0.7fr_1fr_0.7fr] gap-6 text-[10px] md:text-sm py-4 items-start"
+                  className="grid grid-cols-2 md:grid-cols-[0.7fr_1fr_0.7fr] gap-6 text-xs md:text-sm py-4 items-start"
                 >
                   <span>{name}</span>
                   <div className="flex justify-between items-center w-[140px] md:w-[266px]">
@@ -102,21 +102,21 @@ const TeamMembers = () => {
                         stiffness: 300,
                         damping: 35,
                       }}
-                      className="overflow-hidden col-span-full grid grid-cols-[max-content_1fr] md:grid-cols-[0.7fr_1fr_0.7fr] gap-8 text-sm text-[#5a5a5a] px-0 py-8"
+                      className="overflow-hidden col-span-full grid grid-cols-1 md:grid-cols-[0.7fr_1fr_0.7fr] gap-8 text-sm text-[#5a5a5a] px-0 py-8"
                     >
                       <div className="flex justify-center md:justify-start">
                         {img ? (
                           <img
                             src={img}
                             alt={name}
-                            className="w-[80px] h-[107px] md:w-[200px] md:h-[250px] object-cover rounded-sm opacity-100"
+                            className="w-full md:w-[200px] md:h-[250px] object-cover rounded-sm opacity-100"
                           />
                         ) : (
-                          <div className="w-[80px] h-[107px] md:w-[200px] md:h-[250px] bg-gray-100" />
+                          <div className=" w-full h-[280px] md:w-[200px] md:h-[250px] bg-gray-100" />
                         )}
                       </div>
 
-                      <div className="flex flex-col max-w-[200px] md:max-w-xl justify-start gap-2 text-[8px] md:text-xs xl:text-sm">
+                      <div className="flex flex-col  md:max-w-xl justify-start gap-2 text-xs xl:text-sm">
                         <p>{description}</p>
                       </div>
                     </motion.div>

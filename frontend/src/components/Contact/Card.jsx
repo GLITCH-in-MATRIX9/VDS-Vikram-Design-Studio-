@@ -28,20 +28,41 @@ const Card = ({ data }) => {
         <h2 className="font-sora leading-[1.4] font-semibold uppercase text-base md:text-[28px] xl:text-[40px]">
           {data.city}
         </h2>
-        <div className="details flex w-full md:flex-col md:gap-4 xl:flex-row justify-between">
-          <div className="phone md:min-w-fit">
-            <h3 className="font-sora leading-[1.4] font-semibold text-xs md:text-base xl:text-xl">
-              Call us:
-            </h3>
-            {/* List of phone numbers for this location */}
-            {data.phone_numbers.map((number, id) => (
-              <p
-                className="text-xs leading-[1.4] md:text-sm xl:text-base"
-                key={id}
-              >
-                {number}
-              </p>
-            ))}
+        <div className="details flex w-full md:flex-col gap-1 md:gap-4 xl:flex-row justify-between">
+          <div className="flex flex-col md:gap-4 min-w-0">
+            <div className="phone md:min-w-fit">
+              <h3 className="font-sora leading-[1.4] font-semibold text-xs md:text-base xl:text-xl">
+                Call us:
+              </h3>
+              {/* List of phone numbers for this location */}
+              {data.phone_numbers.map((number, id) => (
+                <p
+                  className="text-xs leading-[1.4] md:text-sm xl:text-base"
+                  key={id}
+                >
+                  {number}
+                </p>
+              ))}
+            </div>
+            <div className="email ">
+              <h3 className="font-sora leading-[1.4] font-semibold text-xs md:text-base xl:text-xl">
+                Email us:
+              </h3>
+              {data.email_addresses ? (
+                data.email_addresses.map((email, id) => (
+                  <p
+                    className="text-xs leading-[1.4] md:text-sm xl:text-base break-all"
+                    key={id}
+                  >
+                    {email}
+                  </p>
+                ))
+              ) : (
+                <p className="text-xs leading-[1.4] md:text-sm xl:text-base break-all">
+                  info@vikramdesignstudio.com
+                </p>
+              )}
+            </div>
           </div>
           <div className="address min-w-fit">
             <h3 className="font-sora leading-[1.4] font-semibold text-xs md:text-base xl:text-xl">

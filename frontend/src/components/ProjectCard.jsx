@@ -70,10 +70,10 @@ const ProjectCard = ({ project }) => {
 
               {/* Mobile-only Text Content - Centered below image */}
               <div className="xl:hidden max-w-[400px] xl:max-w-[800px] order-2 flex gap-1 flex-col w-full py-3">
-                <p className="text-xs text-[#7E797A] uppercase">
+                <p className="text-[11px] text-[#7E797A] uppercase">
                   {project?.category || "Residential"}
                 </p>
-                <h2 className="font-sora text-xl font-semibold text-[#3E3C3C]">
+                <h2 className="font-sora text-[15px] font-semibold text-[#3E3C3C]">
                   {project?.name || project?.title || "Project Name"}
                 </h2>
               </div>
