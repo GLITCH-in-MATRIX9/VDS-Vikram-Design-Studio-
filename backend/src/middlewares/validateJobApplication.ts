@@ -1,17 +1,17 @@
 import { Request, Response, NextFunction } from "express";
-import Role from "../models/role";
+import Role from "../models/Role";
 
 const validateJobApplication = async (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const { roleSlug, answers } = req.body;
 
     if (!roleSlug || !answers) {
       return res.status(400).json({
-        message: "roleSlug and answers are required"
+        message: "roleSlug and answers are required",
       });
     }
 
@@ -19,7 +19,7 @@ const validateJobApplication = async (
 
     if (!role) {
       return res.status(400).json({
-        message: "Invalid role"
+        message: "Invalid role",
       });
     }
 
@@ -50,7 +50,7 @@ const validateJobApplication = async (
     if (missingFields.length > 0) {
       return res.status(400).json({
         message: "Missing required fields",
-        missingFields
+        missingFields,
       });
     }
 
@@ -58,16 +58,16 @@ const validateJobApplication = async (
        Reject UNKNOWN fields
     ========================= */
 
-    const allowedFieldNames = roleFields.map(f => f.name);
+    const allowedFieldNames = roleFields.map((f: any) => f.name);
 
     const unknownFields = Object.keys(answers).filter(
-      key => !allowedFieldNames.includes(key)
+      (key) => !allowedFieldNames.includes(key),
     );
 
     if (unknownFields.length > 0) {
       return res.status(400).json({
         message: "Unknown fields detected",
-        unknownFields
+        unknownFields,
       });
     }
 
@@ -75,7 +75,7 @@ const validateJobApplication = async (
   } catch (err) {
     console.error("Validation error:", err);
     res.status(500).json({
-      message: "Validation failed"
+      message: "Validation failed",
     });
   }
 };
