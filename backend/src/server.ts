@@ -20,7 +20,7 @@ import { generalRateLimit } from "./middlewares/rateLimit.middleware";
 import tagRoutes from "./routes/tag.routes";
 
 // Connect to MongoDB
-connectDB(config.mongoUri);
+connectDB();
 
 const app: Express = express();
 const PORT = config.port;

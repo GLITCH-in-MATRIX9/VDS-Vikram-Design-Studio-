@@ -60,7 +60,6 @@ export const submitApplication = async (
         email: applicantEmail,
         name: applicantName,
         position: role.roleName,
-        roleSlug: roleSlug,
       }).catch((error) => {
         console.error("❌ Applicant email failed:", error);
       });

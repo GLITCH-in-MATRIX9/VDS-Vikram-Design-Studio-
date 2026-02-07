@@ -65,4 +65,3 @@ const cleanBase64Images = async (): Promise<void> => {
   }
 };
 
-cleanBase64Images();
