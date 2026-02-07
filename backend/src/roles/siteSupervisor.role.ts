@@ -4,6 +4,8 @@ export const SiteSupervisorRole: RoleData = {
   roleName: "Site Supervisor",
   slug: "site-supervisor",
 
+  isActive: true,
+
   /* =========================
      JOB METADATA (READ ONLY)
   ========================== */

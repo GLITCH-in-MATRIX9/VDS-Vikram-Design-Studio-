@@ -4,7 +4,7 @@ import { Types } from "mongoose";
 import { Project } from "../models/Project.model";
 import { AdminUser, IAdminUser } from "../models/AdminUser.model";
 import { ActivityLog } from "../models/ActivityLog.model";
-import { JobApplication } from "../models/JobApplication.model";
+import JobApplication  from "../models/JobApplication.model";
 
 /* ================================
    EXTEND EXPRESS REQUEST

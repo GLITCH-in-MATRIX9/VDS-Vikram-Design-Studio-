@@ -4,6 +4,8 @@ export const SeniorInteriorDesignerRole: RoleData = {
   roleName: "Senior Interior Designer",
   slug: "senior-interior-designer",
 
+  isActive: true,
+
   /* =========================
      JOB METADATA (READ ONLY)
   ========================== */

@@ -9,7 +9,6 @@ import authRoutes from "./routes/auth.routes";
 import projectRoutes from "./routes/project.routes";
 import contactRoutes from "./routes/contact.routes";
 import adminRoutes from "./routes/admin.routes";
-import hiringRoutes from "./routes/hiring.routes";
 import aboutRoutes from "./routes/about.routes";
 import contactContentRoutes from "./routes/contactContent.routes";
 import rolesRoute from "./routes/roles.routes";
