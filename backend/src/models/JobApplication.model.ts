@@ -1,73 +1,66 @@
-import { Schema, model, Document } from 'mongoose';
+import mongoose, { Schema, Document } from "mongoose";
 
-export interface IJobApplication extends Document {
-  jobPostingId: string;
-  applicantName: string;
-  applicantEmail: string;
-  applicantPhone: string;
-  resumeUrl: string;
-  coverLetter?: string;
-  status: 'PENDING' | 'REVIEWED' | 'SHORTLISTED' | 'REJECTED' | 'HIRED';
-  appliedAt: Date;
-  reviewedAt?: Date;
-  reviewedBy?: string;
-  notes?: string;
+/* =========================
+   PURE DATA TYPE
+========================= */
+
+export interface JobApplicationData {
+  roleSlug: string;                 // e.g. "junior-architect"
+  answers: Record<string, any>;     // dynamic form responses
+  status?: "submitted" | "reviewed" | "shortlisted" | "rejected";
+  notes?: string;                   // internal HR notes
 }
 
-const JobApplicationSchema = new Schema<IJobApplication>({
-  jobPostingId: {
-    type: String,
-    required: true,
-    ref: 'JobPosting'
+/* =========================
+   MONGOOSE DOCUMENT TYPE
+========================= */
+
+export interface JobApplicationDocument
+  extends JobApplicationData,
+    Document {
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+/* =========================
+   SCHEMA
+========================= */
+
+const JobApplicationSchema = new Schema<JobApplicationDocument>(
+  {
+    roleSlug: {
+      type: String,
+      required: true,
+      index: true
+    },
+
+    answers: {
+      type: Schema.Types.Mixed,
+      required: true
+    },
+
+    status: {
+      type: String,
+      enum: ["submitted", "reviewed", "shortlisted", "rejected"],
+      default: "submitted"
+    },
+
+    notes: {
+      type: String
+    }
   },
-  applicantName: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  applicantEmail: {
-    type: String,
-    required: true,
-    lowercase: true,
-    trim: true
-  },
-  applicantPhone: {
-    type: String,
-    required: true,
-    trim: true
-  },
-  resumeUrl: {
-    type: String,
-    required: true
-  },
-  coverLetter: {
-    type: String
-  },
-  status: {
-    type: String,
-    enum: ['PENDING', 'REVIEWED', 'SHORTLISTED', 'REJECTED', 'HIRED'],
-    default: 'PENDING'
-  },
-  appliedAt: {
-    type: Date,
-    default: Date.now
-  },
-  reviewedAt: {
-    type: Date
-  },
-  reviewedBy: {
-    type: String,
-    ref: 'AdminUser'
-  },
-  notes: {
-    type: String
+  {
+    timestamps: true
   }
-}, {
-  timestamps: true
-});
+);
 
-JobApplicationSchema.index({ jobPostingId: 1, status: 1 });
-JobApplicationSchema.index({ appliedAt: -1 });
-JobApplicationSchema.index({ applicantEmail: 1 });
+/* =========================
+   MODEL
+========================= */
 
-export const JobApplication = model<IJobApplication>('JobApplication', JobApplicationSchema);
+const JobApplication = mongoose.model<JobApplicationDocument>(
+  "JobApplication",
+  JobApplicationSchema
+);
+
+export default JobApplication;

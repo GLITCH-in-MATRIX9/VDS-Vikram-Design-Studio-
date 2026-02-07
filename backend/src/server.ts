@@ -12,7 +12,9 @@ import adminRoutes from "./routes/admin.routes";
 import hiringRoutes from "./routes/hiring.routes";
 import aboutRoutes from "./routes/about.routes";
 import contactContentRoutes from "./routes/contactContent.routes";
+import rolesRoute from "./routes/roles.routes";
 import teamRoutes from "./routes/team.routes";
+import applicationsRoute from "./routes/applications.routes";
 
 import { errorHandler } from "./middlewares/error.middleware";
 import { generalRateLimit } from "./middlewares/rateLimit.middleware";
@@ -43,7 +45,7 @@ app.use(
         callback(new Error("Not allowed by CORS"));
       }
     },
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH"],
     credentials: true,
   })
 );
@@ -89,11 +91,12 @@ app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/contact", contactRoutes);
 app.use("/api/admin", adminRoutes);
-app.use("/api/hiring", hiringRoutes);
 app.use("/api/tags", tagRoutes);
 app.use("/api/about", aboutRoutes);
 app.use("/api/content", contactContentRoutes);
 app.use("/api/content", teamRoutes);
+app.use("/api/roles", rolesRoute);
+app.use("/api/applications", applicationsRoute);
 
 // Error & 404 handlers
 app.use(errorHandler);

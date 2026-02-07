@@ -9,6 +9,8 @@ import Team from "./pages/Team";
 import Careers from "./pages/Careers";
 import Contact from "./pages/Contact";
 import ApplicationFormPage from "./pages/ApplicationFormPage";
+import JobDetails from "./components/Careers/JobDetails";
+
 
 // Auth Pages
 import Login from "./pages/authentication/Login";
@@ -22,6 +24,8 @@ import EditProject from "./components/Dashboard/Projects/EditProject";
 import AdminHome from "./components/Dashboard/SidebarMenuOptions/AdminHome";
 import WebsiteContentPage from "./components/Dashboard/SidebarMenuOptions/WebsiteContentPage";
 import Settings from "./components/Dashboard/SidebarMenuOptions/Settings";
+import HiringPortal from "./components/Dashboard/SidebarMenuOptions/HiringPortal";
+import Legal from "./pages/Legal";
 
 // Misc
 import NotFound from "./pages/NotFound";
@@ -37,8 +41,11 @@ const AppRoutes = () => {
       <Route path="/about" element={<About />} />
       <Route path="/team" element={<Team />} />
       <Route path="/careers" element={<Careers />} />
+      <Route path="/careers/:slug" element={<JobDetails />} />
+
       <Route path="/contact" element={<Contact />} />
       <Route path="/apply" element={<ApplicationFormPage />} />
+      <Route path="/legal" element={<Legal />} />
 
       {/* Authentication Pages */}
       <Route path="/login" element={<Login />} />
@@ -55,6 +62,7 @@ const AppRoutes = () => {
           <Route path="projects" element={<Projects />} />
           <Route path="projects/edit/:id" element={<EditProject />} />
           <Route path="website-content" element={<WebsiteContentPage />} />
+          <Route path="hiring" element={<HiringPortal />} />
           <Route path="settings" element={<Settings />} />
 
         </Route>

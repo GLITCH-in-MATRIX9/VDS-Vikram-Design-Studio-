@@ -1,440 +1,268 @@
+// controllers/hiring.controller.ts
 import { Request, Response } from "express";
-import { JobPosting } from "../models/JobPosting.model";
-import { JobApplication } from "../models/JobApplication.model";
-import { ActivityLog } from "../models/ActivityLog.model";
-import { sendEmail } from "../services/email.service";
+import Role from "../models/Role";
+import JobApplication from "../models/JobApplication.model";
+import { sendApplicantConfirmationEmail } from "../services/ApplicantMail.service";
+import { sendStudioApplicationEmail } from "../services/StudioMail.service";
 
-// Defining a minimal interface for the populated job posting for type safety
-interface PopulatedJobPosting {
-  title: string;
-  department: string;
-  // Add other required fields if needed
+interface SubmitApplicationRequest extends Request {
+  body: {
+    roleSlug: string;
+    applicant: {
+      name: string;
+      email: string;
+    };
+    answers: Record<string, any>;
+  };
 }
 
-// NOTE: Since the file doesn't include the definition of req.user,
-// we are assuming the parent file includes a definition like:
-// interface AuthRequest extends Request { user?: IAdminUser; }
-// If you encounter errors with req.user?._id, we'll need to use the non-null assertion '!' here too.
-
-// Job Posting Management
-export const getJobPostings = async (req: Request, res: Response) => {
-  // ... (omitting unchanged code)
+/**
+ * Submit job application
+ * Called AFTER validateJobApplication middleware
+ */
+export const submitApplication = async (
+  req: SubmitApplicationRequest,
+  res: Response,
+) => {
   try {
-    const { isActive, department, experienceLevel } = req.query;
+    const { roleSlug, answers } = req.body;
 
-    let query = {};
-    if (isActive !== undefined) {
-      query = { ...query, isActive: isActive === "true" };
-    }
-    if (department) {
-      query = { ...query, department: department as string };
-    }
-    if (experienceLevel) {
-      query = { ...query, experienceLevel: experienceLevel as string };
+    // Double-check role exists and is active
+    const role = await Role.findOne({ slug: roleSlug, isActive: true });
+    if (!role) {
+      return res.status(404).json({
+        message: "Role not found or inactive",
+      });
     }
 
-    const jobPostings = await JobPosting.find(query)
-      .populate("createdBy", "name email")
-      .sort({ createdAt: -1 });
+    // Extract applicant details
+    const applicantName = req.body.applicant?.name || "Applicant";
+    const applicantEmail = req.body.applicant?.email || "";
 
-    res.status(200).json({
-      success: true,
-      data: jobPostings,
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch job postings",
-      error: error.message,
-    });
-  }
-};
-
-export const createJobPosting = async (req: Request, res: Response) => {
-  // ... (omitting unchanged code)
-  try {
-    const {
-      title,
-      department,
-      location,
-      employmentType,
-      experienceLevel,
-      description,
-      requirements,
-      responsibilities,
-      benefits,
-      salaryRange,
-      applicationDeadline,
-    } = req.body;
-
-    const jobPosting = await JobPosting.create({
-      title,
-      department,
-      location,
-      employmentType,
-      experienceLevel,
-      description,
-      requirements: Array.isArray(requirements) ? requirements : [],
-      responsibilities: Array.isArray(responsibilities) ? responsibilities : [],
-      benefits: Array.isArray(benefits) ? benefits : [],
-      salaryRange,
-      applicationDeadline: applicationDeadline
-        ? new Date(applicationDeadline)
-        : undefined,
-      createdBy: (req as any).user?._id, // Assuming AuthRequest is used in the router
-    });
-
-    // Log activity
-    await ActivityLog.create({
-      userId: (req as any).user?._id, // Assuming AuthRequest is used in the router
-      action: "CREATE",
-      entityType: "JOB",
-      entityId: jobPosting._id,
-      description: `Created job posting: ${jobPosting.title}`,
-      metadata: {
-        department: jobPosting.department,
-        location: jobPosting.location,
+    // Create application
+    const application = await JobApplication.create({
+      roleSlug,
+      applicant: {
+        name: applicantName,
+        email: applicantEmail,
       },
+      answers,
+      status: "submitted",
+    });
+
+    console.log(
+      `✅ New application: ${applicantName} <${applicantEmail}> for ${role.roleName}`,
+    );
+
+    // 1️⃣ Applicant confirmation email
+    if (applicantEmail) {
+      sendApplicantConfirmationEmail({
+        email: applicantEmail,
+        name: applicantName,
+        position: role.roleName,
+        roleSlug,
+      }).catch((error) => {
+        console.error("❌ Applicant email failed:", error);
+      });
+    }
+
+    // 2️⃣ Studio notification email ✅
+    sendStudioApplicationEmail({
+      applicantName,
+      applicantEmail,
+      position: role.roleName,
+      answers,
+    }).catch((error) => {
+      console.error("❌ Studio email failed:", error);
     });
 
     res.status(201).json({
-      success: true,
-      message: "Job posting created successfully",
-      data: jobPosting,
+      message:
+        "Application submitted successfully! Check your email for confirmation.",
+      applicationId: application._id,
+      roleName: role.roleName,
     });
-  } catch (error: any) {
+  } catch (error) {
+    console.error("❌ Submit application error:", error);
     res.status(500).json({
-      success: false,
-      message: "Failed to create job posting",
-      error: error.message,
+      message: "Failed to submit application",
     });
   }
 };
 
-export const updateJobPosting = async (req: Request, res: Response) => {
-  // ... (omitting unchanged code)
+/**
+ * Get all applications (admin)
+ */
+export const getApplications = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    const updateData = req.body;
+    const { roleSlug, status, page = 1, limit = 20 } = req.query;
+    const skip = ((Number(page) - 1) * Number(limit)) as number;
 
-    const jobPosting = await JobPosting.findByIdAndUpdate(id, updateData, {
-      new: true,
-      runValidators: true,
-    }).populate("createdBy", "name email");
+    const query: any = {};
 
-    if (!jobPosting) {
-      return res.status(404).json({
-        success: false,
-        message: "Job posting not found",
-      });
-    }
+    if (roleSlug) query.roleSlug = roleSlug;
+    if (status) query.status = status;
 
-    // Log activity
-    await ActivityLog.create({
-      userId: (req as any).user?._id, // Assuming AuthRequest is used in the router
-      action: "UPDATE",
-      entityType: "JOB",
-      entityId: jobPosting._id,
-      description: `Updated job posting: ${jobPosting.title}`,
-      metadata: { changes: Object.keys(updateData) },
-    });
+    const [applications, total] = await Promise.all([
+      JobApplication.find(query)
+        .sort({ createdAt: -1 })
+        .limit(Number(limit))
+        .skip(skip)
+        .lean(),
 
-    res.status(200).json({
-      success: true,
-      message: "Job posting updated successfully",
-      data: jobPosting,
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to update job posting",
-      error: error.message,
-    });
-  }
-};
+      JobApplication.countDocuments(query),
+    ]);
 
-export const deleteJobPosting = async (req: Request, res: Response) => {
-  // ... (omitting unchanged code)
-  try {
-    const { id } = req.params;
+    // Add role info to each application
+    const applicationsWithRole = await Promise.all(
+      applications.map(async (app: any) => {
+        const role = await Role.findOne({ slug: app.roleSlug }).select(
+          "roleName",
+        );
+        return { ...app, roleName: role?.roleName };
+      }),
+    );
 
-    const jobPosting = await JobPosting.findByIdAndDelete(id);
-    if (!jobPosting) {
-      return res.status(404).json({
-        success: false,
-        message: "Job posting not found",
-      });
-    }
-
-    // Log activity
-    await ActivityLog.create({
-      userId: (req as any).user?._id, // Assuming AuthRequest is used in the router
-      action: "DELETE",
-      entityType: "JOB",
-      entityId: jobPosting._id,
-      description: `Deleted job posting: ${jobPosting.title}`,
-      metadata: { deletedJob: jobPosting.title },
-    });
-
-    res.status(200).json({
-      success: true,
-      message: "Job posting deleted successfully",
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to delete job posting",
-      error: error.message,
-    });
-  }
-};
-
-// Job Application Management
-export const getJobApplications = async (req: Request, res: Response) => {
-  // ... (omitting unchanged code)
-  try {
-    const { jobPostingId, status, limit = 50, page = 1 } = req.query;
-
-    let query = {};
-    if (jobPostingId) {
-      query = { jobPostingId: jobPostingId as string };
-    }
-    if (status) {
-      query = { ...query, status: status as string };
-    }
-
-    const skip = (Number(page) - 1) * Number(limit);
-
-    const applications = await JobApplication.find(query)
-      .populate("jobPostingId", "title department")
-      .populate("reviewedBy", "name email")
-      .sort({ appliedAt: -1 })
-      .skip(skip)
-      .limit(Number(limit));
-
-    const total = await JobApplication.countDocuments(query);
-
-    res.status(200).json({
-      success: true,
-      data: {
-        applications,
-        pagination: {
-          current: Number(page),
-          total: Math.ceil(total / Number(limit)),
-          count: applications.length,
-          totalCount: total,
-        },
+    res.json({
+      applications: applicationsWithRole,
+      pagination: {
+        page: Number(page),
+        limit: Number(limit),
+        total,
+        pages: Math.ceil(total / Number(limit)),
       },
     });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to fetch job applications",
-      error: error.message,
-    });
+  } catch (error) {
+    console.error("❌ Get applications error:", error);
+    res.status(500).json({ message: "Failed to fetch applications" });
   }
 };
 
+/**
+ * Get applications by role slug
+ */
+export const getApplicationsByRole = async (req: Request, res: Response) => {
+  try {
+    const { roleSlug } = req.params;
+
+    const applications = await JobApplication.find({ roleSlug })
+      .sort({ createdAt: -1 })
+      .lean();
+
+    const role = await Role.findOne({ slug: roleSlug });
+
+    res.json({
+      roleName: role?.roleName || roleSlug,
+      applications: applications.map((app: any) => ({
+        ...app,
+        roleName: role?.roleName,
+      })),
+    });
+  } catch (error) {
+    console.error("❌ Get role applications error:", error);
+    res.status(500).json({ message: "Failed to fetch applications" });
+  }
+};
+
+/**
+ * Update application status (admin)
+ */
 export const updateApplicationStatus = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { status, notes } = req.body;
+
+    const allowedStatuses = [
+      "submitted",
+      "reviewed",
+      "shortlisted",
+      "rejected",
+      "on-hold",
+    ];
+
+    if (!status || !allowedStatuses.includes(status)) {
+      return res.status(400).json({
+        message: "Invalid status",
+        allowedStatuses,
+      });
+    }
 
     const application = await JobApplication.findByIdAndUpdate(
       id,
       {
         status,
         notes,
-        reviewedAt: new Date(),
-        reviewedBy: (req as any).user?._id, // Assuming AuthRequest is used in the router
+        updatedAt: new Date(),
       },
-      { new: true, runValidators: true }
-    )
-      .populate("jobPostingId", "title department")
-      .populate("reviewedBy", "name email");
+      { new: true },
+    );
 
     if (!application) {
-      return res.status(404).json({
-        success: false,
-        message: "Application not found",
-      });
+      return res.status(404).json({ message: "Application not found" });
     }
 
-    // 🔑 FIX 1: Assert jobPostingId as the populated object for email service (Line 268)
-    const populatedJobPosting =
-      application.jobPostingId as unknown as PopulatedJobPosting;
-
-    // Send email notification to applicant
-    try {
-      const emailHtml = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <meta charset="UTF-8">
-                    <title>Application Status Update</title>
-                    <style>
-                        body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
-                        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-                        .header { background-color: #2c3e50; color: white; padding: 30px 20px; text-align: center; border-radius: 8px 8px 0 0; }
-                        .content { padding: 30px; background-color: #fff; border: 1px solid #e0e0e0; border-radius: 0 0 8px 8px; }
-                        .status { padding: 15px; border-radius: 5px; margin: 20px 0; }
-                        .status.shortlisted { background-color: #d4edda; border-left: 4px solid #28a745; }
-                        .status.rejected { background-color: #f8d7da; border-left: 4px solid #dc3545; }
-                        .status.hired { background-color: #cce5ff; border-left: 4px solid #007bff; }
-                    </style>
-                </head>
-                <body>
-                    <div class="container">
-                        <div class="header">
-                            <h2>Application Status Update</h2>
-                            <p>Vikram Design Studio</p>
-                        </div>
-                        <div class="content">
-                            <p>Dear ${application.applicantName},</p>
-                            <p>We are writing to inform you about the status of your application for the <strong>${
-                              populatedJobPosting.title
-                            }</strong> position.</p>
-                            
-                            <div class="status ${status.toLowerCase()}">
-                                <h3>Status: ${
-                                  status.charAt(0).toUpperCase() +
-                                  status.slice(1).toLowerCase()
-                                }</h3>
-                                ${
-                                  notes
-                                    ? `<p><strong>Notes:</strong> ${notes}</p>`
-                                    : ""
-                                }
-                            </div>
-                            
-                            <p>Thank you for your interest in joining our team.</p>
-                            <p>Best regards,<br><strong>The VDS Team</strong></p>
-                        </div>
-                    </div>
-                </body>
-                </html>
-            `;
-
-      await sendEmail({
-        to: application.applicantEmail,
-        subject: `Application Status Update - ${populatedJobPosting.title}`, // 🔑 FIX 2 (Line 285)
-        html: emailHtml,
-      });
-    } catch (emailError) {
-      console.warn("Failed to send status update email:", emailError);
-    }
-
-    // Log activity
-    await ActivityLog.create({
-      userId: (req as any).user!._id, // Assuming AuthRequest is used in the router
-      action: "UPDATE",
-      entityType: "APPLICATION",
-      entityId: application._id,
-      description: `Updated application status to ${status} for ${application.applicantName}`,
-      metadata: {
-        applicantEmail: application.applicantEmail,
-        jobTitle: populatedJobPosting.title, // 🔑 FIX 3 (Line 301)
-        status,
-      },
+    res.json({
+      message: "Status updated successfully",
+      application,
     });
-
-    res.status(200).json({
-      success: true,
-      message: "Application status updated successfully",
-      data: application,
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to update application status",
-      error: error.message,
-    });
+  } catch (error) {
+    console.error("❌ Update status error:", error);
+    res.status(500).json({ message: "Failed to update status" });
   }
 };
 
-// Public job application submission
-export const submitJobApplication = async (req: Request, res: Response) => {
+/**
+ * Delete application (admin)
+ */
+export const deleteApplication = async (req: Request, res: Response) => {
   try {
-    const {
-      jobPostingId,
-      applicantName,
-      applicantEmail,
-      applicantPhone,
-      resumeUrl,
-      coverLetter,
-    } = req.body;
+    const { id } = req.params;
 
-    // Validate required fields
-    // ... (omitting unchanged validation code)
+    const application = await JobApplication.findByIdAndDelete(id);
 
-    // Check if job posting exists and is active
-    const jobPosting = await JobPosting.findById(jobPostingId);
-    if (!jobPosting || !jobPosting.isActive) {
-      return res.status(404).json({
-        success: false,
-        message: "Job posting not found or no longer active",
-      });
+    if (!application) {
+      return res.status(404).json({ message: "Application not found" });
     }
 
-    // Check application deadline
-    // ... (omitting unchanged deadline code)
-
-    const application = await JobApplication.create({
-      jobPostingId,
-      applicantName,
-      applicantEmail,
-      applicantPhone,
-      resumeUrl,
-      coverLetter,
+    res.json({
+      message: "Application deleted successfully",
+      deletedId: id,
     });
+  } catch (error) {
+    console.error("❌ Delete error:", error);
+    res.status(500).json({ message: "Failed to delete application" });
+  }
+};
 
-    // Send confirmation email to applicant
-    try {
-      const confirmationHtml = `
-                <!DOCTYPE html>
-                <html>
-                <head>
-// ... (omitting email template code)
-                </head>
-                <body>
-                    <div class="container">
-                        <div class="header">
-                            <h2>Application Received</h2>
-                            <p>Vikram Design Studio</p>
-                        </div>
-                        <div class="content">
-                            <p>Dear ${applicantName},</p>
-                            <p>Thank you for your interest in the <strong>${jobPosting.title}</strong> position at Vikram Design Studio.</p>
-                            <p>We have received your application and will review it carefully. We will get back to you within 5-7 business days.</p>
-                            <p>Best regards,<br><strong>The VDS Team</strong></p>
-                        </div>
-                    </div>
-                </body>
-                </html>
-            `;
-
-      await sendEmail({
-        to: applicantEmail,
-        subject: `Application Received - ${jobPosting.title}`,
-        html: confirmationHtml,
-      });
-    } catch (emailError) {
-      console.warn("Failed to send confirmation email:", emailError);
-    }
-
-    res.status(201).json({
-      success: true,
-      message: "Application submitted successfully",
-      data: {
-        id: application._id,
-        appliedAt: application.appliedAt,
+/**
+ * Get application stats (admin dashboard)
+ */
+export const getApplicationStats = async (req: Request, res: Response) => {
+  try {
+    const stats = await JobApplication.aggregate([
+      {
+        $group: {
+          _id: "$status",
+          count: { $sum: 1 },
+        },
       },
+      {
+        $sort: { count: -1 },
+      },
+    ]);
+
+    const total = await JobApplication.countDocuments();
+
+    res.json({
+      stats,
+      total,
+      byStatus: stats.reduce((acc: any, stat: any) => {
+        acc[stat._id] = stat.count;
+        return acc;
+      }, {}),
     });
-  } catch (error: any) {
-    res.status(500).json({
-      success: false,
-      message: "Failed to submit application",
-      error: error.message,
-    });
+  } catch (error) {
+    console.error("❌ Stats error:", error);
+    res.status(500).json({ message: "Failed to fetch stats" });
   }
 };

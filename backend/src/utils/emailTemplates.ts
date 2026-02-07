@@ -9,10 +9,12 @@ interface ApplicantConfirmationData {
  * @param {ApplicantConfirmationData} data - The dynamic data for the email.
  * @returns {string} - The complete HTML string for the email body.
  */
+
+
 export const getApplicantConfirmationHtml = (data: ApplicantConfirmationData): string => {
   const { name, jobTitle} = data;
 
-  // The CSS and overall structure remain the same to keep it beautiful
+
   return `
     <!DOCTYPE html>
     <html lang="en">

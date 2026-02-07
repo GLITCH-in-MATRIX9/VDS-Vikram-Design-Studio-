@@ -149,6 +149,11 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
+                  <Link to="/careers" onClick={closeAllMenus}>
+                    CAREERS
+                  </Link>
+                </li>
+              <li>
                 <Link to="/contact" onClick={closeAllMenus}>
                   CONTACT
                 </Link>
@@ -372,6 +377,11 @@ const Navbar = () => {
                 <li>
                   <Link to="/team" onClick={closeAllMenus}>
                     TEAM
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/careers" onClick={closeAllMenus}>
+                    Careers
                   </Link>
                 </li>
                 <li>

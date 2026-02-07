@@ -7,6 +7,8 @@ import {
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
+const currentYear = new Date().getFullYear();
+
 const Footer = () => {
   return (
     <footer className="bg-[#F2EFEE]">
@@ -56,10 +58,20 @@ const Footer = () => {
           </a>
         </div>
 
-        {/* Right section: Copyright notice, visible only on large screens */}
-        <div className="text-gray-500 text-xs hidden xl:block">
-          Vikram Design Studio © 2026. All rights reserved.
+        {/* Right section: Copyright + legal links */}
+        <div className="text-gray-500 text-xs hidden xl:flex flex-col items-end gap-1">
+          <span>
+            Vikram Design Studio © {currentYear}. All rights reserved.
+          </span>
+
+          <Link
+            to="/legal"
+            className="hover:text-gray-700 transition"
+          >
+            Privacy Policy & Terms
+          </Link>
         </div>
+
       </div>
     </footer>
   );

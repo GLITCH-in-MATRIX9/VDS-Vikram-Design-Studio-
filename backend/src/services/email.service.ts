@@ -1,8 +1,6 @@
 import nodemailer from "nodemailer";
 import { config } from "../config/env";
 
-/* ---------------- TRANSPORTER ---------------- */
-
 const transporter = nodemailer.createTransport({
   host: config.email.host,
   port: config.email.port,
@@ -13,8 +11,6 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-/* ---------------- VERIFY ---------------- */
-
 transporter.verify((error) => {
   if (error) {
     console.error("❌ Email transporter error:", error);
@@ -22,8 +18,6 @@ transporter.verify((error) => {
     console.log("✅ Email transporter ready");
   }
 });
-
-/* ---------------- TYPES ---------------- */
 
 export interface SendEmailOptions {
   to: string;
@@ -33,8 +27,6 @@ export interface SendEmailOptions {
   replyTo?: string;
 }
 
-/* ---------------- SEND EMAIL ---------------- */
-
 export const sendEmail = async ({
   to,
   subject,
@@ -42,6 +34,7 @@ export const sendEmail = async ({
   from,
   replyTo,
 }: SendEmailOptions): Promise<void> => {
+
   await transporter.sendMail({
     from: from || `"Vikram Design Studio" <${config.email.from}>`,
     to,

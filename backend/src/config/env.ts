@@ -1,7 +1,6 @@
 import dotenv from "dotenv";
 import path from "path";
 
-// Load environment variables
 dotenv.config({ path: path.resolve(__dirname, "../../.env") });
 
 const validateEnv = () => {
@@ -18,6 +17,7 @@ const validateEnv = () => {
     "EMAIL_PASS",
     "EMAIL_FROM",
     "ADMIN_EMAIL",
+    "CAREERS_EMAIL",
 
     // Cloudinary
     "CLOUDINARY_CLOUD_NAME",
@@ -30,6 +30,7 @@ const validateEnv = () => {
   ];
 
   const missing = requiredEnvVars.filter(v => !process.env[v]);
+
   if (missing.length) {
     throw new Error(`❌ Missing env vars: ${missing.join(", ")}`);
   }
@@ -39,25 +40,31 @@ validateEnv();
 
 export const config = {
   port: Number(process.env.PORT),
+
   mongoUri: process.env.MONGO_URI!,
+
   jwt: {
     secret: process.env.JWT_SECRET!,
     expiresIn: process.env.JWT_EXPIRES_IN!,
   },
+
   email: {
     host: process.env.EMAIL_HOST!,
     port: Number(process.env.EMAIL_PORT),
     user: process.env.EMAIL_USER!,
     pass: process.env.EMAIL_PASS!,
-    from: process.env.EMAIL_FROM!,      // sender
-    admin: process.env.ADMIN_EMAIL!,    // receiver
+    from: process.env.EMAIL_FROM!,      // sender identity
+    admin: process.env.ADMIN_EMAIL!,    // contact form inbox
+    careers: process.env.CAREERS_EMAIL!, // hiring inbox
   },
+
   cloudinary: {
     cloudName: process.env.CLOUDINARY_CLOUD_NAME!,
     apiKey: process.env.CLOUDINARY_API_KEY!,
     apiSecret: process.env.CLOUDINARY_API_SECRET!,
     folderName: process.env.CLOUDINARY_FOLDER_NAME!,
   },
+
   recaptcha: {
     secretKey: process.env.RECAPTCHA_SECRET_KEY!,
   },
