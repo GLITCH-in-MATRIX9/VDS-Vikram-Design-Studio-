@@ -22,12 +22,14 @@ const router = Router();
 /* ================================
    AUTH MIDDLEWARE
 ================================ */
+
 router.use(protect);
 
 /* ================================
    DASHBOARD
    All roles
 ================================ */
+
 router.get(
   "/dashboard/stats",
   requireRole(["super_admin", "hr_hiring", "project_content_manager"]),
@@ -38,15 +40,20 @@ router.get(
    USER MANAGEMENT
    Super Admin only
 ================================ */
+
 router.get("/users", requireRole(["super_admin"]), getAllUsers);
+
 router.post("/users", requireRole(["super_admin"]), createUser);
+
 router.put("/users/:id", requireRole(["super_admin"]), updateUser);
+
 router.delete("/users/:id", requireRole(["super_admin"]), deleteUser);
 
 /* ================================
    ABOUT PAGE MANAGEMENT
    Super Admin + Project Content Manager
 ================================ */
+
 router.get(
   "/about",
   requireRole(["super_admin", "project_content_manager"]),
@@ -75,6 +82,7 @@ router.put(
    ACTIVITY LOGS
    Super Admin + HR
 ================================ */
+
 router.get(
   "/activity",
   requireRole(["super_admin", "hr_hiring"]),

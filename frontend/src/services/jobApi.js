@@ -7,14 +7,16 @@ const ROLES_BASE = `${API_BASE}/roles`;
 const APPLICATIONS_BASE = `${API_BASE}/applications`;
 
 const jobApi = {
+
   /* =========================
-   ADMIN
-========================= */
+     ADMIN
+  ========================= */
 
   getAllRolesAdmin: async () => {
     const response = await axios.get(`${ROLES_BASE}/admin/all`);
     return response.data;
   },
+
 
   /* =========================
      ROLES
@@ -25,19 +27,28 @@ const jobApi = {
     return response.data;
   },
 
-  getRoleBySlug: async (slug) => {
-    const response = await axios.get(`${ROLES_BASE}/${slug}`);
-    return response.data;
-  },
-
-  toggleRoleStatus: async (roleId, isActive) => {
-    const response = await axios.patch(
-      `${ROLES_BASE}/${roleId}/status`,
-      { isActive }
+  // ✅ CITY REQUIRED NOW
+  getRoleBySlug: async (slug, city) => {
+    const response = await axios.get(
+      `${ROLES_BASE}/${slug}`,
+      {
+        params: { city }
+      }
     );
     return response.data;
   },
 
+  // ✅ CITY-BASED TOGGLE
+  toggleRoleStatus: async (roleId, city, state) => {
+    const response = await axios.patch(
+      `${ROLES_BASE}/${roleId}/status`,
+      {
+        city,
+        state
+      }
+    );
+    return response.data;
+  },
 
 
   /* =========================
@@ -57,9 +68,13 @@ const jobApi = {
     return response.data;
   },
 
-  getApplicationsByRole: async (roleSlug) => {
+  // ✅ CITY FILTER OPTIONAL
+  getApplicationsByRole: async (roleSlug, city) => {
     const response = await axios.get(
-      `${APPLICATIONS_BASE}/role/${roleSlug}`
+      `${APPLICATIONS_BASE}/role/${roleSlug}`,
+      {
+        params: city ? { city } : {}
+      }
     );
     return response.data;
   },
@@ -78,6 +93,7 @@ const jobApi = {
     );
     return response.data;
   }
+
 };
 
 export default jobApi;

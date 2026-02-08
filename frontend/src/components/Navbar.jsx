@@ -381,7 +381,7 @@ const Navbar = () => {
                 </li>
                 <li>
                   <Link to="/careers" onClick={closeAllMenus}>
-                    Careers
+                    CAREERS
                   </Link>
                 </li>
                 <li>

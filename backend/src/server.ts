@@ -14,16 +14,23 @@ import contactContentRoutes from "./routes/contactContent.routes";
 import rolesRoute from "./routes/roles.routes";
 import teamRoutes from "./routes/team.routes";
 import applicationsRoute from "./routes/applications.routes";
+import tagRoutes from "./routes/tag.routes";
 
 import { errorHandler } from "./middlewares/error.middleware";
 import { generalRateLimit } from "./middlewares/rateLimit.middleware";
-import tagRoutes from "./routes/tag.routes";
 
-// Connect to MongoDB
+// =============================
+// CONNECT DATABASE
+// =============================
+
 connectDB();
 
 const app: Express = express();
 const PORT = config.port;
+
+// =============================
+// CORS CONFIG
+// =============================
 
 const allowedOrigins = [
   "https://vikramdesignstudio.com",
@@ -34,50 +41,66 @@ const allowedOrigins = [
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (e.g. mobile apps, curl)
+
+      // Allow non-browser requests
       if (!origin) return callback(null, true);
 
       if (allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        console.warn(`❌ CORS blocked for origin: ${origin}`);
-        callback(new Error("Not allowed by CORS"));
+        return callback(null, true);
       }
+
+      console.warn(`❌ CORS blocked for origin: ${origin}`);
+      return callback(new Error("Not allowed by CORS"));
     },
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS","PATCH"],
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     credentials: true,
   })
 );
 
-// Parse JSON & URL-encoded payloads with memory optimization
+// =============================
+// BODY PARSING
+// =============================
+
 app.use(
   express.json({
     limit: "30mb",
     verify: (req, res, buf) => {
-      // Add memory monitoring
       if (buf.length > 15 * 1024 * 1024) {
-        // 15MB warning
-        console.warn("Large request detected:", buf.length, "bytes");
+        console.warn("⚠️ Large request detected:", buf.length, "bytes");
       }
     },
   })
 );
+
 app.use(
   express.urlencoded({
     extended: true,
     limit: "30mb",
   })
 );
+
+// =============================
+// RATE LIMIT
+// =============================
+
 app.use(generalRateLimit);
 
-// Upload directory
+// =============================
+// UPLOADS STATIC DIRECTORY
+// =============================
+
 const uploadRoot = process.env.UPLOAD_DIR || "uploads";
 const uploadsPath = path.join(process.cwd(), uploadRoot);
+
 fs.mkdirSync(uploadsPath, { recursive: true });
+
 app.use("/uploads", express.static(uploadsPath));
 
-// Health check
-app.get("/", (req: Request, res: Response) => {
+// =============================
+// HEALTH CHECK
+// =============================
+
+app.get("/", (_req: Request, res: Response) => {
   res.json({
     message: "VDS Backend API is running...",
     version: "1.0.0",
@@ -85,7 +108,10 @@ app.get("/", (req: Request, res: Response) => {
   });
 });
 
-// API Routes
+// =============================
+// API ROUTES
+// =============================
+
 app.use("/api/auth", authRoutes);
 app.use("/api/projects", projectRoutes);
 app.use("/api/contact", contactRoutes);
@@ -97,33 +123,47 @@ app.use("/api/content", teamRoutes);
 app.use("/api/roles", rolesRoute);
 app.use("/api/applications", applicationsRoute);
 
-// Error & 404 handlers
+// =============================
+// ERROR HANDLING
+// =============================
+
 app.use(errorHandler);
-app.use("*", (req: Request, res: Response) =>
+
+app.use("*", (_req: Request, res: Response) =>
   res.status(404).json({ message: "Route not found" })
 );
 
-// Memory monitoring
+// =============================
+// MEMORY MONITORING
+// =============================
+
 const logMemoryUsage = () => {
+
   const used = process.memoryUsage();
+
   console.log("Memory Usage:", {
     rss: `${Math.round(used.rss / 1024 / 1024)} MB`,
     heapTotal: `${Math.round(used.heapTotal / 1024 / 1024)} MB`,
     heapUsed: `${Math.round(used.heapUsed / 1024 / 1024)} MB`,
     external: `${Math.round(used.external / 1024 / 1024)} MB`,
   });
+
 };
 
-// Log memory usage every 5 minutes
+// Every 5 minutes
 setInterval(logMemoryUsage, 5 * 60 * 1000);
 
-// Force garbage collection if available
+// Optional manual GC (run node with --expose-gc)
 if (global.gc) {
   setInterval(() => {
     global.gc!();
-    console.log("Garbage collection triggered");
-  }, 10 * 60 * 1000); // Every 10 minutes
+    console.log("🧹 Garbage collection triggered");
+  }, 10 * 60 * 1000);
 }
+
+// =============================
+// START SERVER
+// =============================
 
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);

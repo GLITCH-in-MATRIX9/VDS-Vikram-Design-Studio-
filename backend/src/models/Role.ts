@@ -1,7 +1,7 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 /* =========================
-   PURE DATA TYPES (NO MONGOOSE)
+   PURE DATA TYPES
 ========================= */
 
 export interface IField {
@@ -25,18 +25,17 @@ export interface RoleData {
   roleName: string;
   slug: string;
 
-  isActive: boolean;
+  // CITY BASED ACTIVE STATE
+  cities: {
+    Kolkata: boolean;
+    Guwahati: boolean;
+  };
 
   jobDescription: string;
   responsibilities: string[];
   requirements: string[];
-
   fields: IField[];
 }
-
-/* =========================
-   MONGOOSE DOCUMENT TYPE
-========================= */
 
 export interface IRole extends RoleData, Document {}
 
@@ -45,30 +44,29 @@ export interface IRole extends RoleData, Document {}
 ========================= */
 
 const FieldSchema = new Schema<IField>({
-  name: { type: String, required: true },
-  label: { type: String, required: true },
-  type: { type: String, required: true },
-  required: { type: Boolean, required: true },
+  name: String,
+  label: String,
+  type: String,
+  required: Boolean,
   options: [{ type: String }],
-  section: { type: String, required: true }
+  section: String
 });
 
 const RoleSchema = new Schema<IRole>({
   roleName: { type: String, required: true },
   slug: { type: String, required: true, unique: true },
 
-  isActive: { type: Boolean, default: true },
+  // ⭐ CITY BASED ACTIVATION
+  cities: {
+    Kolkata: { type: Boolean, default: true },
+    Guwahati: { type: Boolean, default: true }
+  },
 
   jobDescription: { type: String, required: true },
   responsibilities: [{ type: String }],
   requirements: [{ type: String }],
-
   fields: [FieldSchema]
 });
-
-/* =========================
-   MODEL (OVERWRITE-SAFE)
-========================= */
 
 const Role =
   mongoose.models.Role ||

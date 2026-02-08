@@ -5,10 +5,26 @@ import mongoose, { Schema, Document } from "mongoose";
 ========================= */
 
 export interface JobApplicationData {
-  roleSlug: string;                 // e.g. "junior-architect"
-  answers: Record<string, any>;     // dynamic form responses
-  status?: "submitted" | "reviewed" | "shortlisted" | "rejected";
-  notes?: string;                   // internal HR notes
+  roleSlug: string;   // e.g. "junior-architect"
+
+  // ⭐ ADD CITY (REQUIRED FOR CITY-BASED ROLE ACTIVATION)
+  city: "Kolkata" | "Guwahati";
+
+  applicant: {
+    name: string;
+    email: string;
+  };
+
+  answers: Record<string, any>; // dynamic form responses
+
+  status?:
+    | "submitted"
+    | "reviewed"
+    | "shortlisted"
+    | "rejected"
+    | "on-hold";
+
+  notes?: string; // internal HR notes
 }
 
 /* =========================
@@ -31,36 +47,64 @@ const JobApplicationSchema = new Schema<JobApplicationDocument>(
     roleSlug: {
       type: String,
       required: true,
-      index: true
+      index: true,
+    },
+
+    // ⭐ CITY FIELD
+    city: {
+      type: String,
+      enum: ["Kolkata", "Guwahati"],
+      required: true,
+      index: true,
+    },
+
+    applicant: {
+      name: {
+        type: String,
+        required: true,
+      },
+      email: {
+        type: String,
+        required: true,
+      },
     },
 
     answers: {
       type: Schema.Types.Mixed,
-      required: true
+      required: true,
     },
 
     status: {
       type: String,
-      enum: ["submitted", "reviewed", "shortlisted", "rejected"],
-      default: "submitted"
+      enum: [
+        "submitted",
+        "reviewed",
+        "shortlisted",
+        "rejected",
+        "on-hold",
+      ],
+      default: "submitted",
+      index: true,
     },
 
     notes: {
-      type: String
-    }
+      type: String,
+    },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
 /* =========================
-   MODEL
+   MODEL (OVERWRITE SAFE)
 ========================= */
 
-const JobApplication = mongoose.model<JobApplicationDocument>(
-  "JobApplication",
-  JobApplicationSchema
-);
+const JobApplication =
+  mongoose.models.JobApplication ||
+  mongoose.model<JobApplicationDocument>(
+    "JobApplication",
+    JobApplicationSchema
+  );
 
 export default JobApplication;

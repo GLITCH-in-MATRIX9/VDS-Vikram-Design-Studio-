@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import jobApi from "../../../services/jobApi";
 
 export default function ActivateRoles() {
+
   const [roles, setRoles] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -9,10 +10,27 @@ export default function ActivateRoles() {
      FETCH ROLES FROM BACKEND
   ========================== */
   useEffect(() => {
+
     const fetchRoles = async () => {
       try {
+
         const data = await jobApi.getRoles();
+
+        /*
+          Expected structure example:
+
+          {
+            _id: "...",
+            roleName: "Manager",
+            cities: {
+              Kolkata: true,
+              Guwahati: false
+            }
+          }
+        */
+
         setRoles(data);
+
       } catch (err) {
         console.error("Failed to fetch roles", err);
       } finally {
@@ -21,23 +39,33 @@ export default function ActivateRoles() {
     };
 
     fetchRoles();
+
   }, []);
 
   /* =========================
-     TOGGLE ROLE ACTIVE STATE
+     TOGGLE ROLE ACTIVE STATE PER CITY
   ========================== */
-  const toggleRole = async (roleId, state) => {
+  const toggleRole = async (roleId, city, state) => {
+
     try {
-      await jobApi.toggleRoleStatus(roleId, state);
+
+      await jobApi.toggleRoleStatus(roleId, city, state);
 
       // optimistic UI update
       setRoles((prev) =>
         prev.map((role) =>
           role._id === roleId
-            ? { ...role, isActive: state }
+            ? {
+                ...role,
+                cities: {
+                  ...role.cities,
+                  [city]: state,
+                },
+              }
             : role
         )
       );
+
     } catch (err) {
       console.error("Failed to update role status", err);
     }
@@ -53,50 +81,90 @@ export default function ActivateRoles() {
 
   return (
     <div className="w-full bg-white rounded-xl p-6 border border-[#E5E5E5]">
+
       <h2 className="text-base font-medium text-gray-700 mb-4 tracking-wide">
         ROLE AVAILABILITY
       </h2>
 
       <div className="space-y-4">
+
         {roles.map((role) => (
+
           <div
             key={role._id}
-            className="flex items-center justify-between pb-3 border-b last:border-b-0 border-[#E5E5E5]"
+            className="pb-3 border-b last:border-b-0 border-[#E5E5E5]"
           >
-            <span className="text-sm text-gray-700">
+
+            {/* Role Name */}
+            <div className="text-sm text-gray-700 mb-2">
               {role.roleName}
-            </span>
-
-            <div className="flex gap-2">
-              <button
-                onClick={() => toggleRole(role._id, true)}
-                disabled={role.isActive}
-                className={`px-3 py-1 text-xs tracking-wide rounded-md border
-                  ${
-                    role.isActive
-                      ? "bg-[#EAE7E4] text-gray-500 cursor-not-allowed"
-                      : "bg-white text-gray-700 border-gray-300 hover:bg-[#F6F2EF]"
-                  }`}
-              >
-                ACTIVATE
-              </button>
-
-              <button
-                onClick={() => toggleRole(role._id, false)}
-                disabled={!role.isActive}
-                className={`px-3 py-1 text-xs tracking-wide rounded-md border
-                  ${
-                    !role.isActive
-                      ? "bg-[#EAE7E4] text-gray-500 cursor-not-allowed"
-                      : "bg-white text-gray-700 border-gray-300 hover:bg-[#F6F2EF]"
-                  }`}
-              >
-                DEACTIVATE
-              </button>
             </div>
+
+            {/* Cities */}
+            <div className="flex flex-col gap-2">
+
+              {["Kolkata", "Guwahati"].map((city) => {
+
+                const isActive = role.cities?.[city];
+
+                return (
+
+                  <div
+                    key={city}
+                    className="flex items-center justify-between"
+                  >
+
+                    <span className="text-xs text-gray-500">
+                      {city}
+                    </span>
+
+                    <div className="flex gap-2">
+
+                      <button
+                        onClick={() =>
+                          toggleRole(role._id, city, true)
+                        }
+                        disabled={isActive}
+                        className={`px-3 py-1 text-xs tracking-wide rounded-md border
+                          ${
+                            isActive
+                              ? "bg-[#EAE7E4] text-gray-500 cursor-not-allowed"
+                              : "bg-white text-gray-700 border-gray-300 hover:bg-[#F6F2EF]"
+                          }`}
+                      >
+                        ACTIVATE
+                      </button>
+
+                      <button
+                        onClick={() =>
+                          toggleRole(role._id, city, false)
+                        }
+                        disabled={!isActive}
+                        className={`px-3 py-1 text-xs tracking-wide rounded-md border
+                          ${
+                            !isActive
+                              ? "bg-[#EAE7E4] text-gray-500 cursor-not-allowed"
+                              : "bg-white text-gray-700 border-gray-300 hover:bg-[#F6F2EF]"
+                          }`}
+                      >
+                        DEACTIVATE
+                      </button>
+
+                    </div>
+
+                  </div>
+
+                );
+              })}
+
+            </div>
+
           </div>
+
         ))}
+
       </div>
+
     </div>
   );
 }

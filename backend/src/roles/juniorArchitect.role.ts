@@ -4,7 +4,10 @@ export const JuniorArchitectRole: RoleData = {
   roleName: "Junior Architect",
   slug: "junior-architect",
 
-  isActive: true,
+  cities: {
+    Kolkata: true,
+    Guwahati: true
+  },
 
   /* =========================
      JOB METADATA (READ ONLY)

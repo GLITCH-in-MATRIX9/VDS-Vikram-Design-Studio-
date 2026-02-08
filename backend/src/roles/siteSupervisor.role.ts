@@ -4,7 +4,10 @@ export const SiteSupervisorRole: RoleData = {
   roleName: "Site Supervisor",
   slug: "site-supervisor",
 
-  isActive: true,
+  cities: {
+    Kolkata: true,
+    Guwahati: true
+  },
 
   /* =========================
      JOB METADATA (READ ONLY)

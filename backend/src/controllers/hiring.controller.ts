@@ -8,6 +8,7 @@ import { sendStudioApplicationEmail } from "../services/StudioMail.service";
 interface SubmitApplicationRequest extends Request {
   body: {
     roleSlug: string;
+    city: "Kolkata" | "Guwahati";  
     applicant: {
       name: string;
       email: string;
@@ -15,6 +16,7 @@ interface SubmitApplicationRequest extends Request {
     answers: Record<string, any>;
   };
 }
+
 
 /**
  * Submit job application
@@ -24,24 +26,29 @@ export const submitApplication = async (
   req: SubmitApplicationRequest,
   res: Response,
 ) => {
-  try {
-    const { roleSlug, answers } = req.body;
 
-    // Double-check role exists and is active
-    const role = await Role.findOne({ slug: roleSlug, isActive: true });
+  try {
+
+    const { roleSlug, answers, city } = req.body;
+
+    // Check role exists AND city is active
+    const role = await Role.findOne({
+      slug: roleSlug,
+      [`cities.${city}`]: true
+    });
+
     if (!role) {
       return res.status(404).json({
-        message: "Role not found or inactive",
+        message: "Role not available for selected city",
       });
     }
 
-    // Extract applicant details
     const applicantName = req.body.applicant?.name || "Applicant";
     const applicantEmail = req.body.applicant?.email || "";
 
-    // Create application
     const application = await JobApplication.create({
       roleSlug,
+      city, // ⭐ save city also
       applicant: {
         name: applicantName,
         email: applicantEmail,
@@ -51,36 +58,30 @@ export const submitApplication = async (
     });
 
     console.log(
-      `✅ New application: ${applicantName} <${applicantEmail}> for ${role.roleName}`,
+      `✅ New application: ${applicantName} <${applicantEmail}> for ${role.roleName} (${city})`,
     );
 
-    // 1️⃣ Applicant confirmation email
     if (applicantEmail) {
       sendApplicantConfirmationEmail({
         email: applicantEmail,
         name: applicantName,
         position: role.roleName,
-      }).catch((error) => {
-        console.error("❌ Applicant email failed:", error);
-      });
+      }).catch(console.error);
     }
 
-    // 2️⃣ Studio notification email ✅
     sendStudioApplicationEmail({
       applicantName,
       applicantEmail,
       position: role.roleName,
       answers,
-    }).catch((error) => {
-      console.error("❌ Studio email failed:", error);
-    });
+    }).catch(console.error);
 
     res.status(201).json({
-      message:
-        "Application submitted successfully! Check your email for confirmation.",
+      message: "Application submitted successfully!",
       applicationId: application._id,
       roleName: role.roleName,
     });
+
   } catch (error) {
     console.error("❌ Submit application error:", error);
     res.status(500).json({

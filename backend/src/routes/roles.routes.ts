@@ -4,7 +4,7 @@ import Role from "../models/Role";
 const router = Router();
 
 /* =========================
-   GET ALL ROLES
+   GET ALL ROLES (PUBLIC)
 ========================= */
 router.get("/", async (_req: Request, res: Response) => {
   try {
@@ -16,21 +16,33 @@ router.get("/", async (_req: Request, res: Response) => {
 });
 
 /* =========================
-   TOGGLE ROLE ACTIVE STATUS
+   TOGGLE ROLE CITY STATUS
+   (REPLACES isActive)
 ========================= */
-router.patch("/:id/status", async (req, res) => {
-  try {
-    const { isActive } = req.body;
 
-    if (typeof isActive !== "boolean") {
+router.patch("/:id/status", async (req: Request, res: Response) => {
+
+  try {
+
+    const { city, state } = req.body;
+
+    if (!city || typeof state !== "boolean") {
       return res.status(400).json({
-        message: "isActive must be boolean"
+        message: "city and state(boolean) required"
+      });
+    }
+
+    if (!["Kolkata", "Guwahati"].includes(city)) {
+      return res.status(400).json({
+        message: "Invalid city"
       });
     }
 
     const role = await Role.findByIdAndUpdate(
       req.params.id,
-      { isActive },
+      {
+        [`cities.${city}`]: state
+      },
       { new: true }
     );
 
@@ -41,55 +53,66 @@ router.patch("/:id/status", async (req, res) => {
     }
 
     res.json(role);
+
   } catch (err) {
-    console.error("Failed to update role status", err);
+
+    console.error("Failed to update role city status", err);
+
     res.status(500).json({
-      message: "Failed to update role status"
+      message: "Failed to update role city status"
     });
+
   }
 });
 
 
-router.post("/fix-is-active", async (_req, res) => {
-  const result = await Role.updateMany(
-    { isActive: { $exists: false } },
-    { $set: { isActive: true } }
-  );
+/* =========================
+   ADMIN: GET ALL ROLES
+========================= */
 
-  res.json({
-    message: "Roles fixed",
-    updated: result.modifiedCount
-  });
-});
-
-
-// ADMIN: get all roles (including inactive)
 router.get("/admin/all", async (_req, res) => {
   const roles = await Role.find().select("-fields");
   res.json(roles);
 });
 
 
+/* =========================
+   GET ROLE BY SLUG + CITY CHECK
+========================= */
+
 router.get("/:slug", async (req, res) => {
+
   try {
+
+    const { city } = req.query;
+
+    if (!city) {
+      return res.status(400).json({
+        message: "city query required"
+      });
+    }
+
     const role = await Role.findOne({
       slug: req.params.slug,
-      isActive: true
+      [`cities.${city}`]: true
     });
 
     if (!role) {
       return res.status(404).json({
-        message: "Role not found or inactive"
+        message: "Role not found or inactive for selected city"
       });
     }
 
     res.json(role);
+
   } catch (err) {
-    res.status(500).json({ message: "Failed to fetch role" });
+
+    res.status(500).json({
+      message: "Failed to fetch role"
+    });
+
   }
 });
-
-
 
 
 export default router;

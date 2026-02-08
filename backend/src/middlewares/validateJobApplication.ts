@@ -7,32 +7,46 @@ const validateJobApplication = async (
   next: NextFunction,
 ) => {
   try {
-    const { roleSlug, answers } = req.body;
 
-    if (!roleSlug || !answers) {
+    const { roleSlug, answers, city } = req.body;
+
+    /* =========================
+       BASIC CHECK
+    ========================= */
+
+    if (!roleSlug || !answers || !city) {
       return res.status(400).json({
-        message: "roleSlug and answers are required",
+        message: "roleSlug, city and answers are required",
       });
     }
 
-    const role = await Role.findOne({ slug: roleSlug });
+    /* =========================
+       CHECK ROLE + CITY ACTIVE
+    ========================= */
+
+    const role = await Role.findOne({
+      slug: roleSlug,
+      [`cities.${city}`]: true,
+    });
 
     if (!role) {
       return res.status(400).json({
-        message: "Invalid role",
+        message: "Invalid role or role not active for selected city",
       });
     }
 
-    const roleFields = role.fields;
+    const roleFields = role.fields || [];
 
     /* =========================
-       Validate REQUIRED fields
+       VALIDATE REQUIRED FIELDS
     ========================= */
 
     const missingFields: string[] = [];
 
     for (const field of roleFields) {
+
       if (field.required) {
+
         const value = answers[field.name];
 
         const isEmpty =
@@ -44,6 +58,7 @@ const validateJobApplication = async (
         if (isEmpty) {
           missingFields.push(field.label);
         }
+
       }
     }
 
@@ -55,7 +70,7 @@ const validateJobApplication = async (
     }
 
     /* =========================
-       Reject UNKNOWN fields
+       REJECT UNKNOWN FIELDS
     ========================= */
 
     const allowedFieldNames = roleFields.map((f: any) => f.name);
@@ -72,11 +87,15 @@ const validateJobApplication = async (
     }
 
     next();
+
   } catch (err) {
+
     console.error("Validation error:", err);
+
     res.status(500).json({
       message: "Validation failed",
     });
+
   }
 };
 

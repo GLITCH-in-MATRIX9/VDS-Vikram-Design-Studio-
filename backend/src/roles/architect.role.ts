@@ -5,7 +5,10 @@ export const ArchitectRole: RoleData = {
 
   slug: "architect",
 
-  isActive: true,
+  cities: {
+    Kolkata: true,
+    Guwahati: true
+  },
 
   /* =========================
      JOB METADATA (READ ONLY)
