@@ -19,7 +19,6 @@ const FieldRenderer = ({
   selectedCountry,
   selectedState,
 }) => {
-
   const commonProps = {
     name: field.name,
     required: field.required,
@@ -29,12 +28,10 @@ const FieldRenderer = ({
   };
 
   switch (field.type) {
-
     case "textarea":
       return <textarea {...commonProps} rows={4} onChange={onChange} />;
 
     case "select":
-
       if (field.name === "country") {
         return (
           <select {...commonProps} onChange={onChange}>
@@ -138,13 +135,11 @@ const FieldRenderer = ({
   }
 };
 
-
 /* =========================
    MAIN COMPONENT
 ========================= */
 
 const JobApplication = ({ role }) => {
-
   const navigate = useNavigate();
   const { slug } = useParams();
 
@@ -165,7 +160,6 @@ const JobApplication = ({ role }) => {
   ========================= */
 
   const getStatesByCountry = useCallback(async (countryCode) => {
-
     if (!API_KEY) return [];
 
     const res = await fetch(
@@ -174,11 +168,9 @@ const JobApplication = ({ role }) => {
     );
 
     return res.ok ? res.json() : [];
-
   }, []);
 
   const getCitiesByState = useCallback(async (countryCode, stateCode) => {
-
     if (!API_KEY) return [];
 
     const res = await fetch(
@@ -187,7 +179,6 @@ const JobApplication = ({ role }) => {
     );
 
     return res.ok ? res.json() : [];
-
   }, []);
 
   /* =========================
@@ -195,16 +186,26 @@ const JobApplication = ({ role }) => {
   ========================= */
 
   useEffect(() => {
-
     if (!API_KEY) return;
 
     fetch("https://api.countrystatecity.in/v1/countries", {
       headers: { "X-CSCAPI-KEY": API_KEY },
     })
-      .then((r) => r.json())
-      .then(setCountries)
-      .catch(console.error);
+      .then((r) => {
+        if (!r.ok) {
+          // console.error("CSC API error status:", r.status, r.statusText);
+          return [];
+        }
 
+        return r.json();
+      })
+      .then((data) => {
+        setCountries(Array.isArray(data) ? data : []);
+      })
+      .catch((err) => {
+        console.error(err);
+        setCountries([]);
+      });
   }, []);
 
   /* =========================
@@ -212,14 +213,12 @@ const JobApplication = ({ role }) => {
   ========================= */
 
   useEffect(() => {
-
     if (!answers.country) return;
 
     getStatesByCountry(answers.country).then(setStates);
     setCities([]);
 
     setAnswers((p) => ({ ...p, state: "", city: "" }));
-
   }, [answers.country]);
 
   /* =========================
@@ -227,13 +226,11 @@ const JobApplication = ({ role }) => {
   ========================= */
 
   useEffect(() => {
-
     if (!answers.country || !answers.state) return;
 
     getCitiesByState(answers.country, answers.state).then(setCities);
 
     setAnswers((p) => ({ ...p, city: "" }));
-
   }, [answers.state]);
 
   /* =========================
@@ -241,16 +238,12 @@ const JobApplication = ({ role }) => {
   ========================= */
 
   const sections = useMemo(() => {
-
     return role.fields.reduce((acc, field) => {
-
       acc[field.section] = acc[field.section] || [];
       acc[field.section].push(field);
 
       return acc;
-
     }, {});
-
   }, [role.fields]);
 
   /* =========================
@@ -258,13 +251,10 @@ const JobApplication = ({ role }) => {
   ========================= */
 
   const handleChange = (e) => {
-
     const { name, value, type, checked } = e.target;
 
     setAnswers((prev) => {
-
       if (type === "checkbox") {
-
         const current = prev[name] || [];
 
         return {
@@ -276,13 +266,10 @@ const JobApplication = ({ role }) => {
       }
 
       return { ...prev, [name]: value };
-
     });
-
   };
 
   const handleSubmit = async (e) => {
-
     e.preventDefault();
 
     if (!slug || !selectedRoleCity) {
@@ -293,20 +280,12 @@ const JobApplication = ({ role }) => {
     setLoading(true);
 
     try {
-
       await jobApi.submitApplication({
         roleSlug: slug,
         city: selectedRoleCity, // ✅ REQUIRED FOR BACKEND
         applicant: {
-          name:
-            answers.fullName ||
-            answers.name ||
-            answers.firstName ||
-            "",
-          email:
-            answers.email ||
-            answers.email_address ||
-            "",
+          name: answers.fullName || answers.name || answers.firstName || "",
+          email: answers.email || answers.email_address || "",
         },
         answers,
       });
@@ -314,17 +293,11 @@ const JobApplication = ({ role }) => {
       setSubmitted(true);
 
       setTimeout(() => navigate("/careers"), 5000);
-
     } catch (err) {
-
       alert("Submission failed. Please try again.");
-
     } finally {
-
       setLoading(false);
-
     }
-
   };
 
   /* =========================
@@ -343,26 +316,18 @@ const JobApplication = ({ role }) => {
         onSubmit={handleSubmit}
         className={`space-y-14 ${submitted ? "mt-14" : ""}`}
       >
-
         {Object.entries(sections).map(([section, fields], idx) => (
-
           <section key={section}>
-
             <h2 className="text-lg font-semibold mb-6">
               {idx + 1}. {section}
             </h2>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-
               {fields.map((field) => (
-
                 <div key={field.name} className="flex flex-col gap-1">
-
                   <label className="text-sm text-[#6D6D6D]">
                     {field.label}
-                    {field.required && (
-                      <span className="text-red-500">*</span>
-                    )}
+                    {field.required && <span className="text-red-500">*</span>}
                   </label>
 
                   <FieldRenderer
@@ -375,15 +340,10 @@ const JobApplication = ({ role }) => {
                     selectedCountry={answers.country}
                     selectedState={answers.state}
                   />
-
                 </div>
-
               ))}
-
             </div>
-
           </section>
-
         ))}
 
         <button
@@ -401,7 +361,6 @@ const JobApplication = ({ role }) => {
             ? "Submitting..."
             : "Submit Application"}
         </button>
-
       </form>
     </>
   );

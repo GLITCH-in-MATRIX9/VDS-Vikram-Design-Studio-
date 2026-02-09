@@ -5,7 +5,6 @@ import jobApi from "../../../services/jobApi";
 import { AuthContext } from "../../../context/authContext";
 import dashboardImage from "../../../assets/other/admin-dashboard.png";
 
-
 const textColor = "text-[#474545]";
 
 const AdminHome = () => {
@@ -21,8 +20,7 @@ const AdminHome = () => {
     totalApplications: 0,
   });
 
-  const tooltipContent =
-    "Overview of projects and current hiring activity.";
+  const tooltipContent = "Overview of projects and current hiring activity.";
 
   /* =========================
      FETCH DASHBOARD STATS
@@ -45,7 +43,7 @@ const AdminHome = () => {
           totalApplications: applications.length,
         });
       } catch (err) {
-        console.error("Failed to load dashboard stats", err);
+        // console.error("Failed to load dashboard stats", err);
       } finally {
         setLoading(false);
       }
@@ -55,11 +53,7 @@ const AdminHome = () => {
   }, []);
 
   if (!user) {
-    return (
-      <div className="p-10 text-sm text-gray-500">
-        Loading user…
-      </div>
-    );
+    return <div className="p-10 text-sm text-gray-500">Loading user…</div>;
   }
 
   return (
@@ -82,9 +76,7 @@ const AdminHome = () => {
 
           {showTooltip && (
             <div className="absolute right-0 mt-2 w-64 p-4 bg-white rounded-lg shadow border border-gray-200 z-10">
-              <p className="text-sm text-gray-700">
-                {tooltipContent}
-              </p>
+              <p className="text-sm text-gray-700">{tooltipContent}</p>
               <div className="absolute top-[-8px] right-3 w-4 h-4 bg-white rotate-45 border-t border-l border-gray-200"></div>
             </div>
           )}
@@ -133,12 +125,8 @@ const AdminHome = () => {
 
 const StatCard = ({ value, label }) => (
   <div className="bg-white shadow rounded-lg p-8">
-    <div className="text-3xl font-bold mb-2 text-[#474545]">
-      {value}
-    </div>
-    <p className="text-sm uppercase text-[#474545]">
-      {label}
-    </p>
+    <div className="text-3xl font-bold mb-2 text-[#474545]">{value}</div>
+    <p className="text-sm uppercase text-[#474545]">{label}</p>
   </div>
 );
 

@@ -31,7 +31,7 @@ const Heading = () => {
         const data = await teamApi.getTeamPage();
         setHeading(data.heading || { paragraphs: [] });
       } catch (err) {
-        console.error("Failed to load heading:", err);
+        // console.error("Failed to load heading:", err);
       }
     };
     load();

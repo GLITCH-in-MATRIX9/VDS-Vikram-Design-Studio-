@@ -102,7 +102,7 @@ const EditProject = () => {
         setSections(sectionsWithKeys);
         setPreviewURL(project.previewImageUrl || null);
       } catch (err) {
-        console.error("Failed to fetch project:", err);
+        // console.error("Failed to fetch project:", err);
         toast.error("Failed to fetch project details.", { autoClose: 3000 });
       }
     };
@@ -117,7 +117,7 @@ const EditProject = () => {
         );
         setSavedTags(Array.from(tags));
       } catch (err) {
-        console.error("Failed to fetch saved tags:", err);
+        // console.error("Failed to fetch saved tags:", err);
         // Fallback for demonstration if API fails:
         setSavedTags([
           "SUSTAINABLE",
@@ -242,7 +242,7 @@ const EditProject = () => {
         reader.readAsDataURL(file);
       });
     } catch (err) {
-      console.error("File upload simulation failed:", err);
+      // console.error("File upload simulation failed:", err);
       toast.error(
         "File upload failed. Please check the file size (max 900KB)."
       );
@@ -369,7 +369,7 @@ const EditProject = () => {
         onClose: () => navigate("/admin/dashboard/projects"),
       });
     } catch (err) {
-      console.error(err);
+      // console.error(err);
       const errorMessage =
         err?.response?.data?.message ||
         "Failed to update project. Please try again.";

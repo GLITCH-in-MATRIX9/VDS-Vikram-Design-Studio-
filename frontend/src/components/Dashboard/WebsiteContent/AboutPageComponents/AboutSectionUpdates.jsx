@@ -18,7 +18,7 @@ const AboutSectionUpdates = () => {
             : {}
         );
       } catch (err) {
-        console.error("Failed to load About sections", err);
+        // console.error("Failed to load About sections", err);
       } finally {
         setLoading(false);
       }
@@ -69,9 +69,7 @@ const AboutSectionUpdates = () => {
     updateSection(
       key,
       "paragraphs",
-      sections[key].paragraphs.map((p) =>
-        p.id === id ? { ...p, text } : p
-      )
+      sections[key].paragraphs.map((p) => (p.id === id ? { ...p, text } : p))
     );
   };
 
@@ -144,7 +142,7 @@ const AboutSectionUpdates = () => {
       await aboutApi.updateSections(sections, "admin1");
       alert("About sections saved successfully!");
     } catch (err) {
-      console.error(err);
+      // console.error(err);
       alert("Failed to save sections");
     }
   };
@@ -181,9 +179,7 @@ const AboutSectionUpdates = () => {
           {/* Heading */}
           <input
             value={section.heading}
-            onChange={(e) =>
-              updateSection(key, "heading", e.target.value)
-            }
+            onChange={(e) => updateSection(key, "heading", e.target.value)}
             placeholder="Section heading"
             className="border p-2 w-full text-sm"
           />
@@ -201,9 +197,7 @@ const AboutSectionUpdates = () => {
               <textarea
                 key={p.id}
                 value={p.text}
-                onChange={(e) =>
-                  updateParagraph(key, p.id, e.target.value)
-                }
+                onChange={(e) => updateParagraph(key, p.id, e.target.value)}
                 rows={3}
                 className="border p-2 w-full text-sm"
               />
@@ -231,13 +225,9 @@ const AboutSectionUpdates = () => {
               <div key={card.id} className="border rounded p-4 space-y-3">
                 {"img_src" in card ? (
                   <>
-                    {(imagePreviews[`${key}_${card.id}`] ||
-                      card.img_src) && (
+                    {(imagePreviews[`${key}_${card.id}`] || card.img_src) && (
                       <img
-                        src={
-                          imagePreviews[`${key}_${card.id}`] ||
-                          card.img_src
-                        }
+                        src={imagePreviews[`${key}_${card.id}`] || card.img_src}
                         alt=""
                         className="h-32 rounded object-cover"
                       />
@@ -252,11 +242,7 @@ const AboutSectionUpdates = () => {
                         accept="image/*"
                         className="hidden"
                         onChange={(e) =>
-                          handleImageSelect(
-                            key,
-                            card.id,
-                            e.target.files[0]
-                          )
+                          handleImageSelect(key, card.id, e.target.files[0])
                         }
                       />
                     </label>
@@ -266,12 +252,7 @@ const AboutSectionUpdates = () => {
                       placeholder="Project Name"
                       value={card.project_name || ""}
                       onChange={(e) =>
-                        updateCard(
-                          key,
-                          card.id,
-                          "project_name",
-                          e.target.value
-                        )
+                        updateCard(key, card.id, "project_name", e.target.value)
                       }
                       className="border p-2 w-full text-sm"
                     />

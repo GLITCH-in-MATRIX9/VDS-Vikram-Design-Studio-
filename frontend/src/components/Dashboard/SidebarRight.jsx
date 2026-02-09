@@ -51,7 +51,7 @@ const SidebarRight = ({ project, onClose, onDeleteSuccess }) => {
         const data = await projectApi.getTags();
         setTags(data);
       } catch (err) {
-        console.error("Failed to fetch tags:", err);
+        // console.error("Failed to fetch tags:", err);
       }
     };
     fetchTags();
@@ -65,9 +65,10 @@ const SidebarRight = ({ project, onClose, onDeleteSuccess }) => {
       if (onDeleteSuccess) onDeleteSuccess();
       onClose();
     } catch (err) {
-      console.error("Deletion failed:", err);
+      // console.error("Deletion failed:", err);
       toast.error(
-        err?.response?.data?.message || "Failed to delete project. Please check the server."
+        err?.response?.data?.message ||
+          "Failed to delete project. Please check the server."
       );
     }
   };
@@ -82,7 +83,12 @@ const SidebarRight = ({ project, onClose, onDeleteSuccess }) => {
           onDeleteConfirm={executeDelete}
         />
       ),
-      { position: "top-center", autoClose: false, closeOnClick: false, draggable: false }
+      {
+        position: "top-center",
+        autoClose: false,
+        closeOnClick: false,
+        draggable: false,
+      }
     );
   };
 
@@ -97,7 +103,10 @@ const SidebarRight = ({ project, onClose, onDeleteSuccess }) => {
       <ToastContainer position="top-right" autoClose={3000} />
 
       <div className="flex justify-end p-4">
-        <button onClick={onClose} className="text-gray-600 hover:text-black transition">
+        <button
+          onClick={onClose}
+          className="text-gray-600 hover:text-black transition"
+        >
           <X size={22} />
         </button>
       </div>
@@ -117,28 +126,44 @@ const SidebarRight = ({ project, onClose, onDeleteSuccess }) => {
 
         <div className="grid grid-cols-2 gap-y-4 text-xs">
           <span className="text-[#6E6A6B] font-medium">LOCATION</span>
-          <span className="text-[#474545] uppercase">{project.location || "Location"}</span>
+          <span className="text-[#474545] uppercase">
+            {project.location || "Location"}
+          </span>
 
           <span className="text-[#6E6A6B] font-medium">YEAR</span>
-          <span className="text-[#474545] uppercase">{project.year || "2000"}</span>
+          <span className="text-[#474545] uppercase">
+            {project.year || "2000"}
+          </span>
 
           <span className="text-[#6E6A6B] font-medium">STATUS</span>
-          <span className="text-[#474545] uppercase">{project.status || "Complete"}</span>
+          <span className="text-[#474545] uppercase">
+            {project.status || "Complete"}
+          </span>
 
           <span className="text-[#6E6A6B] font-medium">CATEGORY</span>
-          <span className="text-[#474545] uppercase">{project.category || "Category"}</span>
+          <span className="text-[#474545] uppercase">
+            {project.category || "Category"}
+          </span>
 
           <span className="text-[#6E6A6B] font-medium">SUB - CATEGORY</span>
-          <span className="text-[#474545] uppercase">{project.subCategory || "Sub - Category"}</span>
+          <span className="text-[#474545] uppercase">
+            {project.subCategory || "Sub - Category"}
+          </span>
 
           <span className="text-[#6E6A6B] font-medium">CLIENT</span>
-          <span className="break-words text-[#474545] uppercase">{project.client || "XYZ"}</span>
+          <span className="break-words text-[#474545] uppercase">
+            {project.client || "XYZ"}
+          </span>
 
           <span className="text-[#6E6A6B] font-medium">COLLABORATORS</span>
-          <span className="break-words text-[#474545] uppercase">{project.collaborators || "XYZ"}</span>
+          <span className="break-words text-[#474545] uppercase">
+            {project.collaborators || "XYZ"}
+          </span>
 
           <span className="text-[#6E6A6B] font-medium">TEAM</span>
-          <span className="break-words text-[#474545] uppercase">{project.projectTeam || "Team"}</span>
+          <span className="break-words text-[#474545] uppercase">
+            {project.projectTeam || "Team"}
+          </span>
 
           <span className="text-[#6E6A6B] font-medium">TAGS</span>
           <div className="flex flex-wrap gap-2">
@@ -158,12 +183,16 @@ const SidebarRight = ({ project, onClose, onDeleteSuccess }) => {
         <div className="grid grid-cols-2 gap-y-4 text-xs uppercase">
           <span className="text-[#6E6A6B] font-medium">DATE CREATED</span>
           <span className="text-[#474545]">
-            {project.createdAt ? new Date(project.createdAt).toLocaleDateString() : "DD-MM-YYYY"}
+            {project.createdAt
+              ? new Date(project.createdAt).toLocaleDateString()
+              : "DD-MM-YYYY"}
           </span>
 
           <span className="text-[#6E6A6B] font-medium">DATE MODIFIED</span>
           <span className="text-[#474545]">
-            {project.updatedAt ? new Date(project.updatedAt).toLocaleDateString() : "DD-MM-YYYY"}
+            {project.updatedAt
+              ? new Date(project.updatedAt).toLocaleDateString()
+              : "DD-MM-YYYY"}
           </span>
         </div>
       </div>

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import {
   motion,
@@ -76,7 +75,7 @@ const Home = () => {
         setProjects(ordered);
         setError(null);
       } catch (err) {
-        console.error("Error fetching projects:", err);
+        // console.error("Error fetching projects:", err);
         setError("Failed to load projects. Please try again later.");
       } finally {
         setLoading(false);
@@ -85,7 +84,6 @@ const Home = () => {
 
     fetchProjects();
   }, []);
-
 
   // Filter projects based on category, subcategory, and search
   useEffect(() => {
@@ -165,7 +163,7 @@ const Home = () => {
             filteredProjects.map((project) => (
               <div
                 key={project._id}
-                id={`project-${project._id}`}   // 👈 ADD THIS
+                id={`project-${project._id}`} // 👈 ADD THIS
                 className="w-full flex justify-center overflow-hidden"
               >
                 <ProjectCard project={project} />

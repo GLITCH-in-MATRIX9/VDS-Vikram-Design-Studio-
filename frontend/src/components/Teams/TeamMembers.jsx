@@ -14,7 +14,7 @@ const TeamMembers = () => {
         // data shape: { heading: {...}, members: [...] }
         setTeamData(data.members || []);
       } catch (err) {
-        console.error("Failed to load team page:", err);
+        // console.error("Failed to load team page:", err);
       }
     };
 
