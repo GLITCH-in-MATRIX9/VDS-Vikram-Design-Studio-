@@ -61,7 +61,7 @@ const TeamPageUpdates = () => {
           setMarquee(data.marquee_images || []);
         }
       } catch (err) {
-        console.error("Failed to load Team page:", err);
+        // console.error("Failed to load Team page:", err);
       }
     };
 
@@ -181,7 +181,7 @@ const TeamPageUpdates = () => {
       await teamApi.updateHeading(heading, "admin1");
       setHeadingStatus({ message: "Heading saved", error: "" });
     } catch (err) {
-      console.error(err);
+      // console.error(err);
       setHeadingStatus({ message: "", error: "Failed to save heading" });
     }
     setHeadingSaving(false);
@@ -196,7 +196,7 @@ const TeamPageUpdates = () => {
       await teamApi.updateMembers(payload, "admin1");
       setMembersStatus({ message: "Members saved", error: "" });
     } catch (err) {
-      console.error(err);
+      // console.error(err);
       setMembersStatus({ message: "", error: "Failed to save members" });
     }
     setMembersSaving(false);
@@ -209,7 +209,7 @@ const TeamPageUpdates = () => {
       await teamApi.updateMarquee(marquee, "admin1");
       setMarqueeStatus({ message: "Marquee saved", error: "" });
     } catch (err) {
-      console.error(err);
+      // console.error(err);
       setMarqueeStatus({ message: "", error: "Failed to save marquee images" });
     }
     setMarqueeSaving(false);

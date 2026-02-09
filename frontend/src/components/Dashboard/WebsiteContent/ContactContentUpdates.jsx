@@ -47,7 +47,7 @@ const ContactContentUpdates = () => {
         const data = res.data;
         if (data && Array.isArray(data.contacts)) setContacts(data.contacts);
       } catch (err) {
-        console.error("Failed to load contact content", err);
+        // console.error("Failed to load contact content", err);
       }
     };
 
@@ -65,7 +65,7 @@ const ContactContentUpdates = () => {
       lastModifiedBy: "admin",
     };
 
-    console.debug("Persisting contact content:", payload);
+    // console.debug("Persisting contact content:", payload);
 
     await axios.post(`${API_BASE}/content`, payload, { headers });
   };
@@ -83,7 +83,7 @@ const ContactContentUpdates = () => {
         await persistAll(updated);
         alert("Contact updated");
       } catch (err) {
-        console.error("Save failed:", err?.response || err);
+        // console.error("Save failed:", err?.response || err);
         const status = err?.response?.status;
         const serverMsg =
           err?.response?.data?.message || err?.response?.data?.error;
@@ -103,7 +103,7 @@ const ContactContentUpdates = () => {
         await persistAll(updated);
         alert("Contact added");
       } catch (err) {
-        console.error("Save failed:", err?.response || err);
+        // console.error("Save failed:", err?.response || err);
         const status = err?.response?.status;
         const serverMsg =
           err?.response?.data?.message || err?.response?.data?.error;
@@ -147,7 +147,7 @@ const ContactContentUpdates = () => {
       await persistAll(updated);
       alert("Contact removed");
     } catch (err) {
-      console.error("Delete failed:", err?.response || err);
+      // console.error("Delete failed:", err?.response || err);
       const status = err?.response?.status;
       const serverMsg =
         err?.response?.data?.message || err?.response?.data?.error;

@@ -6,9 +6,7 @@ import jobApi from "../../../services/jobApi";
 ========================= */
 
 const prettyLabel = (key) =>
-  key
-    .replace(/([A-Z])/g, " $1")
-    .replace(/^./, (s) => s.toUpperCase());
+  key.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase());
 
 const humanizeSlug = (slug) =>
   slug
@@ -17,7 +15,6 @@ const humanizeSlug = (slug) =>
     .join(" ");
 
 export default function Submissions() {
-
   const [applications, setApplications] = useState([]);
   const [roles, setRoles] = useState(["All Roles"]);
   const [selectedRole, setSelectedRole] = useState("All Roles");
@@ -28,11 +25,8 @@ export default function Submissions() {
   ========================= */
 
   useEffect(() => {
-
     const fetchData = async () => {
-
       try {
-
         const apps = await jobApi.getApplications();
 
         setApplications(apps);
@@ -42,21 +36,14 @@ export default function Submissions() {
         );
 
         setRoles(["All Roles", ...uniqueRoles]);
-
       } catch (err) {
-
-        console.error("Failed to load submissions", err);
-
+        // console.error("Failed to load submissions", err);
       } finally {
-
         setLoading(false);
-
       }
-
     };
 
     fetchData();
-
   }, []);
 
   /* =========================
@@ -64,13 +51,11 @@ export default function Submissions() {
   ========================= */
 
   const filteredData = useMemo(() => {
-
     if (selectedRole === "All Roles") return applications;
 
     return applications.filter(
       (app) => humanizeSlug(app.roleSlug) === selectedRole
     );
-
   }, [applications, selectedRole]);
 
   /* =========================
@@ -78,23 +63,15 @@ export default function Submissions() {
   ========================= */
 
   const deleteSubmission = async (id) => {
-
     if (!confirm("Delete this application?")) return;
 
     try {
-
       await jobApi.deleteApplication(id);
 
-      setApplications((prev) =>
-        prev.filter((app) => app._id !== id)
-      );
-
+      setApplications((prev) => prev.filter((app) => app._id !== id));
     } catch (err) {
-
-      console.error("Failed to delete submission", err);
-
+      // console.error("Failed to delete submission", err);
     }
-
   };
 
   /* =========================
@@ -102,49 +79,32 @@ export default function Submissions() {
   ========================= */
 
   const downloadCSV = () => {
-
     if (filteredData.length === 0) return;
 
     const allFieldKeys = Array.from(
-      new Set(
-        filteredData.flatMap((app) =>
-          Object.keys(app.answers || {})
-        )
-      )
+      new Set(filteredData.flatMap((app) => Object.keys(app.answers || {})))
     );
 
-    const headers = [
-      "Role Applied",
-      "City ",
-      ...allFieldKeys.map(prettyLabel),
-    ];
+    const headers = ["Role Applied", "City ", ...allFieldKeys.map(prettyLabel)];
 
     const rows = filteredData.map((app) => [
-
       humanizeSlug(app.roleSlug),
 
       app.city || "",
 
       ...allFieldKeys.map((key) => {
-
         const value = app.answers?.[key];
 
         if (Array.isArray(value)) return value.join(" | ");
         if (value === undefined || value === null) return "";
 
         return value;
-
       }),
-
     ]);
 
     const csvContent = [headers, ...rows]
       .map((row) =>
-        row
-          .map((val) =>
-            `"${String(val).replace(/"/g, '""')}"`
-          )
-          .join(",")
+        row.map((val) => `"${String(val).replace(/"/g, '""')}"`).join(",")
       )
       .join("\n");
 
@@ -161,13 +121,9 @@ export default function Submissions() {
     link.download =
       selectedRole === "All Roles"
         ? "all_applications.csv"
-        : `${selectedRole.replaceAll(
-            " ",
-            "_"
-          )}_applications.csv`;
+        : `${selectedRole.replaceAll(" ", "_")}_applications.csv`;
 
     link.click();
-
   };
 
   /* =========================
@@ -176,37 +132,28 @@ export default function Submissions() {
 
   if (loading) {
     return (
-      <div className="text-sm text-gray-500 py-10">
-        Loading submissions…
-      </div>
+      <div className="text-sm text-gray-500 py-10">Loading submissions…</div>
     );
   }
 
   return (
     <div className="w-full bg-white rounded-xl p-6 border border-[#E5E5E5] mt-8">
-
       {/* Header */}
 
       <div className="flex items-center justify-between mb-4">
-
         <h2 className="text-base font-medium text-gray-700 tracking-wide">
           SUBMISSIONS
         </h2>
 
         <div className="flex gap-3">
-
           <select
             value={selectedRole}
-            onChange={(e) =>
-              setSelectedRole(e.target.value)
-            }
+            onChange={(e) => setSelectedRole(e.target.value)}
             className="border border-gray-300 text-sm px-3 py-1.5 rounded-md bg-white"
           >
-
             {roles.map((role) => (
               <option key={role}>{role}</option>
             ))}
-
           </select>
 
           <button
@@ -215,21 +162,15 @@ export default function Submissions() {
           >
             Download CSV
           </button>
-
         </div>
-
       </div>
 
       {/* Table */}
 
       <div className="overflow-x-auto">
-
         <table className="w-full text-sm border-collapse">
-
           <thead>
-
             <tr className="text-left text-gray-500 border-b">
-
               <th className="py-2">Name</th>
 
               <th>Email</th>
@@ -241,38 +182,20 @@ export default function Submissions() {
               <th>Experience (yrs)</th>
 
               <th className="text-right">Action</th>
-
             </tr>
-
           </thead>
 
           <tbody>
-
             {filteredData.length === 0 ? (
-
               <tr>
-
-                <td
-                  colSpan="6"
-                  className="py-6 text-center text-gray-400"
-                >
+                <td colSpan="6" className="py-6 text-center text-gray-400">
                   No submissions found
                 </td>
-
               </tr>
-
             ) : (
-
               filteredData.map((app) => (
-
-                <tr
-                  key={app._id}
-                  className="border-b last:border-b-0"
-                >
-
-                  <td className="py-3">
-                    {app.answers?.fullName || "—"}
-                  </td>
+                <tr key={app._id} className="border-b last:border-b-0">
+                  <td className="py-3">{app.answers?.fullName || "—"}</td>
 
                   <td>{app.answers?.email || "—"}</td>
 
@@ -282,35 +205,22 @@ export default function Submissions() {
                     {app.city || "—"}
                   </td>
 
-                  <td>
-                    {app.answers?.totalExperience ?? "—"}
-                  </td>
+                  <td>{app.answers?.totalExperience ?? "—"}</td>
 
                   <td className="text-right">
-
                     <button
-                      onClick={() =>
-                        deleteSubmission(app._id)
-                      }
+                      onClick={() => deleteSubmission(app._id)}
                       className="text-xs text-red-600 hover:underline"
                     >
                       Delete
                     </button>
-
                   </td>
-
                 </tr>
-
               ))
-
             )}
-
           </tbody>
-
         </table>
-
       </div>
-
     </div>
   );
 }

@@ -27,7 +27,7 @@ const AboutMetricsUpdates = () => {
           setMetrics([]);
         }
       } catch (err) {
-        console.error("Failed to load metrics:", err);
+        // console.error("Failed to load metrics:", err);
       } finally {
         setLoading(false);
       }
@@ -54,9 +54,7 @@ const AboutMetricsUpdates = () => {
 
   const updateMetric = (id, field, value) => {
     setMetrics((prev) =>
-      prev.map((m) =>
-        m.id === id ? { ...m, [field]: value } : m
-      )
+      prev.map((m) => (m.id === id ? { ...m, [field]: value } : m))
     );
   };
 
@@ -79,7 +77,7 @@ const AboutMetricsUpdates = () => {
 
       alert("Metrics updated successfully!");
     } catch (err) {
-      console.error("Failed to update metrics:", err);
+      // console.error("Failed to update metrics:", err);
       alert("Failed to update metrics");
     }
   };

@@ -10,7 +10,6 @@ const AboutHeadingUpdates = () => {
   const [paragraphs, setParagraphs] = useState([]);
   const [subTitleLine2, setSubTitleLine2] = useState("");
 
-
   /* ---------------- FETCH DATA ---------------- */
 
   useEffect(() => {
@@ -26,7 +25,7 @@ const AboutHeadingUpdates = () => {
           setParagraphs(data.hero.paragraphs || []);
         }
       } catch (err) {
-        console.error("Failed to load About page:", err);
+        // console.error("Failed to load About page:", err);
       } finally {
         setLoading(false);
       }
@@ -80,7 +79,7 @@ const AboutHeadingUpdates = () => {
 
       alert("About heading updated successfully!");
     } catch (err) {
-      console.error(err);
+      // console.error(err);
       const msg =
         err?.response?.data?.error ||
         err?.response?.data?.message ||
@@ -138,7 +137,6 @@ const AboutHeadingUpdates = () => {
         />
       </div>
 
-
       {/* Hero Image */}
 
       <div className="space-y-3">
@@ -155,9 +153,7 @@ const AboutHeadingUpdates = () => {
         <div className="flex gap-3">
           <button
             type="button"
-            onClick={() =>
-              document.getElementById("heroImageInput").click()
-            }
+            onClick={() => document.getElementById("heroImageInput").click()}
             className="bg-black text-white px-4 py-2 rounded text-sm"
           >
             {heroImage ? "Change Image" : "+ Add Hero Image"}
@@ -183,13 +179,10 @@ const AboutHeadingUpdates = () => {
         />
       </div>
 
-
       {/* Paragraphs */}
       <div className="space-y-4">
         <div className="flex items-center justify-between">
-          <h3 className="font-semibold text-[#3E3C3C]">
-            Story Paragraphs
-          </h3>
+          <h3 className="font-semibold text-[#3E3C3C]">Story Paragraphs</h3>
           <button
             onClick={addParagraph}
             className="bg-gray-200 px-3 py-1 rounded"
@@ -202,9 +195,7 @@ const AboutHeadingUpdates = () => {
           <div key={p.id} className="space-y-2">
             <textarea
               value={p.text}
-              onChange={(e) =>
-                updateParagraph(p.id, e.target.value)
-              }
+              onChange={(e) => updateParagraph(p.id, e.target.value)}
               className="border p-2 w-full bg-white"
               rows={4}
               placeholder={`Paragraph ${idx + 1}`}

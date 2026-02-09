@@ -40,7 +40,7 @@ const MarqueeImages = () => {
         const data = await teamApi.getTeamPage();
         setImages((data.marquee_images || []).map((m) => m.img_src));
       } catch (err) {
-        console.error("Failed to load marquee images:", err);
+        // console.error("Failed to load marquee images:", err);
       }
     };
     load();
