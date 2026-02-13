@@ -3,7 +3,20 @@ import JobApplication from "../models/JobApplication.model";
 import validateJobApplication from "../middlewares/validateJobApplication";
 import { submitApplication } from "../controllers/hiring.controller";
 
+import multer from "multer";
+
 const router = Router();
+
+/* =========================
+   MULTER SETUP (FOR FILE UPLOAD)
+========================= */
+
+const upload = multer({
+  storage: multer.memoryStorage(), 
+  limits: {
+    fileSize: 1024 * 1024, // 1MB max
+  },
+});
 
 /* =========================
    GET ALL APPLICATIONS
@@ -65,6 +78,7 @@ router.get("/role/:roleSlug", async (req: Request, res: Response) => {
 
 router.post(
   "/",
+  upload.single("cvFile"), //
   validateJobApplication,
   submitApplication
 );
@@ -160,6 +174,5 @@ router.delete("/:id", async (req: Request, res: Response) => {
   }
 
 });
-
 
 export default router;

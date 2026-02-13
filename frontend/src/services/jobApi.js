@@ -55,13 +55,20 @@ const jobApi = {
      APPLICATIONS
   ========================= */
 
-  submitApplication: async (payload) => {
+  submitApplication: async (formData) => {
     const response = await axios.post(
       APPLICATIONS_BASE,
-      payload
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
+
     return response.data;
   },
+
 
   getApplications: async () => {
     const response = await axios.get(APPLICATIONS_BASE);

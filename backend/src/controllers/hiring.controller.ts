@@ -1,22 +1,17 @@
 // controllers/hiring.controller.ts
+
 import { Request, Response } from "express";
 import Role from "../models/Role";
 import JobApplication from "../models/JobApplication.model";
 import { sendApplicantConfirmationEmail } from "../services/ApplicantMail.service";
 import { sendStudioApplicationEmail } from "../services/StudioMail.service";
 
-interface SubmitApplicationRequest extends Request {
-  body: {
-    roleSlug: string;
-    city: "Kolkata" | "Guwahati";  
-    applicant: {
-      name: string;
-      email: string;
-    };
-    answers: Record<string, any>;
-  };
-}
+import cloudinary from "../config/cloudinary";
+import streamifier from "streamifier";
 
+interface SubmitApplicationRequest extends Request {
+  file?: Express.Multer.File;
+}
 
 /**
  * Submit job application
@@ -26,15 +21,22 @@ export const submitApplication = async (
   req: SubmitApplicationRequest,
   res: Response,
 ) => {
-
   try {
+    const { roleSlug, city } = req.body;
 
-    const { roleSlug, answers, city } = req.body;
+    // FormData sends answers as string → parse safely
+    let answers =
+      typeof req.body.answers === "string"
+        ? JSON.parse(req.body.answers)
+        : req.body.answers;
 
-    // Check role exists AND city is active
+    /* =========================
+       CHECK ROLE + CITY ACTIVE
+    ========================= */
+
     const role = await Role.findOne({
       slug: roleSlug,
-      [`cities.${city}`]: true
+      [`cities.${city}`]: true,
     });
 
     if (!role) {
@@ -43,12 +45,52 @@ export const submitApplication = async (
       });
     }
 
-    const applicantName = req.body.applicant?.name || "Applicant";
-    const applicantEmail = req.body.applicant?.email || "";
+    /* =========================
+   CLOUDINARY FILE UPLOAD
+========================= */
+
+    const applicantData =
+      typeof req.body.applicant === "string"
+        ? JSON.parse(req.body.applicant)
+        : req.body.applicant;
+
+    const applicantName = applicantData?.name || "Applicant";
+    const applicantEmail = applicantData?.email || "";
+
+    if (req.file) {
+      const safeApplicantName = applicantName
+        .replace(/[^a-zA-Z0-9]/g, "_")
+        .toUpperCase();
+
+      const uploadFromBuffer = () =>
+        new Promise<string>((resolve, reject) => {
+          const stream = cloudinary.uploader.upload_stream(
+            {
+              //STORED INSIDE VDS_FOLDER (LIKE PROJECTS)
+              folder: `VDS_FOLDER/job_applications/${roleSlug}/${city}/${safeApplicantName}`,
+              resource_type: "raw",
+            },
+            (error, result) => {
+              if (error) return reject(error);
+              resolve(result?.secure_url || "");
+            },
+          );
+
+          streamifier.createReadStream(req.file.buffer).pipe(stream);
+        });
+
+      const fileUrl = await uploadFromBuffer();
+
+      answers.cvFile = fileUrl;
+    }
+
+    /* =========================
+       CREATE APPLICATION
+    ========================= */
 
     const application = await JobApplication.create({
       roleSlug,
-      city, // ⭐ save city also
+      city,
       applicant: {
         name: applicantName,
         email: applicantEmail,
@@ -58,8 +100,12 @@ export const submitApplication = async (
     });
 
     console.log(
-      `✅ New application: ${applicantName} <${applicantEmail}> for ${role.roleName} (${city})`,
+      `New application: ${applicantName} <${applicantEmail}> for ${role.roleName} (${city})`,
     );
+
+    /* =========================
+       EMAILS
+    ========================= */
 
     if (applicantEmail) {
       sendApplicantConfirmationEmail({
@@ -81,9 +127,9 @@ export const submitApplication = async (
       applicationId: application._id,
       roleName: role.roleName,
     });
-
   } catch (error) {
     console.error("❌ Submit application error:", error);
+
     res.status(500).json({
       message: "Failed to submit application",
     });
@@ -113,7 +159,6 @@ export const getApplications = async (req: Request, res: Response) => {
       JobApplication.countDocuments(query),
     ]);
 
-    // Add role info to each application
     const applicationsWithRole = await Promise.all(
       applications.map(async (app: any) => {
         const role = await Role.findOne({ slug: app.roleSlug }).select(

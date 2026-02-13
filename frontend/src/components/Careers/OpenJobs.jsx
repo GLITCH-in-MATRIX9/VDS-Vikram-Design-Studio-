@@ -91,7 +91,7 @@ const OpenJobs = () => {
                 </td>
 
                 <td className="px-4 py-4 text-[#474545]">
-                  ARCHITECTURE
+                  {role.department?.toUpperCase()}
                 </td>
 
                 <td className="px-4 py-4 font-semibold text-[#3E3C3C]">

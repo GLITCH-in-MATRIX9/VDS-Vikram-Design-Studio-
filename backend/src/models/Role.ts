@@ -15,21 +15,26 @@ export interface IField {
     | "checkbox"
     | "radio"
     | "select"
+    | "file"
     | "textarea";
   required: boolean;
   options?: string[];
   section: string;
+  placeholder?: string; // ✅ ADDED
 }
 
 export interface RoleData {
   roleName: string;
   slug: string;
+  department: string; 
 
   // CITY BASED ACTIVE STATE
   cities: {
     Kolkata: boolean;
     Guwahati: boolean;
   };
+  
+
 
   jobDescription: string;
   responsibilities: string[];
@@ -49,12 +54,16 @@ const FieldSchema = new Schema<IField>({
   type: String,
   required: Boolean,
   options: [{ type: String }],
-  section: String
+  section: String,
+  placeholder: String // ✅ ADDED
 });
 
 const RoleSchema = new Schema<IRole>({
   roleName: { type: String, required: true },
   slug: { type: String, required: true, unique: true },
+
+  department: { type: String, required: true },
+
 
   // ⭐ CITY BASED ACTIVATION
   cities: {

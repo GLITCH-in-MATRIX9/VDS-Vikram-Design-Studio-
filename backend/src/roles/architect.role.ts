@@ -5,9 +5,12 @@ export const ArchitectRole: RoleData = {
 
   slug: "architect",
 
+  department: "Architecture",
+
+
   cities: {
     Kolkata: true,
-    Guwahati: true
+    Guwahati: true,
   },
 
   /* =========================
@@ -132,7 +135,7 @@ export const ArchitectRole: RoleData = {
       name: "professionalCertification",
       label: "Professional Certification (COA, IIA, LEED AP, etc.)",
       type: "text",
-      required: true,
+      required: false,
       section: "Education & Credentials",
     },
 
@@ -256,7 +259,7 @@ export const ArchitectRole: RoleData = {
       name: "otherSoftware",
       label: "Other Software & Proficiency",
       type: "text",
-      required: true,
+      required: false,
       section: "Skills & Tools",
     },
     {
@@ -283,6 +286,8 @@ export const ArchitectRole: RoleData = {
       label: "CV (PDF – Drive link)",
       type: "text",
       required: true,
+      placeholder:
+        "Upload your file to Google Drive and paste the shareable link here",
       section: "Attachments",
     },
     {
@@ -290,8 +295,11 @@ export const ArchitectRole: RoleData = {
       label: "Portfolio (PDF – Drive link)",
       type: "text",
       required: true,
+      placeholder:
+        "Upload your file to Google Drive and paste the shareable link here",
       section: "Attachments",
     },
+
     {
       name: "portfolioURL",
       label: "Portfolio URL",
@@ -308,8 +316,11 @@ export const ArchitectRole: RoleData = {
       label: "Notice Period",
       type: "text",
       required: true,
+      placeholder:
+        "Enter value in days. If not currently employed, write “Not Applicable”",
       section: "Additional Information",
     },
+
     {
       name: "joiningDate",
       label: "Earliest Possible Joining Date",
@@ -337,26 +348,32 @@ export const ArchitectRole: RoleData = {
     ========================== */
     {
       name: "declaration",
-      label: "Declaration of Information Accuracy",
+      label: "Please confirm your agreement to the following:",
       type: "checkbox",
       required: true,
-      options: ["I agree"],
+      options: [
+        "I hereby declare that all the information provided in this application is true, complete, and accurate to the best of my knowledge. I understand that any false information may result in disqualification or termination of employment.",
+      ],
       section: "Declaration & Consent",
     },
     {
       name: "dataConsent",
-      label: "Consent to Data Processing",
+      label: "",
       type: "checkbox",
       required: true,
-      options: ["I agree"],
+      options: [
+        "I consent to the processing of my personal data for recruitment purposes and understand that my information will be handled in accordance with applicable data protection laws.",
+      ],
       section: "Declaration & Consent",
     },
     {
       name: "assessmentConsent",
-      label: "Consent for Design & Technical Assessment",
+      label: "Design & Technical Assessment:",
       type: "checkbox",
       required: true,
-      options: ["I agree"],
+      options: [
+        "I understand that if shortlisted, I will be required to complete a 24-hour design/technical assessment relevant to the Architect role as part of the selection process.",
+      ],
       section: "Declaration & Consent",
     },
   ],

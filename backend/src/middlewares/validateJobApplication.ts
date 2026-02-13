@@ -7,8 +7,20 @@ const validateJobApplication = async (
   next: NextFunction,
 ) => {
   try {
+    const { roleSlug, city } = req.body;
 
-    const { roleSlug, answers, city } = req.body;
+    let answers;
+
+    try {
+      answers =
+        typeof req.body.answers === "string"
+          ? JSON.parse(req.body.answers)
+          : req.body.answers;
+    } catch {
+      return res.status(400).json({
+        message: "Invalid answers format",
+      });
+    }
 
     /* =========================
        BASIC CHECK
@@ -44,10 +56,9 @@ const validateJobApplication = async (
     const missingFields: string[] = [];
 
     for (const field of roleFields) {
-
       if (field.required) {
-
-        const value = answers[field.name];
+        const value =
+          field.type === "file" ? (req as any).file : answers[field.name];
 
         const isEmpty =
           value === undefined ||
@@ -58,7 +69,6 @@ const validateJobApplication = async (
         if (isEmpty) {
           missingFields.push(field.label);
         }
-
       }
     }
 
@@ -87,15 +97,12 @@ const validateJobApplication = async (
     }
 
     next();
-
   } catch (err) {
-
     console.error("Validation error:", err);
 
     res.status(500).json({
       message: "Validation failed",
     });
-
   }
 };
 

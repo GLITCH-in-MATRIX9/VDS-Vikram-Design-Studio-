@@ -3,10 +3,12 @@ import { RoleData } from "../models/Role";
 export const SiteSupervisorRole: RoleData = {
   roleName: "Site Supervisor",
   slug: "site-supervisor",
+  department: "Engineering",
+
 
   cities: {
     Kolkata: true,
-    Guwahati: true
+    Guwahati: true,
   },
 
   /* =========================
@@ -22,7 +24,7 @@ export const SiteSupervisorRole: RoleData = {
     "Monitor quality, timelines, and site safety.",
     "Verify measurements, materials, and workmanship.",
     "Report progress and issues regularly to the studio team.",
-    "Assist in resolving technical and execution-related challenges on site."
+    "Assist in resolving technical and execution-related challenges on site.",
   ],
 
   requirements: [
@@ -32,7 +34,7 @@ export const SiteSupervisorRole: RoleData = {
     "Ability to read and interpret drawings clearly.",
     "Good coordination and communication skills.",
     "Willingness to work full-time on site when required.",
-    "Willingness to travel to remote sites when required."
+    "Willingness to travel to remote sites when required.",
   ],
 
   /* =========================
@@ -46,56 +48,56 @@ export const SiteSupervisorRole: RoleData = {
       label: "Full Name",
       type: "text",
       required: true,
-      section: "Personal Details"
+      section: "Personal Details",
     },
     {
       name: "dateOfBirth",
       label: "Date of Birth",
       type: "date",
       required: true,
-      section: "Personal Details"
+      section: "Personal Details",
     },
     {
       name: "email",
       label: "Email Address",
       type: "email",
       required: true,
-      section: "Personal Details"
+      section: "Personal Details",
     },
     {
       name: "mobileNumber",
       label: "Mobile Number",
       type: "text",
       required: true,
-      section: "Personal Details"
+      section: "Personal Details",
     },
     {
       name: "country",
       label: "Country",
       type: "select",
       required: true,
-      section: "Personal Details"
+      section: "Personal Details",
     },
     {
       name: "state",
       label: "State",
       type: "select",
       required: true,
-      section: "Personal Details"
+      section: "Personal Details",
     },
     {
       name: "city",
       label: "City",
       type: "select",
       required: true,
-      section: "Personal Details"
+      section: "Personal Details",
     },
     {
       name: "linkedin",
       label: "LinkedIn Profile",
       type: "text",
       required: false,
-      section: "Personal Details"
+      section: "Personal Details",
     },
 
     /* 2. Education & Credentials */
@@ -109,30 +111,30 @@ export const SiteSupervisorRole: RoleData = {
         "Master’s Degree",
         "Diploma",
         "Professional Certification",
-        "Other"
+        "Other",
       ],
-      section: "Education & Credentials"
+      section: "Education & Credentials",
     },
     {
       name: "institution",
       label: "Institution",
       type: "text",
       required: true,
-      section: "Education & Credentials"
+      section: "Education & Credentials",
     },
     {
       name: "graduationYear",
       label: "Graduation Year",
       type: "number",
       required: true,
-      section: "Education & Credentials"
+      section: "Education & Credentials",
     },
     {
       name: "professionalCertification",
       label: "Professional Certification (if any)",
       type: "text",
       required: false,
-      section: "Education & Credentials"
+      section: "Education & Credentials",
     },
 
     /* 3. Professional Profile */
@@ -141,28 +143,28 @@ export const SiteSupervisorRole: RoleData = {
       label: "Total Years of Experience",
       type: "number",
       required: true,
-      section: "Professional Profile"
+      section: "Professional Profile",
     },
     {
       name: "relevantSiteExperience",
       label: "Relevant Experience as Site Supervisor (years)",
       type: "number",
       required: true,
-      section: "Professional Profile"
+      section: "Professional Profile",
     },
     {
       name: "currentOrganization",
       label: "Current Organization",
       type: "text",
       required: true,
-      section: "Professional Profile"
+      section: "Professional Profile",
     },
     {
       name: "currentDesignation",
       label: "Current Designation",
       type: "text",
       required: true,
-      section: "Professional Profile"
+      section: "Professional Profile",
     },
 
     /* 4. Project Experience (OPTIONAL) */
@@ -176,23 +178,23 @@ export const SiteSupervisorRole: RoleData = {
         "Commercial",
         "Institutional",
         "Hospitality",
-        "Mixed-use"
+        "Mixed-use",
       ],
-      section: "Project Experience"
+      section: "Project Experience",
     },
     {
       name: "largestProject",
       label: "Largest Project Handled (area or value)",
       type: "text",
       required: false,
-      section: "Project Experience"
+      section: "Project Experience",
     },
     {
       name: "projectRole",
       label: "Your Role in That Project",
       type: "textarea",
       required: false,
-      section: "Project Experience"
+      section: "Project Experience",
     },
 
     /* 5. Skills & Tools */
@@ -202,7 +204,7 @@ export const SiteSupervisorRole: RoleData = {
       type: "radio",
       required: true,
       options: ["Advanced", "Intermediate", "Beginner", "No Experience"],
-      section: "Skills & Tools"
+      section: "Skills & Tools",
     },
     {
       name: "msExcel",
@@ -210,37 +212,23 @@ export const SiteSupervisorRole: RoleData = {
       type: "radio",
       required: true,
       options: ["Advanced", "Intermediate", "Beginner", "No Experience"],
-      section: "Skills & Tools"
+      section: "Skills & Tools",
     },
     {
       name: "otherSoftware",
       label: "Other Software & Proficiency",
       type: "text",
-      required: true,
-      section: "Skills & Tools"
+      required: false,
+      section: "Skills & Tools",
     },
 
     /* 6. Attachments */
     {
-      name: "cv",
-      label: "CV (PDF only)",
-      type: "text",
+      name: "cvFile",
+      label: "Upload CV (PDF, max 1MB)",
+      type: "file",
       required: true,
-      section: "Attachments"
-    },
-    {
-      name: "portfolio",
-      label: "Portfolio (PDF only)",
-      type: "text",
-      required: true,
-      section: "Attachments"
-    },
-    {
-      name: "portfolioURL",
-      label: "Portfolio URL",
-      type: "text",
-      required: false,
-      section: "Attachments"
+      section: "Attachments",
     },
 
     /* 7. Additional Information */
@@ -249,28 +237,31 @@ export const SiteSupervisorRole: RoleData = {
       label: "Notice Period",
       type: "text",
       required: true,
-      section: "Additional Information"
+      placeholder:
+        "Enter your notice period in days. If not currently employed, write “Not Applicable”",
+      section: "Additional Information",
     },
+
     {
       name: "joiningDate",
       label: "Earliest Possible Joining Date",
       type: "date",
       required: true,
-      section: "Additional Information"
+      section: "Additional Information",
     },
     {
       name: "desiredCompensation",
       label: "Desired Compensation (Annual CTC in INR)",
       type: "number",
       required: true,
-      section: "Additional Information"
+      section: "Additional Information",
     },
     {
       name: "whyUs",
       label: "Why would you like to work with us?",
       type: "textarea",
       required: true,
-      section: "Additional Information"
+      section: "Additional Information",
     },
 
     /* 8. Declaration & Consent */
@@ -280,7 +271,7 @@ export const SiteSupervisorRole: RoleData = {
       type: "checkbox",
       required: true,
       options: ["I agree"],
-      section: "Declaration & Consent"
+      section: "Declaration & Consent",
     },
     {
       name: "dataConsent",
@@ -288,7 +279,7 @@ export const SiteSupervisorRole: RoleData = {
       type: "checkbox",
       required: true,
       options: ["I agree"],
-      section: "Declaration & Consent"
-    }
-  ]
+      section: "Declaration & Consent",
+    },
+  ],
 };

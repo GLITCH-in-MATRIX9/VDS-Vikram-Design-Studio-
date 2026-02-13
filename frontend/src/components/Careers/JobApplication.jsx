@@ -23,6 +23,7 @@ const FieldRenderer = ({
     name: field.name,
     required: field.required,
     value: defaultValue || "",
+    placeholder: field.placeholder || "",
     className:
       "border border-[#E3E1DF] rounded px-3 py-2 text-sm focus:outline-none w-full",
   };
@@ -129,6 +130,42 @@ const FieldRenderer = ({
           ))}
         </div>
       );
+
+    case "file":
+      return (
+        <input
+          type="file"
+          name={field.name}
+          accept="application/pdf"
+          required={field.required}
+          onChange={(e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+
+            // ✅ Allow only PDF
+            if (file.type !== "application/pdf") {
+              alert("Only PDF files allowed.");
+              return;
+            }
+
+            // ✅ Max size = 1MB
+            if (file.size > 1024 * 1024) {
+              alert("File must be less than 1MB.");
+              return;
+            }
+
+            onChange({
+              target: {
+                name: field.name,
+                value: file,
+                type: "file"
+              }
+            });
+          }}
+          className="border border-[#E3E1DF] rounded px-3 py-2 text-sm w-full"
+        />
+      );
+
 
     default:
       return <input type={field.type} {...commonProps} onChange={onChange} />;
@@ -349,17 +386,16 @@ const JobApplication = ({ role }) => {
         <button
           type="submit"
           disabled={submitted || loading}
-          className={`px-8 py-3 rounded text-sm font-medium w-full md:w-auto ${
-            submitted || loading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-black text-white hover:bg-gray-800"
-          }`}
+          className={`px-8 py-3 rounded text-sm font-medium w-full md:w-auto ${submitted || loading
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-black text-white hover:bg-gray-800"
+            }`}
         >
           {submitted
             ? "Submitted!"
             : loading
-            ? "Submitting..."
-            : "Submit Application"}
+              ? "Submitting..."
+              : "Submit Application"}
         </button>
       </form>
     </>
