@@ -125,14 +125,7 @@ export default function Submissions() {
     link.download =
       selectedRole === "All Roles"
         ? "all_applications.csv"
-<<<<<<< Updated upstream
         : `${selectedRole.replaceAll(" ", "_")}_applications.csv`;
-=======
-        : `${selectedRole.replaceAll(
-          " ",
-          "_"
-        )}_applications.csv`;
->>>>>>> Stashed changes
 
     link.click();
   };
@@ -202,15 +195,7 @@ export default function Submissions() {
           <tbody>
             {filteredData.length === 0 ? (
               <tr>
-<<<<<<< Updated upstream
                 <td colSpan="6" className="py-6 text-center text-gray-400">
-=======
-
-                <td
-                  colSpan="7"
-                  className="py-6 text-center text-gray-400"
-                >
->>>>>>> Stashed changes
                   No submissions found
                 </td>
               </tr>
