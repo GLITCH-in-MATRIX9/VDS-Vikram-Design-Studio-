@@ -98,6 +98,10 @@ export default function Submissions() {
         if (Array.isArray(value)) return value.join(" | ");
         if (value === undefined || value === null) return "";
 
+        if (key === "cvFile" && value) {
+          return `${value}.pdf`;
+        }
+
         return value;
       }),
     ]);
@@ -121,7 +125,14 @@ export default function Submissions() {
     link.download =
       selectedRole === "All Roles"
         ? "all_applications.csv"
+<<<<<<< Updated upstream
         : `${selectedRole.replaceAll(" ", "_")}_applications.csv`;
+=======
+        : `${selectedRole.replaceAll(
+          " ",
+          "_"
+        )}_applications.csv`;
+>>>>>>> Stashed changes
 
     link.click();
   };
@@ -181,6 +192,9 @@ export default function Submissions() {
 
               <th>Experience (yrs)</th>
 
+              {/* ADDED COLUMN */}
+              <th>Date Submitted</th>
+
               <th className="text-right">Action</th>
             </tr>
           </thead>
@@ -188,7 +202,15 @@ export default function Submissions() {
           <tbody>
             {filteredData.length === 0 ? (
               <tr>
+<<<<<<< Updated upstream
                 <td colSpan="6" className="py-6 text-center text-gray-400">
+=======
+
+                <td
+                  colSpan="7"
+                  className="py-6 text-center text-gray-400"
+                >
+>>>>>>> Stashed changes
                   No submissions found
                 </td>
               </tr>
@@ -206,6 +228,13 @@ export default function Submissions() {
                   </td>
 
                   <td>{app.answers?.totalExperience ?? "—"}</td>
+
+                  {/* ADDED DATE FIELD */}
+                  <td>
+                    {app.createdAt
+                      ? new Date(app.createdAt).toLocaleDateString()
+                      : "—"}
+                  </td>
 
                   <td className="text-right">
                     <button
