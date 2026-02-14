@@ -58,6 +58,8 @@ export const submitApplication = async (
     const applicantEmail = applicantData?.email || "";
 
     if (req.file) {
+      const file = req.file; // create local reference
+
       const safeApplicantName = applicantName
         .replace(/[^a-zA-Z0-9]/g, "_")
         .toUpperCase();
@@ -66,7 +68,6 @@ export const submitApplication = async (
         new Promise<string>((resolve, reject) => {
           const stream = cloudinary.uploader.upload_stream(
             {
-              //STORED INSIDE VDS_FOLDER (LIKE PROJECTS)
               folder: `VDS_FOLDER/job_applications/${roleSlug}/${city}/${safeApplicantName}`,
               resource_type: "raw",
             },
@@ -76,7 +77,7 @@ export const submitApplication = async (
             },
           );
 
-          streamifier.createReadStream(req.file.buffer).pipe(stream);
+          streamifier.createReadStream(file.buffer).pipe(stream); // use local variable
         });
 
       const fileUrl = await uploadFromBuffer();
@@ -178,7 +179,7 @@ export const getApplications = async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    console.error("❌ Get applications error:", error);
+    console.error("Get applications error:", error);
     res.status(500).json({ message: "Failed to fetch applications" });
   }
 };
@@ -204,7 +205,7 @@ export const getApplicationsByRole = async (req: Request, res: Response) => {
       })),
     });
   } catch (error) {
-    console.error("❌ Get role applications error:", error);
+    console.error(" Get role applications error:", error);
     res.status(500).json({ message: "Failed to fetch applications" });
   }
 };
@@ -274,7 +275,7 @@ export const deleteApplication = async (req: Request, res: Response) => {
       deletedId: id,
     });
   } catch (error) {
-    console.error("❌ Delete error:", error);
+    console.error("Delete error:", error);
     res.status(500).json({ message: "Failed to delete application" });
   }
 };
@@ -307,7 +308,7 @@ export const getApplicationStats = async (req: Request, res: Response) => {
       }, {}),
     });
   } catch (error) {
-    console.error("❌ Stats error:", error);
+    console.error(" Stats error:", error);
     res.status(500).json({ message: "Failed to fetch stats" });
   }
 };
