@@ -10,10 +10,10 @@ interface ApplicantConfirmationData {
  * @returns {string} - The complete HTML string for the email body.
  */
 
-
-export const getApplicantConfirmationHtml = (data: ApplicantConfirmationData): string => {
-  const { name, jobTitle} = data;
-
+export const getApplicantConfirmationHtml = (
+  data: ApplicantConfirmationData
+): string => {
+  const { name, jobTitle } = data;
 
   return `
     <!DOCTYPE html>
@@ -45,7 +45,6 @@ export const getApplicantConfirmationHtml = (data: ApplicantConfirmationData): s
               <!-- HEADER -->
               <tr>
                 <td align="center" class="header">
-                  <h1 style="font-weight: 300;">Application Received</h1>
                 </td>
               </tr>
               <!-- CONTENT - This is the part we've updated -->
