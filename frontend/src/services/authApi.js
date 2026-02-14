@@ -52,7 +52,31 @@ const authApi = {
     deleteUser: async (userId) => {
         const response = await axios.delete(`${ADMIN_URL}/users/${userId}`);
         return response.data;
-    }
+    },
+    /* =========================
+   APPLICATION EXPORT (ADMIN)
+========================= */
+
+    exportApplicationsCSV: async () => {
+        const response = await axios.get(
+            `${ADMIN_URL}/export/applications/csv`,
+            {
+                responseType: "blob"
+            }
+        );
+        return response.data;
+    },
+
+    exportApplicationsZIP: async () => {
+        const response = await axios.get(
+            `${ADMIN_URL}/export/applications/zip`,
+            {
+                responseType: "blob"
+            }
+        );
+        return response.data;
+    },
+
 };
 
 export default authApi;

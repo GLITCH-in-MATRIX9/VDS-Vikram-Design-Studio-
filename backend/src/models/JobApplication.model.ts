@@ -5,7 +5,7 @@ import mongoose, { Schema, Document } from "mongoose";
 ========================= */
 
 export interface JobApplicationData {
-  roleSlug: string;   // e.g. "junior-architect"
+  roleSlug: string; // e.g. "junior-architect"
 
   // ⭐ ADD CITY (REQUIRED FOR CITY-BASED ROLE ACTIVATION)
   city: "Kolkata" | "Guwahati";
@@ -15,14 +15,12 @@ export interface JobApplicationData {
     email: string;
   };
 
-  answers: Record<string, any>; // dynamic form responses
+  answers: {
+    cvFile?: string;
+    [key: string]: any;
+  };
 
-  status?:
-    | "submitted"
-    | "reviewed"
-    | "shortlisted"
-    | "rejected"
-    | "on-hold";
+  status?: "submitted" | "reviewed" | "shortlisted" | "rejected" | "on-hold";
 
   notes?: string; // internal HR notes
 }
@@ -31,9 +29,7 @@ export interface JobApplicationData {
    MONGOOSE DOCUMENT TYPE
 ========================= */
 
-export interface JobApplicationDocument
-  extends JobApplicationData,
-    Document {
+export interface JobApplicationDocument extends JobApplicationData, Document {
   createdAt: Date;
   updatedAt: Date;
 }
@@ -76,13 +72,7 @@ const JobApplicationSchema = new Schema<JobApplicationDocument>(
 
     status: {
       type: String,
-      enum: [
-        "submitted",
-        "reviewed",
-        "shortlisted",
-        "rejected",
-        "on-hold",
-      ],
+      enum: ["submitted", "reviewed", "shortlisted", "rejected", "on-hold"],
       default: "submitted",
       index: true,
     },
@@ -93,7 +83,7 @@ const JobApplicationSchema = new Schema<JobApplicationDocument>(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 /* =========================
@@ -104,7 +94,7 @@ const JobApplication =
   mongoose.models.JobApplication ||
   mongoose.model<JobApplicationDocument>(
     "JobApplication",
-    JobApplicationSchema
+    JobApplicationSchema,
   );
 
 export default JobApplication;

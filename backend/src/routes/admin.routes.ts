@@ -9,6 +9,12 @@ import {
 } from "../controllers/admin.controller";
 
 import {
+  exportApplicationsCSV,
+  exportApplicationsZIP
+} from "../controllers/export.controller";
+
+
+import {
   getAboutPage,
   updateHero,
   updateMetrics,
@@ -88,5 +94,23 @@ router.get(
   requireRole(["super_admin", "hr_hiring"]),
   getActivityLogs
 );
+
+
+/* ================================
+   APPLICATION EXPORT (HR + SUPER ADMIN)
+================================ */
+
+router.get(
+  "/export/applications/csv",
+  requireRole(["super_admin", "hr_hiring"]),
+  exportApplicationsCSV
+);
+
+router.get(
+  "/export/applications/zip",
+  requireRole(["super_admin", "hr_hiring"]),
+  exportApplicationsZIP
+);
+
 
 export default router;

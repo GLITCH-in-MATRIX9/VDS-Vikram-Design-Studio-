@@ -1,12 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
 import jobApi from "../../../services/jobApi";
+import authApi from "../../../services/authApi";
+import { Info } from "lucide-react";
 
 /* =========================
    HELPERS
 ========================= */
-
-const prettyLabel = (key) =>
-  key.replace(/([A-Z])/g, " $1").replace(/^./, (s) => s.toUpperCase());
 
 const humanizeSlug = (slug) =>
   slug
@@ -15,6 +14,7 @@ const humanizeSlug = (slug) =>
     .join(" ");
 
 export default function Submissions() {
+
   const [applications, setApplications] = useState([]);
   const [roles, setRoles] = useState(["All Roles"]);
   const [selectedRole, setSelectedRole] = useState("All Roles");
@@ -25,8 +25,11 @@ export default function Submissions() {
   ========================= */
 
   useEffect(() => {
+
     const fetchData = async () => {
+
       try {
+
         const apps = await jobApi.getApplications();
 
         setApplications(apps);
@@ -36,14 +39,16 @@ export default function Submissions() {
         );
 
         setRoles(["All Roles", ...uniqueRoles]);
+
       } catch (err) {
-        // console.error("Failed to load submissions", err);
+        console.error("Failed to load submissions", err);
       } finally {
         setLoading(false);
       }
     };
 
     fetchData();
+
   }, []);
 
   /* =========================
@@ -51,11 +56,13 @@ export default function Submissions() {
   ========================= */
 
   const filteredData = useMemo(() => {
+
     if (selectedRole === "All Roles") return applications;
 
     return applications.filter(
       (app) => humanizeSlug(app.roleSlug) === selectedRole
     );
+
   }, [applications, selectedRole]);
 
   /* =========================
@@ -63,71 +70,74 @@ export default function Submissions() {
   ========================= */
 
   const deleteSubmission = async (id) => {
+
     if (!confirm("Delete this application?")) return;
 
     try {
+
       await jobApi.deleteApplication(id);
 
-      setApplications((prev) => prev.filter((app) => app._id !== id));
+      setApplications((prev) =>
+        prev.filter((app) => app._id !== id)
+      );
+
     } catch (err) {
-      // console.error("Failed to delete submission", err);
+      console.error("Failed to delete submission", err);
     }
   };
 
   /* =========================
-     DOWNLOAD CSV (FULL DATA)
+     FULL CSV DOWNLOAD
   ========================= */
 
-  const downloadCSV = () => {
-    if (filteredData.length === 0) return;
+  const downloadServerCSV = async () => {
 
-    const allFieldKeys = Array.from(
-      new Set(filteredData.flatMap((app) => Object.keys(app.answers || {})))
-    );
+    try {
 
-    const headers = ["Role Applied", "City ", ...allFieldKeys.map(prettyLabel)];
+      const blob = await authApi.exportApplicationsCSV();
 
-    const rows = filteredData.map((app) => [
-      humanizeSlug(app.roleSlug),
+      const url = window.URL.createObjectURL(blob);
 
-      app.city || "",
+      const link = document.createElement("a");
 
-      ...allFieldKeys.map((key) => {
-        const value = app.answers?.[key];
+      link.href = url;
+      link.download = "applications_full_export.csv";
 
-        if (Array.isArray(value)) return value.join(" | ");
-        if (value === undefined || value === null) return "";
+      document.body.appendChild(link);
+      link.click();
 
-        if (key === "cvFile" && value) {
-          return `${value}.pdf`;
-        }
+      link.remove();
 
-        return value;
-      }),
-    ]);
+    } catch (err) {
+      console.error("CSV download failed", err);
+    }
+  };
 
-    const csvContent = [headers, ...rows]
-      .map((row) =>
-        row.map((val) => `"${String(val).replace(/"/g, '""')}"`).join(",")
-      )
-      .join("\n");
+  /* =========================
+     ZIP EXPORT
+  ========================= */
 
-    const blob = new Blob([csvContent], {
-      type: "text/csv;charset=utf-8;",
-    });
+  const downloadZIP = async () => {
 
-    const url = URL.createObjectURL(blob);
+    try {
 
-    const link = document.createElement("a");
+      const blob = await authApi.exportApplicationsZIP();
 
-    link.href = url;
+      const url = window.URL.createObjectURL(blob);
 
-    link.download =
-      selectedRole === "All Roles"
-        ? "all_applications.csv"
-        : `${selectedRole.replaceAll(" ", "_")}_applications.csv`;
+      const link = document.createElement("a");
 
-    link.click();
+      link.href = url;
+      link.download = "applications_export.zip";
+
+      document.body.appendChild(link);
+      link.click();
+
+      link.remove();
+
+    } catch (err) {
+      console.error("ZIP download failed", err);
+    }
   };
 
   /* =========================
@@ -136,20 +146,25 @@ export default function Submissions() {
 
   if (loading) {
     return (
-      <div className="text-sm text-gray-500 py-10">Loading submissions…</div>
+      <div className="text-sm text-gray-500 py-10">
+        Loading submissions…
+      </div>
     );
   }
 
   return (
     <div className="w-full bg-white rounded-xl p-6 border border-[#E5E5E5] mt-8">
+
       {/* Header */}
 
       <div className="flex items-center justify-between mb-4">
+
         <h2 className="text-base font-medium text-gray-700 tracking-wide">
           SUBMISSIONS
         </h2>
 
-        <div className="flex gap-3">
+        <div className="flex items-center gap-3">
+
           <select
             value={selectedRole}
             onChange={(e) => setSelectedRole(e.target.value)}
@@ -160,61 +175,85 @@ export default function Submissions() {
             ))}
           </select>
 
+          {/* CSV */}
           <button
-            onClick={downloadCSV}
+            onClick={downloadServerCSV}
             className="text-sm px-3 py-1.5 rounded-md border border-gray-300 hover:bg-[#F6F2EF]"
           >
             Download CSV
           </button>
+
+          {/* ZIP */}
+          <button
+            onClick={downloadZIP}
+            className="text-sm px-3 py-1.5 rounded-md border border-gray-300 hover:bg-black hover:text-white transition"
+          >
+            Download ZIP
+          </button>
+
+          {/* INFO ICON + TOOLTIP */}
+
+          <div className="relative group">
+
+            <Info className="w-4 h-4 text-gray-500 cursor-pointer" />
+
+            <div className="absolute right-0 mt-2 w-64 text-xs bg-black text-white p-3 rounded-md opacity-0 group-hover:opacity-100 transition pointer-events-none z-10">
+
+              <p className="mb-2">
+                <strong>Download CSV:</strong> Exports all applications with complete data and clickable CV download links.
+              </p>
+
+              <p>
+                <strong>Download ZIP:</strong> Downloads a ZIP file containing the CSV and all applicant PDF files together.
+              </p>
+
+            </div>
+
+          </div>
+
         </div>
+
       </div>
 
       {/* Table */}
 
       <div className="overflow-x-auto">
+
         <table className="w-full text-sm border-collapse">
+
           <thead>
             <tr className="text-left text-gray-500 border-b">
               <th className="py-2">Name</th>
-
               <th>Email</th>
-
               <th>Position</th>
-
               <th>City Applied For</th>
-
               <th>Experience (yrs)</th>
-
-              {/* ADDED COLUMN */}
               <th>Date Submitted</th>
-
               <th className="text-right">Action</th>
             </tr>
           </thead>
 
           <tbody>
+
             {filteredData.length === 0 ? (
               <tr>
-                <td colSpan="6" className="py-6 text-center text-gray-400">
+                <td colSpan="7" className="py-6 text-center text-gray-400">
                   No submissions found
                 </td>
               </tr>
             ) : (
               filteredData.map((app) => (
+
                 <tr key={app._id} className="border-b last:border-b-0">
+
                   <td className="py-3">{app.answers?.fullName || "—"}</td>
-
                   <td>{app.answers?.email || "—"}</td>
-
                   <td>{humanizeSlug(app.roleSlug)}</td>
-
                   <td className="font-medium text-[#3E3C3C]">
                     {app.city || "—"}
                   </td>
-
                   <td>{app.answers?.totalExperience ?? "—"}</td>
 
-                  {/* ADDED DATE FIELD */}
                   <td>
                     {app.createdAt
                       ? new Date(app.createdAt).toLocaleDateString()
@@ -229,12 +268,18 @@ export default function Submissions() {
                       Delete
                     </button>
                   </td>
+
                 </tr>
+
               ))
             )}
+
           </tbody>
+
         </table>
+
       </div>
+
     </div>
   );
 }

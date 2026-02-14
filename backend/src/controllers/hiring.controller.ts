@@ -57,19 +57,29 @@ export const submitApplication = async (
     const applicantName = applicantData?.name || "Applicant";
     const applicantEmail = applicantData?.email || "";
 
+    /* =========================
+   CLOUDINARY FILE UPLOAD (AFTER CREATE)
+========================= */
+
     if (req.file) {
-      const file = req.file; // create local reference
+      const file = req.file;
 
       const safeApplicantName = applicantName
         .replace(/[^a-zA-Z0-9]/g, "_")
         .toUpperCase();
 
+      // ⭐ Unique clean filename
+      const publicId = `${application._id}_${safeApplicantName}`;
+
       const uploadFromBuffer = () =>
         new Promise<string>((resolve, reject) => {
           const stream = cloudinary.uploader.upload_stream(
             {
-              folder: `VDS_FOLDER/job_applications/${roleSlug}/${city}/${safeApplicantName}`,
+              folder: `VDS_FOLDER/job_applications/${roleSlug}/${city}`,
               resource_type: "raw",
+              public_id: publicId,
+              use_filename: true,
+              unique_filename: false,
             },
             (error, result) => {
               if (error) return reject(error);
@@ -77,12 +87,13 @@ export const submitApplication = async (
             },
           );
 
-          streamifier.createReadStream(file.buffer).pipe(stream); // use local variable
+          streamifier.createReadStream(file.buffer).pipe(stream);
         });
 
       const fileUrl = await uploadFromBuffer();
 
-      answers.cvFile = fileUrl;
+      application.answers.cvFile = fileUrl;
+      await application.save();
     }
 
     /* =========================
@@ -257,21 +268,45 @@ export const updateApplicationStatus = async (req: Request, res: Response) => {
   }
 };
 
-/**
- * Delete application (admin)
- */
 export const deleteApplication = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    const application = await JobApplication.findByIdAndDelete(id);
+    // 1️⃣ Find application first
+    const application = await JobApplication.findById(id);
 
     if (!application) {
       return res.status(404).json({ message: "Application not found" });
     }
 
+    /* =========================
+       DELETE CLOUDINARY FILE
+    ========================= */
+
+    const fileUrl = application.answers?.cvFile;
+
+    if (fileUrl) {
+      try {
+        // extract public_id from cloudinary URL
+        const parts = fileUrl.split("/upload/")[1];
+        const publicIdWithExtension = parts.substring(parts.indexOf("/") + 1);
+        const publicId = publicIdWithExtension.replace(/\.[^/.]+$/, "");
+
+        await cloudinary.uploader.destroy(publicId, {
+          resource_type: "raw",
+        });
+
+        console.log("Cloudinary file deleted:", publicId);
+      } catch (cloudErr) {
+        console.error("Cloudinary delete failed:", cloudErr);
+      }
+    }
+
+    // 2️⃣ delete database record
+    await application.deleteOne();
+
     res.json({
-      message: "Application deleted successfully",
+      message: "Application and file deleted successfully",
       deletedId: id,
     });
   } catch (error) {
