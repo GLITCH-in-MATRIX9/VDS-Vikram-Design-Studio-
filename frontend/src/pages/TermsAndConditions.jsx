@@ -1,6 +1,6 @@
 import React from "react";
 
-const Legal = () => {
+const TermsAndConditions = () => {
   return (
     <section className="bg-[#f2efee] px-4 md:px-8 xl:px-20 py-8 md:py-12 xl:py-20">
       <div className="max-w-4xl">
@@ -15,9 +15,7 @@ const Legal = () => {
           </p>
 
           <div>
-            <h2 className="font-medium text-[#3E3C3C] mb-2">
-              Website Content
-            </h2>
+            <h2 className="font-medium text-[#3E3C3C] mb-2">Website Content</h2>
             <p>
               All content on this website, including text, images, drawings,
               graphics, and projects, is the property of Vikram Design Studio
@@ -27,9 +25,7 @@ const Legal = () => {
           </div>
 
           <div>
-            <h2 className="font-medium text-[#3E3C3C] mb-2">
-              Use of Website
-            </h2>
+            <h2 className="font-medium text-[#3E3C3C] mb-2">Use of Website</h2>
             <p>
               You agree to use this website for lawful purposes only and in a
               manner that does not infringe upon the rights of others or
@@ -43,9 +39,8 @@ const Legal = () => {
             </h2>
             <p>
               All intellectual property rights related to this website and its
-              contents remain with Vikram Design Studio. Use of any content
-              for commercial purposes without permission is strictly
-              prohibited.
+              contents remain with Vikram Design Studio. Use of any content for
+              commercial purposes without permission is strictly prohibited.
             </p>
           </div>
 
@@ -55,8 +50,8 @@ const Legal = () => {
             </h2>
             <p>
               While we strive to keep all information accurate and up to date,
-              we do not guarantee completeness or correctness of all content
-              at all times.
+              we do not guarantee completeness or correctness of all content at
+              all times.
             </p>
           </div>
 
@@ -66,15 +61,13 @@ const Legal = () => {
             </h2>
             <p>
               Vikram Design Studio shall not be liable for any direct or
-              indirect damages arising from the use of this website or
-              reliance on its content.
+              indirect damages arising from the use of this website or reliance
+              on its content.
             </p>
           </div>
 
           <div>
-            <h2 className="font-medium text-[#3E3C3C] mb-2">
-              External Links
-            </h2>
+            <h2 className="font-medium text-[#3E3C3C] mb-2">External Links</h2>
             <p>
               This website may include links to third-party websites. Vikram
               Design Studio is not responsible for their content or policies.
@@ -93,9 +86,7 @@ const Legal = () => {
           </div>
 
           <div>
-            <h2 className="font-medium text-[#3E3C3C] mb-2">
-              Governing Law
-            </h2>
+            <h2 className="font-medium text-[#3E3C3C] mb-2">Governing Law</h2>
             <p>
               These terms shall be governed by and interpreted in accordance
               with the laws of India.
@@ -107,4 +98,4 @@ const Legal = () => {
   );
 };
 
-export default Legal;
+export default TermsAndConditions;

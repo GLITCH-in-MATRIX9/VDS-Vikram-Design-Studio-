@@ -11,7 +11,6 @@ import Contact from "./pages/Contact";
 import ApplicationFormPage from "./pages/ApplicationFormPage";
 import JobDetails from "./components/Careers/JobDetails";
 
-
 // Auth Pages
 import Login from "./pages/authentication/Login";
 import Register from "./pages/authentication/Register";
@@ -25,7 +24,8 @@ import AdminHome from "./components/Dashboard/SidebarMenuOptions/AdminHome";
 import WebsiteContentPage from "./components/Dashboard/SidebarMenuOptions/WebsiteContentPage";
 import Settings from "./components/Dashboard/SidebarMenuOptions/Settings";
 import HiringPortal from "./components/Dashboard/SidebarMenuOptions/HiringPortal";
-import Legal from "./pages/Legal";
+import TermsAndConditions from "./pages/TermsAndConditions";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
 
 // Misc
 import NotFound from "./pages/NotFound";
@@ -45,7 +45,8 @@ const AppRoutes = () => {
 
       <Route path="/contact" element={<Contact />} />
       <Route path="/apply" element={<ApplicationFormPage />} />
-      <Route path="/legal" element={<Legal />} />
+      <Route path="/terms-and-conditions" element={<TermsAndConditions />} />
+      <Route path="/privacy-policy" element={<PrivacyPolicy />} />
 
       {/* Authentication Pages */}
       <Route path="/login" element={<Login />} />
@@ -53,7 +54,10 @@ const AppRoutes = () => {
       <Route path="/forgot-password" element={<ForgotPassword />} />
 
       {/* Redirect /admin to dashboard home */}
-      <Route path="/admin" element={<Navigate to="/admin/dashboard/home" replace />} />
+      <Route
+        path="/admin"
+        element={<Navigate to="/admin/dashboard/home" replace />}
+      />
 
       {/* Protected Admin Dashboard Routes */}
       <Route path="/admin/dashboard" element={<ProtectedRoute />}>
@@ -64,7 +68,6 @@ const AppRoutes = () => {
           <Route path="website-content" element={<WebsiteContentPage />} />
           <Route path="hiring" element={<HiringPortal />} />
           <Route path="settings" element={<Settings />} />
-
         </Route>
       </Route>
 
