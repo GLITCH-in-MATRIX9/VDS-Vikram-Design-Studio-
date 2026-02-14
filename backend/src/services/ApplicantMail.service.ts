@@ -15,7 +15,7 @@ export const sendApplicantConfirmationEmail = async (
 ): Promise<void> => {
   const { email, name, position } = data;
 
-const htmlContent = `
+  const htmlContent = `
 <!doctype html>
 <html>
 <head>
@@ -50,9 +50,7 @@ const htmlContent = `
 
 <div class="wrapper" style="max-width:600px;margin:auto;background:#ffffff;padding:40px;color:#000;">
 
-<p style="font-size:14px;margin-bottom:20px;">
-<strong>Subject:</strong> Application Received | Vikram Design Studio
-</p>
+
 
 <p style="font-size:15px;margin-bottom:16px;">
 Hi <strong>${name}</strong>,
@@ -170,8 +168,6 @@ www.vikramdesignstudio.com
 </body>
 </html>
 `;
-
-
 
   await sendEmail({
     to: email,

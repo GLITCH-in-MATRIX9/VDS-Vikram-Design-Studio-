@@ -36,13 +36,20 @@ const AdminHome = () => {
           jobApi.getApplications(),
         ]);
 
+        const activeRolesCount = roles.filter((r) => {
+          if (r.cities && typeof r.cities === "object") {
+            return Object.values(r.cities).some((v) => v === true);
+          }
+          return !!r.isActive;
+        }).length;
+
         setStats({
           totalProjects: projects.length,
           totalRoles: roles.length,
-          activeRoles: roles.filter((r) => r.isActive).length,
+          activeRoles: activeRolesCount,
           totalApplications: applications.length,
         });
-      } catch (err) {
+      } catch {
         // console.error("Failed to load dashboard stats", err);
       } finally {
         setLoading(false);

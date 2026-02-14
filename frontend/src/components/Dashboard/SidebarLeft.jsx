@@ -8,7 +8,7 @@ import {
   FaHistory,
   FaCog,
 } from "react-icons/fa";
-import logo from "../../assets/navbar/VDSLOGOADMIN.png";
+import logo from "../../assets/navbar/LogoIcon.png";
 
 const SidebarLeft = ({ user, onLogout }) => {
   const location = useLocation();
@@ -64,7 +64,7 @@ const SidebarLeft = ({ user, onLogout }) => {
         {/* Logo */}
         <Link to="/">
           <div className="flex flex-col items-center mb-6">
-            <img src={logo} alt="Logo" className="h-24 mb-2" />
+            <img src={logo} alt="Logo" className="h-8 md:h-12 w-auto mb-2" />
           </div>
         </Link>
         <hr className="border-gray-400 mb-6" />

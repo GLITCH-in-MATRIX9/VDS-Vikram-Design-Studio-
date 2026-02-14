@@ -12,7 +12,7 @@ interface StudioMailData {
  * Send new application notification to studio
  */
 export const sendStudioApplicationEmail = async (
-  data: StudioMailData,
+  data: StudioMailData
 ): Promise<void> => {
   const { applicantName, applicantEmail, position, answers } = data;
 
@@ -51,9 +51,7 @@ export const sendStudioApplicationEmail = async (
 
 <div class="wrapper" style="max-width:600px;margin:0 auto;background:#ffffff;color:#000;padding:40px;">
 
-<p style="font-size:14px;margin-bottom:20px;">
-<strong>Subject:</strong> New Application Received | Vikram Design Studio
-</p>
+
 
 <p style="font-size:15px;margin-bottom:16px;">
 Hello Team,

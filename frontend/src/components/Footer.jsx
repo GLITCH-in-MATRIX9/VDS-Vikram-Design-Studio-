@@ -65,13 +65,35 @@ const Footer = () => {
           </span>
 
           <Link
-            to="/legal"
+            to="/terms-and-conditions"
             className="hover:text-gray-700 transition"
           >
-            Privacy Policy & Terms
+            Terms & Conditions
+          </Link>
+          <Link to="/privacy-policy" className="hover:text-gray-700 transition">
+            Privacy Policy
           </Link>
         </div>
-
+      </div>
+      <div className="text-gray-500 text-xs xl:hidden flex items-end justify-between gap-1 max-w-7xl mx-auto px-6 py-6">
+        <div className="flex flex-col items-start gap-2">
+          <span>Vikram Design Studio © {currentYear}.</span>
+          <span>All rights reserved.</span>
+        </div>
+        <div className="flex flex-col items-end gap-2">
+          <Link
+            to="/terms-and-conditions"
+            className="hover:text-gray-700 transition text-end"
+          >
+            Terms & Conditions
+          </Link>
+          <Link
+            to="/privacy-policy"
+            className="hover:text-gray-700 transition text-end"
+          >
+            Privacy Policy
+          </Link>
+        </div>
       </div>
     </footer>
   );
