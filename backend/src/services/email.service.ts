@@ -23,7 +23,7 @@ export interface SendEmailOptions {
   to: string;
   subject: string;
   html: string;
-  from?: string;
+  type?: "admin" | "careers";   // 👈 added this
   replyTo?: string;
 }
 
@@ -31,12 +31,22 @@ export const sendEmail = async ({
   to,
   subject,
   html,
-  from,
+  type = "admin",  // default = info@
   replyTo,
 }: SendEmailOptions): Promise<void> => {
 
+  const senderEmail =
+    type === "careers"
+      ? config.email.careers
+      : config.email.from;
+
+  const senderName =
+    type === "careers"
+      ? "Vikram Design Studio - Careers"
+      : "Vikram Design Studio";
+
   await transporter.sendMail({
-    from: from || `"Vikram Design Studio" <${config.email.from}>`,
+    from: `"${senderName}" <${senderEmail}>`,
     to,
     subject,
     html,

@@ -11,7 +11,7 @@ interface ApplicantMailData {
  * Send job application confirmation email to applicant
  */
 export const sendApplicantConfirmationEmail = async (
-  data: ApplicantMailData
+  data: ApplicantMailData,
 ): Promise<void> => {
   const { email, name, position } = data;
 
@@ -173,6 +173,7 @@ www.vikramdesignstudio.com
     to: email,
     subject: "Application Received | Vikram Design Studio",
     html: htmlContent,
-    replyTo: config.email.from,
+    replyTo: config.email.careers,
+    type: "careers",
   });
 };

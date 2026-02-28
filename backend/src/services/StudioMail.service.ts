@@ -170,5 +170,6 @@ www.vikramdesignstudio.com
     subject: `New Application Received – ${position}`,
     html: htmlContent,
     replyTo: applicantEmail, // HR can reply directly
+    type: "careers",  
   });
 };
