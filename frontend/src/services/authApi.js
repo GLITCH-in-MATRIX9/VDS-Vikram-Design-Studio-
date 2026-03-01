@@ -1,7 +1,7 @@
-import axios from 'axios';
+import axios from "axios";
 
 // Base URL
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
 const AUTH_URL = `${API_URL}/auth`;
 const ADMIN_URL = `${API_URL}/admin`;
 
@@ -13,8 +13,18 @@ const authApi = {
         return response.data;
     },
 
-    register: async (name, email, password, role = 'Project Content Managers') => {
-        const response = await axios.post(`${AUTH_URL}/register`, { name, email, password, role });
+    register: async (
+        name,
+        email,
+        password,
+        role = "Project Content Managers",
+    ) => {
+        const response = await axios.post(`${AUTH_URL}/register`, {
+            name,
+            email,
+            password,
+            role,
+        });
         return response.data;
     },
 
@@ -29,7 +39,10 @@ const authApi = {
     },
 
     changePassword: async (currentPassword, newPassword) => {
-        const response = await axios.put(`${AUTH_URL}/change-password`, { currentPassword, newPassword });
+        const response = await axios.put(`${AUTH_URL}/change-password`, {
+            currentPassword,
+            newPassword,
+        });
         return response.data;
     },
 
@@ -40,7 +53,12 @@ const authApi = {
     },
 
     createUser: async (name, email, password, role) => {
-        const response = await axios.post(`${ADMIN_URL}/users`, { name, email, password, role });
+        const response = await axios.post(`${ADMIN_URL}/users`, {
+            name,
+            email,
+            password,
+            role,
+        });
         return response.data;
     },
 
@@ -54,29 +72,34 @@ const authApi = {
         return response.data;
     },
     /* =========================
-   APPLICATION EXPORT (ADMIN)
-========================= */
+     APPLICATION EXPORT (ADMIN)
+  ========================= */
 
-    exportApplicationsCSV: async () => {
+    exportApplicationsCSV: async (role) => {
         const response = await axios.get(
             `${ADMIN_URL}/export/applications/csv`,
             {
+                params: {
+                    role: role !== "All Roles" ? role : undefined
+                },
                 responseType: "blob"
             }
         );
         return response.data;
     },
 
-    exportApplicationsZIP: async () => {
+    exportApplicationsZIP: async (role) => {
         const response = await axios.get(
             `${ADMIN_URL}/export/applications/zip`,
             {
+                params: {
+                    role: role !== "All Roles" ? role : undefined
+                },
                 responseType: "blob"
             }
         );
         return response.data;
     },
-
 };
 
 export default authApi;

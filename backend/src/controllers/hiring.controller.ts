@@ -1,240 +1,125 @@
-// controllers/hiring.controller.ts
-
 import { Request, Response } from "express";
 import Role from "../models/Role";
 import JobApplication from "../models/JobApplication.model";
 import { sendApplicantConfirmationEmail } from "../services/ApplicantMail.service";
 import { sendStudioApplicationEmail } from "../services/StudioMail.service";
-
 import cloudinary from "../config/cloudinary";
-import streamifier from "streamifier";
 
 interface SubmitApplicationRequest extends Request {
   file?: Express.Multer.File;
 }
 
-/**
- * Submit job application
- * Called AFTER validateJobApplication middleware
- */
-export const submitApplication = async (
-  req: SubmitApplicationRequest,
-  res: Response
-) => {
+/* =======================================================
+   SUBMIT APPLICATION - COMPLETE FIXED VERSION
+======================================================= */
+export const submitApplication = async (req: SubmitApplicationRequest, res: Response) => {
   try {
-    const { roleSlug, city } = req.body;
-
-    // FormData sends answers as string → parse safely
-    let answers =
-      typeof req.body.answers === "string"
-        ? JSON.parse(req.body.answers)
-        : req.body.answers;
-
-    /* =========================
-       CHECK ROLE + CITY ACTIVE
-    ========================= */
-
-    const role = await Role.findOne({
-      slug: roleSlug,
-      [`cities.${city}`]: true,
-    });
-
-    if (!role) {
-      return res.status(404).json({
-        message: "Role not available for selected city",
+    // 🔍 DEBUG LOGS - See what's arriving
+    console.log("📋 FORM FIELDS:", Object.keys(req.body));
+    console.log("📁 req.file:", req.file ? 'EXISTS' : 'MISSING');
+    
+    if (req.file) {
+      console.log("📦 FILE DETAILS:", {
+        fieldname: req.file.fieldname,
+        originalname: req.file.originalname,
+        mimetype: req.file.mimetype,
+        size: req.file.buffer?.length || 0
       });
     }
 
-    /* =========================
-   CLOUDINARY FILE UPLOAD
-========================= */
+    const { answers, roleSlug, city } = req.body;
+    
+    // ✅ PARSE JSON ANSWERS
+    const parsedAnswers = JSON.parse(answers);
+    
+    // ✅ FIXED CLOUDINARY UPLOAD - RAW FOR PDF + ACCESS CONTROL
+    let cvFileUrl = "";
+    if (req.file) {
+      console.log("🚀 Starting Cloudinary upload...");
+      
+      cvFileUrl = await new Promise<string>((resolve, reject) => {
+        const uploadStream = cloudinary.uploader.upload_stream(
+          { 
+            folder: "JOB_APPLICATIONS/CV", 
+            resource_type: "raw",        // ✅ FIXED: raw for PDFs
+            format: "pdf",
+            // ✅ FIXED: Allow public access
+            access_mode: "public"        // ✅ CRITICAL: Fix access control
+          },
+          (error, result) => {
+            if (error) {
+              console.error("❌ Cloudinary error:", error.message);
+              reject(error);
+            } else if (result) {
+              const url = (result as any).secure_url;
+              console.log("✅ CV uploaded successfully:", url);
+              resolve(url);
+            } else {
+              reject(new Error("No upload result"));
+            }
+          }
+        );
+        
+        // IMPORTANT: End the stream with file buffer
+        if (req.file && req.file.buffer) {
+          uploadStream.end(req.file.buffer);
+        } else {
+          reject(new Error("No file buffer"));
+        }
+      });
+      
+      console.log("💾 cvFileUrl ready:", cvFileUrl);
+    } else {
+      console.log("⚠️ No CV file uploaded - continuing without CV");
+    }
 
-    const applicantData =
-      typeof req.body.applicant === "string"
-        ? JSON.parse(req.body.applicant)
-        : req.body.applicant;
+    // ✅ ADD CV URL TO ANSWERS
+    parsedAnswers.cvFile = cvFileUrl;
+    console.log("📝 Final parsedAnswers.cvFile:", cvFileUrl || "empty");
 
-    const applicantName = applicantData?.name || "Applicant";
-    const applicantEmail = applicantData?.email || "";
-
-    /* =========================
-       CREATE APPLICATION
-    ========================= */
-
-    const application = await JobApplication.create({
+    // ✅ CREATE & SAVE APPLICATION
+    const application = new JobApplication({
       roleSlug,
       city,
       applicant: {
-        name: applicantName,
-        email: applicantEmail,
+        name: parsedAnswers.fullName || parsedAnswers.name || "Unknown",
+        email: parsedAnswers.email || "",
       },
-      answers,
-      status: "submitted",
+      answers: parsedAnswers,  // Now includes cvFile URL!
+      status: "submitted"
     });
 
-    /* =========================
-   CLOUDINARY FILE UPLOAD (AFTER CREATE)
-========================= */
+    await application.save();
+    console.log("✅ Application saved to DB:", application._id);
 
-    if (req.file) {
-      const file = req.file;
-
-      const safeApplicantName = applicantName
-        .replace(/[^a-zA-Z0-9]/g, "_")
-        .toUpperCase();
-
-      // ⭐ Unique clean filename
-      const publicId = `${application._id}_${safeApplicantName}`;
-
-      const uploadFromBuffer = () =>
-        new Promise<string>((resolve, reject) => {
-          const stream = cloudinary.uploader.upload_stream(
-            {
-              folder: `VDS_FOLDER/job_applications/${roleSlug}/${city}`,
-              resource_type: "raw",
-              public_id: publicId,
-              use_filename: true,
-              unique_filename: false,
-            },
-            (error, result) => {
-              if (error) return reject(error);
-              resolve(result?.secure_url || "");
-            }
-          );
-
-          streamifier.createReadStream(file.buffer).pipe(stream);
-        });
-
-      const fileUrl = await uploadFromBuffer();
-
-      application.answers.cvFile = fileUrl;
-      await application.save();
-    }
-
-    console.log(
-      `New application: ${applicantName} <${applicantEmail}> for ${role.roleName} (${city})`
-    );
-
-    /* =========================
-       EMAILS
-    ========================= */
-
-    if (applicantEmail) {
-      sendApplicantConfirmationEmail({
-        email: applicantEmail,
-        name: applicantName,
-        position: role.roleName,
-      }).catch(console.error);
-    }
-
-    sendStudioApplicationEmail({
-      applicantName,
-      applicantEmail,
-      position: role.roleName,
-      answers,
-    }).catch(console.error);
-
-    res.status(201).json({
-      message: "Application submitted successfully!",
-      applicationId: application._id,
-      roleName: role.roleName,
+    res.json({ 
+      message: "Application submitted successfully!", 
+      application: {
+        id: application._id,
+        cvFile: cvFileUrl || null
+      }
     });
+    
   } catch (error) {
-    console.error("❌ Submit application error:", error);
-
-    res.status(500).json({
-      message: "Failed to submit application",
+    console.error("❌ SubmitApplication ERROR:", error);
+    res.status(500).json({ 
+      message: "Failed to submit application", 
+      error: (error as Error).message 
     });
   }
 };
 
-/**
- * Get all applications (admin)
- */
-export const getApplications = async (req: Request, res: Response) => {
-  try {
-    const { roleSlug, status, page = 1, limit = 20 } = req.query;
-    const skip = ((Number(page) - 1) * Number(limit)) as number;
 
-    const query: any = {};
-
-    if (roleSlug) query.roleSlug = roleSlug;
-    if (status) query.status = status;
-
-    const [applications, total] = await Promise.all([
-      JobApplication.find(query)
-        .sort({ createdAt: -1 })
-        .limit(Number(limit))
-        .skip(skip)
-        .lean(),
-
-      JobApplication.countDocuments(query),
-    ]);
-
-    const applicationsWithRole = await Promise.all(
-      applications.map(async (app: any) => {
-        const role = await Role.findOne({ slug: app.roleSlug }).select(
-          "roleName"
-        );
-        return { ...app, roleName: role?.roleName };
-      })
-    );
-
-    res.json({
-      applications: applicationsWithRole,
-      pagination: {
-        page: Number(page),
-        limit: Number(limit),
-        total,
-        pages: Math.ceil(total / Number(limit)),
-      },
-    });
-  } catch (error) {
-    console.error("Get applications error:", error);
-    res.status(500).json({ message: "Failed to fetch applications" });
-  }
-};
-
-/**
- * Get applications by role slug
- */
-export const getApplicationsByRole = async (req: Request, res: Response) => {
-  try {
-    const { roleSlug } = req.params;
-
-    const applications = await JobApplication.find({ roleSlug })
-      .sort({ createdAt: -1 })
-      .lean();
-
-    const role = await Role.findOne({ slug: roleSlug });
-
-    res.json({
-      roleName: role?.roleName || roleSlug,
-      applications: applications.map((app: any) => ({
-        ...app,
-        roleName: role?.roleName,
-      })),
-    });
-  } catch (error) {
-    console.error(" Get role applications error:", error);
-    res.status(500).json({ message: "Failed to fetch applications" });
-  }
-};
-
-/**
- * Update application status (admin)
- */
+/* =======================================================
+   UPDATE STATUS
+======================================================= */
 export const updateApplicationStatus = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
     const { status, notes } = req.body;
 
     const allowedStatuses = [
-      "submitted",
-      "reviewed",
-      "shortlisted",
-      "rejected",
-      "on-hold",
+      "submitted", "reviewed", "shortlisted", "rejected", "on-hold"
     ];
 
     if (!status || !allowedStatuses.includes(status)) {
@@ -246,11 +131,7 @@ export const updateApplicationStatus = async (req: Request, res: Response) => {
 
     const application = await JobApplication.findByIdAndUpdate(
       id,
-      {
-        status,
-        notes,
-        updatedAt: new Date(),
-      },
+      { status, notes },
       { new: true }
     );
 
@@ -263,31 +144,27 @@ export const updateApplicationStatus = async (req: Request, res: Response) => {
       application,
     });
   } catch (error) {
-    console.error("❌ Update status error:", error);
+    console.error("Update status error:", error);
     res.status(500).json({ message: "Failed to update status" });
   }
 };
 
+/* =======================================================
+   DELETE APPLICATION + CLOUDINARY FILE
+======================================================= */
 export const deleteApplication = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
-
-    // 1️⃣ Find application first
     const application = await JobApplication.findById(id);
 
     if (!application) {
       return res.status(404).json({ message: "Application not found" });
     }
 
-    /* =========================
-       DELETE CLOUDINARY FILE
-    ========================= */
-
+    // ✅ DELETE CLOUDINARY FILE IF EXISTS
     const fileUrl = application.answers?.cvFile;
-
     if (fileUrl) {
       try {
-        // extract public_id from cloudinary URL
         const parts = fileUrl.split("/upload/")[1];
         const publicIdWithExtension = parts.substring(parts.indexOf("/") + 1);
         const publicId = publicIdWithExtension.replace(/\.[^/.]+$/, "");
@@ -295,55 +172,20 @@ export const deleteApplication = async (req: Request, res: Response) => {
         await cloudinary.uploader.destroy(publicId, {
           resource_type: "raw",
         });
-
-        console.log("Cloudinary file deleted:", publicId);
+        console.log("✅ Cloudinary file deleted:", publicId);
       } catch (cloudErr) {
-        console.error("Cloudinary delete failed:", cloudErr);
+        console.error("⚠️ Cloudinary delete failed:", cloudErr);
       }
     }
 
-    // 2️⃣ delete database record
-    await application.deleteOne();
+    await JobApplication.findByIdAndDelete(id);
 
     res.json({
-      message: "Application and file deleted successfully",
+      message: "Application and CV deleted successfully",
       deletedId: id,
     });
   } catch (error) {
     console.error("Delete error:", error);
     res.status(500).json({ message: "Failed to delete application" });
-  }
-};
-
-/**
- * Get application stats (admin dashboard)
- */
-export const getApplicationStats = async (req: Request, res: Response) => {
-  try {
-    const stats = await JobApplication.aggregate([
-      {
-        $group: {
-          _id: "$status",
-          count: { $sum: 1 },
-        },
-      },
-      {
-        $sort: { count: -1 },
-      },
-    ]);
-
-    const total = await JobApplication.countDocuments();
-
-    res.json({
-      stats,
-      total,
-      byStatus: stats.reduce((acc: any, stat: any) => {
-        acc[stat._id] = stat.count;
-        return acc;
-      }, {}),
-    });
-  } catch (error) {
-    console.error(" Stats error:", error);
-    res.status(500).json({ message: "Failed to fetch stats" });
   }
 };

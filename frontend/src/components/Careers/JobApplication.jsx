@@ -330,9 +330,11 @@ const JobApplication = ({ role }) => {
       formData.append("applicant", JSON.stringify(applicantObj));
 
       // If there's a file in answers (cvFile), append it as 'cvFile' (multer expects this key)
-      if (answers.cvFile && answers.cvFile instanceof File) {
-        formData.append("cvFile", answers.cvFile, answers.cvFile.name);
-      }
+      Object.entries(answers).forEach(([key, value]) => {
+        if (value instanceof File) {
+          formData.append(key, value, value.name);
+        }
+      });
 
       // Append answers as JSON string (backend parses this)
       formData.append("answers", JSON.stringify(answers));
@@ -343,8 +345,8 @@ const JobApplication = ({ role }) => {
 
       setTimeout(() => navigate("/careers"), 5000);
     } catch (err) {
-      console.error(err);
-      alert("Submission failed. Please try again.");
+      console.log("Backend error:", err.response?.data);
+      alert(err.response?.data?.message || "Submission failed.");
     } finally {
       setLoading(false);
     }
@@ -399,17 +401,16 @@ const JobApplication = ({ role }) => {
         <button
           type="submit"
           disabled={submitted || loading}
-          className={`px-8 py-3 rounded text-sm font-medium w-full md:w-auto ${
-            submitted || loading
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-black text-white hover:bg-gray-800"
-          }`}
+          className={`px-8 py-3 rounded text-sm font-medium w-full md:w-auto ${submitted || loading
+            ? "bg-gray-400 cursor-not-allowed"
+            : "bg-black text-white hover:bg-gray-800"
+            }`}
         >
           {submitted
             ? "Submitted!"
             : loading
-            ? "Submitting..."
-            : "Submit Application"}
+              ? "Submitting..."
+              : "Submit Application"}
         </button>
       </form>
     </>
