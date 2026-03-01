@@ -41,10 +41,9 @@ export const submitApplication = async (req: SubmitApplicationRequest, res: Resp
         const uploadStream = cloudinary.uploader.upload_stream(
           { 
             folder: "JOB_APPLICATIONS/CV", 
-            resource_type: "raw",        // ✅ FIXED: raw for PDFs
-            format: "pdf",
-            // ✅ FIXED: Allow public access
-            access_mode: "public"        // ✅ CRITICAL: Fix access control
+            resource_type: "raw",      
+            
+            access_mode: "public"        
           },
           (error, result) => {
             if (error) {

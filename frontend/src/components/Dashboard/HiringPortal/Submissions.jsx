@@ -44,10 +44,15 @@ export default function Submissions() {
     );
   }, [applications, selectedRole]);
 
+  // ✅ GOOGLE PDF VIEWER - 100% RELIABLE PREVIEW
   const previewPDF = (cvFileUrl, applicantName) => {
     setOriginalPdfUrl(cvFileUrl);
     setApplicantName(applicantName || "candidate");
+    
+    // 🔗 GOOGLE DOCS VIEWER - Works with ANY PDF URL (raw/image)
     const googleViewerUrl = `https://docs.google.com/gview?url=${encodeURIComponent(cvFileUrl)}&embedded=true`;
+    
+    console.log("📄 Google Preview URL:", googleViewerUrl);
     setPdfUrl(googleViewerUrl);
     setShowPdfModal(true);
   };
@@ -98,7 +103,7 @@ export default function Submissions() {
       link.href = url;
       link.download =
         role && role !== "All Roles"
-          ? `${role.replaceAll(" ", "_")}_applications.csv`
+          ? `${role.replace(/ /g, "_")}_applications.csv`
           : "applications_full_export.csv";
       document.body.appendChild(link);
       link.click();
@@ -133,17 +138,17 @@ export default function Submissions() {
 
   return (
     <>
-      {/* ✅ PERFECT MODAL WITH BLOB DOWNLOAD */}
+      {/* ✅ GOOGLE PDF VIEWER MODAL */}
       {showPdfModal && (
         <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-2xl w-full max-w-[95vw] max-h-[95vh] flex flex-col shadow-2xl">
+          <div className="bg-white rounded-2xl w-full max-w-[60vw] h-[90vh] flex flex-col shadow-2xl">
             <div className="p-6 border-b border-gray-200 flex justify-between items-center">
               <h3 className="text-lg font-semibold flex items-center gap-2">
                 <FileText className="w-5 h-5 text-blue-600" />
                 CV Preview - {applicantName}
               </h3>
               <div className="flex items-center gap-3">
-                {/* ✅ 100% WORKING PDF DOWNLOAD */}
+                {/* ✅ DOWNLOAD BUTTON */}
                 <button
                   onClick={downloadPDF}
                   className="px-4 py-2 text-sm bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2 transition-all shadow-sm"
@@ -162,7 +167,7 @@ export default function Submissions() {
               <iframe
                 src={pdfUrl}
                 className="w-full h-full border-0"
-                title="CV Preview"
+                title={`CV Preview - ${applicantName}`}
                 loading="lazy"
               />
             </div>
@@ -208,7 +213,7 @@ export default function Submissions() {
               <Info className="w-4 h-4 text-gray-500 cursor-pointer" />
               <div className="absolute right-0 mt-2 w-64 text-xs bg-black text-white p-3 rounded-md opacity-0 group-hover:opacity-100 transition pointer-events-none z-10">
                 <p className="mb-2">
-                  <strong>Preview CV:</strong> Click blue button to view PDF.
+                  <strong>Preview CV:</strong> Click blue button to view PDF via Google Viewer.
                 </p>
                 <p>Download ZIP includes all PDFs + CSV.</p>
               </div>

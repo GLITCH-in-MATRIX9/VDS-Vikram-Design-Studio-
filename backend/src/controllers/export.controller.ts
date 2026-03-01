@@ -106,7 +106,7 @@ export const exportApplicationsCSV = async (req: Request, res: Response) => {
     res.header("Content-Type", "text/csv");
     res.attachment(
       role && role !== "All Roles"
-        ? `${(role as string).replaceAll(/ /g, "_")}_applications.csv`
+        ? `${(role as string).replace(/ /g, "_")}_applications.csv`
         : "applications_full_export.csv"
     );
     res.send(csv);
