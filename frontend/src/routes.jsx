@@ -50,7 +50,7 @@ const AppRoutes = () => {
 
       {/* Authentication Pages */}
       <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
+      {/* <Route path="/register" element={<Register />} /> */}
       <Route path="/forgot-password" element={<ForgotPassword />} />
 
       {/* Redirect /admin to dashboard home */}

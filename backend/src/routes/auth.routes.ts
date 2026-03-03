@@ -14,7 +14,7 @@ import { loginRateLimit, registerRateLimit } from '../middlewares/rateLimit.midd
 const router = Router();
 
 // Public routes
-router.post('/register', registerRateLimit, validateRegister, registerAdmin);
+// router.post('/register', registerRateLimit, validateRegister, registerAdmin);
 router.post('/login', loginRateLimit, validateAuth, loginAdmin);
 
 // Protected routes
