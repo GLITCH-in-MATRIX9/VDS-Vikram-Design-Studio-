@@ -13,9 +13,9 @@ const transporter = nodemailer.createTransport({
 
 transporter.verify((error) => {
   if (error) {
-    console.error("❌ Email transporter error:", error);
+    console.error("Email transporter error:", error);
   } else {
-    console.log("✅ Email transporter ready");
+    console.log("Email transporter ready");
   }
 });
 
@@ -23,7 +23,7 @@ export interface SendEmailOptions {
   to: string;
   subject: string;
   html: string;
-  type?: "admin" | "careers";   // 👈 added this
+  type?: "admin" | "careers";
   replyTo?: string;
 }
 
@@ -31,7 +31,7 @@ export const sendEmail = async ({
   to,
   subject,
   html,
-  type = "admin",  // default = info@
+  type = "admin",   //by default 
   replyTo,
 }: SendEmailOptions): Promise<void> => {
 
