@@ -12,38 +12,34 @@ interface SubmitApplicationRequest extends Request {
 /* =======================================================
    SUBMIT APPLICATION - COMPLETE FIXED VERSION
 ======================================================= */
-export const submitApplication = async (req: SubmitApplicationRequest, res: Response) => {
+export const submitApplication = async (
+  req: SubmitApplicationRequest,
+  res: Response
+) => {
   try {
-    // 🔍 DEBUG LOGS - See what's arriving
+
     console.log("📋 FORM FIELDS:", Object.keys(req.body));
-    console.log("📁 req.file:", req.file ? 'EXISTS' : 'MISSING');
-    
-    if (req.file) {
-      console.log("📦 FILE DETAILS:", {
-        fieldname: req.file.fieldname,
-        originalname: req.file.originalname,
-        mimetype: req.file.mimetype,
-        size: req.file.buffer?.length || 0
-      });
-    }
+    console.log("📁 req.file:", req.file ? "EXISTS" : "MISSING");
 
     const { answers, roleSlug, city } = req.body;
-    
-    // ✅ PARSE JSON ANSWERS
+
     const parsedAnswers = JSON.parse(answers);
-    
-    // ✅ FIXED CLOUDINARY UPLOAD - RAW FOR PDF + ACCESS CONTROL
+
     let cvFileUrl = "";
+
+    /* ============================
+       Upload CV to Cloudinary
+    ============================ */
+
     if (req.file) {
       console.log("🚀 Starting Cloudinary upload...");
-      
+
       cvFileUrl = await new Promise<string>((resolve, reject) => {
         const uploadStream = cloudinary.uploader.upload_stream(
-          { 
-            folder: "JOB_APPLICATIONS/CV", 
-            resource_type: "raw",      
-            
-            access_mode: "public"        
+          {
+            folder: "JOB_APPLICATIONS/CV",
+            resource_type: "raw",
+            access_mode: "public",
           },
           (error, result) => {
             if (error) {
@@ -51,32 +47,30 @@ export const submitApplication = async (req: SubmitApplicationRequest, res: Resp
               reject(error);
             } else if (result) {
               const url = (result as any).secure_url;
-              console.log("✅ CV uploaded successfully:", url);
+              console.log("✅ CV uploaded:", url);
               resolve(url);
             } else {
               reject(new Error("No upload result"));
             }
           }
         );
-        
-        // IMPORTANT: End the stream with file buffer
-        if (req.file && req.file.buffer) {
+
+        if (req.file?.buffer) {
           uploadStream.end(req.file.buffer);
         } else {
           reject(new Error("No file buffer"));
         }
       });
-      
-      console.log("💾 cvFileUrl ready:", cvFileUrl);
     } else {
-      console.log("⚠️ No CV file uploaded - continuing without CV");
+      console.log("⚠️ No CV file uploaded");
     }
 
-    // ✅ ADD CV URL TO ANSWERS
     parsedAnswers.cvFile = cvFileUrl;
-    console.log("📝 Final parsedAnswers.cvFile:", cvFileUrl || "empty");
 
-    // ✅ CREATE & SAVE APPLICATION
+    /* ============================
+       Save Application
+    ============================ */
+
     const application = new JobApplication({
       roleSlug,
       city,
@@ -84,27 +78,60 @@ export const submitApplication = async (req: SubmitApplicationRequest, res: Resp
         name: parsedAnswers.fullName || parsedAnswers.name || "Unknown",
         email: parsedAnswers.email || "",
       },
-      answers: parsedAnswers,  // Now includes cvFile URL!
-      status: "submitted"
+      answers: parsedAnswers,
+      status: "submitted",
     });
 
     await application.save();
+
     console.log("✅ Application saved to DB:", application._id);
 
-    res.json({ 
-      message: "Application submitted successfully!", 
+    /* ============================
+       Send Emails
+    ============================ */
+
+    try {
+
+      await sendApplicantConfirmationEmail({
+        email: application.applicant.email,
+        name: application.applicant.name,
+        position: roleSlug,
+      });
+
+      await sendStudioApplicationEmail({
+        applicantName: application.applicant.name,
+        applicantEmail: application.applicant.email,
+        position: roleSlug,
+        answers: parsedAnswers,
+      });
+
+      console.log("📧 Emails sent successfully");
+
+    } catch (emailError) {
+      console.error("⚠️ Email sending failed:", emailError);
+    }
+
+    /* ============================
+       Response
+    ============================ */
+
+    res.json({
+      message: "Application submitted successfully!",
       application: {
         id: application._id,
-        cvFile: cvFileUrl || null
-      }
+        cvFile: cvFileUrl || null,
+      },
     });
-    
+
   } catch (error) {
+
     console.error("❌ SubmitApplication ERROR:", error);
-    res.status(500).json({ 
-      message: "Failed to submit application", 
-      error: (error as Error).message 
+
+    res.status(500).json({
+      message: "Failed to submit application",
+      error: (error as Error).message,
     });
+
   }
 };
 
